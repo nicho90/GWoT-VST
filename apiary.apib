@@ -1,0 +1,220 @@
+FORMAT: 1A
+HOST: http://www.example.org/api/
+
+# Geospatial Web of Things - Virtual Smart Things API
+
+**HOSTS ( MASTER )**: `http://www.example.org:8080/api/`
+
+#### Allowed HTTP-Requests:
+
+| METHODE | Description |
+|----------|----------|
+| `GET` | Get a resource or list of resources |
+| `POST` | To create or update resource |
+| `PUT` | To create or update resource |
+| `DELETE` | To delete resource |
+
+#### Server Responses:
+| CODE | STATUS | Description |
+|----------|----------|----------|
+|`200`| `OK` | the request was successfull |
+|`201`| `CREATED` |  the request was successfull and a resource was created |
+|`204`| `DELETED` |  the request was successfull and the resource was deleted |
+|`400`| `BAD REQUEST` |  the request failed |
+|`401`| `UNAUTHORIZED` |  the request failed, because of an unauthorzied user |
+|`403`| `NOT ALLOWED` |  the request failed, because the request was not allowed |
+|`404`| `NOT FOUND` |  the request failed, the resource could not be found |
+|`500`| `INTERNAL SERVER ERROR` | the request was unavailable |
+
+
+# Data Structures
+
+## Sensor (object)
++ sensor_id: `1` (number, optional) - `null` (Default)
++ sensor_description: `RPi Water gauge sensor`(string) - The description of the sensor.
++ lng: `7.59572` (number, required) - The Longitude-value of the location. 
++ lat: `51.969415` (number, required) - The Latitude-value of the location.
+
+
+
+## Sensors Collection [/api/sensors]
+
+### List all Locations [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "sensor_id" : "1" ,
+                "created" : "",
+                "updated": "",
+                "sensor_description": "RPi Water gauge sensor",
+                "lng": 7.59572,
+                "lat": 51.969415
+            }, {
+            "sensor_id" : "2" ,
+            "created" : "",
+            "updated": "",
+            "sensor_description": "Arduino Water gauge sensor",
+            "lng": 7.59575,
+            "lat": 51.969425
+        }
+        ]
+
++ Response 500 (application/json)
+
+        {
+            "name" : "<NAME>"
+            "message" : "<MESSAGE>",
+            "error" : "<ERROR>"
+        }
+
+
+### Create a Location [POST]
+
++ Request
+
+    + Headers
+
+            X-Access-Token : token
+            Content-Type : application/json
+
++ Attributes (Sensor)
+
++ Response 201 (application/json)
+
+        {
+            "sensor_id" : "1" ,
+            "created" : "",
+            "updated": "",
+            "sensor_description": "RPi Water gauge sensor",
+            "lng": 7.59572,
+            "lat": 51.969415
+        }
+
++ Response 404 (application/json)
+
+        {
+            "name" : "<NAME>"
+            "message" : "<MESSAGE>",
+            "error" : "<ERROR>"
+        }
+
++ Response 500 (application/json)
+
+        {
+            "name" : "<NAME>"
+            "message" : "<MESSAGE>",
+            "error" : "<ERROR>"
+        }
+
+
+## Sensor Collection [/api/sensors/{sensor_id}]
+### Get a Sensor [GET]
+
++ Parameters
+
+    + sensor\_id: `1` (number, required) - The ID of a Sensor.
+
++ Response 200 (application/json)
+
+        {
+            "sensor_id" : "1" ,
+            "created" : "",
+            "updated": "",
+            "sensor_description": "RPi Water gauge sensor",
+            "lng": 7.59572,
+            "lat": 51.969415
+        }
+
++ Response 404 (application/json)
+
+        {
+            "name" : "<NAME>"
+            "message" : "<MESSAGE>",
+            "error" : "<ERROR>"
+        }
+
++ Response 500 (application/json)
+
+        {
+            "name" : "<NAME>"
+            "message" : "<MESSAGE>",
+            "error" : "<ERROR>"
+        }
+
+### Edit a Sensor [PUT]
+
++ Request
+    
+    + Headers
+        
+            Content-Type : application/json
+
+    + Body
+
+            {
+                "sensor_id" : "1" ,
+                "created" : "",
+                "updated": "",
+                "sensor_description": "RPi Water gauge sensor",
+                "lng": 7.59572,
+                "lat": 51.969415
+            }
+
++ Parameters
+
+    + sensor\_id: `1` (number, required) - The ID of a Sensor.
+
++ Attributes (Sensor)
+
++ Response 200 (application/json)
+
+            {
+                "sensor_id" : "1" ,
+                "created" : "",
+                "updated": "",
+                "sensor_description": "RPi Water gauge sensor",
+                "lng": 7.59572,
+                "lat": 51.969415
+            }
+
++ Response 404 (application/json)
+
+        {
+            "name" : "<NAME>"
+            "message" : "<MESSAGE>",
+            "error" : "<ERROR>"
+        }
+
++ Response 500 (application/json)
+
+        {
+            "name" : "<NAME>"
+            "message" : "<MESSAGE>",
+            "error" : "<ERROR>"
+        }
+
+### Delete a Sensor [DELETE]
+
++ Parameters
+
+    + sensor\_id: `1` (number, required) - The ID of a Sensor.
+
++ Response 204
+
++ Response 404 (application/json)
+
+        {
+            "name" : "<NAME>"
+            "message" : "<MESSAGE>",
+            "error" : "<ERROR>"
+        }
+
++ Response 500 (application/json)
+
+        {
+            "name" : "<NAME>"
+            "message" : "<MESSAGE>",
+            "error" : "<ERROR>"
+        }
