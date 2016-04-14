@@ -1,2 +1,4 @@
-
+rpi/node_modules/*
+server/node_modules/*
+server/public/lib/*
 .DS_Store
