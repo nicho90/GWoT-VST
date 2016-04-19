@@ -1,0 +1,30 @@
+{
+    "name": "gwot-vst-server",
+    "version": "1.0.0",
+    "description": "The Geospatial Web of Things, is a project of the Institute for Geoinformatics Münster (Germany), which took place in summer term 2016. This `package.json` belongs to Virtual Smart Things Group and focuses on the Server, which is the main-part of the overall architecture. The Main-Server consits of a MQTT-Broker, which listens to published MQTT-messages from the Raspberry Pis, which collects water levels from sensors. Furthermore the in-comming sensor-data will be post-processed and stored in a database. A REST-API provides the data for the WebClient, which visualizes the data as timeseries and manages the sensor-settings and subscriptions. The Nodejs-Webserver consits of the static files for the WebClient, which are in the subfolder `/public`.",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node server.js"
+    },
+    "author": "GWoT-VST-Group",
+    "contributors": [{
+        "name": "Nicholas Schiestel",
+        "email": "n.schiestel@uni-muenster.de"
+    }, {
+        "name": "Heinrich Löwen",
+        "email": "loewen.heinrich@uni-muenster.de"
+    }, {
+        "name": "Timm Kühnel",
+        "email": "timm.kuehnel@gmail.com"
+    }, {
+        "name": "Rehan Aziz Chaudhary",
+        "email": "r_chau02@uni-muenster.de"
+    }],
+    "license": "MIT",
+    "dependencies": {
+        "express": "^4.13.4",
+        "http": "0.0.0",
+        "path": "^0.12.7"
+    }
+}
