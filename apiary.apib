@@ -31,7 +31,7 @@ HOST: http://www.example.org/api/
 
 ## Sensor (object)
 + sensor_id: `1` (number, optional) - `null` (Default)
-+ sensor_description: `RPi Water gauge sensor`(string) - The description of the sensor.
++ sensor_description: `RPi Water gauge sensor`(string, optional) - The description of the sensor.
 + lng: `7.59572` (number, required) - The Longitude-value of the location. 
 + lat: `51.969415` (number, required) - The Latitude-value of the location.
 
@@ -52,13 +52,13 @@ HOST: http://www.example.org/api/
                 "lng": 7.59572,
                 "lat": 51.969415
             }, {
-            "sensor_id" : "2" ,
-            "created" : "",
-            "updated": "",
-            "sensor_description": "Arduino Water gauge sensor",
-            "lng": 7.59575,
-            "lat": 51.969425
-        }
+                "sensor_id" : "2" ,
+                "created" : "",
+                "updated": "",
+                "sensor_description": "Arduino Water gauge sensor",
+                "lng": 7.59575,
+                "lat": 51.969425
+            }
         ]
 
 + Response 500 (application/json)
