@@ -9,8 +9,8 @@ var mqtt = require("mqtt");
 var gpio = {
   trig : 23,  // TRIG pin of the sensor; fix
   echo : 24,  // ECHO pin of the sensor; fix
-  measurementTimeout : 750  // timeout for the r-pi-usonic package; fix
-  sensor : null;  // measuring function
+  measurementTimeout : 750,  // timeout for the r-pi-usonic package; fix
+  sensor : null  // measuring function
 }
 
 
@@ -72,7 +72,7 @@ var timer = {
     if (this.stopped) return;
     // Make here the measurement
     // console.log("Measure");
-    measurement.distance = sensor.sensor();
+    measurement.distance = gpio.sensor();
     measurement.timestamp = new Date();
     this.publish();
     this.start();
