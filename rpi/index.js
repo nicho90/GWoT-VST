@@ -4,9 +4,9 @@ var mqtt = require("mqtt");
 
 // Global measurement variables
 var gpio = {
-  trig : 23;
-  echo : 24;
-  measurementTimeout : 750;
+  trig : 23,
+  echo : 24,
+  measurementTimeout : 750
 }
 
 var sensor = {
@@ -14,13 +14,13 @@ var sensor = {
   sensor_id: "rpi-1",
   lng: 7.698035, // e.g. from GPS-Sensor or Settings
   lat: 51.9733937, // e.g. from GPS-Sensor or Settings
-  interval: 60000, // ms => 1 min = 60000 ms
+  interval: 1000, // ms => 1 min = 60000 ms
   distance: 100 // reference hight of the sensor
 }
 
 var measurement = {
   sensor_id : sensor.sensor_id,
-  timestamp : Date.now(),
+  timestamp : new Date(),
   measurement : 0,  // Distance in cm
   lng: sensor.lng, // (regarding geoMQTT)
   lat: sensor.lat // (regarding geoMQTT)
@@ -60,7 +60,7 @@ var timer = {
     // Make here the measurement
     // console.log("Measure");
     measurement.distance = sensor.sensor();
-    measurement.timestamp = Date.now();
+    measurement.timestamp = new Date();
     this.publish();
     this.start();
   },
