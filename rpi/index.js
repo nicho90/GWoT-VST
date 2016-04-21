@@ -32,7 +32,7 @@ var sensor = {
 var measurement = {
   id : sensor.id,
   timestamp : new Date(),
-  measurement : 0,  // Distance in cm
+  distance : 0,  // Distance in cm
   lng : sensor.lng, // (regarding geoMQTT)
   lat : sensor.lat // (regarding geoMQTT)
 }
@@ -132,7 +132,9 @@ client.on('connect', function () {
   var i = 0;
   setInterval(function() {
     var topic = '/rpi/test';
-    var message = measurement.toString();
+    //var message = "test";
+    var message = measurement.distance.toString();
+    //var message = measurement.toString();
     var options = {
       qos : 2, // Quality of Service: 2 = at least once
       retain : false
