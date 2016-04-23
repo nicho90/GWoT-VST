@@ -44,7 +44,7 @@ var server = require('http').createServer(app);
 // Set Server-Port
 var port = process.env.PORT || 3000;
 server.listen(port, function () {
-    console.log('Webserver listening at port %d', port);
+    console.log('Webserver is listening at port %d', port);
 });
 
 // Set folder for static files (WebClient)

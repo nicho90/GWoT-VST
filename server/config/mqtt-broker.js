@@ -58,3 +58,4 @@ if (!simpleServer) {
 }
 
 exports.broker = broker;
+exports.moscaSettings = moscaSettings;
