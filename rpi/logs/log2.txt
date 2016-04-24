@@ -1,3 +1,4 @@
+Test 2; 2600mAh; USB hub off; Video Output off; Bluetooth off; CPU 200MHz; 9h 40m
 Sensor initialization succeeded. Fri Apr 15 2016 18:27:28 GMT+0200 (CEST)
 Distance 5.428327586206897 measured at time Fri Apr 15 2016 18:28:28 GMT+0200 (CEST)
 Distance 97.36781034482759 measured at time Fri Apr 15 2016 18:29:28 GMT+0200 (CEST)

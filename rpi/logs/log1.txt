@@ -1,3 +1,4 @@
+Test 1; 2600mAh; default settings; 5h 35m
 Sensor initialization succeeded. Thu Apr 14 2016 19:56:09 GMT+0200 (CEST)
 Distance 10.006206896551724 measured at time Thu Apr 14 2016 19:57:09 GMT+0200 (CEST)
 Distance 97.46327586206897 measured at time Thu Apr 14 2016 19:58:09 GMT+0200 (CEST)
