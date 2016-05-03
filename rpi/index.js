@@ -1,13 +1,14 @@
 // Require packages
 var usonic = require("r-pi-usonic");
-var gpios = require("gpio");
+var gpio = require("gpio");
 var mqtt = require("mqtt");
 
 
 /**
  * Pysical connection to the sensor
  */
-var gpio = {
+var gpioPins = {
+  led : 17,   // Pin for the LED
   trig : 23,  // TRIG pin of the sensor; fix
   echo : 24,  // ECHO pin of the sensor; fix
   measurementTimeout : 750,  // timeout for the r-pi-usonic package; fix
@@ -17,7 +18,7 @@ var gpio = {
 /**
  * Phyiscal connection of a LED
  */
-var led = gpios.export(17, {
+var led = gpio.export(gpioPins.led, {
    direction: "out",
    ready: function() {
    }
@@ -56,7 +57,7 @@ var initSensor = function() {
       console.log("Sensor initialization failed.");
     } else {
       console.log("Sensor initialization succeeded. " + new Date());
-      gpio.sensor = usonic.createSensor(gpio.echo, gpio.trig, gpio.measurementTimeout);
+      gpioPins.sensor = usonic.createSensor(gpioPins.echo, gpioPins.trig, gpioPins.measurementTimeout);
       timer.start();
     }
   });
@@ -116,4 +117,3 @@ var setTimerInterval = function(iv) {
 
 
 initSensor();
-
