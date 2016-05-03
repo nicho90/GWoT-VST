@@ -1,5 +1,6 @@
 // Require packages
 var usonic = require("r-pi-usonic");
+var gpios = require("gpio");
 var mqtt = require("mqtt");
 
 
@@ -13,6 +14,14 @@ var gpio = {
   sensor : null  // measuring function
 }
 
+/**
+ * Phyiscal connection of a LED
+ */
+var led = gpios.export(17, {
+   direction: "out",
+   ready: function() {
+   }
+});
 
 /**
  * Sensor Data
@@ -21,7 +30,7 @@ var sensor = {
   id : "rpi-1",
   lng : 7.698035, // e.g. from GPS-Sensor or Settings
   lat : 51.9733937, // e.g. from GPS-Sensor or Settings
-  interval : 60000, // ms => 1 min = 60000 ms
+  interval : 3000, // ms => 1 min = 60000 ms
   distance : 100 // reference hight of the sensor
 }
 
@@ -51,7 +60,7 @@ var initSensor = function() {
       timer.start();
     }
   });
-}
+};
 
 
 /**
@@ -75,11 +84,18 @@ var timer = {
     measurement.distance = gpio.sensor();
     measurement.timestamp = new Date();
     this.publish();
+    this.blink();
     this.start();
   },
   publish : function() {
     // Publish here the measurement via MQTT
     console.log("Distance " + measurement.distance + " measured at time " + measurement.timestamp);
+  },
+  blink : function() {
+    led.set()
+    setTimeout(function() {
+      led.set(0);
+    }, 200);
   },
   stop : function() {
     console.log("Stop");
