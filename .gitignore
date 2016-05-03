@@ -3,3 +3,5 @@ server/node_modules/*
 server/public/lib/*
 server/public/docs/*
 .DS_Store
+
+*.rdb
