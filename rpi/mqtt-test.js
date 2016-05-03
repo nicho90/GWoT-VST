@@ -58,6 +58,7 @@ client.subscribe('cloud');
  */
 client.on('connect', function () {
 
+    console.log("Connect client");
     // TODO: Implementation of real sensor and measurements
 
 
