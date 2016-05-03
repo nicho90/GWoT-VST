@@ -117,3 +117,63 @@ var setTimerInterval = function(iv) {
 
 
 initSensor();
+
+/**
+ * Create MQTT-Client and setup clientId, if MQTT-Broker is online (heartbeat)
+ */
+var client = mqtt.connect('mqtt://127.0.0.1:1883', {
+    encoding : 'utf8',
+    clientId : 'rpi',
+    will : { // Last Will (if Sensor goes offline)
+        topic : 'dead',
+        payload : 'mypayload',
+        qos : 2,
+        retain : true
+    }
+});
+
+
+/**
+ * Subscribe to topic from MQTT-Broker
+ */
+client.subscribe('cloud');
+// TODO: Define MQTT-Messages
+
+
+/**
+ * Connect to MQTT-Broker
+ */
+client.on('connect', function () {
+  // TEST: Send a message every 3 Seconds to Broker
+  var i = 0;
+  setInterval(function() {
+    var topic = '/rpi/test';
+    //var message = "test";
+    var message = measurement.distance.toString();
+    //var message = measurement.toString();
+    var options = {
+      qos : 2, // Quality of Service: 2 = at least once
+      retain : false
+    };
+
+    // Publish message
+    client.publish(topic, message, options, function(){
+      console.log("rpi: Hello from rpi")
+    });
+    i += 1;
+  }, 3000);
+});
+
+
+/**
+ * Recieve Messages from MQTT-Broker
+ */
+client.on('message', function (topic, message) {
+  console.log(topic + ": " + message.toString());
+  //client.end(); // No need to close connection, otherwise program will be closed
+
+  // TODO:
+  // - Implement Settings (Topic) from the MQTT-Broker
+  // - Implement update-interval, if defined thresholds are closer
+  // - Implement update-interval for real-time-data, if a User clicks in the WebClient on a Sensor
+});
