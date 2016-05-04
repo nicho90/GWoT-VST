@@ -2,6 +2,7 @@
 var usonic = require("r-pi-usonic");
 var gpio = require("gpio");
 var mqtt = require("mqtt");
+var GeoJSON = require('geojson');
 
 
 /**
@@ -139,6 +140,11 @@ var client = mqtt.connect('mqtt://giv-gwot-vst.uni-muenster.de:1883', {
 client.subscribe('cloud');
 // TODO: Define MQTT-Messages
 
+var data = [
+  { name: 'Location A', category: 'Store', street: 'Market', lat: 39.984, lng: -75.343 },
+  { name: 'Location B', category: 'House', street: 'Broad', lat: 39.284, lng: -75.833 },
+  { name: 'Location C', category: 'Office', street: 'South', lat: 39.123, lng: -74.534 }
+];
 
 /**
  * Connect to MQTT-Broker
@@ -148,9 +154,7 @@ client.on('connect', function () {
   var i = 0;
   setInterval(function() {
     var topic = '/rpi/test';
-    //var message = "test";
-    var message = measurement.distance.toString();
-    //var message = measurement.toString();
+    var message = JSON.stringify(GeoJSON.parse([measurement], {Point: ['lat', 'lng']}));
     var options = {
       qos : 2, // Quality of Service: 2 = at least once
       retain : false
