@@ -82,7 +82,7 @@ var timer = {
     if (this.stopped) return;
     // Make here the measurement
     // console.log("Measure");
-    measurement.distance = gpio.sensor();
+    measurement.distance = gpioPins.sensor();
     measurement.timestamp = new Date();
     this.publish();
     this.blink();
