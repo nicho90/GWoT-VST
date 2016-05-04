@@ -121,7 +121,7 @@ initSensor();
 /**
  * Create MQTT-Client and setup clientId, if MQTT-Broker is online (heartbeat)
  */
-var client = mqtt.connect('mqtt://127.0.0.1:1883', {
+var client = mqtt.connect('mqtt://giv-gwot-vst.uni-muenster.de:1883', {
     encoding : 'utf8',
     clientId : 'rpi',
     will : { // Last Will (if Sensor goes offline)
