@@ -14,7 +14,7 @@ var gpioPins = {
   echo : 24,  // ECHO pin of the sensor; fix
   measurementTimeout : 750,  // timeout for the r-pi-usonic package; fix
   sensor : null  // measuring function
-}
+};
 
 /**
  * Phyiscal connection of a LED
@@ -25,6 +25,39 @@ var led = gpio.export(gpioPins.led, {
    }
 });
 
+
+/**
+ * Scheduled measurment
+ */
+var scheduled = {
+  scheduled : true,
+  interval : 3000,
+  start : function () {
+    if (!this.realtime) return;
+    pubSD();
+    this.timeout = setTimeout(function() {
+      timer.start();
+    }, this.interval);
+  }
+};
+
+
+/**
+ * Realtime measurment
+ */
+var scheduled = {
+  realtime : false,
+  interval : 1000,
+  start : function () {
+    if (!this.realtime) return;
+    pubSD();
+    this.timeout = setTimeout(function() {
+      timer.start();
+    }, this.interval);
+  }
+};
+
+
 /**
  * Sensor Data
  */
@@ -32,11 +65,9 @@ var sensor = {
   id : "rpi-1",
   lng : 7.698035, // e.g. from GPS-Sensor or Settings
   lat : 51.9733937, // e.g. from GPS-Sensor or Settings
-  interval : 3000, // ms => 1 min = 60000 ms
+  interval : scheduled.interval, // ms => 1 min = 60000 ms
   distance : 100, // reference hight of the sensor
-  scheduled : true,
-  realtime : true
-}
+};
 
 
 /**
@@ -48,7 +79,7 @@ var measurement = {
   distance : 0,  // Distance in cm
   lng : sensor.lng, // (regarding geoMQTT)
   lat : sensor.lat // (regarding geoMQTT)
-}
+};
 
 
 /**
@@ -62,6 +93,8 @@ var initSensor = function() {
       console.log("Sensor initialization succeeded. " + new Date());
       gpioPins.sensor = usonic.createSensor(gpioPins.echo, gpioPins.trig, gpioPins.measurementTimeout);
       timer.start();
+      scheduled.start();
+      realtime.start();
     }
   });
 };
@@ -73,10 +106,8 @@ var initSensor = function() {
 var timer = {
   stopped : false,
   interval : sensor.interval,	// default measurement interval
-  start : function(iv) {
+  start : function() {
     this.stopped = false;
-    //console.log("Start");
-    if(iv) this.interval = iv;
     this.timeout = setTimeout(function() {
       timer.measure();
     }, this.interval);
@@ -88,14 +119,8 @@ var timer = {
     measurement.distance = gpioPins.sensor();
     measurement.timestamp = new Date();
     console.log("Distance " + measurement.distance + " measured at time " + measurement.timestamp);
-    this.publish();
     this.blink();
     this.start();
-  },
-  publish : function() {
-    // Publish here the measurement via MQTT
-    if (sensor.realtime) { pubRT() };
-    if (sensor.scheduled) { pubSD() };
   },
   blink : function() {
     led.set()
@@ -115,9 +140,9 @@ var timer = {
 /**
  * Function to set a new timer interval
  */
-var setTimerInterval = function(iv) {
+var setTimerInterval = function() {
   timer.stop();
-  timer.start(iv);
+  timer.start();
 };
 
 
@@ -170,7 +195,7 @@ client.on('connect', function () {
     retain : false
   };
 });
-  
+
 
 /**
  * Publish message with scheduled data
@@ -194,4 +219,3 @@ var pubRT = function() {
     this.options
   );
 };
-
