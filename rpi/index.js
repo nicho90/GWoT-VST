@@ -33,10 +33,11 @@ var scheduled = {
   scheduled : true,
   interval : 3000,
   start : function () {
-    if (!this.realtime) return;
+    if (!this.scheduled) return;
     pubSD();
+    console.log("Publish scheduled");
     this.timeout = setTimeout(function() {
-      timer.start();
+      scheduled.start();
     }, this.interval);
   }
 };
@@ -45,14 +46,15 @@ var scheduled = {
 /**
  * Realtime measurment
  */
-var scheduled = {
-  realtime : false,
+var realtime = {
+  realtime : true,
   interval : 1000,
   start : function () {
     if (!this.realtime) return;
-    pubSD();
+    pubRT();
+    console.log("Publish realtime");
     this.timeout = setTimeout(function() {
-      timer.start();
+      realtime.start();
     }, this.interval);
   }
 };
@@ -65,7 +67,7 @@ var sensor = {
   id : "rpi-1",
   lng : 7.698035, // e.g. from GPS-Sensor or Settings
   lat : 51.9733937, // e.g. from GPS-Sensor or Settings
-  interval : scheduled.interval, // ms => 1 min = 60000 ms
+  interval : realtime.interval, // ms => 1 min = 60000 ms
   distance : 100, // reference hight of the sensor
 };
 
