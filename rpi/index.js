@@ -166,27 +166,6 @@ var client = mqtt.connect('mqtt://giv-gwot-vst.uni-muenster.de:1883', {
 
 
 /**
- * Subscribe to topic from MQTT-Broker
- */
-client.subscribe('cloud');
-// TODO: Define MQTT-Messages
-
-
-/**
- * Recieve Messages from MQTT-Broker
- */
-client.on('message', function (topic, message) {
-  console.log(topic + ": " + message.toString());
-  //client.end(); // No need to close connection, otherwise program will be closed
-
-  // TODO:
-  // - Implement Settings (Topic) from the MQTT-Broker
-  // - Implement update-interval, if defined thresholds are closer
-  // - Implement update-interval for real-time-data, if a User clicks in the WebClient on a Sensor
-});
-
-
-/**
  * Connect to MQTT-Broker
  */
 client.on('connect', function () {
@@ -221,3 +200,24 @@ var pubRT = function() {
     this.options
   );
 };
+
+
+/**
+ * Subscribe to topic from MQTT-Broker
+ */
+client.subscribe('/data/realtime');
+client.subscribe('/settings');
+
+
+/**
+ * Recieve Messages from MQTT-Broker
+ */
+client.on('message', function (topic, message) {
+  console.log(topic + ": " + message.toString());
+  //client.end(); // No need to close connection, otherwise program will be closed
+
+  // TODO:
+  // - Implement Settings (Topic) from the MQTT-Broker
+  // - Implement update-interval, if defined thresholds are closer
+  // - Implement update-interval for real-time-data, if a User clicks in the WebClient on a Sensor
+});
