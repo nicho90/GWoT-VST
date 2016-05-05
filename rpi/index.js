@@ -30,7 +30,7 @@ var led = gpio.export(gpioPins.led, {
  * Scheduled measurment
  */
 var scheduled = {
-  scheduled : true,
+  status : true,
   interval : 3000,
   start : function () {
     if (!this.scheduled) return;
@@ -39,7 +39,16 @@ var scheduled = {
     this.timeout = setTimeout(function() {
       scheduled.start();
     }, this.interval);
+  },
+  stop : function() {
+    clearTimeout(this.timeout);
+    return;
   }
+};
+
+var resetScheduledTimer = function() {
+  scheduled.stop();
+  scheduled.start();
 };
 
 
@@ -47,7 +56,7 @@ var scheduled = {
  * Realtime measurment
  */
 var realtime = {
-  realtime : true,
+  status : true,
   interval : 1000,
   start : function () {
     if (!this.realtime) return;
@@ -56,7 +65,16 @@ var realtime = {
     this.timeout = setTimeout(function() {
       realtime.start();
     }, this.interval);
+  },
+  stop : function() {
+    clearTimeout(this.timeout);
+    return;
   }
+};
+
+var resetRealtimeTimer = function() {
+  scheduled.stop();
+  scheduled.start();
 };
 
 
@@ -131,7 +149,6 @@ var timer = {
     }, 200);
   },
   stop : function() {
-    console.log("Stop");
     this.stopped = true;
     clearTimeout(this.timeout);
     return;
@@ -142,7 +159,7 @@ var timer = {
 /**
  * Function to set a new timer interval
  */
-var setTimerInterval = function() {
+var resetMeasurementTimer = function() {
   timer.stop();
   timer.start();
 };
@@ -214,7 +231,28 @@ client.subscribe('/settings');
  */
 client.on('message', function (topic, message) {
   console.log(topic + ": " + message.toString());
-  //client.end(); // No need to close connection, otherwise program will be closed
+
+  switch(topic) {
+    case '/data/realtime':
+        console.log('Case 1: ' + topic + ": " + message.toString());
+        realtime.status = message.status;
+        if (message.status) {
+          sensor.interval = realtime.interval;
+          resetMeasurementTimer();
+        } else if (!message.status) {
+          sensor.interval = scheduled.interval;
+          resetMeasurementTimer();
+          resetScheduledTimer();
+        }
+        break;
+    case '/settings':
+        console.log('Case 2: ' + topic + ": " + message.toString());
+        scheduled.interval = message.interval;
+        resetMeasurementTimer();
+        break;
+    default:
+        default console.log('Default: ' + topic + ": " + message.toString());
+  }
 
   // TODO:
   // - Implement Settings (Topic) from the MQTT-Broker
