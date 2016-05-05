@@ -33,12 +33,14 @@ var scheduled = {
   status : true,
   interval : 3000,
   start : function () {
-    if (!this.scheduled) return;
-    pubSD();
-    console.log("Publish scheduled");
+    if (!this.status) return;
     this.timeout = setTimeout(function() {
-      scheduled.start();
+      scheduled.publish();
     }, this.interval);
+  },
+  publish : function() {
+    pubSD();
+    this.start();
   },
   stop : function() {
     clearTimeout(this.timeout);
@@ -56,15 +58,17 @@ var resetScheduledTimer = function() {
  * Realtime measurment
  */
 var realtime = {
-  status : true,
+  status : false,
   interval : 1000,
   start : function () {
-    if (!this.realtime) return;
-    pubRT();
-    console.log("Publish realtime");
+    if (!this.status) return;
     this.timeout = setTimeout(function() {
-      realtime.start();
+      realtime.publish();
     }, this.interval);
+  },
+  publish : function() {
+    pubRT();
+    this.start();
   },
   stop : function() {
     clearTimeout(this.timeout);
@@ -73,8 +77,8 @@ var realtime = {
 };
 
 var resetRealtimeTimer = function() {
-  scheduled.stop();
-  scheduled.start();
+  realtime.stop();
+  realtime.start();
 };
 
 
@@ -85,7 +89,7 @@ var sensor = {
   id : "rpi-1",
   lng : 7.698035, // e.g. from GPS-Sensor or Settings
   lat : 51.9733937, // e.g. from GPS-Sensor or Settings
-  interval : realtime.interval, // ms => 1 min = 60000 ms
+  interval : scheduled.interval, // ms => 1 min = 60000 ms
   distance : 100, // reference hight of the sensor
 };
 
@@ -126,16 +130,16 @@ var initSensor = function() {
 var timer = {
   stopped : false,
   interval : sensor.interval,	// default measurement interval
-  start : function() {
+  start : function(iv) {
     this.stopped = false;
+    if(iv) this.interval = iv;
     this.timeout = setTimeout(function() {
       timer.measure();
     }, this.interval);
   },
   measure : function() {
     if (this.stopped) return;
-    // Make here the measurement
-    // console.log("Measure");
+    // Make the measurement
     measurement.distance = gpioPins.sensor();
     measurement.timestamp = new Date();
     console.log("Distance " + measurement.distance + " measured at time " + measurement.timestamp);
@@ -159,9 +163,9 @@ var timer = {
 /**
  * Function to set a new timer interval
  */
-var resetMeasurementTimer = function() {
+var setMeasurementTimer = function(iv) {
   timer.stop();
-  timer.start();
+  timer.start(iv);
 };
 
 
@@ -186,8 +190,6 @@ var client = mqtt.connect('mqtt://giv-gwot-vst.uni-muenster.de:1883', {
  * Connect to MQTT-Broker
  */
 client.on('connect', function () {
-  //topic = '/sensor/scheduled/measurement';
-  //message = JSON.stringify(GeoJSON.parse([measurement], {Point: ['lat', 'lng']}));
   options = {
     qos : 2, // Quality of Service: 2 = at least once
     retain : false
@@ -199,11 +201,7 @@ client.on('connect', function () {
  * Publish message with scheduled data
  */
 var pubSD = function() {
-  client.publish(
-    '/sensor/scheduled/measurement',
-    JSON.stringify(GeoJSON.parse([measurement], {Point: ['lat', 'lng']})),
-    this.options
-  );
+  client.publish('/sensor/scheduled/measurement',JSON.stringify(GeoJSON.parse([measurement], {Point: ['lat', 'lng']})),this.options);
 };
 
 
@@ -230,32 +228,27 @@ client.subscribe('/settings');
  * Recieve Messages from MQTT-Broker
  */
 client.on('message', function (topic, message) {
-  console.log(topic + ": " + message.toString());
-
   switch(topic) {
     case '/data/realtime':
-        console.log('Case 1: ' + topic + ": " + message.toString());
+        var message = JSON.parse(message);
         realtime.status = message.status;
-        if (message.status) {
-          sensor.interval = realtime.interval;
-          resetMeasurementTimer();
+	if (message.status) {
+	  timer.interval = realtime.interval;
+          setMeasurementTimer(realtime.interval);
+	  resetRealtimeTimer();
         } else if (!message.status) {
-          sensor.interval = scheduled.interval;
-          resetMeasurementTimer();
+          timer.interval = scheduled.interval;
+          setMeasurementTimer(scheduled.interval);
+	  resetRealtimeTimer();
           resetScheduledTimer();
         }
         break;
     case '/settings':
-        console.log('Case 2: ' + topic + ": " + message.toString());
-        scheduled.interval = message.interval;
-        resetMeasurementTimer();
+	var message = JSON.parse(message);
+	scheduled.interval = message.interval;
+	if (!realtime.status) setMeasurementTimer(scheduled.interval);
         break;
     default:
-        default console.log('Default: ' + topic + ": " + message.toString());
+        console.log('Default: ' + topic + ": " + message.toString());
   }
-
-  // TODO:
-  // - Implement Settings (Topic) from the MQTT-Broker
-  // - Implement update-interval, if defined thresholds are closer
-  // - Implement update-interval for real-time-data, if a User clicks in the WebClient on a Sensor
 });
