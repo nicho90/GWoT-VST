@@ -20,9 +20,8 @@ var gpioPins = {
  * Phyiscal connection of a LED
  */
 var led = gpio.export(gpioPins.led, {
-   direction: "out",
-   ready: function() {
-   }
+  direction: "out",
+  ready: function() {}
 });
 
 
@@ -48,6 +47,10 @@ var scheduled = {
   }
 };
 
+
+/**
+ * Function to reset the scheduled timer interval
+ */
 var resetScheduledTimer = function() {
   scheduled.stop();
   scheduled.start();
@@ -76,6 +79,10 @@ var realtime = {
   }
 };
 
+
+/**
+ * Function to reset the realtime timer interval
+ */
 var resetRealtimeTimer = function() {
   realtime.stop();
   realtime.start();
@@ -150,7 +157,7 @@ var timer = {
     led.set()
     setTimeout(function() {
       led.set(0);
-    }, 200);
+    }, 100);
   },
   stop : function() {
     this.stopped = true;
@@ -168,21 +175,23 @@ var setMeasurementTimer = function(iv) {
   timer.start(iv);
 };
 
-
+/**
+ * Initialize and start the sensor
+ */
 initSensor();
 
 /**
  * Create MQTT-Client and setup clientId, if MQTT-Broker is online (heartbeat)
  */
 var client = mqtt.connect('mqtt://giv-gwot-vst.uni-muenster.de:1883', {
-    encoding : 'utf8',
-    clientId : 'rpi',
-    will : { // Last Will (if Sensor goes offline)
-        topic : 'dead',
-        payload : 'mypayload',
-        qos : 2,
-        retain : true
-    }
+  encoding : 'utf8',
+  clientId : 'rpi',
+  will : { // Last Will (if Sensor goes offline)
+    topic : 'dead',
+    payload : 'mypayload',
+    qos : 2,
+    retain : true
+  }
 });
 
 
@@ -201,7 +210,10 @@ client.on('connect', function () {
  * Publish message with scheduled data
  */
 var pubSD = function() {
-  client.publish('/sensor/scheduled/measurement',JSON.stringify(GeoJSON.parse([measurement], {Point: ['lat', 'lng']})),this.options);
+  client.publish(
+    '/sensor/scheduled/measurement',
+    JSON.stringify(GeoJSON.parse([measurement], {Point: ['lat', 'lng']})),
+    this.options);
 };
 
 
@@ -230,24 +242,24 @@ client.subscribe('/settings');
 client.on('message', function (topic, message) {
   switch(topic) {
     case '/data/realtime':
-        var message = JSON.parse(message);
-        realtime.status = message.status;
-	if (message.status) {
-	  timer.interval = realtime.interval;
-          setMeasurementTimer(realtime.interval);
-	  resetRealtimeTimer();
-        } else if (!message.status) {
-          timer.interval = scheduled.interval;
-          setMeasurementTimer(scheduled.interval);
-	  resetRealtimeTimer();
-          resetScheduledTimer();
-        }
-        break;
+      var message = JSON.parse(message);
+      realtime.status = message.status;
+	    if (message.status) {
+	      timer.interval = realtime.interval;
+        setMeasurementTimer(realtime.interval);
+	      resetRealtimeTimer();
+      } else if (!message.status) {
+        timer.interval = scheduled.interval;
+        setMeasurementTimer(scheduled.interval);
+	      resetRealtimeTimer();
+        resetScheduledTimer();
+      }
+      break;
     case '/settings':
-	var message = JSON.parse(message);
-	scheduled.interval = message.interval;
-	if (!realtime.status) setMeasurementTimer(scheduled.interval);
-        break;
+	    var message = JSON.parse(message);
+      scheduled.interval = message.interval;
+      if (!realtime.status) setMeasurementTimer(scheduled.interval);
+      break;
     default:
         console.log('Default: ' + topic + ": " + message.toString());
   }
