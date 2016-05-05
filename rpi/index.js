@@ -33,7 +33,9 @@ var sensor = {
   lng : 7.698035, // e.g. from GPS-Sensor or Settings
   lat : 51.9733937, // e.g. from GPS-Sensor or Settings
   interval : 3000, // ms => 1 min = 60000 ms
-  distance : 100 // reference hight of the sensor
+  distance : 100, // reference hight of the sensor
+  scheduled : true,
+  realtime : true
 }
 
 
@@ -85,14 +87,15 @@ var timer = {
     // console.log("Measure");
     measurement.distance = gpioPins.sensor();
     measurement.timestamp = new Date();
+    console.log("Distance " + measurement.distance + " measured at time " + measurement.timestamp);
     this.publish();
     this.blink();
     this.start();
   },
   publish : function() {
     // Publish here the measurement via MQTT
-    console.log("Distance " + measurement.distance + " measured at time " + measurement.timestamp);
-    pubTS();
+    if (sensor.realtime) { pubRT() };
+    if (sensor.scheduled) { pubSD() };
   },
   blink : function() {
     led.set()
@@ -159,17 +162,36 @@ client.on('message', function (topic, message) {
 /**
  * Connect to MQTT-Broker
  */
-var pubTS = function() {
-  client.on('connect', function () {
-    var topic = 'sensor/scheduled/measurement';
-    var message = JSON.stringify(GeoJSON.parse([measurement], {Point: ['lat', 'lng']}));
-    var options = {
-      qos : 2, // Quality of Service: 2 = at least once
-      retain : false
-    };
-    // Publish message
-    client.publish(topic, message, options, function(){
-      console.log("rpi: Hello from rpi")
-    });
-  });
+client.on('connect', function () {
+  //topic = '/sensor/scheduled/measurement';
+  //message = JSON.stringify(GeoJSON.parse([measurement], {Point: ['lat', 'lng']}));
+  options = {
+    qos : 2, // Quality of Service: 2 = at least once
+    retain : false
+  };
+});
+  
+
+/**
+ * Publish message with scheduled data
+ */
+var pubSD = function() {
+  client.publish(
+    '/sensor/scheduled/measurement',
+    JSON.stringify(GeoJSON.parse([measurement], {Point: ['lat', 'lng']})),
+    this.options
+  );
 };
+
+
+/**
+ * Publish message with realtime data
+ */
+var pubRT = function() {
+  client.publish(
+    '/sensor/realtime/measurement',
+    JSON.stringify(GeoJSON.parse([measurement], {Point: ['lat', 'lng']})),
+    this.options
+  );
+};
+
