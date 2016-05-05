@@ -92,6 +92,7 @@ var timer = {
   publish : function() {
     // Publish here the measurement via MQTT
     console.log("Distance " + measurement.distance + " measured at time " + measurement.timestamp);
+    pubTS();
   },
   blink : function() {
     led.set()
@@ -140,34 +141,6 @@ var client = mqtt.connect('mqtt://giv-gwot-vst.uni-muenster.de:1883', {
 client.subscribe('cloud');
 // TODO: Define MQTT-Messages
 
-var data = [
-  { name: 'Location A', category: 'Store', street: 'Market', lat: 39.984, lng: -75.343 },
-  { name: 'Location B', category: 'House', street: 'Broad', lat: 39.284, lng: -75.833 },
-  { name: 'Location C', category: 'Office', street: 'South', lat: 39.123, lng: -74.534 }
-];
-
-/**
- * Connect to MQTT-Broker
- */
-client.on('connect', function () {
-  // TEST: Send a message every 3 Seconds to Broker
-  var i = 0;
-  setInterval(function() {
-    var topic = '/rpi/test';
-    var message = JSON.stringify(GeoJSON.parse([measurement], {Point: ['lat', 'lng']}));
-    var options = {
-      qos : 2, // Quality of Service: 2 = at least once
-      retain : false
-    };
-
-    // Publish message
-    client.publish(topic, message, options, function(){
-      console.log("rpi: Hello from rpi")
-    });
-    i += 1;
-  }, 3000);
-});
-
 
 /**
  * Recieve Messages from MQTT-Broker
@@ -181,3 +154,22 @@ client.on('message', function (topic, message) {
   // - Implement update-interval, if defined thresholds are closer
   // - Implement update-interval for real-time-data, if a User clicks in the WebClient on a Sensor
 });
+
+
+/**
+ * Connect to MQTT-Broker
+ */
+var pubTS = function() {
+  client.on('connect', function () {
+    var topic = 'sensor/scheduled/measurement';
+    var message = JSON.stringify(GeoJSON.parse([measurement], {Point: ['lat', 'lng']}));
+    var options = {
+      qos : 2, // Quality of Service: 2 = at least once
+      retain : false
+    };
+    // Publish message
+    client.publish(topic, message, options, function(){
+      console.log("rpi: Hello from rpi")
+    });
+  });
+};
