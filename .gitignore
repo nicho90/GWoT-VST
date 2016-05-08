@@ -2,6 +2,5 @@ rpi/node_modules/*
 server/node_modules/*
 server/public/lib/*
 server/public/docs/*
-.DS_Store
-
+*.DS_Store
 *.rdb
