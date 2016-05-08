@@ -10,11 +10,11 @@ exports.request = function(req, res){
     // Check if username and password exit
     if(req.body.username == undefined || req.body.username == "" ){
         res.status(400).send({
-            'Error': 'No Username'
+            message: 'No Username'
         });
     } else if (req.body.password == undefined || req.body.password == ""){
         res.status(400).send({
-            'Error': 'No Password'
+            message: 'No Password'
         });
     } else {
         // Create URL
@@ -31,13 +31,18 @@ exports.request = function(req, res){
                     done();
 
                     if(err) {
-                        return console.error('error running query', err);
+                        console.error('Error running query: ', err);
+                        res.status(401).json({
+                            message: 'Error running query',
+                            error: err
+                        });
+                        return
                     } else {
 
                         // Check if user exist
                         if(result.rows.length == 0) {
                             res.status(404).send({
-                                'Error': 'User not found'
+                                message: 'User not found'
                             });
                         } else {
 
@@ -47,29 +52,15 @@ exports.request = function(req, res){
                             if(user.password == req.body.password){
 
                                 // Create Access-Token
-                                var token = jwt.sign({username: user.username, password: user.password}, secret.key, {
-                                    //expiresIn: 1440 // expires in 24 hours
-                                    expiresIn: 1440 // expires in 24 hours
+                                user.token = jwt.sign({username: user.username, password: user.password}, secret.key, {
+                                    expiresIn: '1d' // Default: 1 day
                                 });
-                                user.token = token;
 
-
-                                jwt.verify(token, secret.key, function(err, decoded) {
-                                    if (err) {
-                                        res.status(401).json({
-                                            success: false,
-                                            message: 'Failed to authenticate token'
-                                        });
-                                    } else {
-                                        // if everything is good, save to request for use in other routes
-                                        console.log(decoded);
-                                        res.status(200).send(user);
-                                    }
-                                });
+                                res.status(200).send(user);
 
                             } else {
                                 res.status(401).send({
-                                    'Error': 'Wrong password'
+                                    message: 'Wrong password'
                                 });
                             }
                         }
