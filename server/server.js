@@ -1,5 +1,6 @@
 var program = require('commander');
 var path = require('path');
+var _ = require('underscore');
 
 
 /**
@@ -47,17 +48,13 @@ var db_settings = {
     user: "",
     password: ""
 };
+db_settings = _.extend(db_settings, require('./config/db'));
 
-console.log(program.postgres_user);
-console.log(program.postgres_password);
-
-if(program.postgres_user != "" && program.postgres_password != ""){
+if(program.postgres_user != "admin" && program.postgres_password != "password"){
     db_settings.status = true;
     db_settings.user = program.postgres_user;
     db_settings.password = program.postgres_password;
     exports.db_settings = db_settings;
-
-    console.log(db_settings);
 }
 
 // Check if a SMTP-address and Password were set, otherwise run only simple webserver without REST-API
@@ -66,7 +63,7 @@ var email_settings = {
     user: "",
     password: ""
 };
-if(program.email_user && program.email_password){
+if(program.email_user != "user@gmail.com" && program.email_password != "password"){
     email_settings.status = true;
     email_settings.user = program.email_user;
     email_settings.password = program.email_password;
@@ -74,10 +71,13 @@ if(program.email_user && program.email_password){
 }
 
 
+
 /**
  * Start Express-Webserver
  */
 var express = require('express');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 var app = express();
 var server = require('http').createServer(app);
 
@@ -88,15 +88,83 @@ server.listen(port, function () {
 });
 
 // Set Webserver-Settings
-app.use(bodyParser({
-    limit: 100000 // Maximum file-size: 100000KB = ~100MB (default: 100kb)
+app.use(bodyParser.json({
+    limit: 52428800 // 50MB
 }));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({
+    extended: false,
+    limit: 52428800 // 50MB
+}));
 app.use(cookieParser());
 
 // Set folder for static files (WebClient)
 app.use(express.static(__dirname + '/public'));
+
+
+
+/**
+ * Start Websocket-Server
+ */
+var io = require('socket.io')(server);
+var web_clients = [];
+io.on('connection', function (socket) {
+
+    console.log("Socket connected: " + socket);
+
+    // Add new webClient-User to web_clients[]
+    /*web_clients.push({
+        id: socket,
+        sensor_ids: []
+    });
+    console.log("New WebClient has been conneted!");
+
+
+    // Request Real-time data
+    socket.on('getRT', function (data) {
+        _.findWhere(web_clients, {newsroom: "The New York Times"});
+        sensor_ids
+
+
+         // we tell the client to execute 'new message'
+         socket.broadcast.emit('test', {
+             username: "Max",
+             message: "I wrote this message"
+         });
+     });
+
+     // when the client emits 'new message', this listens and executes
+     /*socket.on('new message', function (data) {
+         // we tell the client to execute 'new message'
+         socket.broadcast.emit('new message', {
+             username: "Max",
+             message: "I wrote this message"
+         });
+     });*/
+
+     // when the user disconnects.. perform this
+     socket.on('disconnect', function () {
+         console.log("Socket disconnected: " + socket);
+         /*if (addedUser) {
+             --numUsers;
+
+             // echo globally that this client has left
+             socket.broadcast.emit('user left', {
+                 username: socket.username,
+                 numUsers: numUsers
+             });
+         }*/
+     });
+
+     /*var i = 0;
+      setInterval(function() {
+          socket.broadcast.emit('test', {
+              username: "Max",
+              message: "I wrote this message"
+          });
+          console.log('test: ' + '{ "username": "Max", "message": "I wrote this message" }')
+      i += 1;
+  }, 3000);*/
+ });
 
 
 
@@ -114,20 +182,23 @@ if(db_settings.status && email_settings.status){
  */
 if(db_settings.status && email_settings.status){
 
-    exports.db = require('./config/db').getDatabase();
+    console.log('PostgreSQL-Database is listening at port ' + db_settings.port);
     console.log('REST-API is listening at endpoint /api/...');
 
-    // TODO:
-    // Implement Routes & Controllers
-
     // Load dependencies
-    // var sensors = require ('./routes/sensors');
+    var login = require ('./routes/login');
+    //var users = require ('./routes/users');
+    //var sensors = require ('./routes/sensors');
+    //var measurements = require ('./routes/measurements');
 
     // Load Routes
-    // app.use('/api', sensors); // sensors
+    app.use('/api', login);
+    //app.use('/api', users);
+    //app.use('/api', sensors);
+    //app.use('/api', measurements);
 
 } else {
-    console.log("Simple Webserver, no REST-API");
+    console.log("Simple Webserver, no REST-API (no Database, no Websockets, no Email-Notification-Service)");
 }
 
 
