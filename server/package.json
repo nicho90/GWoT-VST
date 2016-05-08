@@ -19,7 +19,7 @@
     },
     {
       "name": "Timm Kühnel",
-      "email": "timm.kuehnel@gmail.com"
+      "email": "t_kueh06@uni-muenster.de"
     },
     {
       "name": "Rehan Aziz Chaudhary",
@@ -28,13 +28,20 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "async": "^2.0.0-rc.4",
+    "body-parser": "^1.15.0",
     "commander": "^2.9.0",
+    "cookie": "^0.2.3",
+    "cookie-parser": "~1.0.1",
+    "cookie-signature": "^1.0.6",
     "express": "^4.13.4",
     "http": "0.0.0",
+    "jsonwebtoken": "^6.2.0",
     "mosca": "^1.1.2",
     "nodemailer": "^2.3.2",
     "path": "^0.12.7",
     "pg": "^4.5.5",
-    "socket.io": "^1.4.6"
+    "socket.io": "^1.4.6",
+    "underscore": "^1.8.3"
   }
 }
