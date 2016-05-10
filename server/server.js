@@ -188,13 +188,13 @@ if(db_settings.status && email_settings.status){
     // Load dependencies
     var login = require ('./routes/login');
     var users = require ('./routes/users');
-    //var sensors = require ('./routes/sensors');
+    var sensors = require ('./routes/sensors');
     //var measurements = require ('./routes/measurements');
 
     // Load Routes
     app.use('/api', login);
     app.use('/api', users);
-    //app.use('/api', sensors);
+    app.use('/api', sensors);
     //app.use('/api', measurements);
 
 } else {

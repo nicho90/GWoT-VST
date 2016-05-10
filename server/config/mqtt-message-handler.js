@@ -21,7 +21,7 @@ if(broker != undefined){
 
 
     // CURRENT FOR TESTING
-    var message = {
+    /*var message = {
         topic: 'cloud',
         payload: 'abcde', // String or a Buffer
         qos: 1, // quality of service: 0, 1, or 2
@@ -33,7 +33,7 @@ if(broker != undefined){
             //console.log("Sent: Hello from cloud")
         });
         i += 1;
-    }, 3000);
+    }, 3000);*/
 
 
     /**
