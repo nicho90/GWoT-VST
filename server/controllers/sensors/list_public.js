@@ -1,7 +1,10 @@
 var pg = require('pg');
+var types = require('pg').types;
+types.setTypeParser(1700, 'text', parseFloat);
 var jwt = require('jsonwebtoken');
 var secret = require('./../../config/secret');
 var db_settings = require('../../server.js').db_settings;
+
 
 // LIST
 exports.request = function(req, res){

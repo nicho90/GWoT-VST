@@ -1,4 +1,6 @@
 var pg = require('pg');
+var types = require('pg').types;
+types.setTypeParser(1700, 'text', parseFloat);
 var jwt = require('jsonwebtoken');
 var secret = require('./../../config/secret');
 var verifier = require('./../../config/verifier');
