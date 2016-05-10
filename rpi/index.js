@@ -30,7 +30,7 @@ var led = gpio.export(gpioPins.led, {
  */
 var scheduled = {
   status : true,
-  interval : 3000,
+  interval : 60000, // default interval 1 min
   start : function () {
     if (!this.status) return;
     this.timeout = setTimeout(function() {

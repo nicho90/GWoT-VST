@@ -3,7 +3,8 @@ var mqtt    = require('mqtt');
 var client  = mqtt.connect('mqtt://giv-gwot-vst.uni-muenster.de:1883');
 
 client.on('connect', function () {
-  client.subscribe('/data/realtime');
+  client.subscribe('/sensor/realtime/measurement');
+  //client.subscribe('/sensor/scheduled/measurement');
 
 client.on('message', function (topic, message) {
   console.log(message.toString());
