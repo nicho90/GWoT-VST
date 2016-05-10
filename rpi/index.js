@@ -246,7 +246,10 @@ client.on('message', function (topic, message) {
     case '/settings':
 	    var message = JSON.parse(message);
       scheduled.interval = message.interval;
-      if (!realtime.status) setMeasurementTimer(scheduled.interval);
+      if (!realtime.status){
+        setMeasurementTimer(scheduled.interval);
+        resetScheduledTimer();
+      }
       break;
     default:
         console.log('Default: ' + topic + ": " + message.toString());
