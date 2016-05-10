@@ -4,3 +4,4 @@ server/public/lib/*
 server/public/docs/*
 *.DS_Store
 *.rdb
+npm-debug.log
