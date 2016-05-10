@@ -3,7 +3,7 @@ var usonic = require("r-pi-usonic");
 var gpio = require("gpio");
 var mqtt = require("mqtt");
 var GeoJSON = require('geojson');
-
+var sensor = require("./config/sensor");
 
 /**
  * Pysical connection to the sensor
@@ -30,7 +30,7 @@ var led = gpio.export(gpioPins.led, {
  */
 var scheduled = {
   status : true,
-  interval : 60000, // default interval 1 min
+  interval : sensor.interval, // default interval 1 min
   start : function () {
     if (!this.status) return;
     this.timeout = setTimeout(function() {
@@ -90,22 +90,10 @@ var resetRealtimeTimer = function() {
 
 
 /**
- * Sensor Data
- */
-var sensor = {
-  id : "rpi-1",
-  lng : 7.698035, // e.g. from GPS-Sensor or Settings
-  lat : 51.9733937, // e.g. from GPS-Sensor or Settings
-  interval : scheduled.interval, // ms => 1 min = 60000 ms
-  distance : 100, // reference hight of the sensor
-};
-
-
-/**
  * Measurement object for storing every measurment and generating the message
  */
 var measurement = {
-  id : sensor.id,
+  device_id : sensor.device_id,
   timestamp : new Date(),
   distance : 0,  // Distance in cm
   lng : sensor.lng, // (regarding geoMQTT)
