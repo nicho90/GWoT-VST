@@ -5,7 +5,6 @@ var mqtt = require("mqtt");
 var GeoJSON = require('geojson');
 var sensor = require("./config/sensor");
 var ifaces = require('os').networkInterfaces();
-//console.log(ifaces.wlan0);
 
 /**
  * Pysical connection to the sensor
@@ -222,13 +221,25 @@ var pubRT = function() {
     );
 };
 
+/**
+ * Publish the ip of the PI
+ */
+var pubIP = function() {
+    client.publish(
+        '/sensor/ip',
+        JSON.stringify(ifaces.wlan0),
+        this.options
+    );
+
+};
+
 
 /**
  * Subscribe to topic from MQTT-Broker
  */
 client.subscribe('/data/realtime');
 client.subscribe('/settings');
-
+client.subscribe('/ipcheck');
 
 /**
  * Recieve Messages from MQTT-Broker
@@ -258,11 +269,9 @@ client.on('message', function(topic, message) {
             }
             break;
         case '/ipcheck':
-            client.publish(
-                '/sensor/ip',
-                JSON.stringify(ifaces),
-                this.options
-            );
+	    console.log("ipcheck in");
+	    pubIP();
+	    break;
         default:
             console.log('Default: ' + topic + ": " + message.toString());
     }
