@@ -1,0 +1,10 @@
+Bus power stopping
+Powering off HDMI
+Stopping bluetooth (via systemctl): bluetooth.service.
+Bus power stopping
+Powering off HDMI
+Stopping bluetooth (via systemctl): bluetooth.service.
+Bus power stopping
+Stopping bluetooth (via systemctl): bluetooth.service.
+Bus power stopping
+Stopping bluetooth (via systemctl): bluetooth.service.
