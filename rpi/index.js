@@ -4,7 +4,7 @@ var gpio = require("gpio");
 var mqtt = require("mqtt");
 var GeoJSON = require('geojson');
 var sensor = require("./config/sensor");
-var ifaces = require('os').networkInterfaces();
+var ip = require("ip");
 
 /**
  * Pysical connection to the sensor
@@ -227,10 +227,10 @@ var pubRT = function() {
 var pubIP = function() {
     client.publish(
         '/sensor/ip',
-        JSON.stringify(ifaces.wlan0),
+        //JSON.stringify(ifaces.wlan0),
+	ip.address().toString(),
         this.options
     );
-
 };
 
 
@@ -269,7 +269,6 @@ client.on('message', function(topic, message) {
             }
             break;
         case '/ipcheck':
-	    console.log("ipcheck in");
 	    pubIP();
 	    break;
         default:
