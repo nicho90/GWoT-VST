@@ -1,0 +1,14 @@
+{
+  "name": "testserver",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "rehan",
+  "license": "MIT",
+  "dependencies": {
+    "r-pi-usonic": "^2.5.0"
+  }
+}
