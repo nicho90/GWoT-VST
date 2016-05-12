@@ -53,10 +53,16 @@ if(broker != undefined){
             console.log('Message settings', packet.payload.toString());
         } else if (packet.topic == "/ipcheck") {
             console.log('Message ipcheck', packet.payload.toString());
+        } else if (packet.topic == "/sensor/ip") {
+            console.log('Message sensor ip', packet.payload.toString());
         } else if (packet.topic == "/sensor/scheduled/measurement") {
             console.log('Message scheduled measurement ', packet.payload.toString());
+            // Here are the scheduled measurement messages incomming
+            // TODO handle incomming data
         } else if (packet.topic == "/sensor/realtime/measurement") {
             console.log('Message realtime measurement', packet.payload.toString());
+            // Here are the realtime measurment messages incomming
+            // TODO handle incomming data
         }
 
     });
