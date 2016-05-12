@@ -29,6 +29,7 @@
   "dependencies": {
     "geojson": "^0.3.0",
     "gpio": "^0.2.7",
+    "ip": "^1.1.3",
     "mqtt": "^1.10.0",
     "r-pi-usonic": "^2.5.0"
   }

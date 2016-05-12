@@ -3,7 +3,8 @@ var usonic = require("r-pi-usonic");
 var gpio = require("gpio");
 var mqtt = require("mqtt");
 var GeoJSON = require('geojson');
-
+var sensor = require("./config/sensor");
+var ip = require("ip");
 
 /**
  * Pysical connection to the sensor
@@ -30,7 +31,7 @@ var led = gpio.export(gpioPins.led, {
  */
 var scheduled = {
     status: true,
-    interval: 3000,
+    interval: sensor.interval, // default interval 1 min
     start: function() {
         if (!this.status) return;
         this.timeout = setTimeout(function() {
@@ -90,22 +91,10 @@ var resetRealtimeTimer = function() {
 
 
 /**
- * Sensor Data
- */
-var sensor = {
-    id: "rpi-1",
-    lng: 7.698035, // e.g. from GPS-Sensor or Settings
-    lat: 51.9733937, // e.g. from GPS-Sensor or Settings
-    interval: scheduled.interval, // ms => 1 min = 60000 ms
-    distance: 100, // reference hight of the sensor
-};
-
-
-/**
  * Measurement object for storing every measurment and generating the message
  */
 var measurement = {
-    id: sensor.id,
+    device_id: sensor.device_id,
     timestamp: new Date(),
     distance: 0, // Distance in cm
     lng: sensor.lng, // (regarding geoMQTT)
@@ -234,11 +223,24 @@ var pubRT = function() {
 
 
 /**
+ * Publish the ip of the PI
+ */
+var pubIP = function() {
+    client.publish(
+        '/sensor/ip',
+        //JSON.stringify(ifaces.wlan0),
+        ip.address().toString(),
+        this.options
+    );
+};
+
+
+/**
  * Subscribe to topic from MQTT-Broker
  */
 client.subscribe('/data/realtime');
 client.subscribe('/settings');
-
+client.subscribe('/ipcheck');
 
 /**
  * Recieve Messages from MQTT-Broker
@@ -262,7 +264,13 @@ client.on('message', function(topic, message) {
         case '/settings':
             var message = JSON.parse(message);
             scheduled.interval = message.interval;
-            if (!realtime.status) setMeasurementTimer(scheduled.interval);
+            if (!realtime.status) {
+                setMeasurementTimer(scheduled.interval);
+                resetScheduledTimer();
+            }
+            break;
+        case '/ipcheck':
+            pubIP();
             break;
         default:
             console.log('Default: ' + topic + ": " + message.toString());
