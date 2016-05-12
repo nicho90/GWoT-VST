@@ -46,13 +46,17 @@ if(broker != undefined){
 
         // CURRENT FOR TESTING
         if (packet.topic == "heartbeat") {
-            console.log('Message', packet.payload.toString());
-        } else if (packet.topic == "distance") {
-            console.log('Message', packet.payload.toString());
-        } else if (packet.topic == "/rpi/test") {
-            console.log('RPI-Message', packet.payload.toString());
-        } else if (packet.topic == "cloud") {
-            console.log('CLOUD-Message', packet.payload.toString());
+            console.log('Message heartbeat ', packet.payload.toString());
+        } else if (packet.topic == "/data/realtime") {
+            console.log('Message realtime', packet.payload.toString());
+        } else if (packet.topic == "/settings") {
+            console.log('Message settings', packet.payload.toString());
+        } else if (packet.topic == "/ipcheck") {
+            console.log('Message ipcheck', packet.payload.toString());
+        } else if (packet.topic == "/sensor/scheduled/measurement") {
+            console.log('Message scheduled measurement ', packet.payload.toString());
+        } else if (packet.topic == "/sensor/realtime/measurement") {
+            console.log('Message realtime measurement', packet.payload.toString());
         }
 
     });
