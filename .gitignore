@@ -4,4 +4,9 @@ server/public/lib/*
 server/public/docs/*
 *.DS_Store
 *.rdb
+*.directory
+*.idea
+*.vsc
 npm-debug.log
+
+.idea/vcs.xml
