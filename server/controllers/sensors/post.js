@@ -75,7 +75,7 @@ exports.request = function(req, res){
 				                    } else {
 
 										// Send Result
-										res.status(200).send(result.rows[0]);
+										res.status(201).send(result.rows[0]);
 									}
 								});
 							}

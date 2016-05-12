@@ -8,16 +8,7 @@ var db_settings = require('../../server.js').db_settings;
 exports.request = function(req, res){
 
 	// TODO
-	/* User-Model validation:
-		{
-			username,
-			password,
-			email_address,
-			first_name,
-			last_name
-		}
-	*/
-
+	// User-Model validation
 
 	// Create URL
 	var url = "postgres://" + db_settings.user + ":" + db_settings.password + "@" + db_settings.host + ":" + db_settings.port + "/" + db_settings.database_name;
@@ -36,7 +27,7 @@ exports.request = function(req, res){
 					req.body.email_address,
 					req.body.first_name,
 					req.body.last_name,
-					'user' // User-Role
+					'user' // User-Role (Standard)
 				], function(err, result) {
 				done();
 
@@ -45,7 +36,9 @@ exports.request = function(req, res){
 				} else {
 
 					// Database Query
-					client.query('SELECT * FROM Users WHERE username=$1;', [req.body.username], function(err, result) {
+					client.query('SELECT * FROM Users WHERE username=$1;', [
+						req.body.username
+					], function(err, result) {
 						done();
 
 	                    if(err) {
@@ -64,10 +57,9 @@ exports.request = function(req, res){
 								user.token = jwt.sign({username: user.username, password: user.password}, secret.key, {
 									expiresIn: 1440 // expires in 24 hours
 								});
-								//console.log(user);
 
 								// Send Result
-								res.status(200).send(user);
+								res.status(201).send(user);
 							}
 						}
 					});

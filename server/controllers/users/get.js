@@ -35,7 +35,9 @@ exports.request = function(req, res){
 					} else {
 
 						// Database Query
-						client.query('SELECT created, updated, username, password, email_address, first_name, last_name FROM Users WHERE username=$1;', [req.params.username], function(err, result) {
+						client.query('SELECT created, updated, username, password, email_address, first_name, last_name FROM Users WHERE username=$1;', [
+							req.params.username
+						], function(err, result) {
 							done();
 
 							if(err) {
@@ -57,7 +59,6 @@ exports.request = function(req, res){
 									// Attach Access-Token
 									var user = result.rows[0];
 									user.token = req.headers.token;
-									//console.log(user);
 
 									// Send Result
 									res.status(200).send(user);

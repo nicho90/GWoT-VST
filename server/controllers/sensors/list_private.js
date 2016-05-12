@@ -39,13 +39,15 @@ exports.request = function(req, res){
 						// Check if only private sensors were requested
 						var query;
 						if(req.query.public) {
-							query = "SELECT DISTINCT * FROM (SELECT created_by, sensor_id, device_id, description, private, sensor_height, ST_X(coordinates) AS lng, ST_Y(coordinates) AS lat, created, updated FROM Sensors WHERE private=false UNION ALL SELECT created_by, sensor_id, device_id, description, private, sensor_height, ST_X(coordinates) AS lng, ST_Y(coordinates) AS lat, created, updated FROM Sensors WHERE created_by='nicho90') AS Sensors";
+							query = "SELECT DISTINCT * FROM (SELECT created_by, sensor_id, device_id, description, private, sensor_height, ST_X(coordinates) AS lng, ST_Y(coordinates) AS lat, created, updated FROM Sensors WHERE private=false UNION ALL SELECT created_by, sensor_id, device_id, description, private, sensor_height, ST_X(coordinates) AS lng, ST_Y(coordinates) AS lat, created, updated FROM Sensors WHERE created_by=$1) AS Sensors";
 						} else {
-							query = "SELECT created_by, sensor_id, device_id, description, private, sensor_height, ST_X(coordinates) AS lng, ST_Y(coordinates) AS lat, created, updated FROM Sensors WHERE created_by='nicho90'";
+							query = "SELECT created_by, sensor_id, device_id, description, private, sensor_height, ST_X(coordinates) AS lng, ST_Y(coordinates) AS lat, created, updated FROM Sensors WHERE created_by=$1";
 						}
 
 						// Database Query
-						client.query(query, function(err, result) {
+						client.query(query, [
+							req.params.username
+						], function(err, result) {
 							done();
 
 							if(err) {
