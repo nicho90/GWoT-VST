@@ -53,7 +53,7 @@ exports.request = function(req, res){
 	                    } else {
 
 	                        // Check if user exist
-	                        if(result.rows.length == 0) {
+	                        if(result.rows.length === 0) {
 	                            res.status(404).send({
 	                                'Error': 'User not found'
 	                            });

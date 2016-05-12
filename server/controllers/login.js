@@ -8,11 +8,11 @@ var db_settings = require('../server.js').db_settings;
 exports.request = function(req, res){
 
     // Check if username and password exit
-    if(req.body.username == undefined || req.body.username == "" ){
+    if(req.body.username === undefined || req.body.username === "" ){
         res.status(400).send({
             message: 'No Username'
         });
-    } else if (req.body.password == undefined || req.body.password == ""){
+    } else if (req.body.password === undefined || req.body.password === ""){
         res.status(400).send({
             message: 'No Password'
         });
@@ -36,11 +36,11 @@ exports.request = function(req, res){
                             message: 'Error running query',
                             error: err
                         });
-                        return
+                        return;
                     } else {
 
                         // Check if user exist
-                        if(result.rows.length == 0) {
+                        if(result.rows.length === 0) {
                             res.status(404).send({
                                 message: 'User not found'
                             });

@@ -7,7 +7,7 @@ var verifier = require('./../../config/verifier');
 var db_settings = require('../../server.js').db_settings;
 
 
-// LIST
+// LIST (PRIVATE)
 exports.request = function(req, res){
 
 	// Decode Token

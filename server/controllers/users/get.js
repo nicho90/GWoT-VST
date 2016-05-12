@@ -44,11 +44,11 @@ exports.request = function(req, res){
 									message: 'Error running query',
 									error: err
 								});
-								return
+								return;
 							} else {
 
 								// Check if user exist
-								if(result.rows.length == 0) {
+								if(result.rows.length === 0) {
 									res.status(404).send({
 										message: 'User not found'
 									});
@@ -56,7 +56,7 @@ exports.request = function(req, res){
 
 									// Attach Access-Token
 									var user = result.rows[0];
-									user.token = req.headers.token
+									user.token = req.headers.token;
 									//console.log(user);
 
 									// Send Result

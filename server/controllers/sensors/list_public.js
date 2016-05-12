@@ -6,7 +6,7 @@ var secret = require('./../../config/secret');
 var db_settings = require('../../server.js').db_settings;
 
 
-// LIST
+// LIST (PUBLIC)
 exports.request = function(req, res){
 
     // TODO:

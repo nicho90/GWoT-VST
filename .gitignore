@@ -9,4 +9,3 @@ server/public/docs/*
 *.idea
 *.vsc
 npm-debug.log
-.idea/vcs.xml

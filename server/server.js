@@ -82,7 +82,7 @@ var app = express();
 var server = require('http').createServer(app);
 
 // Set Server-Port
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 3333;
 server.listen(port, function () {
     console.log('Webserver is listening at port %d', port);
 });
