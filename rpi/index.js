@@ -96,7 +96,10 @@ var resetRealtimeTimer = function() {
 var measurement = {
     device_id: sensor.device_id,
     timestamp: new Date(),
-    distance: 0, // Distance in cm
+    distance: {
+      value: 0, // Distance in cm
+      unit: "cm"
+    },
     lng: sensor.lng, // (regarding geoMQTT)
     lat: sensor.lat // (regarding geoMQTT)
 };
@@ -136,9 +139,9 @@ var timer = {
     measure: function() {
         if (this.stopped) return;
         // Make the measurement
-        measurement.distance = gpioPins.sensor();
+        measurement.distance.value = gpioPins.sensor();
         measurement.timestamp = new Date();
-        console.log("Distance " + measurement.distance + " measured at time " + measurement.timestamp);
+        console.log("Distance " + measurement.distance.value + " measured at time " + measurement.timestamp);
         this.blink();
         this.start();
     },
