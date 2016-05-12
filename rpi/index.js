@@ -221,6 +221,7 @@ var pubRT = function() {
     );
 };
 
+
 /**
  * Publish the ip of the PI
  */
@@ -228,7 +229,7 @@ var pubIP = function() {
     client.publish(
         '/sensor/ip',
         //JSON.stringify(ifaces.wlan0),
-	ip.address().toString(),
+	    ip.address().toString(),
         this.options
     );
 };
@@ -269,8 +270,8 @@ client.on('message', function(topic, message) {
             }
             break;
         case '/ipcheck':
-	    pubIP();
-	    break;
+            pubIP();
+            break;
         default:
             console.log('Default: ' + topic + ": " + message.toString());
     }
