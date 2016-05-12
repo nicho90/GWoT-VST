@@ -229,7 +229,7 @@ var pubIP = function() {
     client.publish(
         '/sensor/ip',
         //JSON.stringify(ifaces.wlan0),
-        ip.address().toString(),
+	    ip.address().toString(),
         this.options
     );
 };
