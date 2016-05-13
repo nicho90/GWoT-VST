@@ -8,4 +8,5 @@ server/public/docs/*
 *.directory
 *.idea
 *.vsc
+.idea/vcs.xml
 npm-debug.log

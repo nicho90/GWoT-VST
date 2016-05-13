@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+        <title>Registration successful</title>
+
+        <style>
+            body {
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+
+            table thead, table tbody {
+                background-color: #FFFFFF;
+            }
+
+            thead {
+                border-bottom: 1px solid #333333;
+            }
+
+            .name {
+                color: #0275d8;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="jumbotron">
+                    <br>
+                    <center>
+                        <h1 class="display-4">Hello <span class="name">{{first_name}} {{last_name}}</span></h1>
+                        <p>Your new profile <b>{{username}}</b> has been successfully created!</p>
+                    </center>
+                    <br>
+                    <hr>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-2"></div>
+                        <div class="col-xs-8">
+                            <center><h4>Next steps</h4></center>
+                            <ol>
+                                <li>Login at <a href="#">LINK</a></li>
+                                <li>Create new thresholds</li>
+                                <li>Subscribe to existing sensors with your created thresholds</li>
+                            </ol>
+                            <br>
+                            <center><h4>New sensors</h4></center>
+                            Your floodway or bridge is not covered with a sensor? You can easily create a new sensor in the application. You you can decide if you want to make it private for own purposes or to make it public to share it with other users. To build an own sensor with a Raspberry Pi, please follow the following instructions <a href="#">LINK</a>.
+                        </div>
+                        <div class="col-xs-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div>
+            <center>
+                <b>APP-NAME</b> by <a href="https://www.uni-muenster.de/Geoinformatics/en/index.html" target="_blank">Institute for Geoinformatics</a><br>
+                <address>Heisenbergstraße 2 • 48149 • Münster • Germany</address>
+            </center>
+        </div>
+        <br>
+    </body>
+</html>

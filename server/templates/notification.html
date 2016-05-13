@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+        <title>Threshold-Alert</title>
+
+        <style>
+            body {
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+
+            table thead, table tbody {
+                background-color: #FFFFFF;
+            }
+
+            thead {
+                border-bottom: 1px solid #333333;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="jumbotron">
+                    <center>
+                        <h3>Attention {{username}}</h3>
+                        <p>A threshold was triggered for one of your subscripted sensors!</p>
+                    </center>
+                    <br>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Sensor</th>
+                                <th>Threshold</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {{sensor_id}}
+                                </td>
+                                <td>
+                                    {{threshold_name}}
+                                </td>
+                                <td>
+                                    {{status}} <!-- passing possible, limited, dangerous -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div>
+            <center>
+                <b>APP-NAME</b> by <a href="https://www.uni-muenster.de/Geoinformatics/en/index.html" target="_blank">Institute for Geoinformatics</a><br>
+                <address>Heisenbergstraße 2 • 48149 • Münster • Germany</address>
+            </center>
+        </div>
+        <br>
+    </body>
+</html>
