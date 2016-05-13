@@ -25,6 +25,7 @@ exports.request = function(req, res){
 					message: validation.message
 				});
 			} else {
+				
 				// Create URL
 				var url = "postgres://" + db_settings.user + ":" + db_settings.password + "@" + db_settings.host + ":" + db_settings.port + "/" + db_settings.database_name;
 
