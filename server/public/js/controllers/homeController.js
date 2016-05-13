@@ -1,42 +1,14 @@
 var app = angular.module("gwot-vst");
 
 
-// Home Controller
+/**
+ * Home Controller
+ * @param  {[type]} "HomeController" [description]
+ * @param  {[type]} function($scope, $translate    [description]
+ * @return {[type]}                  [description]
+ */
 app.controller("HomeController", function($scope, $translate) {
 
-    $scope.status = true;
-
-    // Change Language
-    $scope.changeLanguage = function(newLanguage) {
-        $translate.use(newLanguage);
-
-        if($scope.status) {
-            $scope.status = false;
-        } else {
-            $scope.status = true;
-        }
-
-    };
-
-    var i = 0;
-
-    $scope.cats = [];
-
-    // new cat-object
-    $scope.cat = {
-        "name": ""
-    };
-
-    // add new cat to the list (cat-array)
-    $scope.add = function(){
-        i++;
-        $scope.cats.push(
-            {
-                "id": i,
-                "name": $scope.cat.name
-            }
-        );
-    };
 
 
 });
