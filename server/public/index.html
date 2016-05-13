@@ -36,7 +36,7 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-fixed-top navbar-dark bg-inverse" ng-controller="NavController">
 
-        <a class="navbar-brand" ng-href="#/">GWoT-VST</a>
+        <a class="navbar-brand" ng-href="#/">{{config.appName}} <small>{{config.appVersion}}</small></a>
 
         <!-- NAVBAR LEFT -->
         <ul class="nav nav-pills">
@@ -144,6 +144,7 @@
     <script src="lib/angular-translate/angular-translate.min.js"></script>
 
     <!-- App Modules -->
+    <script src="js/modules/config.js"></script>
     <script src="js/modules/routes.js"></script>
     <script src="js/modules/languages.js"></script>
 

@@ -1,7 +1,7 @@
-var app = angular.module("languages", []);
+var app = angular.module("languages", [ "config" ]);
 
 
-app.config(function($translateProvider) {
+app.config(function($translateProvider, config) {
 
     $translateProvider.translations('de_DE', {
 
@@ -17,6 +17,6 @@ app.config(function($translateProvider) {
 
     });
 
-    // Default Language (English)
-    $translateProvider.preferredLanguage('en_US');
+    // Set Default Language (English)
+    $translateProvider.preferredLanguage(config.appLanguage);
 });
