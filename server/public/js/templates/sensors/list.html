@@ -1,2 +1,29 @@
 <br>
 <h1>{{ 'SENSORS' | translate }}</h1>
+<br>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Sensor-ID</th>
+            <th>Device-ID</th>
+            <th>Description</th>
+            <th>Coordinates</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-if="sensors.length == 0">
+            <td colspan="4">
+                <center>- {{ 'NONE' | translate}} -</center>
+            </td>
+        </tr>
+
+        <tr ng-if="sensors.length != 0" ng-repeat="sensor in sensors">
+            <td>{{sensor.sensor_id}}</td>
+            <td>{{sensor.device_id}}</td>
+            <td>{{sensor.description}}</td>
+            <td>
+                ({{sensor.lat}}, {{sensor.lng}})
+            </td>
+        </tr>
+    </tbody>
+</table>

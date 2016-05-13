@@ -6,14 +6,16 @@ app.config(function($translateProvider, config) {
     $translateProvider.translations('de_DE', {
 
         WELCOME: 'Willkommen',
-        SENSORS: 'Sensoren'
+        SENSORS: 'Sensoren',
+        NONE: 'keine'
 
     });
 
     $translateProvider.translations('en_US', {
 
         WELCOME: 'Welcome',
-        SENSORS: 'Sensors'
+        SENSORS: 'Sensors',
+        NONE: 'none'
 
     });
 

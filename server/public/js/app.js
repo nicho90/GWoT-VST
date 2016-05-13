@@ -1,19 +1,20 @@
 var app = angular.module("gwot-vst", [
 
 
-        // App Settings
-        "config",
+    // App Settings
+    "config",
 
-        // External Modules
-        "ngRoute",
-        "pascalprecht.translate",
+    // External Modules
+    "ngRoute",
+    "pascalprecht.translate",
 
-        // Own Modules
-        "routes",
-        "languages"
+    // Own Modules
+    "routes",
+    "languages",
 
-    ]
-);
+    //Services
+    "sensorService"
+]);
 
 
 // Start App
