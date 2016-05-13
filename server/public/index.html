@@ -1,44 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Geospatial Web of Things - Virtual Smart Things Group">
-        <meta name="author" content="Nicholas Schiestel">
-        <meta name="author" content="Heinrich Löwen">
-        <meta name="author" content="Rehan Aziz Chaudhary">
-        <meta name="author" content="Timm Kühnel">
-        <!--<link rel="icon" href="images/favicon/favicon.ico"> -->
 
-        <!-- Detect phone numbers -->
-        <meta name="format-detection" content="telephone=no">
-        <meta http-equiv="x-rim-auto-match" content="none">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Geospatial Web of Things - Virtual Smart Things Group">
+    <meta name="author" content="Nicholas Schiestel">
+    <meta name="author" content="Heinrich Löwen">
+    <meta name="author" content="Rehan Aziz Chaudhary">
+    <meta name="author" content="Timm Kühnel">
+    <!--<link rel="icon" href="images/favicon/favicon.ico"> -->
 
-        <title>GWoT-VST</title>
+    <!-- Detect phone numbers -->
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="x-rim-auto-match" content="none">
 
-        <!-- Bootstrap core CSS -->
-        <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <title>GWoT-VST</title>
 
-        <!-- Font-Awesome -->
-        <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+    <!-- Bootstrap core CSS -->
+    <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-        <!-- Flag Icons -->
-        <link href="lib/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
+    <!-- Font-Awesome -->
+    <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
 
-        <!-- Custom styles for this template -->
-        <link href="css/styles.css" rel="stylesheet"/>
+    <!-- Flag Icons -->
+    <link href="lib/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
 
-    </head>
+    <!-- Custom styles for this template -->
+    <link href="css/styles.css" rel="stylesheet" />
 
-    <body ng-app="gwot-vst">
+</head>
 
-        <!--<div ng-view>
-            TEMPLATE-CONTENT (VIEWS BASED ON THE ROUTE)
-        </div>-->
+<body ng-app="gwot-vst">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-fixed-top navbar-dark bg-inverse" ng-controller="NavController">
+
+        <a class="navbar-brand" ng-href="#/">GWoT-VST</a>
+
+        <!-- NAVBAR LEFT -->
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link" ng-href="#/" ng-class="{ active: isActive('/') }">
+                    <i class="fa fa-home"></i>&nbsp;&nbsp;{{ 'NAV_HOME' | translate }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" ng-href="#/sensors" ng-class="{ active: isActive('/sensors') }">
+                    <i class="fa fa-wifi"></i>&nbsp;&nbsp;{{ 'NAV_SENSORS' | translate }}
+                </a>
+            </li>
+        </ul>
+
+        <!-- NAVBAR RIGHT -->
+
+    </nav>
+
+    <div ng-view>
+        TEMPLATE-CONTENT (VIEWS BASED ON THE ROUTE)
+    </div>
 
 
-        <div ng-controller="HomeController">
+    <!--<div ng-controller="HomeController">
 
             <h1>{{ 'WELCOME' | translate }}</h1>
 
@@ -50,14 +73,14 @@
             STATUS:
             <span class="label label-pill" ng-class="{ 'label-success': status,  'label-danger': !status }">
 
-            <!--{ bolder: language=='en_US'}-->
+            { bolder: language=='en_US'}
                 <span ng-if="status">online</span>
                 <span ng-if="!status">offline</span>
             </span>
 
             <br>
 
-            <!-- <ul ng-repeat="cat in cats">
+            <ul ng-repeat="cat in cats">
                 <li>{{cat.id}}. {{cat.name}}</li>
             </ul>
 
@@ -66,7 +89,7 @@
             <label>New Cat</label>
             <input type="text" class="form-control" placeholder="Name" ng-model="cat.name">
 
-            <button type="button" ng-click="add()" class="btn btn-primary">Add new Cat</button>-->
+            <button type="button" ng-click="add()" class="btn btn-primary">Add new Cat</button>
 
         </div>
 
@@ -113,23 +136,24 @@
                 </tbody>
             </table>
         </div>
+-->
 
+    <!-- JavaScript Dependecies -->
+    <script src="lib/jquery/dist/jquery.min.js"></script>
+    <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="lib/angular-translate/angular-translate.min.js"></script>
 
-        <!-- JavaScript Dependecies -->
-        <script src="lib/jquery/dist/jquery.min.js"></script>
-        <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="lib/angular/angular.min.js"></script>
-        <script src="lib/angular-translate/angular-translate.min.js"></script>
+    <!-- App Modules -->
+    <script src="js/modules/languages.js"></script>
 
-        <!-- App Modules -->
-        <script src="js/modules/languages.js"></script>
+    <!-- Main App -->
+    <script src="js/app.js"></script>
 
-        <!-- Main App -->
-        <script src="js/app.js"></script>
+    <!-- Controllers -->
+    <script src="js/controllers/homeController.js"></script>
+    <script src="js/controllers/sensors/create.js"></script>
 
-        <!-- Controllers -->
-        <script src="js/controllers/homeController.js"></script>
-        <script src="js/controllers/sensors/create.js"></script>
+</body>
 
-    </body>
 </html>
