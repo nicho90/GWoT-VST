@@ -4,23 +4,13 @@ var gpio = require("gpio");
 var mqtt = require("mqtt");
 var GeoJSON = require('geojson');
 var sensor = require("./config/sensor");
+var gpio_settings = require("./config/gpio");
 var ip = require("ip");
-
-/**
- * Pysical connection to the sensor
- */
-var gpioPins = {
-    led: 17, // Pin for the LED
-    trig: 23, // TRIG pin of the sensor; fix
-    echo: 24, // ECHO pin of the sensor; fix
-    measurementTimeout: 750, // timeout for the r-pi-usonic package; fix
-    sensor: null // measuring function
-};
 
 /**
  * Phyiscal connection of a LED
  */
-var led = gpio.export(gpioPins.led, {
+var led = gpio.export(gpio_settings.led, {
     direction: "out",
     ready: function() {}
 });
@@ -29,13 +19,13 @@ var led = gpio.export(gpioPins.led, {
 /**
  * Scheduled measurment
  */
-var scheduled = {
+var scheduledTimer = {
     status: true,
     interval: sensor.interval, // default interval 1 min
     start: function() {
         if (!this.status) return;
         this.timeout = setTimeout(function() {
-            scheduled.publish();
+            scheduledTimer.publish();
         }, this.interval);
     },
     publish: function() {
@@ -53,21 +43,21 @@ var scheduled = {
  * Function to reset the scheduled timer interval
  */
 var resetScheduledTimer = function() {
-    scheduled.stop();
-    scheduled.start();
+    scheduledTimer.stop();
+    scheduledTimer.start();
 };
 
 
 /**
  * Realtime measurment
  */
-var realtime = {
+var realtimeTimer = {
     status: false,
     interval: 1000,
     start: function() {
         if (!this.status) return;
         this.timeout = setTimeout(function() {
-            realtime.publish();
+            realtimeTimer.publish();
         }, this.interval);
     },
     publish: function() {
@@ -85,8 +75,8 @@ var realtime = {
  * Function to reset the realtime timer interval
  */
 var resetRealtimeTimer = function() {
-    realtime.stop();
-    realtime.start();
+    realtimeTimer.stop();
+    realtimeTimer.start();
 };
 
 
@@ -97,8 +87,8 @@ var measurement = {
     device_id: sensor.device_id,
     timestamp: new Date(),
     distance: {
-      value: 0, // Distance in cm
-      unit: "cm"
+        value: 0, // Distance in cm
+        unit: "cm"
     },
     lng: sensor.lng, // (regarding geoMQTT)
     lat: sensor.lat // (regarding geoMQTT)
@@ -114,10 +104,10 @@ var initSensor = function() {
             console.log("Sensor initialization failed.");
         } else {
             console.log("Sensor initialization succeeded. " + new Date());
-            gpioPins.sensor = usonic.createSensor(gpioPins.echo, gpioPins.trig, gpioPins.measurementTimeout);
+            gpio_settings.sensor = usonic.createSensor(gpio_settings.echo, gpio_settings.trig, gpio_settings.measurement_timeout);
             timer.start();
-            scheduled.start();
-            realtime.start();
+            scheduledTimer.start();
+            realtimeTimer.start();
         }
     });
 };
@@ -126,20 +116,20 @@ var initSensor = function() {
 /**
  *
  */
-var timer = {
+var measurementTimer = {
     stopped: false,
     interval: sensor.interval, // default measurement interval
     start: function(iv) {
         this.stopped = false;
         if (iv) this.interval = iv;
         this.timeout = setTimeout(function() {
-            timer.measure();
+            measurementTimer.measure();
         }, this.interval);
     },
     measure: function() {
         if (this.stopped) return;
         // Make the measurement
-        measurement.distance.value = gpioPins.sensor();
+        measurement.distance.value = gpio_settings.sensor();
         measurement.timestamp = new Date();
         console.log("Distance " + measurement.distance.value + " measured at time " + measurement.timestamp);
         this.blink();
@@ -163,8 +153,8 @@ var timer = {
  * Function to set a new timer interval
  */
 var setMeasurementTimer = function(iv) {
-    timer.stop();
-    timer.start(iv);
+    measurementTimer.stop();
+    measurementTimer.start(iv);
 };
 
 /**
@@ -212,6 +202,18 @@ var pubSD = function() {
 
 
 /**
+ * Verify incomming scheduled settings
+ */
+var verifySD = fuction(message) {
+    scheduledTimer.interval = message.interval;
+    if (!realtimeTimer.status) {
+        setMeasurementTimer(scheduledTimer.interval);
+        resetScheduledTimer();
+    }
+}
+
+
+/**
  * Publish message with realtime data
  */
 var pubRT = function() {
@@ -226,13 +228,30 @@ var pubRT = function() {
 
 
 /**
+ * Verify incomming realtime settings
+ */
+var verifyRT = fuction(message) {
+    realtimeTimer.status = message.status;
+    if (message.status) {
+        measurementTimer.interval = realtimeTimer.interval;
+        setMeasurementTimer(realtimeTimer.interval);
+        resetRealtimeTimer();
+    } else if (!message.status) {
+        measurementTimer.interval = scheduledTimer.interval;
+        setMeasurementTimer(scheduledTimer.interval);
+        resetRealtimeTimer();
+        resetScheduledTimer();
+    }
+}
+
+/**
  * Publish the ip of the PI
  */
 var pubIP = function() {
     client.publish(
         '/sensor/ip',
         //JSON.stringify(ifaces.wlan0),
-	    ip.address().toString(),
+        ip.address().toString(),
         this.options
     );
 };
@@ -249,33 +268,22 @@ client.subscribe('/ipcheck');
  * Recieve Messages from MQTT-Broker
  */
 client.on('message', function(topic, message) {
-    switch (topic) {
-        case '/data/realtime':
-            var message = JSON.parse(message);
-            realtime.status = message.status;
-            if (message.status) {
-                timer.interval = realtime.interval;
-                setMeasurementTimer(realtime.interval);
-                resetRealtimeTimer();
-            } else if (!message.status) {
-                timer.interval = scheduled.interval;
-                setMeasurementTimer(scheduled.interval);
-                resetRealtimeTimer();
-                resetScheduledTimer();
-            }
-            break;
-        case '/settings':
-            var message = JSON.parse(message);
-            scheduled.interval = message.interval;
-            if (!realtime.status) {
-                setMeasurementTimer(scheduled.interval);
-                resetScheduledTimer();
-            }
-            break;
-        case '/ipcheck':
-            pubIP();
-            break;
-        default:
-            console.log('Default: ' + topic + ": " + message.toString());
+    var message = JSON.parse(message);
+    if (message.id == sensor.device_id) {
+        switch (topic) {
+            case '/data/realtime':
+                verifyRT(message);
+                break;
+            case '/settings':
+                verifySD(message);
+                break;
+            case '/ipcheck':
+                pubIP();
+                break;
+            default:
+                console.log("MQTT receive invalid topic.");
+        };
+    } else {
+        console.log("MQTT receive invalid id.")
     }
 });
