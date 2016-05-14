@@ -198,12 +198,14 @@ if(db_settings.status && email_settings.status){
     var users = require ('./routes/users');
     var sensors = require ('./routes/sensors');
     //var measurements = require ('./routes/measurements');
+    var vehicles = require ('./routes/vehicles');
 
     // Load Routes
     app.use('/api', login);
     app.use('/api', users);
     app.use('/api', sensors);
     //app.use('/api', measurements);
+    app.use('/api', vehicles);
 
 } else {
     console.log("Simple Webserver, no REST-API (no Database, no Websockets, no Email-Notification-Service)");
