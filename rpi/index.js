@@ -105,7 +105,7 @@ var initSensor = function() {
         } else {
             console.log("Sensor initialization succeeded. " + new Date());
             gpio_settings.sensor = usonic.createSensor(gpio_settings.echo, gpio_settings.trig, gpio_settings.measurement_timeout);
-            timer.start();
+            measurementTimer.start();
             scheduledTimer.start();
             realtimeTimer.start();
         }
@@ -204,7 +204,7 @@ var pubSD = function() {
 /**
  * Verify incomming scheduled settings
  */
-var verifySD = fuction(message) {
+var verifySD = function(message) {
     scheduledTimer.interval = message.interval;
     if (!realtimeTimer.status) {
         setMeasurementTimer(scheduledTimer.interval);
@@ -230,7 +230,7 @@ var pubRT = function() {
 /**
  * Verify incomming realtime settings
  */
-var verifyRT = fuction(message) {
+var verifyRT = function(message) {
     realtimeTimer.status = message.status;
     if (message.status) {
         measurementTimer.interval = realtimeTimer.interval;
@@ -269,7 +269,7 @@ client.subscribe('/ipcheck');
  */
 client.on('message', function(topic, message) {
     var message = JSON.parse(message);
-    if (message.id == sensor.device_id) {
+    if (message.device_id == sensor.device_id) {
         switch (topic) {
             case '/data/realtime':
                 verifyRT(message);
