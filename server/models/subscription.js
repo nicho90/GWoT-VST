@@ -1,5 +1,5 @@
 /**
- * Login Model for schema validation
+ * Subscription Model for schema validation
  * @type {Object}
  */
 module.exports = {
@@ -8,13 +8,16 @@ module.exports = {
             "type": "string",
             "minLength": 2
         },
-        "password": {
-            "type": "string",
-            "minLength": 6
+        "sensor_id": {
+            "type": "integer"
+        },
+        "threshold_id": {
+            "type": "integer"
         }
     },
     "required": [
         "username",
-        "password"
+        "sensor_id",
+        "threshold_id"
     ]
 };
