@@ -1,45 +1,51 @@
 {
-    "name": "gwot-vst-server",
-    "version": "1.0.0",
-    "description": "The Geospatial Web of Things, is a project of the Institute for Geoinformatics Münster (Germany), which took place in summer term 2016. This `package.json` belongs to Virtual Smart Things Group and focuses on the Server, which is the main-part of the overall architecture. The Main-Server consits of a MQTT-Broker, which listens to published MQTT-messages from the Raspberry Pis, which collects water levels from sensors. Furthermore the in-comming sensor-data will be post-processed and stored in a database. A REST-API provides the data for the WebClient, which visualizes the data as timeseries and manages the sensor-settings and subscriptions. The Nodejs-Webserver consits of the static files for the WebClient, which are in the subfolder `/public`.",
-    "main": "server.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node server.js"
+  "name": "gwot-vst-server",
+  "version": "1.0.0",
+  "description": "The Geospatial Web of Things, is a project of the Institute for Geoinformatics Münster (Germany), which took place in summer term 2016. This `package.json` belongs to Virtual Smart Things Group and focuses on the Server, which is the main-part of the overall architecture. The Main-Server consits of a MQTT-Broker, which listens to published MQTT-messages from the Raspberry Pis, which collects water levels from sensors. Furthermore the in-comming sensor-data will be post-processed and stored in a database. A REST-API provides the data for the WebClient, which visualizes the data as timeseries and manages the sensor-settings and subscriptions. The Nodejs-Webserver consits of the static files for the WebClient, which are in the subfolder `/public`.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "GWoT-VST-Group",
+  "contributors": [
+    {
+      "name": "Nicholas Schiestel",
+      "email": "n.schiestel@uni-muenster.de"
     },
-    "author": "GWoT-VST-Group",
-    "contributors": [{
-        "name": "Nicholas Schiestel",
-        "email": "n.schiestel@uni-muenster.de"
-    }, {
-        "name": "Heinrich Löwen",
-        "email": "loewen.heinrich@uni-muenster.de"
-    }, {
-        "name": "Timm Kühnel",
-        "email": "t_kueh06@uni-muenster.de"
-    }, {
-        "name": "Rehan Aziz Chaudhary",
-        "email": "r_chau02@uni-muenster.de"
-    }],
-    "license": "MIT",
-    "dependencies": {
-        "ajv": "^4.0.5",
-        "async": "^2.0.0-rc.4",
-        "body-parser": "^1.15.0",
-        "commander": "^2.9.0",
-        "cookie": "^0.2.3",
-        "cookie-parser": "~1.0.1",
-        "cookie-signature": "^1.0.6",
-        "express": "^4.13.4",
-        "fs": "0.0.2",
-        "http": "0.0.0",
-        "jsonwebtoken": "^6.2.0",
-        "mosca": "^1.1.2",
-        "mustache": "^2.2.1",
-        "nodemailer": "^2.3.2",
-        "path": "^0.12.7",
-        "pg": "^4.5.5",
-        "socket.io": "^1.4.6",
-        "underscore": "^1.8.3"
+    {
+      "name": "Heinrich Löwen",
+      "email": "loewen.heinrich@uni-muenster.de"
+    },
+    {
+      "name": "Timm Kühnel",
+      "email": "t_kueh06@uni-muenster.de"
+    },
+    {
+      "name": "Rehan Aziz Chaudhary",
+      "email": "r_chau02@uni-muenster.de"
     }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "ajv": "^4.0.5",
+    "async": "^2.0.0-rc.5",
+    "body-parser": "^1.15.0",
+    "commander": "^2.9.0",
+    "cookie": "^0.2.3",
+    "cookie-parser": "~1.0.1",
+    "cookie-signature": "^1.0.6",
+    "express": "^4.13.4",
+    "fs": "0.0.2",
+    "http": "0.0.0",
+    "jsonwebtoken": "^6.2.0",
+    "moment": "^2.13.0",
+    "mosca": "^1.1.2",
+    "mustache": "^2.2.1",
+    "nodemailer": "^2.3.2",
+    "path": "^0.12.7",
+    "pg": "^4.5.5",
+    "socket.io": "^1.4.6",
+    "underscore": "^1.8.3"
+  }
 }
