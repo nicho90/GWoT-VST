@@ -3,27 +3,32 @@ var jwt = require('jsonwebtoken');
 var secret = require('./../config/secret');
 var db_settings = require('../server.js').db_settings;
 
+var Ajv = require('ajv');
+var schema = require('./../models/login');
+var ajv = Ajv({"format": "full"});
+var validate = ajv.compile(schema);
+
 
 // POST
 exports.request = function(req, res){
 
-    // Check if username and password exit
-    if(req.body.username === undefined || req.body.username === "" ){
-        res.status(400).send({
-            message: 'No Username'
-        });
-    } else if (req.body.password === undefined || req.body.password === ""){
-        res.status(400).send({
-            message: 'No Password'
-        });
+    // Schema Validation
+    var valid = validate(req.body);
+    if (!valid) {
+        res.status(errors.schema.error_1.code).send(_.extend(errors.schema.error_1, {
+            err: validate.errors[0].dataPath + ": " + validate.errors[0].message
+        }));
+        return console.error(validate.errors[0].dataPath + ": " + validate.errors[0].message);
     } else {
+
         // Create URL
         var url = "postgres://" + db_settings.user + ":" + db_settings.password + "@" + db_settings.host + ":" + db_settings.port + "/" + db_settings.database_name;
 
         // Connect to Database
         pg.connect(url, function(err, client, done) {
             if(err) {
-                console.error('Error fetching client from pool', err);
+                res.status(errors.database.error_1.code).send(errors.database.error_1);
+    			return console.error(errors.database.error_1.message, err);
             } else {
 
                 // Database Query
@@ -31,12 +36,8 @@ exports.request = function(req, res){
                     done();
 
                     if(err) {
-                        console.error('Error running query: ', err);
-                        res.status(401).json({
-                            message: 'Error running query',
-                            error: err
-                        });
-                        return;
+                        res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
+                        return console.error(errors.database.error_2.message, err);
                     } else {
 
                         // Check if user exist
