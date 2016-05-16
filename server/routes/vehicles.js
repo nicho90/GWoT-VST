@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var list = require('../controllers/vehicles');
+var list = require('../controllers/vehicles/list');
 
 
 // LIST

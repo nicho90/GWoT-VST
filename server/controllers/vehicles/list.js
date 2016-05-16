@@ -1,7 +1,7 @@
 var pg = require('pg');
 var jwt = require('jsonwebtoken');
-var secret = require('./../config/secret');
-var db_settings = require('../server.js').db_settings;
+var secret = require('./../../config/secret');
+var db_settings = require('../../server.js').db_settings;
 
 
 // LIST
