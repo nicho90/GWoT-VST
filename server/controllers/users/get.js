@@ -25,14 +25,15 @@ exports.request = function(req, res){
 					message: validation.message
 				});
 			} else {
-				
+
 				// Create URL
 				var url = "postgres://" + db_settings.user + ":" + db_settings.password + "@" + db_settings.host + ":" + db_settings.port + "/" + db_settings.database_name;
 
 				// Connect to Database
 				pg.connect(url, function(err, client, done) {
 					if(err) {
-						console.error('Error fetching client from pool', err);
+						res.status(errors.database.error_1.code).send(errors.database.error_1);
+						return console.error(errors.database.error_1.message, err);
 					} else {
 
 						// Database Query
@@ -42,12 +43,8 @@ exports.request = function(req, res){
 							done();
 
 							if(err) {
-								console.error('Error running query: ', err);
-								res.status(401).json({
-									message: 'Error running query',
-									error: err
-								});
-								return;
+								res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
+								return console.error(errors.database.error_2.message, err);
 							} else {
 
 								// Check if user exist

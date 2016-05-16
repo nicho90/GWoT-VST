@@ -18,7 +18,8 @@ exports.request = function(req, res){
 	// Connect to Database
 	pg.connect(url, function(err, client, done) {
 		if(err) {
-			console.error('Error fetching client from pool', err);
+			res.status(errors.database.error_1.code).send(errors.database.error_1);
+			return console.error(errors.database.error_1.message, err);
 		} else {
 
 			// Database Query
@@ -26,7 +27,8 @@ exports.request = function(req, res){
                 done();
 
                 if(err) {
-                    return console.error('error running query', err);
+					res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
+					return console.error(errors.database.error_2.message, err);
                 } else {
 
                     // Send Result
