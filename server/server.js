@@ -198,6 +198,8 @@ if(db_settings.status && email_settings.status){
     var users = require ('./routes/users');
     var sensors = require ('./routes/sensors');
     //var measurements = require ('./routes/measurements');
+    var thresholds = require ('./routes/thresholds');
+    var subscriptions = require ('./routes/subscriptions');
     var vehicles = require ('./routes/vehicles');
 
     // Load Routes
@@ -205,6 +207,8 @@ if(db_settings.status && email_settings.status){
     app.use('/api', users);
     app.use('/api', sensors);
     //app.use('/api', measurements);
+    app.use('/api', thresholds);
+    app.use('/api', subscriptions);
     app.use('/api', vehicles);
 
 } else {
