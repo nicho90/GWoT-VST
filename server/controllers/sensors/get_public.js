@@ -1,10 +1,12 @@
 var pg = require('pg');
 var types = require('pg').types;
 types.setTypeParser(1700, 'text', parseFloat);
+var _ = require('underscore');
 var jwt = require('jsonwebtoken');
 var secret = require('./../../config/secret');
-var verifier = require('./../../config/verifier');
 var db_settings = require('../../server.js').db_settings;
+var errors = require('./../../config/errors');
+var verifier = require('./../../config/verifier');
 
 
 // GET (PUBLIC)
@@ -34,7 +36,7 @@ exports.request = function(req, res){
 					return console.error(errors.database.error_2.message, err);
 				} else {
 
-					// Check if sensor exist
+					// Check if sensor exists
 					if(result.rows.length === 0) {
 						res.status(404).send({
 							message: 'Sensor not found'

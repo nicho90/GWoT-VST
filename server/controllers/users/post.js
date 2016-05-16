@@ -4,6 +4,7 @@ var jwt = require('jsonwebtoken');
 var secret = require('./../../config/secret');
 var db_settings = require('../../server.js').db_settings;
 var errors = require('./../../config/errors');
+var verifier = require('./../../config/verifier');
 
 var transporter = require('./../../config/email.js').transporter;
 var _mailOptions = require('./../../config/email.js').mailOptions;
@@ -66,7 +67,7 @@ exports.request = function(req, res) {
 								return console.error(errors.database.error_2.message, err);
 	                        } else {
 
-	                            // Check if user exist
+	                            // Check if user exists
 	                            if (result.rows.length === 0) {
 	                                res.status(404).send({
 	                                    'Error': 'User not found'
