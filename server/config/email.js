@@ -21,6 +21,4 @@ var smtpConfig = {
 exports.transporter = nodemailer.createTransport(smtpConfig);
 
 // Default Mail options
-exports.mailOptions = { from: 'APP-NAME <' + email_settings.user + '>' };
-// TODO:
-// Find a name for our application
+exports.mailOptions = { from: 'GWoT-VST <' + email_settings.user + '>' };

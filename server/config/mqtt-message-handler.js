@@ -1,7 +1,8 @@
 var broker = require('./mqtt-broker.js').broker;
 var moscaSettings = require('./mqtt-broker.js').moscaSettings;
 
-if(broker != undefined){
+if(broker !== undefined){
+
     // Start
     broker.on('ready', function(){
         console.log('Mosca-Broker is listening at port ' + moscaSettings.port);
@@ -10,30 +11,14 @@ if(broker != undefined){
     // Client Connect
     broker.on('clientConnected', function(client) {
         console.log('Client connected', client.id);
-        // TODO: Insert sensor-status is Database and send Websocket-Message
+        // TODO: Insert sensor-status in Database and send Websocket-Message
     });
 
     // Client Disconnect
     broker.on('clientDisconnected', function(client) {
         console.log('Client disconnected', client.id);
-        // TODO: Insert sensor-status is Database and send Websocket-Message
+        // TODO: Insert sensor-status in Database and send Websocket-Message
     });
-
-
-    // CURRENT FOR TESTING
-    /*var message = {
-        topic: 'cloud',
-        payload: 'abcde', // String or a Buffer
-        qos: 1, // quality of service: 0, 1, or 2
-        retain: false // or true
-    };
-    var i = 0;
-    setInterval(function() {
-        broker.publish(message, function() {
-            //console.log("Sent: Hello from cloud")
-        });
-        i += 1;
-    }, 3000);*/
 
 
     /**
@@ -41,10 +26,8 @@ if(broker != undefined){
      */
     broker.on('published', function(packet, client) {
         //console.log('Published', client);
-        // TODO: Design Publish/Subscribe messages for Broker and Raspberry Pi
 
-
-        // CURRENT FOR TESTING
+        // MQTT-topics
         if (packet.topic == "heartbeat") {
             console.log('Message heartbeat ', packet.payload.toString());
         } else if (packet.topic == "/data/realtime") {
