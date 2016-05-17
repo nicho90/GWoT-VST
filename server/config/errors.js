@@ -16,6 +16,10 @@ module.exports = {
         error_2: {
             code: 401,
             message: 'Error running query'
+        },
+        error_3: {
+            code: 400,
+            message: 'No valid query parameters'
         }
     },
     authentication: {
@@ -54,7 +58,7 @@ module.exports = {
         },
         error_6: {
             code: 404,
-            message: 'Time-Serie not found'
+            message: 'Timeserie not found'
         },
         error_7: {
             code: 404,
