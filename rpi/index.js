@@ -30,6 +30,7 @@ var scheduledTimer = {
     },
     publish: function() {
         pubSD();
+	console.log("Scheduled publish");
         measurements = [];  //empty the measurements arrar to collect the next 5 measurements
         this.start();
     },
@@ -136,7 +137,6 @@ var measurementTimer = {
         measurement.timestamp = new Date();
         measurements.push(measurement);   // push measurement to the measurements array
         console.log("Distance " + measurement.distance.value + " measured at time " + measurement.timestamp);
-        console.log(JSON.stringify(measurements));
         this.blink();
         this.start();
     },
