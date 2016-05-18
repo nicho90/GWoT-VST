@@ -136,7 +136,7 @@ var measurementTimer = {
         measurement.timestamp = new Date();
         measurements.push(measurement);   // push measurement to the measurements array
         console.log("Distance " + measurement.distance.value + " measured at time " + measurement.timestamp);
-        console.log(measurements.toString());
+        console.log(JSON.stringify(measurements));
         this.blink();
         this.start();
     },
@@ -199,7 +199,7 @@ client.on('connect', function() {
 var pubSD = function() {
     client.publish(
         '/sensor/scheduled/measurement',
-        JSON.stringify(GeoJSON.parse([measurements], {
+        JSON.stringify(GeoJSON.parse(measurements, {
             Point: ['lat', 'lng']
         })),
         this.options);
@@ -212,7 +212,7 @@ var pubSD = function() {
 var verifySD = function(message) {
     scheduledTimer.interval = message.interval;
     if (!realtimeTimer.status) {
-        setMeasurementTimer(scheduledTimer.interval);
+        setMeasurementTimer(scheduledTimer.interval/5);
         resetScheduledTimer();
     }
 }
