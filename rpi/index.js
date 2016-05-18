@@ -30,6 +30,7 @@ var scheduledTimer = {
     },
     publish: function() {
         pubSD();
+        measurements = [];  //empty the measurements arrar to collect the next 5 measurements
         this.start();
     },
     stop: function() {
@@ -94,6 +95,8 @@ var measurement = {
     lat: sensor.lat // (regarding geoMQTT)
 };
 
+var measurements = [];  // collect 5 measurements for publishing
+
 
 /**
  * Ultasonic Sensor initialization. Needs to be called once when script starts
@@ -118,7 +121,7 @@ var initSensor = function() {
  */
 var measurementTimer = {
     stopped: false,
-    interval: sensor.interval, // default measurement interval
+    interval: sensor.interval/5, // default measurement interval 5x faster than scheduled interval
     start: function(iv) {
         this.stopped = false;
         if (iv) this.interval = iv;
@@ -131,7 +134,9 @@ var measurementTimer = {
         // Make the measurement
         measurement.distance.value = gpio_settings.sensor();
         measurement.timestamp = new Date();
+        measurements.push(measurement);   // push measurement to the measurements array
         console.log("Distance " + measurement.distance.value + " measured at time " + measurement.timestamp);
+        console.log(measurements.toString());
         this.blink();
         this.start();
     },
@@ -194,7 +199,7 @@ client.on('connect', function() {
 var pubSD = function() {
     client.publish(
         '/sensor/scheduled/measurement',
-        JSON.stringify(GeoJSON.parse([measurement], {
+        JSON.stringify(GeoJSON.parse([measurements], {
             Point: ['lat', 'lng']
         })),
         this.options);
