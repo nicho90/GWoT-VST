@@ -40,7 +40,7 @@ exports.request = function(req, res){
 					} else {
 
 						// Database Query
-						client.query('SELECT sensor_id, device_id, description, private, sensor_height, ST_X(coordinates) AS lng, ST_Y(coordinates) AS lat, created, updated FROM Sensors WHERE created_by=$1 AND sensor_id=$2;', [
+						client.query('SELECT sensor_id, device_id, description, private, sensor_height, ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat, created, updated FROM Sensors WHERE created_by=$1 AND sensor_id=$2;', [
 							req.params.username,
 							req.params.sensor_id
 						], function(err, result) {
