@@ -30,7 +30,7 @@ var scheduledTimer = {
     },
     publish: function() {
         pubSD();
-	console.log("Scheduled publish");
+	//console.log("Scheduled publish " , measurements);
         measurements = [];  //empty the measurements arrar to collect the next 5 measurements
         this.start();
     },
@@ -135,7 +135,7 @@ var measurementTimer = {
         // Make the measurement
         measurement.distance.value = gpio_settings.sensor();
         measurement.timestamp = new Date();
-        measurements.push(measurement);   // push measurement to the measurements array
+        measurements.push(JSON.parse(JSON.stringify(measurement)));   // push measurement to the measurements array
         console.log("Distance " + measurement.distance.value + " measured at time " + measurement.timestamp);
         this.blink();
         this.start();
