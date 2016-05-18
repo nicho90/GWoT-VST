@@ -1,10 +1,10 @@
 var broker = require('./mqtt-broker.js').broker;
 var moscaSettings = require('./mqtt-broker.js').moscaSettings;
 
-if(broker !== undefined){
+if (broker !== undefined) {
 
     // Start
-    broker.on('ready', function(){
+    broker.on('ready', function() {
         console.log('Mosca-Broker is listening at port ' + moscaSettings.port);
     });
 
@@ -40,19 +40,10 @@ if(broker !== undefined){
             console.log('Message sensor ip', packet.payload.toString());
         } else if (packet.topic == "/sensor/scheduled/measurement") {
             //console.log('Message scheduled measurement ', packet.payload.toString());
-            // Here are the scheduled measurement messages incomming
-            // TODO handle incomming data
-	    var measurements = JSON.parse(packet.payload).features;
-	    //var message = JSON.parse(packet.payload);
-	    //console.log(measurements);
-	    //measurements.forEach(function(entry){
-		//console.log(entry);
-		// TODO 1. check device id
-		// TODO calculate median
-		// TODO push median to db
-	    //});
-	    var medianMeasurement = median(measurements);
+            var measurements = JSON.parse(packet.payload).features;
+            var medianMeasurement = median(measurements);
             console.log("Half: ", medianMeasurement);
+            // TODO push medianMeasurement to DB
         } else if (packet.topic == "/sensor/realtime/measurement") {
             console.log('Message realtime measurement', packet.payload.toString());
             // Here are the realtime measurment messages incomming
@@ -63,11 +54,10 @@ if(broker !== undefined){
 };
 
 var median = function(values) {
-    console.log("Values", values);
-    values.sort( function(a,b) { return a.properties.distance.value-b.properties.distance.value; });
-    var half = Math.floor(values.length/2);
-
-    console.log("Half even: ", values[half]);
+    values.sort(function(a, b) {
+        return a.properties.distance.value - b.properties.distance.value;
+    });
+    var half = Math.floor(values.length / 2);
     return values[half];
 };
 
