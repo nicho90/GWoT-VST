@@ -197,7 +197,7 @@ if(db_settings.status && email_settings.status){
     var login = require ('./routes/login');
     var users = require ('./routes/users');
     var sensors = require ('./routes/sensors');
-    //var measurements = require ('./routes/measurements');
+    var measurements = require ('./routes/measurements');
     var timeseries = require ('./routes/timeseries');
     var thresholds = require ('./routes/thresholds');
     var subscriptions = require ('./routes/subscriptions');
@@ -209,7 +209,7 @@ if(db_settings.status && email_settings.status){
     app.use('/api', login);
     app.use('/api', users);
     app.use('/api', sensors);
-    //app.use('/api', measurements);
+    app.use('/api', measurements);
     app.use('/api', timeseries);
     app.use('/api', thresholds);
     app.use('/api', subscriptions);
