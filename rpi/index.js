@@ -30,8 +30,8 @@ var scheduledTimer = {
     },
     publish: function() {
         pubSD();
-	//console.log("Scheduled publish " , measurements);
-        measurements = [];  //empty the measurements arrar to collect the next 5 measurements
+        //console.log("Scheduled publish " , measurements);
+        measurements = []; //empty the measurements arrar to collect the next 5 measurements
         this.start();
     },
     stop: function() {
@@ -96,7 +96,7 @@ var measurement = {
     lat: sensor.lat // (regarding geoMQTT)
 };
 
-var measurements = [];  // collect 5 measurements for publishing
+var measurements = []; // collect 5 measurements for publishing
 
 
 /**
@@ -122,7 +122,7 @@ var initSensor = function() {
  */
 var measurementTimer = {
     stopped: false,
-    interval: sensor.interval/5, // default measurement interval 5x faster than scheduled interval
+    interval: sensor.interval / 5, // default measurement interval 5x faster than scheduled interval
     start: function(iv) {
         this.stopped = false;
         if (iv) this.interval = iv;
@@ -135,7 +135,7 @@ var measurementTimer = {
         // Make the measurement
         measurement.distance.value = gpio_settings.sensor();
         measurement.timestamp = new Date();
-        measurements.push(JSON.parse(JSON.stringify(measurement)));   // push measurement to the measurements array
+        measurements.push(JSON.parse(JSON.stringify(measurement))); // push measurement to the measurements array
         console.log("Distance " + measurement.distance.value + " measured at time " + measurement.timestamp);
         this.blink();
         this.start();
@@ -212,7 +212,7 @@ var pubSD = function() {
 var verifySD = function(message) {
     scheduledTimer.interval = message.interval;
     if (!realtimeTimer.status) {
-        setMeasurementTimer(scheduledTimer.interval/5);
+        setMeasurementTimer(scheduledTimer.interval / 5);
         resetScheduledTimer();
     }
 }
