@@ -65,8 +65,7 @@ var checkDeviceID = function(device_id) {
               } else {
                 return false;
               }
-            }
-          }
+            }  
         });
     }
   });
