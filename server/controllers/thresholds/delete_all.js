@@ -9,7 +9,7 @@ var errors = require('./../../config/errors');
 var verifier = require('./../../config/verifier');
 
 
-// DELETE
+// DELETE ALL
 exports.request = function(req, res){
 
 	// Decode Token
