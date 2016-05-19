@@ -45,8 +45,11 @@ var checkDeviceID = function(id) {
               } else {
                   console.log("Database resp.: ", result.rows);
                   result.rows.filter(function(obj) {
-                    console.log(obj.device_id === id);
-                  })
+                    if (obj.device_id === id) {
+                        return true;
+                    }
+                  });
+                  return false;
               }
           });
       }
