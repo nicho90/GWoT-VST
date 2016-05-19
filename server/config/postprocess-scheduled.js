@@ -1,6 +1,7 @@
 var pg = require('pg');
 var db_settings = require('../server.js').db_settings;
 var waterfall = require('async-waterfall');
+var errors = require('./../../config/errors');
 
 /**
  * Postprocess Observations from the Scheduled topic
@@ -12,7 +13,7 @@ exports.process = function(message) {
   console.log("Half: ", measurement);
 
   // Create URL
-  async.waterfall([
+  waterfall([
     function(callback){
       if(checkDeviceID(measurement.properties.device_id)){
         callback(null, true);
@@ -60,6 +61,7 @@ var checkDeviceID = function(id) {
           var obj = result.rows.filter(function(val) {
             return val.device_id === id;
           })[0];
+
           if (obj) {
             return true;
           } else {
