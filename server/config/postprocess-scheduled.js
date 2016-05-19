@@ -13,12 +13,17 @@ exports.process = function(message) {
 
   // Create URL
   async.waterfall([
-      var checkID = checkDeviceID(measurement.properties.device_id),
-      if (checkID) {
-        console.log("Device_ID matches. Proceed...");
+    function(callback){
+      if(checkDeviceID(measurement.properties.device_id)){
+        callback(null, true);
       } else {
-        console.log("Device_ID does not match.");
-      }
+        callback(null, false);
+      };
+    },
+    function(sensor, callback) {
+      console.log("Second callback ", sensor);
+      callback(null);
+    }
     ], function(callback) {
       console.log("waterfall callback");
     }
@@ -52,12 +57,14 @@ var checkDeviceID = function(id) {
           return console.error(errors.database.error_2.message, err);
         } else {
           console.log("Database resp.: ", result.rows);
-          result.rows.filter(function(obj) {
-            if (obj.device_id === id) {
-              return true;
-            }
-          });
-          return false;
+          var obj = result.rows.filter(function(val) {
+            return val.device_id === id;
+          })[0];
+          if (obj) {
+            return true;
+          } else {
+            return false;
+          }
         }
       });
     }
