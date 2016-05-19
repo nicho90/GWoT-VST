@@ -54,11 +54,10 @@ exports.request = function(req, res){
 								return console.error(errors.database.error_2.message, err);
 							} else {
 
-								// Check if user exists
+								// Check if sensor exists
 								if(result.rows.length === 0) {
-									res.status(404).send({
-										message: 'Sensor not found'
-									});
+									res.status(errors.query.error_2.code).send(errors.query.error_2);
+		                            return console.error(errors.query.error_2.message);
 								} else {
 
 									// Prepare Query
@@ -101,9 +100,8 @@ exports.request = function(req, res){
 
 													// Check if sensor exists
 													if(result.rows.length === 0) {
-														res.status(404).send({
-															message: 'Sensor not found'
-														});
+														res.status(errors.query.error_2.code).send(errors.query.error_2);
+							                            return console.error(errors.query.error_2.message);
 													} else {
 
 														// Send Result
