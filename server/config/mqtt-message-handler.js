@@ -42,11 +42,7 @@ if (broker !== undefined) {
             console.log('Message sensor ip', packet.payload.toString());
         } else if (packet.topic == "/sensor/scheduled/measurement") {
             //console.log('Message scheduled measurement ', packet.payload.toString());
-            var measurements = JSON.parse(packet.payload).features;
-            var medianMeasurement = median(measurements);
-            console.log("Half: ", medianMeasurement);
-            // TODO push medianMeasurement to DB
-            postprocessScheduled.process;
+            postprocessScheduled.process(packet.payload);
         } else if (packet.topic == "/sensor/realtime/measurement") {
             console.log('Message realtime measurement', packet.payload.toString());
             // Here are the realtime measurment messages incomming
@@ -54,14 +50,6 @@ if (broker !== undefined) {
         }
 
     });
-};
-
-var median = function(values) {
-    values.sort(function(a, b) {
-        return a.properties.distance.value - b.properties.distance.value;
-    });
-    var half = Math.floor(values.length / 2);
-    return values[half];
 };
 
 module.exports = broker;
