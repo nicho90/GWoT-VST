@@ -51,7 +51,7 @@ exports.request = function(req, res){
 						} else {
 
 							// Database Query
-							client.query("INSERT INTO Sensors (created, updated, created_by, device_id, description, private, coordinates, sensor_height) VALUES (now(), now(), $1, $2, $3, $4, ST_GeomFromText('POINT(" + req.body.lat + " " + req.body.lng + ")', 4326), $5);",
+							client.query("INSERT INTO Sensors (created, updated, created_by, device_id, description, private, coordinates, sensor_height) VALUES (now(), now(), $1, $2, $3, $4, 'POINT(" + req.body.lat + " " + req.body.lng + ")', $5);",
 								[
 									req.params.username,
 									req.body.device_id,
@@ -67,7 +67,7 @@ exports.request = function(req, res){
 								} else {
 
 									// Database Query
-									client.query('SELECT sensor_id, device_id, description, private, sensor_height, ST_X(coordinates) AS lng, ST_Y(coordinates) AS lat, created, updated FROM Sensors WHERE created_by=$1 ORDER BY created DESC;', [
+									client.query('SELECT sensor_id, device_id, description, private, sensor_height, ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat, created, updated FROM Sensors WHERE created_by=$1 ORDER BY created DESC;', [
 										req.params.username
 									], function(err, result) {
 										done();

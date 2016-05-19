@@ -197,25 +197,25 @@ if(db_settings.status && email_settings.status){
     var login = require ('./routes/login');
     var users = require ('./routes/users');
     var sensors = require ('./routes/sensors');
-    //var measurements = require ('./routes/measurements');
+    var measurements = require ('./routes/measurements');
     var timeseries = require ('./routes/timeseries');
     var thresholds = require ('./routes/thresholds');
     var subscriptions = require ('./routes/subscriptions');
     var vehicles = require ('./routes/vehicles');
-    //var service_stations = require ('./routes/service_stations');
-    //var emergency_stations = require ('./routes/emergency_stations');
+    var service_stations = require ('./routes/service_stations');
+    var emergency_stations = require ('./routes/emergency_stations');
 
     // Load Routes
     app.use('/api', login);
     app.use('/api', users);
     app.use('/api', sensors);
-    //app.use('/api', measurements);
+    app.use('/api', measurements);
     app.use('/api', timeseries);
     app.use('/api', thresholds);
     app.use('/api', subscriptions);
     app.use('/api', vehicles);
-    //app.use('/api', service_stations);
-    //app.use('/api', emergency_stations);
+    app.use('/api', service_stations);
+    app.use('/api', emergency_stations);
 
 } else {
     console.log("Simple Webserver, no REST-API (no Database, no Websockets, no Email-Notification-Service)");

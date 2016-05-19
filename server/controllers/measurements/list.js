@@ -9,11 +9,8 @@ var errors = require('./../../config/errors');
 var verifier = require('./../../config/verifier');
 
 
-// GET (PUBLIC)
+// LIST
 exports.request = function(req, res){
-
-	// TODO
-	// Admin
 
 	// Create URL
 	var url = "postgres://" + db_settings.user + ":" + db_settings.password + "@" + db_settings.host + ":" + db_settings.port + "/" + db_settings.database_name;
@@ -25,29 +22,42 @@ exports.request = function(req, res){
 			return console.error(errors.database.error_1.message, err);
 		} else {
 
+			var query;
+			var singleData = false;
+			if(req.query.latest){
+				query = "SELECT * FROM Measurements WHERE sensor_id=$1 ORDER BY measured DESC LIMIT 1;";
+				singleData = true;
+			} else if(req.query.maximum) {
+				query = "SELECT * FROM Measurements WHERE sensor_id=$1 ORDER BY distance DESC LIMIT 1;";
+				singleData = true;
+			} else if(req.query.minimum) {
+				query = "SELECT * FROM Measurements WHERE sensor_id=$1 ORDER BY distance ASC LIMIT 1;";
+				singleData = true;
+			} else {
+				query = "SELECT * FROM Measurements WHERE sensor_id=$1 ORDER BY measured DESC;";
+			}
+
 			// Database Query
-			client.query('SELECT sensor_id, device_id, description, private, sensor_height, ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat, created, updated FROM Sensors WHERE private=false AND sensor_id=$1;', [
+            client.query(query, [
 				req.params.sensor_id
 			], function(err, result) {
-				done();
+                done();
 
-				if(err) {
+                if(err) {
 					res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 					return console.error(errors.database.error_2.message, err);
-				} else {
+                } else {
 
-					// Check if sensor exists
-					if(result.rows.length === 0) {
-						res.status(404).send({
-							message: 'Sensor not found'
-						});
-					} else {
-
-						// Send Result
+					// Send Result
+					if(singleData){
 						res.status(200).send(result.rows[0]);
+					} else {
+						res.status(200).send(result.rows);
 					}
-				}
-			});
+
+                }
+            });
 		}
 	});
+
 };

@@ -26,7 +26,7 @@ exports.request = function(req, res){
 		} else {
 
 			// Database Query
-            client.query('SELECT sensor_id, device_id, description, private, sensor_height, ST_X(coordinates) AS lng, ST_Y(coordinates) AS lat, created, updated FROM Sensors WHERE private=false ORDER BY device_id;', function(err, result) {
+            client.query('SELECT sensor_id, device_id, description, private, sensor_height, ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat, created, updated FROM Sensors WHERE private=false ORDER BY device_id;', function(err, result) {
                 done();
 
                 if(err) {
