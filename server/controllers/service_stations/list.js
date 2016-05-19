@@ -23,39 +23,101 @@ exports.request = function(req, res) {
         } else {
 
             var query;
-            if(req.query.lng && req.query.lat){
-                query = "SELECT " +
-                    "service_station_id, " +
-                    "ST_Distance(coordinates, ST_GeographyFromText('POINT(" + req.query.lng + " " + req.query.lat + ")')) AS distance, " +
-                    "'METER' AS unit, " +
-                    "name, " +
-                    "phone_number, " +
-                    "ST_X(coordinates::geometry) AS lng, " +
-                    "ST_Y(coordinates::geometry) AS lat, " +
-                    "street, " +
-                    "house_number, " +
-                    "addition, " +
-                    "zip_code, " +
-                    "city, " +
-                    "country " +
-                    "FROM Service_Stations ORDER BY distance ASC LIMIT 5;";
+
+            // Check params
+            if(req.params.sensor_id) {
+
+                // Database Query
+                client.query('SELECT * FROM Sensors WHERE sensor_id=$1;', [
+                    req.params.sensor_id
+                ], function(err, result) {
+                    done();
+
+                    if(err) {
+                        res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
+                        return console.error(errors.database.error_2.message, err);
+                    } else {
+
+                        // Check if sensor exists
+                        if(result.rows.length === 0) {
+                            res.status(errors.query.error_2.code).send(errors.query.error_2);
+                            return console.error(errors.query.error_2.message);
+                        } else {
+
+                            // Prepare Query
+                            query = "SELECT " +
+                                "service_stations.service_station_id, " +
+                                "ST_Distance(service_stations.coordinates, sensors.coordinates) AS distance, " +
+                                "'METER' AS unit, " +
+                                "service_stations.name, " +
+                                "service_stations.phone_number, " +
+                                "ST_X(service_stations.coordinates::geometry) AS lng, " +
+                                "ST_Y(service_stations.coordinates::geometry) AS lat, " +
+                                "service_stations.street, " +
+                                "service_stations.house_number, " +
+                                "service_stations.addition, " +
+                                "service_stations.zip_code, " +
+                                "service_stations.city, " +
+                                "service_stations.country " +
+                                "FROM Service_Stations service_stations, Sensors sensors " +
+                                "WHERE sensors.sensor_id=$1 ORDER BY distance ASC LIMIT 5;";
+
+                            // Database query
+                            client.query(query, [
+                                req.params.sensor_id
+                            ], function(err, result) {
+                                done();
+
+                                if (err) {
+                                    res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
+                                    return console.error(errors.database.error_2.message, err);
+                                } else {
+
+                                    // Send Result
+                                    res.status(200).send(result.rows);
+                                }
+                            });
+                        }
+                    }
+                });
+
             } else {
-                query = "SELECT * FROM Service_Stations;";
-            }
 
-            // Database query
-            client.query(query, function(err, result) {
-                done();
-
-                if (err) {
-                    res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
-                    return console.error(errors.database.error_2.message, err);
+                // Check for longitude & latitude
+                if(req.query.lng && req.query.lat){
+                    query = "SELECT " +
+                        "service_station_id, " +
+                        "ST_Distance(coordinates, ST_GeographyFromText('POINT(" + req.query.lng + " " + req.query.lat + ")')) AS distance, " +
+                        "'METER' AS unit, " +
+                        "name, " +
+                        "phone_number, " +
+                        "ST_X(coordinates::geometry) AS lng, " +
+                        "ST_Y(coordinates::geometry) AS lat, " +
+                        "street, " +
+                        "house_number, " +
+                        "addition, " +
+                        "zip_code, " +
+                        "city, " +
+                        "country " +
+                        "FROM Service_Stations ORDER BY distance ASC LIMIT 5;";
                 } else {
-
-                    // Send Result
-                    res.status(200).send(result.rows);
+                    query = "SELECT * FROM Service_Stations;";
                 }
-            });
+
+                // Database query
+                client.query(query, function(err, result) {
+                    done();
+
+                    if (err) {
+                        res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
+                        return console.error(errors.database.error_2.message, err);
+                    } else {
+
+                        // Send Result
+                        res.status(200).send(result.rows);
+                    }
+                });
+            }
         }
     });
 };
