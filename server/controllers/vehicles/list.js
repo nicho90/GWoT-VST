@@ -26,9 +26,24 @@ exports.request = function(req, res) {
               console.log(req.query.category);
               category = "WHERE category=";
               switch(req.query.category) {
-                  case 'scooter': {
+                  case 'bike':
+                    category += "'BIKE'";
+                    break;
+                  case 'wheelchair':
+                    category += "'WHEELCHAIR'";
+                    break;
+                  case 'scooter':
                     category += "'SCOOTER'";
-                  }
+                    break;
+                  case 'motorbike':
+                    category += "'MOTORBIKE'";
+                    break;
+                  case 'car':
+                    category += "'CAR'";
+                    break;
+                  case 'truck':
+                    category += "'TRUCK'";
+                    break;
               }
             } else {
               console.log('no query');
