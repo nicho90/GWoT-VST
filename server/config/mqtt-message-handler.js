@@ -1,5 +1,7 @@
 var broker = require('./mqtt-broker.js').broker;
 var moscaSettings = require('./mqtt-broker.js').moscaSettings;
+var postprocessScheduled = require('./postprocess-scheduled.js');
+var postprocessRealtime = require('./postprocess-realtime.js');
 
 if (broker !== undefined) {
 
@@ -44,6 +46,7 @@ if (broker !== undefined) {
             var medianMeasurement = median(measurements);
             console.log("Half: ", medianMeasurement);
             // TODO push medianMeasurement to DB
+            postprocessScheduled.process;
         } else if (packet.topic == "/sensor/realtime/measurement") {
             console.log('Message realtime measurement', packet.payload.toString());
             // Here are the realtime measurment messages incomming
