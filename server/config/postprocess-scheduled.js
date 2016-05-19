@@ -50,7 +50,7 @@ exports.process = function(message) {
               } else {
 
                 // TODO Abbruch
-                callback(null, measurement, null);
+                callback(new Error("Abbruch"));
               }
             }
           });
@@ -74,8 +74,12 @@ exports.process = function(message) {
             }
           });*/
         }
-      ], function(callback) {
-        console.log("waterfall callback");
+      ], function(err, callback) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("waterfall callback");
+        }
       });
     }
   });
