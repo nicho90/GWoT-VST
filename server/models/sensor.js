@@ -20,11 +20,11 @@ module.exports = {
             "minimum": 0
         },
         "default_frequency": {
-            "type": "number",
+            "type": "integer",
             "minimum": 1000
         },
         "threshold_frequency": {
-            "type": "number",
+            "type": "integer",
             "minimum": 1000
         },
         "threshold_value": {
