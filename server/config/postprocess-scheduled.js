@@ -79,7 +79,7 @@ exports.process = function(message) {
                     // TODO:
                     // - Change sensor.interval to sensor.default_frequency and sensor.threshold_frequency in PostgreSQL-Schemas
                     // - Rename threshold.value to threshold.threshold_value in PostgreSQL-Schema
-                    
+
                     if (measurement.properties.distance > sensor.threshold) {
                         // TODO: Send MQTT-Message increase frequency
                         callback(null, measurement, sensor);
@@ -115,7 +115,7 @@ exports.process = function(message) {
                     });
                 },
 
-                // 6. Check all Thresholds of subscriptioned Users for this sensor
+                // 6. Check all Thresholds of subscripted Users for this sensor
                 function(measurement, sensor, users, callback) {
 
                     async.each(users, function(user, callback) {
