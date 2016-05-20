@@ -76,7 +76,11 @@ exports.process = function(message) {
                 // 4. Check Sensor-Settings for threshold
                 function(measurement, sensor, callback) {
 
-                    if(measurement.properties.distance > sensor.threshold) {
+                    // TODO:
+                    // - Change sensor.interval to sensor.default_frequency and sensor.threshold_frequency in PostgreSQL-Schemas
+                    // - Rename threshold.value to threshold.threshold_value in PostgreSQL-Schema
+                    
+                    if (measurement.properties.distance > sensor.threshold) {
                         // TODO: Send MQTT-Message increase frequency
                         callback(null, measurement, sensor);
                     } else {
@@ -89,10 +93,10 @@ exports.process = function(message) {
                 function(measurement, sensor, callback) {
 
                     var query = "SELECT DISTINCT" +
-	                    "users.username, " +
+                        "users.username, " +
                         "users.email_address, " +
-	                    "users.first_name, " +
-	                    "users.last_name " +
+                        "users.first_name, " +
+                        "users.last_name " +
                         "FROM Subscriptions subscriptions JOIN Users users ON subscriptions.username=users.username " +
                         "WHERE subscriptions.sensor_id=$1;";
 
@@ -106,26 +110,68 @@ exports.process = function(message) {
                             console.error(errors.database.error_2.message, err);
                             callback(new Error(errors.database.error_2.message));
                         } else {
-                            callback(null, result.rows);
+                            callback(null, measurement, sensor, result.rows);
                         }
                     });
                 },
 
                 // 6. Check all Thresholds of subscriptioned Users for this sensor
-                function(users, callback) {
+                function(measurement, sensor, users, callback) {
 
-                    // TODO:
-                    // - FOR EACH user in users
-                    // - Check all user-thresholds for this sensor_id
-                    // - Send email if result.rows.lenght > 0!
-                    // - Emit Websocket-notification if result.rows.lenght > 0!
-                    callback(null);
+                    async.each(users, function(user, callback) {
+
+                        var query = "SELECT " +
+	                        "subscriptions.subscription_id, " +
+	                        "subscriptions.threshold_id, " +
+                        	"thresholds.description, " +
+                        	"thresholds.category, " +
+                        	"thresholds.value" +
+                            "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
+                            "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND thresholds.value > $3;";
+
+                        // Database query
+                        client.query(query, [
+                            sensor.sensor_id,
+                            user.username,
+                            measurement.properties.distance
+                        ], function(err, result) {
+                            done();
+
+                            if (err) {
+                                console.error(errors.database.error_2.message, err);
+                                callback(new Error(errors.database.error_2.message));
+                            } else {
+
+                                if(result.rows.lenght > 0){
+
+                                    console.log(result.rows);
+
+                                    // TODO:
+                                    // - Send email to User
+                                    // - Emit Websocket-notification if result.rows.lenght > 0!
+
+                                    callback();
+                                } else {
+                                    callback();
+                                }
+                            }
+                        });
+                    }, function(err) {
+                        if (err) {
+                            console.error("");
+                            callback(new Error(""));
+                        } else {
+                            console.log("Emails were sent to all users!");
+                            callback(null);
+                        }
+                    });
+
                 }
             ], function(err, callback) {
                 if (err) {
                     console.log(err);
                 } else {
-                    console.log("waterfall callback");
+                    console.log("Pipeline has been finished!");
                 }
             });
         }
