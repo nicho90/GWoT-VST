@@ -66,8 +66,29 @@ exports.request = function(req, res){
 				                    return console.error(errors.database.error_2.message, err);
 								} else {
 
+									var query = "SELECT " +
+										"sensor_id, " +
+										"device_id, " +
+										"description ," +
+										"private, " +
+										"sensor_height, " +
+										"'CENTIMETER' AS sensor_height_unit, " +
+										"default_frequency, " +
+										"'MILLISECONDS' AS default_frequency_unit, " +
+										"threshold_frequency, " +
+										"'MILLISECONDS' AS threshold_frequency_unit, " +
+										"threshold_value, " +
+										"'CENTIMETER' AS threshold_value_unit, " +
+										"ST_X(coordinates::geometry) AS lng, " +
+										"ST_Y(coordinates::geometry) AS lat, " +
+										"created, " +
+										"updated " +
+										"FROM Sensors WHERE created_by=$1 ORDER BY created DESC;";
+
+									/* 'SELECT sensor_id, device_id, description, private, sensor_height, ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat, created, updated FROM Sensors WHERE created_by=$1 ORDER BY created DESC;' */
+
 									// Database Query
-									client.query('SELECT sensor_id, device_id, description, private, sensor_height, ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat, created, updated FROM Sensors WHERE created_by=$1 ORDER BY created DESC;', [
+									client.query(query, [
 										req.params.username
 									], function(err, result) {
 										done();

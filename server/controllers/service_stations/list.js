@@ -48,7 +48,7 @@ exports.request = function(req, res) {
                             query = "SELECT " +
                                 "service_stations.service_station_id, " +
                                 "ST_Distance(service_stations.coordinates, sensors.coordinates) AS distance, " +
-                                "'METER' AS unit, " +
+                                "'METER' AS distance_unit, " +
                                 "service_stations.name, " +
                                 "service_stations.phone_number, " +
                                 "ST_X(service_stations.coordinates::geometry) AS lng, " +
@@ -88,7 +88,7 @@ exports.request = function(req, res) {
                     query = "SELECT " +
                         "service_station_id, " +
                         "ST_Distance(coordinates, ST_GeographyFromText('POINT(" + req.query.lng + " " + req.query.lat + ")')) AS distance, " +
-                        "'METER' AS unit, " +
+                        "'METER' AS distance_unit, " +
                         "name, " +
                         "phone_number, " +
                         "ST_X(coordinates::geometry) AS lng, " +

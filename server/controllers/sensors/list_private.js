@@ -42,9 +42,71 @@ exports.request = function(req, res){
 						// Check if only private sensors were requested
 						var query;
 						if(req.query.public) {
-							query = "SELECT DISTINCT * FROM (SELECT created_by, sensor_id, device_id, description, private, sensor_height, ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat, created, updated FROM Sensors WHERE private=false UNION ALL SELECT created_by, sensor_id, device_id, description, private, sensor_height, ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat, created, updated FROM Sensors WHERE created_by=$1) AS Sensors";
+							query = "SELECT DISTINCT * FROM " +
+								"(SELECT " +
+									"created_by, " +
+									"sensor_id, " +
+									"device_id, " +
+									"description ," +
+									"private, " +
+									"sensor_height, " +
+									"'CENTIMETER' AS sensor_height_unit, " +
+									"default_frequency, " +
+									"'MILLISECONDS' AS default_frequency_unit, " +
+									"threshold_frequency, " +
+									"'MILLISECONDS' AS threshold_frequency_unit, " +
+									"threshold_value, " +
+									"'CENTIMETER' AS threshold_value_unit, " +
+									"ST_X(coordinates::geometry) AS lng, " +
+									"ST_Y(coordinates::geometry) AS lat, " +
+									"created, " +
+									"updated " +
+								"FROM Sensors WHERE private=false " +
+								"UNION ALL " +
+								"SELECT " +
+									"created_by, " +
+									"sensor_id, " +
+									"device_id, " +
+									"description ," +
+									"private, " +
+									"sensor_height, " +
+									"'CENTIMETER' AS sensor_height_unit, " +
+									"default_frequency, " +
+									"'MILLISECONDS' AS default_frequency_unit, " +
+									"threshold_frequency, " +
+									"'MILLISECONDS' AS threshold_frequency_unit, " +
+									"threshold_value, " +
+									"'CENTIMETER' AS threshold_value_unit, " +
+									"ST_X(coordinates::geometry) AS lng, " +
+									"ST_Y(coordinates::geometry) AS lat, " +
+									"created, " +
+									"updated " +
+								"FROM Sensors WHERE created_by=$1) AS Sensors;";
+
+							/* query = "SELECT DISTINCT * FROM (SELECT created_by, sensor_id, device_id, description, private, sensor_height, ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat, created, updated FROM Sensors WHERE private=false UNION ALL SELECT created_by, sensor_id, device_id, description, private, sensor_height, ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat, created, updated FROM Sensors WHERE created_by=$1) AS Sensors"; */
+
 						} else {
-							query = "SELECT created_by, sensor_id, device_id, description, private, sensor_height, ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat, created, updated FROM Sensors WHERE created_by=$1";
+							query = "SELECT " +
+								"created_by, " +
+								"sensor_id, " +
+								"device_id, " +
+								"description ," +
+								"private, " +
+								"sensor_height, " +
+								"'CENTIMETER' AS sensor_height_unit, " +
+								"default_frequency, " +
+								"'MILLISECONDS' AS default_frequency_unit, " +
+								"threshold_frequency, " +
+								"'MILLISECONDS' AS threshold_frequency_unit, " +
+								"threshold_value, " +
+								"'CENTIMETER' AS threshold_value_unit, " +
+								"ST_X(coordinates::geometry) AS lng, " +
+								"ST_Y(coordinates::geometry) AS lat, " +
+								"created, " +
+								"updated " +
+								"FROM Sensors WHERE created_by=$1;";
+
+							/* query = "SELECT created_by, sensor_id, device_id, description, private, sensor_height, ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat, created, updated FROM Sensors WHERE created_by=$1"; */
 						}
 
 						// Database Query
