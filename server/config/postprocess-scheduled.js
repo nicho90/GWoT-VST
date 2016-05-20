@@ -1,13 +1,19 @@
-var pg = require('pg');
-var db_settings = require('../server.js').db_settings;
-var async = require('async');
-var errors = require('./errors');
-
-
 /**
  * Postprocess Observations from the Scheduled topic
  */
 exports.process = function(message) {
+
+    var pg = require('pg');
+    var db_settings = require('../server.js').db_settings;
+    var async = require('async');
+    var errors = require('./errors');
+
+    var transporter = require('./email.js').transporter;
+    var _mailOptions = require('./email.js').mailOptions;
+    var path = require('path');
+    var fs = require('fs');
+    var mustache = require('mustache');
+
 
     // Create URL
     var url = "postgres://" + db_settings.user + ":" + db_settings.password + "@" + db_settings.host + ":" + db_settings.port + "/" + db_settings.database_name;
@@ -89,7 +95,7 @@ exports.process = function(message) {
                     }
                 },
 
-                // 5. Get all subscripted Users for this sensor
+                // 5. Get all subscribed Users for this sensor
                 function(measurement, sensor, callback) {
 
                     var query = "SELECT DISTINCT" +
@@ -115,7 +121,7 @@ exports.process = function(message) {
                     });
                 },
 
-                // 6. Check all Thresholds of subscripted Users for this sensor
+                // 6. Check all Thresholds of subscribed Users for this sensor
                 function(measurement, sensor, users, callback) {
 
                     async.each(users, function(user, callback) {
@@ -145,9 +151,42 @@ exports.process = function(message) {
                                 if(result.rows.lenght > 0){
 
                                     console.log(result.rows);
+                                    var triggered_thresholds = result.rows;
+
+                                    // Read Template
+	                                fs.readFile(path.join(__dirname, '../templates/notification.html'), function(err, data) {
+	                                    if (err) throw err;
+
+	                                    // Render HTML-content
+	                                    var output = mustache.render(data.toString(), user, sensor, triggered_thresholds);
+
+	                                    // Create Text for Email-Previews and Email without HTML-support
+	                                    var text =
+	                                        'Attention ' + user.first_name + ' ' + user.last_name + '!\n' +
+	                                        'At least one of your thresholds has been triggered for a  sensor, which you are subscribed to!\n\n\n' +
+                                            // TODO: Input Sensor and list all thresholds
+	                                        'GWoT-VST - Institute for Geoinformatics (Heisenbergstraße 2, 48149 Münster, Germany)';
+
+	                                    // Set Mail options
+	                                    var mailOptions = {
+	                                        from: _mailOptions.from,
+	                                        to: user.email_address,
+	                                        subject: 'One or more thresholds has been triggered!',
+	                                        text: text,
+	                                        html: output
+	                                    };
+
+	                                    // Send Email
+	                                    transporter.sendMail(mailOptions, function(error, info) {
+	                                        if (error) {
+	                                            return console.log(error);
+	                                        } else {
+	                                            console.log('Message sent: ' + info.response);
+	                                        }
+	                                    });
+	                                });
 
                                     // TODO:
-                                    // - Send email to User
                                     // - Emit Websocket-notification if result.rows.lenght > 0!
 
                                     callback();
