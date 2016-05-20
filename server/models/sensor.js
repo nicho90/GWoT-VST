@@ -19,6 +19,18 @@ module.exports = {
             "type": "number",
             "minimum": 0
         },
+        "default_frequency": {
+            "type": "number",
+            "minimum": 1000
+        },
+        "threshold_frequency": {
+            "type": "number",
+            "minimum": 1000
+        },
+        "threshold_value": {
+            "type": "number",
+            "minimum": 0
+        },
         "lat": {
             "type": "number",
             "minimum": 0
@@ -33,6 +45,9 @@ module.exports = {
         "description",
         "private",
         "sensor_height",
+        "default_frequency",
+        "threshold_frequency",
+        "threshold_value",
         "lat",
         "lng"
     ]

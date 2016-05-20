@@ -12,7 +12,7 @@ module.exports = {
             "type": "string",
             "minLength": 1
         },
-        "value": {
+        "threshold_value": {
             "type": "number",
             "minimum": 0
         },
@@ -33,7 +33,7 @@ module.exports = {
     "required": [
         "username",
         "description",
-        "value",
+        "threshold_value",
         "category"
     ]
 };
