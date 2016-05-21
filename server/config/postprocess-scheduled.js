@@ -3,6 +3,7 @@
  */
 exports.process = function(message) {
 
+    var broker = require('./mqtt-message-handler.js');
     var pg = require('pg');
     var db_settings = require('../server.js').db_settings;
     var async = require('async');
@@ -50,7 +51,7 @@ exports.process = function(message) {
                             callback(new Error(errors.database.error_2.message));
                         } else {
                             if (result.rows.length > 0) {
-                                callback(null, measurement, result.rows[0].sensor_id);
+                                callback(null, measurement, result.rows[0]);
                             } else {
                                 console.error(errors.query.error_2.message);
                                 callback(new Error(errors.query.error_2.message));
@@ -63,10 +64,10 @@ exports.process = function(message) {
                 function(measurement, sensor, callback) {
 
                     // Database query
-                    client.query('INSERT INTO Measurements (created, updated, sensor_id, distance, measured) VALUES (now(), now(), $1, $2, now());', [
+                    client.query('INSERT INTO Measurements (created, updated, sensor_id, distance, measured) VALUES (now(), now(), $1, $2, $3);', [
                         sensor.sensor_id,
-                        measurement.properties.distance //,
-                        // TODO: Use measurement.measured instead of now()
+                        measurement.properties.distance.value,
+                        measurement.properties.timestamp
                     ], function(err, result) {
                         done();
 
@@ -87,10 +88,44 @@ exports.process = function(message) {
                     // - Rename threshold.value to threshold.threshold_value in PostgreSQL-Schema
 
                     if (measurement.properties.distance > sensor.threshold) {
-                        // TODO: Send MQTT-Message increase frequency
+                        // only increase if not increased yet
+                        if (!sensor.frequency_increased) {
+                            // Send MQTT-Message increase frequency
+                            broker.publish('/settings', '{"device_id": "rpi-1","interval": ' + sensor.threshold_frequency + '}', {retain: false, qos: 1});
+                            // change frequency_increased value
+                            client.query('UPDATE Sensors SET frequency_increased=true WHERE sensor_id=$1;',[
+                                sensor.sensor_id;
+                            ], function(err, result) {
+                                done();
+
+                                if (err) {
+                                    console.error(errors.database.error_2.message, err);
+                                    callback(new Error(errors.database.error_2.message));
+                                } else {
+                                    //callback(null, measurement, sensor);
+                                }
+                            });
+                        }
                         callback(null, measurement, sensor);
                     } else {
-                        // TODO: Send MQTT-Message decrease frequency
+                        // only decrease if not decrease
+                        if (sensor.frequency_increased) {
+                            // Send MQTT-Message decrease frequency
+                            broker.publish('/settings', '{"device_id": "rpi-1","interval": ' + sensor.default_frequency + '}', {retain: false, qos: 1});
+                            // change frequency_increased value
+                            client.query('UPDATE Sensors SET frequency_increased=false WHERE sensor_id=$1;',[
+                                sensor.sensor_id;
+                            ], function(err, result) {
+                                done();
+
+                                if (err) {
+                                    console.error(errors.database.error_2.message, err);
+                                    callback(new Error(errors.database.error_2.message));
+                                } else {
+                                    //callback(null, measurement, sensor);
+                                }
+                            });
+                        }
                         callback(null, measurement, sensor);
                     }
                 },
@@ -127,11 +162,11 @@ exports.process = function(message) {
                     async.each(users, function(user, callback) {
 
                         var query = "SELECT " +
-	                        "subscriptions.subscription_id, " +
-	                        "subscriptions.threshold_id, " +
-                        	"thresholds.description, " +
-                        	"thresholds.category, " +
-                        	"thresholds.value" +
+                            "subscriptions.subscription_id, " +
+                            "subscriptions.threshold_id, " +
+                            "thresholds.description, " +
+                            "thresholds.category, " +
+                            "thresholds.value" +
                             "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
                             "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND thresholds.value > $3;";
 
@@ -148,43 +183,43 @@ exports.process = function(message) {
                                 callback(new Error(errors.database.error_2.message));
                             } else {
 
-                                if(result.rows.lenght > 0){
+                                if (result.rows.lenght > 0) {
 
                                     console.log(result.rows);
                                     var triggered_thresholds = result.rows;
 
                                     // Read Template
-	                                fs.readFile(path.join(__dirname, '../templates/notification.html'), function(err, data) {
-	                                    if (err) throw err;
+                                    fs.readFile(path.join(__dirname, '../templates/notification.html'), function(err, data) {
+                                        if (err) throw err;
 
-	                                    // Render HTML-content
-	                                    var output = mustache.render(data.toString(), user, sensor, triggered_thresholds);
+                                        // Render HTML-content
+                                        var output = mustache.render(data.toString(), user, sensor, triggered_thresholds);
 
-	                                    // Create Text for Email-Previews and Email without HTML-support
-	                                    var text =
-	                                        'Attention ' + user.first_name + ' ' + user.last_name + '!\n' +
-	                                        'At least one of your thresholds has been triggered for a  sensor, which you are subscribed to!\n\n\n' +
+                                        // Create Text for Email-Previews and Email without HTML-support
+                                        var text =
+                                            'Attention ' + user.first_name + ' ' + user.last_name + '!\n' +
+                                            'At least one of your thresholds has been triggered for a  sensor, which you are subscribed to!\n\n\n' +
                                             // TODO: Input Sensor and list all thresholds
-	                                        'GWoT-VST - Institute for Geoinformatics (Heisenbergstraße 2, 48149 Münster, Germany)';
+                                            'GWoT-VST - Institute for Geoinformatics (Heisenbergstraße 2, 48149 Münster, Germany)';
 
-	                                    // Set Mail options
-	                                    var mailOptions = {
-	                                        from: _mailOptions.from,
-	                                        to: user.email_address,
-	                                        subject: 'One or more thresholds has been triggered!',
-	                                        text: text,
-	                                        html: output
-	                                    };
+                                        // Set Mail options
+                                        var mailOptions = {
+                                            from: _mailOptions.from,
+                                            to: user.email_address,
+                                            subject: 'One or more thresholds has been triggered!',
+                                            text: text,
+                                            html: output
+                                        };
 
-	                                    // Send Email
-	                                    transporter.sendMail(mailOptions, function(error, info) {
-	                                        if (error) {
-	                                            return console.log(error);
-	                                        } else {
-	                                            console.log('Message sent: ' + info.response);
-	                                        }
-	                                    });
-	                                });
+                                        // Send Email
+                                        transporter.sendMail(mailOptions, function(error, info) {
+                                            if (error) {
+                                                return console.log(error);
+                                            } else {
+                                                console.log('Message sent: ' + info.response);
+                                            }
+                                        });
+                                    });
 
                                     // TODO:
                                     // - Emit Websocket-notification if result.rows.lenght > 0!
