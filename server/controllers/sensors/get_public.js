@@ -34,8 +34,8 @@ exports.request = function(req, res){
 				"'CENTIMETER' AS sensor_height_unit, " +
 				"default_frequency, " +
 				"'MILLISECONDS' AS default_frequency_unit, " +
-				"threshold_frequency, " +
-				"'MILLISECONDS' AS threshold_frequency_unit, " +
+				"danger_frequency, " +
+				"'MILLISECONDS' AS danger_frequency_unit, " +
 				"threshold_value, " +
 				"'CENTIMETER' AS threshold_value_unit, " +
 				"ST_X(coordinates::geometry) AS lng, " +

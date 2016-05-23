@@ -93,19 +93,19 @@ exports.process = function(message) {
                 function(measurement, sensor, callback) {
 
                     // TODO:
-                    // - Change sensor.interval to sensor.default_frequency and sensor.threshold_frequency in PostgreSQL-Schemas
+                    // - Change sensor.interval to sensor.default_frequency and sensor.danger_frequency in PostgreSQL-Schemas
 
                     if (measurement.properties.distance > sensor.threshold_value) {
 
                         // only increase if not increased yet
-                        if (!sensor.frequency_increased) {
+                        if (!sensor.increased_frequency) {
                             // Send MQTT-Message increase frequency
-                            broker.publish('/settings', '{"device_id": "rpi-1","interval": ' + sensor.threshold_frequency + '}', {
+                            broker.publish('/settings', '{"device_id": "rpi-1","interval": ' + sensor.danger_frequency + '}', {
                                 retain: false,
                                 qos: 1
                             });
-                            // change frequency_increased value
-                            client.query('UPDATE Sensors SET frequency_increased=true WHERE sensor_id=$1;', [
+                            // change increased_frequency value
+                            client.query('UPDATE Sensors SET increased_frequency=true WHERE sensor_id=$1;', [
                                 sensor.sensor_id
                             ], function(err, result) {
                                 done();
@@ -124,14 +124,14 @@ exports.process = function(message) {
                     } else {
 
                         // only decrease if not decrease
-                        if (sensor.frequency_increased) {
+                        if (sensor.increased_frequency) {
                             // Send MQTT-Message decrease frequency
                             broker.publish('/settings', '{"device_id": "rpi-1","interval": ' + sensor.default_frequency + '}', {
                                 retain: false,
                                 qos: 1
                             });
-                            // change frequency_increased value
-                            client.query('UPDATE Sensors SET frequency_increased=false WHERE sensor_id=$1;', [
+                            // change increased_frequency value
+                            client.query('UPDATE Sensors SET increased_frequency=false WHERE sensor_id=$1;', [
                                 sensor.sensor_id
                             ], function(err, result) {
                                 done();
