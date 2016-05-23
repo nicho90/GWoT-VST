@@ -91,7 +91,8 @@ exports.process = function(message) {
 
                         // only increase if not increased yet
                         if (!sensor.increased_frequency) {
-                            // Send MQTT-Message increase frequency
+
+                            /* Send MQTT-Message increase frequency
                             broker.publish('/settings', '{"device_id": "rpi-1","interval": ' + sensor.danger_frequency + '}', {
                                 retain: false,
                                 qos: 1
@@ -108,16 +109,16 @@ exports.process = function(message) {
                                 } else {
                                     callback(null, measurement, sensor);
                                 }
-                            });
+                            }); */
                         } else {
                             callback(null, measurement, sensor);
                         }
 
                     } else {
 
-                        // only decrease if not decrease
+                        //only decrease if not decrease
                         if (sensor.increased_frequency) {
-                            // Send MQTT-Message decrease frequency
+                            /* Send MQTT-Message decrease frequency
                             broker.publish('/settings', '{"device_id": "rpi-1","interval": ' + sensor.default_frequency + '}', {
                                 retain: false,
                                 qos: 1
@@ -134,7 +135,7 @@ exports.process = function(message) {
                                 } else {
                                     callback(null, measurement, sensor);
                                 }
-                            });
+                            });*/
                         } else {
                             callback(null, measurement, sensor);
                         }
@@ -144,7 +145,7 @@ exports.process = function(message) {
                 // 5. Get all subscribed Users for this sensor
                 function(measurement, sensor, callback) {
 
-                    var query = "SELECT DISTINCT" +
+                    var query = "SELECT DISTINCT " +
                         "users.username, " +
                         "users.email_address, " +
                         "users.first_name, " +
