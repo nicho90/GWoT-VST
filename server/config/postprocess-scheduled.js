@@ -64,9 +64,10 @@ exports.process = function(message) {
                 function(measurement, sensor, callback) {
 
                     // Database query
-                    client.query('INSERT INTO Measurements (created, updated, sensor_id, distance, measured) VALUES (now(), now(), $1, $2, $3);', [
+                    client.query('INSERT INTO Measurements (created, updated, sensor_id, distance, measurement_timestamp) VALUES (now(), now(), $1, $2, $3);', [
                         sensor.sensor_id,
                         measurement.properties.distance.value,
+                        // TODO: Add water_level
                         measurement.properties.timestamp
                     ], function(err, result) {
                         done();
@@ -85,9 +86,9 @@ exports.process = function(message) {
 
                     // TODO:
                     // - Change sensor.interval to sensor.default_frequency and sensor.threshold_frequency in PostgreSQL-Schemas
-                    // - Rename threshold.value to threshold.threshold_value in PostgreSQL-Schema
 
-                    if (measurement.properties.distance > sensor.threshold) {
+                    if (measurement.properties.distance > sensor.threshold_value) {
+
                         // only increase if not increased yet
                         if (!sensor.frequency_increased) {
                             // Send MQTT-Message increase frequency
@@ -105,12 +106,15 @@ exports.process = function(message) {
                                     console.error(errors.database.error_2.message, err);
                                     callback(new Error(errors.database.error_2.message));
                                 } else {
-                                    //callback(null, measurement, sensor);
+                                    callback(null, measurement, sensor);
                                 }
                             });
+                        } else {
+                            callback(null, measurement, sensor);
                         }
-                        callback(null, measurement, sensor);
+
                     } else {
+
                         // only decrease if not decrease
                         if (sensor.frequency_increased) {
                             // Send MQTT-Message decrease frequency
@@ -128,11 +132,12 @@ exports.process = function(message) {
                                     console.error(errors.database.error_2.message, err);
                                     callback(new Error(errors.database.error_2.message));
                                 } else {
-                                    //callback(null, measurement, sensor);
+                                    callback(null, measurement, sensor);
                                 }
                             });
+                        } else {
+                            callback(null, measurement, sensor);
                         }
-                        callback(null, measurement, sensor);
                     }
                 },
 
@@ -167,14 +172,18 @@ exports.process = function(message) {
 
                     async.each(users, function(user, callback) {
 
+                        // TODO:
+                        // - Add support for warning_threshold critical_threshold (currently only critical_thresholds)
+                        // - Calculate with water_level = sensor_height - measured_distance
+
                         var query = "SELECT " +
                             "subscriptions.subscription_id, " +
                             "subscriptions.threshold_id, " +
                             "thresholds.description, " +
                             "thresholds.category, " +
-                            "thresholds.value" +
+                            "thresholds.critical_value" +
                             "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                            "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND thresholds.value > $3;";
+                            "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND thresholds.critical_value > $3;";
 
                         // Database query
                         client.query(query, [
