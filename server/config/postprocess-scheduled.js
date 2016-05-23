@@ -84,9 +84,6 @@ exports.process = function(message) {
                 // 4. Check Sensor-Settings for threshold
                 function(measurement, sensor, callback) {
 
-                    // TODO:
-                    // - Change sensor.interval to sensor.default_frequency and sensor.danger_frequency in PostgreSQL-Schemas
-
                     if (measurement.properties.distance.value > sensor.threshold_value) {
 
                         // only increase if not increased yet
@@ -163,9 +160,6 @@ exports.process = function(message) {
                             console.error(errors.database.error_2.message, err);
                             callback(new Error(errors.database.error_2.message));
                         } else {
-
-                            console.log(result.rows);
-                            
                             callback(null, measurement, sensor, result.rows);
                         }
                     });
@@ -231,13 +225,13 @@ exports.process = function(message) {
                                         };
 
                                         // Send Email
-                                        transporter.sendMail(mailOptions, function(error, info) {
+                                        /*transporter.sendMail(mailOptions, function(error, info) {
                                             if (error) {
                                                 return console.log(error);
                                             } else {
                                                 console.log('Message sent: ' + info.response);
                                             }
-                                        });
+                                        });*/
                                     });
 
                                     // TODO:
@@ -251,10 +245,10 @@ exports.process = function(message) {
                         });
                     }, function(err) {
                         if (err) {
-                            console.error("");
-                            callback(new Error(""));
+                            console.log(err);
+                            callback(err);
                         } else {
-                            console.log("Emails were sent to all users!");
+                            //console.log("Emails were sent to all users!");
                             callback(null);
                         }
                     });
