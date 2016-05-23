@@ -13,11 +13,15 @@ module.exports = {
         },
         "threshold_id": {
             "type": "integer"
+        },
+        "active": {
+            "type": "boolean"
         }
     },
     "required": [
         "username",
         "sensor_id",
-        "threshold_id"
+        "threshold_id",
+        "active"
     ]
 };
