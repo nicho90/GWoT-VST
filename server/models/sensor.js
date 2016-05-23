@@ -15,7 +15,19 @@ module.exports = {
         "private": {
             "type": "boolean"
         },
+        "water_body_id": {
+            "type": "integer",
+            "minimum": 0
+        },
         "sensor_height": {
+            "type": "number",
+            "minimum": 0
+        },
+        "crossing_height": {
+            "type": "number",
+            "minimum": 0
+        },
+        "threshold_value": {
             "type": "number",
             "minimum": 0
         },
@@ -23,19 +35,15 @@ module.exports = {
             "type": "integer",
             "minimum": 1000
         },
-        "threshold_frequency": {
+        "danger_frequency": {
             "type": "integer",
             "minimum": 1000
         },
-        "threshold_value": {
+        "lng": {
             "type": "number",
             "minimum": 0
         },
         "lat": {
-            "type": "number",
-            "minimum": 0
-        },
-        "lng": {
             "type": "number",
             "minimum": 0
         }
@@ -44,11 +52,13 @@ module.exports = {
         "device_id",
         "description",
         "private",
+        "water_body_id",
         "sensor_height",
-        "default_frequency",
-        "threshold_frequency",
+        "crossing_height",
         "threshold_value",
-        "lat",
-        "lng"
+        "default_frequency",
+        "danger_frequency",
+        "lng",
+        "lat"
     ]
 };
