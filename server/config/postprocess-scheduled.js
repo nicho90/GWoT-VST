@@ -91,10 +91,13 @@ exports.process = function(message) {
                         // only increase if not increased yet
                         if (!sensor.frequency_increased) {
                             // Send MQTT-Message increase frequency
-                            broker.publish('/settings', '{"device_id": "rpi-1","interval": ' + sensor.threshold_frequency + '}', {retain: false, qos: 1});
+                            broker.publish('/settings', '{"device_id": "rpi-1","interval": ' + sensor.threshold_frequency + '}', {
+                                retain: false,
+                                qos: 1
+                            });
                             // change frequency_increased value
-                            client.query('UPDATE Sensors SET frequency_increased=true WHERE sensor_id=$1;',[
-                                sensor.sensor_id;
+                            client.query('UPDATE Sensors SET frequency_increased=true WHERE sensor_id=$1;', [
+                                sensor.sensor_id
                             ], function(err, result) {
                                 done();
 
@@ -111,10 +114,13 @@ exports.process = function(message) {
                         // only decrease if not decrease
                         if (sensor.frequency_increased) {
                             // Send MQTT-Message decrease frequency
-                            broker.publish('/settings', '{"device_id": "rpi-1","interval": ' + sensor.default_frequency + '}', {retain: false, qos: 1});
+                            broker.publish('/settings', '{"device_id": "rpi-1","interval": ' + sensor.default_frequency + '}', {
+                                retain: false,
+                                qos: 1
+                            });
                             // change frequency_increased value
-                            client.query('UPDATE Sensors SET frequency_increased=false WHERE sensor_id=$1;',[
-                                sensor.sensor_id;
+                            client.query('UPDATE Sensors SET frequency_increased=false WHERE sensor_id=$1;', [
+                                sensor.sensor_id
                             ], function(err, result) {
                                 done();
 
