@@ -65,6 +65,7 @@ if(!db_settings.status){
                     // PostgreSQL-timestamp: "2016-05-17 00:20:53.248363+02"
                     var yesterday = moment().add(-1, 'days');
                     var begin = yesterday.format("YYYY-MM-DD") + " 00:00:00";
+                    var _begin = yesterday.format("YYYY-MM-DD");
                     var end = yesterday.format("YYYY-MM-DD") + " 23:59:59";
 
                     //console.log(begin);
@@ -87,10 +88,11 @@ if(!db_settings.status){
                                 if(result.rows[0].avg !== null){
 
                                     // Database Query
-                                    client.query("INSERT INTO Timeseries (created, updated, sensor_id, date, distance) VALUES (now(), now(), $1, $2, $3);", [
+                                    client.query("INSERT INTO Timeseries (created, updated, sensor_id, distance, water_level, measurement_date) VALUES (now(), now(), $1, $2, $3, $4);", [
                                         sensor.sensor_id,
-                                        begin,
-                                        result.rows[0].avg
+                                        result.rows[0].avg,
+                                        sensor.sensor_height-result.rows[0].avg,
+                                        _begin
                                     ], function(err, result) {
                                         done();
 
