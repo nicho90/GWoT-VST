@@ -163,6 +163,9 @@ exports.process = function(message) {
                             console.error(errors.database.error_2.message, err);
                             callback(new Error(errors.database.error_2.message));
                         } else {
+
+                            console.log(result.rows);
+                            
                             callback(null, measurement, sensor, result.rows);
                         }
                     });
@@ -182,9 +185,9 @@ exports.process = function(message) {
                             "subscriptions.threshold_id, " +
                             "thresholds.description, " +
                             "thresholds.category, " +
-                            "thresholds.critical_value" +
+                            "thresholds.critical_threshold " +
                             "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                            "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND thresholds.critical_value > $3;";
+                            "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND thresholds.critical_threshold > $3;";
 
                         // Database query
                         client.query(query, [
