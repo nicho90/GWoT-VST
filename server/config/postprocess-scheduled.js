@@ -75,7 +75,7 @@ exports.process = function(message) {
                     client.query('INSERT INTO Measurements (created, updated, sensor_id, distance, water_level, measurement_timestamp) VALUES (now(), now(), $1, $2, $3, $4);', [
                         sensor.sensor_id,
                         measurement.properties.distance.value,
-                        sensor.sensor_height-distance,
+                        sensor.sensor_height-distance.value,
                         timestamp
                     ], function(err, result) {
                         done();
@@ -95,7 +95,7 @@ exports.process = function(message) {
                     // TODO:
                     // - Change sensor.interval to sensor.default_frequency and sensor.danger_frequency in PostgreSQL-Schemas
 
-                    if (measurement.properties.distance > sensor.threshold_value) {
+                    if (measurement.properties.distance.value > sensor.threshold_value) {
 
                         // only increase if not increased yet
                         if (!sensor.increased_frequency) {
@@ -197,7 +197,7 @@ exports.process = function(message) {
                         client.query(query, [
                             sensor.sensor_id,
                             user.username,
-                            measurement.properties.distance
+                            measurement.properties.distance.value
                         ], function(err, result) {
                             done();
 
