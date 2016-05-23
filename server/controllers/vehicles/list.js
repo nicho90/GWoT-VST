@@ -20,51 +20,59 @@ exports.request = function(req, res) {
             return console.error(errors.database.error_1.message, err);
         } else {
 
-            // Check if category was requested
-            var category;
+            var category = "";
+            var status = true;
+
+            // Check which category was requested
             if (req.query.category) {
-              console.log(req.query.category);
-              category = "WHERE category=";
-              switch(req.query.category) {
-                  case 'bike':
-                    category += "'BIKE'";
-                    break;
-                  case 'wheelchair':
-                    category += "'WHEELCHAIR'";
-                    break;
-                  case 'scooter':
-                    category += "'SCOOTER'";
-                    break;
-                  case 'motorbike':
-                    category += "'MOTORBIKE'";
-                    break;
-                  case 'car':
-                    category += "'CAR'";
-                    break;
-                  case 'truck':
-                    category += "'TRUCK'";
-                    break;
-              }
-            } else {
-              console.log('no query');
-              category = "";
+                category = "WHERE category=";
+                switch (req.query.category) {
+                    case 'bike':
+                        category += "'BIKE'";
+                        break;
+                    case 'wheelchair':
+                        category += "'WHEELCHAIR'";
+                        break;
+                    case 'scooter':
+                        category += "'SCOOTER'";
+                        break;
+                    case 'motorbike':
+                        category += "'MOTORBIKE'";
+                        break;
+                    case 'car': {
+                        category += "'CAR'";
+                        break;
+                    }
+                    case 'truck': {
+                        category += "'TRUCK'";
+                        break;
+                    }
+                    default: {
+                        status = false;
+                    }
+                }
             }
 
-            // TODO don't send status 200 at a non-existing query
+            // Check if query-parameter was valid
+            if(!status) {
+                res.status(errors.database.error_3.code).send(errors.database.error_3);
+                return console.error(errors.database.error_3.message);
+            } else {
 
-            // Database query
-            client.query('SELECT * FROM Vehicles ' + category + ';', function(err, result) {
-                done();
+                // Database query
+                client.query('SELECT * FROM Vehicles ' + category + ';', function(err, result) {
+                    done();
 
-                if (err) {
-                    res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
-                    return console.error(errors.database.error_2.message, err);
-                } else {
+                    if (err) {
+                        res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
+                        return console.error(errors.database.error_2.message, err);
+                    } else {
 
-                    // Send Result
-                    res.status(200).send(result.rows);
-                }
-            });
+                        // Send Result
+                        res.status(200).send(result.rows);
+                    }
+                });
+            }
         }
     });
 };
