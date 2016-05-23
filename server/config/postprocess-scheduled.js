@@ -75,7 +75,7 @@ exports.process = function(message) {
                     client.query('INSERT INTO Measurements (created, updated, sensor_id, distance, water_level, measurement_timestamp) VALUES (now(), now(), $1, $2, $3, $4);', [
                         sensor.sensor_id,
                         measurement.properties.distance.value,
-                        sensor_height-distance,
+                        sensor.sensor_height-distance,
                         timestamp
                     ], function(err, result) {
                         done();
