@@ -25,7 +25,7 @@ exports.request = function(req, res){
 			var query;
 			var singleData = false;
 			if(req.query.latest){
-				query = "SELECT * FROM Measurements WHERE sensor_id=$1 ORDER BY measured DESC LIMIT 1;";
+				query = "SELECT * FROM Measurements WHERE sensor_id=$1 ORDER BY measurement_timestamp DESC LIMIT 1;";
 				singleData = true;
 			} else if(req.query.maximum) {
 				query = "SELECT * FROM Measurements WHERE sensor_id=$1 ORDER BY distance DESC LIMIT 1;";
@@ -34,7 +34,7 @@ exports.request = function(req, res){
 				query = "SELECT * FROM Measurements WHERE sensor_id=$1 ORDER BY distance ASC LIMIT 1;";
 				singleData = true;
 			} else {
-				query = "SELECT * FROM Measurements WHERE sensor_id=$1 ORDER BY measured DESC;";
+				query = "SELECT * FROM Measurements WHERE sensor_id=$1 ORDER BY measurement_timestamp DESC LIMIT 1000;";
 			}
 
 			// Database Query
