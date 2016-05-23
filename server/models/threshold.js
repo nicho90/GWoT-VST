@@ -12,7 +12,11 @@ module.exports = {
             "type": "string",
             "minLength": 1
         },
-        "threshold_value": {
+        "warning_threshold": {
+            "type": "number",
+            "minimum": 0
+        },
+        "critical_threshold": {
             "type": "number",
             "minimum": 0
         },
@@ -25,6 +29,7 @@ module.exports = {
                 "SCOOTER",
                 "MOTORBIKE",
                 "CAR",
+                "BUS",
                 "TRUCK",
                 "OTHER"
             ]
@@ -33,7 +38,8 @@ module.exports = {
     "required": [
         "username",
         "description",
-        "threshold_value",
+        "warning_threshold",
+        "critical_threshold",
         "category"
     ]
 };
