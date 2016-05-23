@@ -7,7 +7,6 @@ exports.process = function(message) {
     var pg = require('pg');
     var db_settings = require('../server.js').db_settings;
     var async = require('async');
-    var moment = require('moment');
     var errors = require('./errors');
 
     var transporter = require('./email.js').transporter;
@@ -64,19 +63,12 @@ exports.process = function(message) {
                 // 3. Save new measuremt in Database
                 function(measurement, sensor, callback) {
 
-                    // TODO:
-                    // - Check if format of the timestamp is correctly parsed
-                    // - Check for offset (corrent timezone)
-                    console.log(measurement);
-                    var timestamp = moment(measurement.properties.timestamp*1000).format("YYYY-MM-DD HH:mm:ss");
-                    console.log(timestamp);
-
                     // Database query
                     client.query('INSERT INTO Measurements (created, updated, sensor_id, distance, water_level, measurement_timestamp) VALUES (now(), now(), $1, $2, $3, $4);', [
                         sensor.sensor_id,
                         measurement.properties.distance.value,
                         sensor.sensor_height-measurement.properties.distance.value,
-                        timestamp
+                        measurement.properties.timestamp
                     ], function(err, result) {
                         done();
 
