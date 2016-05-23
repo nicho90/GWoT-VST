@@ -196,7 +196,9 @@ if(db_settings.status && email_settings.status){
     // Load dependencies
     var login = require ('./routes/login');
     var users = require ('./routes/users');
+    var water_bodies = require ('./routes/water_bodies');
     var sensors = require ('./routes/sensors');
+    var related_sensors = require ('./routes/related_sensors');
     var measurements = require ('./routes/measurements');
     var timeseries = require ('./routes/timeseries');
     var thresholds = require ('./routes/thresholds');
@@ -208,7 +210,9 @@ if(db_settings.status && email_settings.status){
     // Load Routes
     app.use('/api', login);
     app.use('/api', users);
+    app.use('/api', water_bodies);
     app.use('/api', sensors);
+    app.use('/api', related_sensors);
     app.use('/api', measurements);
     app.use('/api', timeseries);
     app.use('/api', thresholds);
