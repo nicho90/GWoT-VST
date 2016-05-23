@@ -67,7 +67,7 @@ exports.process = function(message) {
                     // TODO:
                     // - Check if format of the timestamp is correctly parsed
                     // - Check for offset (corrent timezone)
-                    console.log(measurement.properties.timestamp);
+                    console.log(measurement);
                     var timestamp = moment(measurement.properties.timestamp*1000).format("YYYY-MM-DD HH:mm:ss");
                     console.log(timestamp);
 
@@ -75,7 +75,7 @@ exports.process = function(message) {
                     client.query('INSERT INTO Measurements (created, updated, sensor_id, distance, water_level, measurement_timestamp) VALUES (now(), now(), $1, $2, $3, $4);', [
                         sensor.sensor_id,
                         measurement.properties.distance.value,
-                        sensor.sensor_height-distance.value,
+                        sensor.sensor_height-measurement.properties.distance.value,
                         timestamp
                     ], function(err, result) {
                         done();
