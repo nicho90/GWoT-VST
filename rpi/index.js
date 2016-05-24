@@ -186,11 +186,14 @@ var client = mqtt.connect('mqtt://giv-gwot-vst.uni-muenster.de:1883', {
  * Connect to MQTT-Broker
  */
 client.on('connect', function() {
+    console.log("Client connected");
     options = {
         qos: 2, // Quality of Service: 2 = at least once
         retain: true
     };
-    subscribeTopics();
+    client.subscribe('/data/realtime');
+    client.subscribe('/settings');
+    client.subscribe('/ipcheck');
 });
 
 
@@ -264,18 +267,10 @@ var pubIP = function() {
 
 
 /**
- * Subscribe to topic from MQTT-Broker
- */
-var subscribeTopics = function() {
-    client.subscribe('/data/realtime');
-    client.subscribe('/settings');
-    client.subscribe('/ipcheck');
-};
-
-/**
  * Recieve Messages from MQTT-Broker
  */
 client.on('message', function(topic, message) {
+    console.log(message);
     var message = JSON.parse(message);
     if (message.device_id == sensor.device_id) {
         switch (topic) {
