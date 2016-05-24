@@ -95,7 +95,7 @@ exports.process = function(message) {
                             message = {
                                 topic: '/settings',
                                 payload: '{"device_id": "rpi-1","interval": ' + sensor.danger_frequency + '}', // String or a Buffer
-                                qos: 1, // quality of service: 0, 1, or 2
+                                qos: 2, // quality of service: 0, 1, or 2
                                 retain: false // or true
                             };
                             broker.publish(message, function() {
@@ -126,7 +126,7 @@ exports.process = function(message) {
                             message = {
                                 topic: '/settings',
                                 payload: '{"device_id": "rpi-1","interval": ' + sensor.default_frequency + '}', // String or a Buffer
-                                qos: 1, // quality of service: 0, 1, or 2
+                                qos: 2, // quality of service: 0, 1, or 2
                                 retain: false // or true
                             };
                             broker.publish(message, function() {
