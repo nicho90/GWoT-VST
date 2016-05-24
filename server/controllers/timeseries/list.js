@@ -52,19 +52,19 @@ exports.request = function(req, res){
 				var query;
 				if(req.query.hours){
 					begin = now.subtract(req.query.hours, 'hours').format("YYYY-MM-DD hh:mm:ss");
-					query = "SELECT * FROM Measurements WHERE sensor_id=$1 AND measured >=$2 ORDER BY measured ASC;";
+					query = "SELECT * FROM Measurements WHERE sensor_id=$1 AND measurement_timestamp >=$2 ORDER BY measurement_timestamp ASC;";
 				} else if(req.query.days) {
 					begin = now.subtract(req.query.days, 'days').format("YYYY-MM-DD hh:mm:ss");
-					query = "SELECT * FROM Timeseries WHERE sensor_id=$1 AND date >=$2 ORDER BY date ASC;";
+					query = "SELECT * FROM Timeseries WHERE sensor_id=$1 AND measurement_date >=$2 ORDER BY measurement_date ASC;";
 				} else if(req.query.weeks) {
 					begin = now.subtract(req.query.weeks, 'weeks').format("YYYY-MM-DD hh:mm:ss");
-					query = "SELECT * FROM Timeseries WHERE sensor_id=$1 AND date >=$2 ORDER BY date ASC;";
+					query = "SELECT * FROM Timeseries WHERE sensor_id=$1 AND measurement_date >=$2 ORDER BY measurement_date ASC;";
 				} else if(req.query.months) {
 					begin = now.subtract(req.query.months, 'months').format("YYYY-MM-DD hh:mm:ss");
-					query = "SELECT * FROM Timeseries WHERE sensor_id=$1 AND date >=$2 ORDER BY date ASC;";
+					query = "SELECT * FROM Timeseries WHERE sensor_id=$1 AND measurement_date >=$2 ORDER BY measurement_date ASC;";
 				} else if(req.query.years) {
 					begin = now.subtract(req.query.years, 'years').format("YYYY-MM-DD hh:mm:ss");
-					query = "SELECT * FROM Timeseries WHERE sensor_id=$1 AND date >=$2 ORDER BY date ASC;";
+					query = "SELECT * FROM Timeseries WHERE sensor_id=$1 AND measurement_date >=$2 ORDER BY measurement_date ASC;";
 				} else {
 					res.status(errors.database.error_3.code).send(_.extend(errors.database.error_3));
 					return console.error(errors.database.error_3.message);
