@@ -183,23 +183,23 @@ exports.process = function(message) {
                     async.each(users, function(user, callback) {
 
                         var query = "" +
-                            "SELECT " +
+                            "(SELECT " +
                                 "subscriptions.subscription_id, " +
                                 "subscriptions.threshold_id, " +
                                 "thresholds.description, " +
                                 "thresholds.category, " +
                                 "'warning' AS level " + // warning-level
                                 "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                                "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND ($3 + $4) >= ($5 + thresholds.critical_threshold) AND ($3 + $4) < ($5 + thresholds.critical_threshold)" +
+                                "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND ($3 + $4) >= ($5 + thresholds.critical_threshold) AND ($3 + $4) < ($5 + thresholds.critical_threshold)) " +
                             "UNION ALL " + // Merge with critical-level
-                                "SELECT " +
+                                "(SELECT " +
                                     "subscriptions.subscription_id, " +
                                     "subscriptions.threshold_id, " +
                                     "thresholds.description, " +
                                     "thresholds.category, " +
                                     "'danger' AS level " + // danger-level
                                     "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                                    "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND ($3 + $4) >= ($5 + thresholds.critical_threshold);";
+                                    "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND ($3 + $4) >= ($5 + thresholds.critical_threshold));";
 
                         console.log(query);
 
