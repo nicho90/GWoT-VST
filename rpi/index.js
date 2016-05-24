@@ -188,8 +188,9 @@ var client = mqtt.connect('mqtt://giv-gwot-vst.uni-muenster.de:1883', {
 client.on('connect', function() {
     options = {
         qos: 2, // Quality of Service: 2 = at least once
-        retain: false
+        retain: true
     };
+    subscribeTopics();
 });
 
 
@@ -265,9 +266,11 @@ var pubIP = function() {
 /**
  * Subscribe to topic from MQTT-Broker
  */
-client.subscribe('/data/realtime');
-client.subscribe('/settings');
-client.subscribe('/ipcheck');
+var subscribeTopics = function() {
+    client.subscribe('/data/realtime');
+    client.subscribe('/settings');
+    client.subscribe('/ipcheck');
+};
 
 /**
  * Recieve Messages from MQTT-Broker
