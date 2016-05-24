@@ -15,4 +15,4 @@ client.on('message', function (topic, message) {
   client.end();
 });
 
-client.publish('/ipcheck', '', this.options);
+client.publish('/ipcheck', '{"device_id": "rpi-1"}', this.options);
