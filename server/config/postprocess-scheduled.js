@@ -83,7 +83,7 @@ exports.process = function(message) {
 
                 // 4. Check Sensor-Settings for threshold
                 function(measurement, sensor, callback) {
-			console.log(measurement.properties.distance.value, sensor.threshold_value);
+                    console.log(measurement.properties.distance.value, sensor.threshold_value);
                     if (measurement.properties.distance.value > sensor.threshold_value) {
 
                         // only increase if not increased yet
@@ -127,7 +127,7 @@ exports.process = function(message) {
                                 qos: 1, // quality of service: 0, 1, or 2
                                 retain: false // or true
                             }
-                            broker.publish(message, function(){
+                            broker.publish(message, function() {
                                 console.log("Message send");
                             });
                             // change increased_frequency value
