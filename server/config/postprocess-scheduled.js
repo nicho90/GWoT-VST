@@ -84,18 +84,20 @@ exports.process = function(message) {
                 // 4. Check Sensor-Settings for threshold
                 function(measurement, sensor, callback) {
                     console.log(measurement.properties.distance.value, sensor.threshold_value);
+
+                    var message;
                     if (measurement.properties.distance.value > sensor.threshold_value) {
 
                         // only increase if not increased yet
                         if (!sensor.increased_frequency) {
 
                             // Send MQTT-Message increase frequency
-                            var message = {
+                            message = {
                                 topic: '/settings',
                                 payload: '{"device_id": "rpi-1","interval": ' + sensor.danger_frequency + '}', // String or a Buffer
                                 qos: 1, // quality of service: 0, 1, or 2
                                 retain: false // or true
-                            }
+                            };
                             broker.publish(message, function() {
                                 console.log("Message send");
                             });
@@ -121,12 +123,12 @@ exports.process = function(message) {
                         //only decrease if not decrease
                         if (sensor.increased_frequency) {
                             // Send MQTT-Message decrease frequency
-                            var message = {
+                            message = {
                                 topic: '/settings',
                                 payload: '{"device_id": "rpi-1","interval": ' + sensor.default_frequency + '}', // String or a Buffer
                                 qos: 1, // quality of service: 0, 1, or 2
                                 retain: false // or true
-                            }
+                            };
                             broker.publish(message, function() {
                                 console.log("Message send");
                             });
@@ -180,24 +182,32 @@ exports.process = function(message) {
 
                     async.each(users, function(user, callback) {
 
-                        // TODO:
-                        // - Add support for warning_threshold critical_threshold (currently only critical_thresholds)
-                        // - Calculate with water_level = sensor_height - measured_distance
-
-                        var query = "SELECT " +
-                            "subscriptions.subscription_id, " +
-                            "subscriptions.threshold_id, " +
-                            "thresholds.description, " +
-                            "thresholds.category, " +
-                            "thresholds.critical_threshold " +
-                            "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                            "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND thresholds.critical_threshold > $3;";
+                        var query = "" +
+                            "SELECT " +
+                                "subscriptions.subscription_id, " +
+                                "subscriptions.threshold_id, " +
+                                "thresholds.description, " +
+                                "thresholds.category, " +
+                                "'warning' AS level " + // warning-level
+                                "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
+                                "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND ($3+$4) >= ($5 + thresholds.critical_threshold) AND ($3+$4) < ($5 + thresholds.critical_threshold)" +
+                            "UNION ALL " + // Merge with critical-level
+                                "SELECT " +
+                                    "subscriptions.subscription_id, " +
+                                    "subscriptions.threshold_id, " +
+                                    "thresholds.description, " +
+                                    "thresholds.category, " +
+                                    "'danger' AS level " + // danger-level
+                                    "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
+                                    "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND ($3+$4) >= ($5 + thresholds.critical_threshold);";
 
                         // Database query
                         client.query(query, [
                             sensor.sensor_id,
                             user.username,
-                            measurement.properties.distance.value
+                            measurement.properties.distance.value,
+                            sensor.sensor_height,
+                            sensor.crossing_height
                         ], function(err, result) {
                             done();
 
