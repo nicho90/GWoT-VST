@@ -190,7 +190,7 @@ exports.process = function(message) {
                                 "thresholds.category, " +
                                 "'warning' AS level " + // warning-level
                                 "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                                "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND ($3 + $4) >= ($5 + thresholds.critical_threshold) AND ($3 + $4) < ($5 + thresholds.critical_threshold)) " +
+                                "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND ($3 - $4) >= ($5 + thresholds.warning_threshold) AND ($3 - $4) < ($5 + thresholds.critical_threshold)) " +
                             "UNION ALL " + // Merge with critical-level
                                 "(SELECT " +
                                     "subscriptions.subscription_id, " +
@@ -199,7 +199,7 @@ exports.process = function(message) {
                                     "thresholds.category, " +
                                     "'danger' AS level " + // danger-level
                                     "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                                    "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND ($3 + $4) >= ($5 + thresholds.critical_threshold));";
+                                    "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND ($3 - $4) >= ($5 + thresholds.critical_threshold));";
 
                         console.log(query);
 
@@ -207,8 +207,8 @@ exports.process = function(message) {
                         client.query(query, [
                             sensor.sensor_id,
                             user.username,
-                            measurement.properties.distance.value,
                             sensor.sensor_height,
+                            measurement.properties.distance.value,
                             sensor.crossing_height
                         ], function(err, result) {
                             done();
