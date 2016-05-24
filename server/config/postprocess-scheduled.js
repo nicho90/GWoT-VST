@@ -83,7 +83,7 @@ exports.process = function(message) {
 
                 // 4. Check Sensor-Settings for threshold
                 function(measurement, sensor, callback) {
-
+			console.log(measurement.properties.distance.value, sensor.threshold_value);
                     if (measurement.properties.distance.value > sensor.threshold_value) {
 
                         // only increase if not increased yet
