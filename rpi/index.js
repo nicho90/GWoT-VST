@@ -270,8 +270,8 @@ var pubIP = function() {
  * Recieve Messages from MQTT-Broker
  */
 client.on('message', function(topic, message) {
-    console.log(message);
     var message = JSON.parse(message);
+    console.log(message);
     if (message.device_id == sensor.device_id) {
         switch (topic) {
             case '/data/realtime':
