@@ -67,7 +67,7 @@ exports.process = function(message) {
                     client.query('INSERT INTO Measurements (created, updated, sensor_id, distance, water_level, measurement_timestamp) VALUES (now(), now(), $1, $2, $3, $4);', [
                         sensor.sensor_id,
                         measurement.properties.distance.value,
-                        sensor.sensor_height-measurement.properties.distance.value,
+                        sensor.sensor_height - measurement.properties.distance.value,
                         measurement.properties.timestamp
                     ], function(err, result) {
                         done();
@@ -89,10 +89,15 @@ exports.process = function(message) {
                         // only increase if not increased yet
                         if (!sensor.increased_frequency) {
 
-                            /* Send MQTT-Message increase frequency
-                            broker.publish('/settings', '{"device_id": "rpi-1","interval": ' + sensor.danger_frequency + '}', {
-                                retain: false,
-                                qos: 1
+                            // Send MQTT-Message increase frequency
+                            var message = {
+                                topic: '/settings',
+                                payload: '{"device_id": "rpi-1","interval": ' + sensor.danger_frequency + '}', // String or a Buffer
+                                qos: 1, // quality of service: 0, 1, or 2
+                                retain: false // or true
+                            }
+                            broker.publish(message, function() {
+                                console.log("Message send");
                             });
                             // change increased_frequency value
                             client.query('UPDATE Sensors SET increased_frequency=true WHERE sensor_id=$1;', [
@@ -106,7 +111,7 @@ exports.process = function(message) {
                                 } else {
                                     callback(null, measurement, sensor);
                                 }
-                            }); */
+                            });
                         } else {
                             callback(null, measurement, sensor);
                         }
@@ -115,10 +120,15 @@ exports.process = function(message) {
 
                         //only decrease if not decrease
                         if (sensor.increased_frequency) {
-                            /* Send MQTT-Message decrease frequency
-                            broker.publish('/settings', '{"device_id": "rpi-1","interval": ' + sensor.default_frequency + '}', {
-                                retain: false,
-                                qos: 1
+                            // Send MQTT-Message decrease frequency
+                            var message = {
+                                topic: '/settings',
+                                payload: '{"device_id": "rpi-1","interval": ' + sensor.default_frequency + '}', // String or a Buffer
+                                qos: 1, // quality of service: 0, 1, or 2
+                                retain: false // or true
+                            }
+                            broker.publish(message, function(){
+                                console.log("Message send");
                             });
                             // change increased_frequency value
                             client.query('UPDATE Sensors SET increased_frequency=false WHERE sensor_id=$1;', [
@@ -132,7 +142,7 @@ exports.process = function(message) {
                                 } else {
                                     callback(null, measurement, sensor);
                                 }
-                            });*/
+                            });
                         } else {
                             callback(null, measurement, sensor);
                         }
