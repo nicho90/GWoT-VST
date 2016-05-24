@@ -182,7 +182,6 @@ exports.process = function(message) {
 
                     async.each(users, function(user, callback) {
 
-                        /*
                         var query = "" +
                                 "(SELECT " +
                                     "subscriptions.subscription_id, " +
@@ -191,7 +190,7 @@ exports.process = function(message) {
                                     "thresholds.category, " +
                                     "'warning' AS level " + // warning-level
                                     "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                                    "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND ($3 - $4) >= ($5 + thresholds.warning_threshold) AND ($3 - $4) < ($5 + thresholds.critical_threshold)) " +
+                                    "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$3 AND ($11 - $8) >= ($12 + thresholds.warning_threshold) AND ($6 - $9) < ($13 + thresholds.critical_threshold)) " +
                             "UNION ALL " + // Merge with critical-level
                                 "(SELECT " +
                                     "subscriptions.subscription_id, " +
@@ -200,8 +199,8 @@ exports.process = function(message) {
                                     "thresholds.category, " +
                                     "'danger' AS level " + // danger-level
                                     "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                                    "WHERE subscriptions.sensor_id=$1 AND subscriptions.username=$2 AND ($3 - $4) >= ($5 + thresholds.critical_threshold));";*/
-
+                                    "WHERE subscriptions.sensor_id=$2 AND subscriptions.username=$4 AND ($7 - $10) >= ($14 + thresholds.critical_threshold));";
+                        /*
                         var query = "" +
                                 "(SELECT " +
                                     "subscriptions.subscription_id, " +
@@ -219,17 +218,26 @@ exports.process = function(message) {
                                     "thresholds.category, " +
                                     "'danger' AS level " + // danger-level
                                     "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                                    "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.username='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") >= (" + sensor.crossing_height + " + thresholds.critical_threshold));";
+                                    "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.username='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") >= (" + sensor.crossing_height + " + thresholds.critical_threshold));";*/
 
                         console.log(query);
 
                         // Database query
                         client.query(query, [
-                            /*sensor.sensor_id,
+                            sensor.sensor_id,
+                            sensor.sensor_id,
+                            user.username,
                             user.username,
                             sensor.sensor_height,
+                            sensor.sensor_height,
+                            sensor.sensor_height,
                             measurement.properties.distance.value,
-                            sensor.crossing_height*/
+                            measurement.properties.distance.value,
+                            measurement.properties.distance.value,
+                            sensor.crossing_height,
+                            sensor.crossing_height,
+                            sensor.crossing_height,
+                            sensor.crossing_height
                         ], function(err, result) {
                             done();
 
