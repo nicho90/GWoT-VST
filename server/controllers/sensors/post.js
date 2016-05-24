@@ -50,15 +50,36 @@ exports.request = function(req, res){
 							return console.error(errors.database.error_1.message, err);
 						} else {
 
+							var query = "INSERT INTO Sensors (" +
+								"created, " +
+								"updated, " +
+								"created_by, " +
+								"device_id, " +
+								"description, " +
+								"private, " +
+								"water_body_id, " +
+								"coordinates, " +
+								"sensor_height, " +
+								"crossing_height, " +
+								"default_frequency, " +
+								"danger_frequency, " +
+								"increased_frequency, " +
+								"online_status " +
+							") VALUES (" + "now(), now(), $1, $2, $3, $4, $5, 'POINT(" + req.body.lat + " " + req.body.lng + ")', $6, $7, $8, $9, $10, 'false', 'false');";
+
 							// Database Query
-							client.query("INSERT INTO Sensors (created, updated, created_by, device_id, description, private, coordinates, sensor_height) VALUES (now(), now(), $1, $2, $3, $4, 'POINT(" + req.body.lat + " " + req.body.lng + ")', $5);",
-								[
-									req.params.username,
-									req.body.device_id,
-									req.body.description,
-									req.body.private,
-									req.body.sensor_height
-								], function(err, result) {
+							client.query(query, [
+								req.params.username,
+								req.body.device_id,
+								req.body.description,
+								req.body.private,
+								req.body.water_body_id,
+								req.body.sensor_height,
+								req.body.crossing_height,
+								req.body.threshold_value,
+								req.body.default_frequency,
+								req.body.danger_frequency
+							], function(err, result) {
 								done();
 
 								if(err) {
@@ -73,19 +94,21 @@ exports.request = function(req, res){
 										"private, " +
 										"sensor_height, " +
 										"'CENTIMETER' AS sensor_height_unit, " +
-										"default_frequency, " +
-										"'MILLISECONDS' AS default_frequency_unit, " +
-										"threshold_frequency, " +
-										"'MILLISECONDS' AS threshold_frequency_unit, " +
+										"crossing_height, " +
+										"'CENTIMETER' AS crossing_height_unit, " +
 										"threshold_value, " +
 										"'CENTIMETER' AS threshold_value_unit, " +
+										"default_frequency, " +
+										"'MILLISECONDS' AS default_frequency_unit, " +
+										"danger_frequency, " +
+										"'MILLISECONDS' AS danger_frequency_unit, " +
+										"increased_frequency, " +
+										"online_status, " +
 										"ST_X(coordinates::geometry) AS lng, " +
 										"ST_Y(coordinates::geometry) AS lat, " +
 										"created, " +
 										"updated " +
 										"FROM Sensors WHERE created_by=$1 ORDER BY created DESC;";
-
-									/* 'SELECT sensor_id, device_id, description, private, sensor_height, ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat, created, updated FROM Sensors WHERE created_by=$1 ORDER BY created DESC;' */
 
 									// Database Query
 									client.query(query, [
