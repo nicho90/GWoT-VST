@@ -1,168 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Geospatial Web of Things - Virtual Smart Things Group">
-    <meta name="author" content="Nicholas Schiestel">
-    <meta name="author" content="Heinrich Löwen">
-    <meta name="author" content="Rehan Aziz Chaudhary">
-    <meta name="author" content="Timm Kühnel">
-    <!--<link rel="icon" href="images/favicon/favicon.ico"> -->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Geospatial Web of Things - Virtual Smart Things Group">
+        <meta name="author" content="Nicholas Schiestel">
+        <meta name="author" content="Heinrich Löwen">
+        <meta name="author" content="Rehan Aziz Chaudhary">
+        <meta name="author" content="Timm Kühnel">
+        <!--<link rel="icon" href="images/favicon/favicon.ico"> -->
 
-    <!-- Detect phone numbers -->
-    <meta name="format-detection" content="telephone=no">
-    <meta http-equiv="x-rim-auto-match" content="none">
+        <!-- Detect phone numbers -->
+        <meta name="format-detection" content="telephone=no">
+        <meta http-equiv="x-rim-auto-match" content="none">
 
-    <title>GWoT-VST</title>
+        <title>GWoT-VST</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <!-- Bootstrap core CSS -->
+        <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
 
-    <!-- Font-Awesome -->
-    <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+        <!-- Font-Awesome -->
+        <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
 
-    <!-- Flag Icons -->
-    <link href="lib/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
+        <!-- Flag Icons -->
+        <link href="lib/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
 
-    <!-- Custom styles -->
-    <link href="css/styles.css" rel="stylesheet" />
+        <!-- ngAlert -->
+        <link href="/lib/ng-alert/ng-alert.css" rel="stylesheet">
 
-</head>
+        <!-- Custom styles -->
+        <link href="css/styles.css" rel="stylesheet"/>
 
-<body ng-app="gwot-vst">
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-fixed-top navbar-dark bg-inverse" ng-controller="NavController">
+    </head>
 
-        <a class="navbar-brand" ng-href="#/">{{config.appName}} <small>{{config.appVersion}}</small></a>
+    <body ng-app="gwot-vst">
 
-        <!-- NAVBAR LEFT -->
-        <ul class="nav nav-pills">
-            <li class="nav-item">
-                <a class="nav-link" ng-href="#/" ng-class="{ active: isActive('/') }">
-                    <i class="fa fa-home"></i>&nbsp;&nbsp;{{ 'NAV_HOME' | translate }}
+        <!-- NAVBAR -->
+        <div class="container-fluid">
+            <nav class="navbar navbar-fixed-top navbar-dark bg-inverse" ng-controller="NavController">
+
+                <!-- App-Name -->
+                <a class="navbar-brand" ng-href="#/">{{config.appName}}
+                    <small>{{config.appVersion}}</small>
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" ng-href="#/sensors" ng-class="{ active: isActive('/sensors') }">
-                    <i class="fa fa-wifi"></i>&nbsp;&nbsp;{{ 'NAV_SENSORS' | translate }}
-                </a>
-            </li>
-        </ul>
 
-        <!-- NAVBAR RIGHT -->
+                <!-- Left Navbar-Menu -->
+                <ul class="nav navbar-nav">
+                    <li class="nav-item nav-pills">
+                        <a class="nav-link" ng-href="#/" ng-class="{ active: isActive('/') }">
+                            <i class="fa fa-home" aria-hidden="true"></i>&nbsp;{{ 'NAV_HOME' | translate }}
+                        </a>
+                    </li>
+                    <li class="nav-item nav-pills">
+                        <a class="nav-link" ng-href="#/sensors" ng-class="{ active: isActive('/sensors') }">
+                            <i class="fa fa-cubes" aria-hidden="true"></i>&nbsp;{{ 'NAV_SENSORS' | translate }}
+                        </a>
+                    </li>
+                </ul>
 
-    </nav>
+                <!-- Right Navbar-Menu (Login & Profile) -->
+                <form class="form-inline pull-xs-right" ng-if="!authenticated_user">
+                    <input class="form-control form-control" type="text" placeholder="{{ 'USERNAME' | translate }}" ng-model="user.username">
+                    <input class="form-control form-control" type="password" placeholder="{{ 'PASSWORD' | translate }}" ng-model="user.password">
+                    <button class="btn btn-primary" type="submit" ng-click="login()">
+                        <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'LOGIN' | translate }}
+                    </button>
+                    <button class="btn btn-primary" type="button" ng-click="sign_up()">
+                        {{ 'SIGN_UP' | translate }}
+                    </button>
+                </form>
 
-    <div class="container-fluid main" ng-view></div>
+                <ul class="nav navbar-nav pull-right" ng-if="authenticated_user">
+                    <li class="nav-item nav-pills dropdown pull-xs-right">
+                        <a class="nav-link dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="cursor:pointer;">
+                            <i class="fa fa-user"></i>&nbsp;&nbsp;{{authenticated_user.username}}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <h6 class="dropdown-header" ng-if="authenticated_user.thresholds.length > 0">{{ 'THRESHOLDS' | translate}}</h6>
 
+                            <a ng-repeat="threshold in authenticated_user.thresholds" class="dropdown-item" style="cursor:pointer;" ng-click="updateCurrentThreshold(threshold.threshold_id)">
+                                {{threshold.category}}:
+                                {{threshold.description}}
+                            </a>
+                            <div class="dropdown-divider" ng-if="authenticated_user.thresholds.length > 0"></div>
+                            <a class="dropdown-item" ng-click="logout()" style="cursor:pointer;">
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'LOGOUT'}}
+                            </a>
+                        </div>
+                    </li>
+                </ul>
 
-    <!--<div ng-controller="HomeController">
-
-            <h1>{{ 'WELCOME' | translate }}</h1>
-
-            <button type="button" ng-click="changeLanguage('de_DE')" class="btn btn-success">Switch to German</button>
-            <button type="button" ng-click="changeLanguage('en_US')" class="btn btn-primary">Switch to English</button>
-            <br>
-            <br>
-
-            STATUS:
-            <span class="label label-pill" ng-class="{ 'label-success': status,  'label-danger': !status }">
-
-            { bolder: language=='en_US'}
-                <span ng-if="status">online</span>
-                <span ng-if="!status">offline</span>
-            </span>
-
-            <br>
-
-            <ul ng-repeat="cat in cats">
-                <li>{{cat.id}}. {{cat.name}}</li>
-            </ul>
-
-            <hr>
-
-            <label>New Cat</label>
-            <input type="text" class="form-control" placeholder="Name" ng-model="cat.name">
-
-            <button type="button" ng-click="add()" class="btn btn-primary">Add new Cat</button>
-
+            </nav>
         </div>
 
-        <br>
 
-        <div ng-controller="CreateSensorController">
-
-            <h1>{{ 'SENSORS' | translate }}</h1>
-
-            <label>New Sensor</label>
-            <input type="text" class="form-control" placeholder="Id" ng-model="sensor.id">
-            <br>
-            <label>New Sensor</label>
-            <input type="text" class="form-control" placeholder="Description" ng-model="sensor.description">
-            <br>
-            <label>New Sensor</label>
-            <div class="row">
+        <!-- ALERT-MESSAGES -->
+        <div class="alerts" ng-controller="AlertController">
+            <div class="row" ng-if="isAlert">
+                <div class="col-xs-3"></div>
                 <div class="col-xs-6">
-                    <input type="number" class="form-control" placeholder="Latitude" ng-model="sensor.coordinates.lat">
+                    <div class="alert" ng-class="{'alert-success': alert.status==1, 'alert-danger': alert.status==2, 'alert-warning': alert.status==3, 'alert-info': alert.status==4}" role="alert">
+                        <a class="close" ng-click="alertClose()">&times;</a>
+                        <b>{{ alert.info }}</b> {{ alert.message }}
+                    </div>
                 </div>
-                <div class="col-xs-6">
-                    <input type="number" class="form-control" placeholder="Longitude" ng-model="sensor.coordinates.lng">
-                </div>
+                <div class="col-xs-3"></div>
             </div>
-
-            <button type="button" ng-click="add()" class="btn btn-primary">Add new Sensor</button>
-
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Description</th>
-                        <th>Coordinates</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="sensor in sensors">
-                        <td>{{sensor.id}}</td>
-                        <td>{{sensor.description}}</td>
-                        <td>
-                            ({{sensor.coordinates.lat}}, {{sensor.coordinates.lng}})
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
--->
-
-    <!-- JavaScript Dependecies -->
-    <script src="lib/jquery/dist/jquery.min.js"></script>
-    <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="lib/angular/angular.min.js"></script>
-    <script src="lib/angular-route/angular-route.min.js"></script>
-    <script src="lib/angular-translate/angular-translate.min.js"></script>
-
-    <!-- App Modules -->
-    <script src="js/modules/config.js"></script>
-    <script src="js/modules/routes.js"></script>
-    <script src="js/modules/languages.js"></script>
-
-    <!-- Services -->
-    <script src="js/services/sensorService.js"></script>
 
 
-    <!-- Main App -->
-    <script src="js/app.js"></script>
+        <!-- VIEW -->
+        <div class="container-fluid main" ng-view></div>
 
-    <!-- Main Controllers -->
-    <script src="js/controllers/homeController.js"></script>
-    <script src="js/controllers/navController.js"></script>
 
-    <!-- Sensor Controllers -->
-    <script src="js/controllers/sensors/list.js"></script>
-    <script src="js/controllers/sensors/create.js"></script>
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container-fluid">
+                <span class="flag-icon flag-icon-gb"></span>&nbsp;&nbsp;{{ 'ENGLISH' | translate}}
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                <span class="flag-icon flag-icon-de"></span>&nbsp;&nbsp;{{ 'GERMAN' | translate}}
+            </div>
+        </footer>
 
-</body>
+
+
+        <!-- JavaScript Dependecies -->
+        <script src="lib/jquery/dist/jquery.min.js"></script>
+        <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="lib/angular/angular.min.js"></script>
+        <script src="lib/angular-route/angular-route.min.js"></script>
+        <script src="lib/angular-translate/angular-translate.min.js"></script>
+
+        <!-- App Modules -->
+        <script src="js/modules/config.js"></script>
+        <script src="js/modules/routes.js"></script>
+        <script src="js/modules/languages.js"></script>
+
+        <!-- Services -->
+        <script src="js/services/loginService.js"></script>
+        <script src="js/services/userService.js"></script>
+        <script src="js/services/thresholdService.js"></script>
+        <script src="js/services/sensorService.js"></script>
+
+        <!-- Main App -->
+        <script src="js/app.js"></script>
+
+        <!-- Main Controllers -->
+        <script src="js/controllers/homeController.js"></script>
+        <script src="js/controllers/alertController.js"></script>
+        <script src="js/controllers/navController.js"></script>
+
+        <!-- User Controllers -->
+        <script src="js/controllers/users/create.js"></script>
+
+        <!-- Sensor Controllers -->
+        <script src="js/controllers/sensors/list.js"></script>
+        <script src="js/controllers/sensors/create.js"></script>
+
+    </body>
 
 </html>

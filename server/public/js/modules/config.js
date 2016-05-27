@@ -1,12 +1,7 @@
-/**
- * Created by timmimim on 13/05/16.
- */
-
 var app = angular.module("config", []);
 
 /**
  * Constants
- * @param   {[type]}    "setup"     [description]
  */
 app.constant("config", {
     appName: "GWoT-VST",

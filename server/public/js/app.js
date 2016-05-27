@@ -1,6 +1,5 @@
 var app = angular.module("gwot-vst", [
 
-
     // App Settings
     "config",
 
@@ -12,12 +11,17 @@ var app = angular.module("gwot-vst", [
     "routes",
     "languages",
 
-    //Services
+    // Services
+    "loginService",
+    "userService",
+    "thresholdService",
     "sensorService"
 ]);
 
 
-// Start App
+/**
+ * Start application
+ */
 app.run(function($translate, config) {
 
     // Use Translator and set Language

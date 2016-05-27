@@ -1,6 +1,8 @@
 var app = angular.module("languages", [ "config" ]);
 
-
+/**
+ * Translate Provider
+ */
 app.config(function($translateProvider, config) {
 
     $translateProvider.translations('de_DE', {
