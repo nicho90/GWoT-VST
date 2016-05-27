@@ -1,2 +1,14 @@
 <br>
-<h1>{{ 'WELCOME' | translate }}</h1>
+<leaflet id="map" markers="markers" center="center" layers="layers" paths="paths"></leaflet>
+
+<!-- Map-Resizer -->
+<script>
+    $('#map').css.height = ($(window).height() - 150);
+    $('#map').css("height", ($(window).height()) - 150);
+    $(window).on("resize", resize);
+    resize();
+
+    function resize(){
+        $('#map').css("height", ($(window).height() - 150));
+    }
+</script>

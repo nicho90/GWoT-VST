@@ -19,5 +19,6 @@ app.constant("config", {
     appLanguage: 'en_US',
     //apiURL: "/api"
     apiURL: "http://giv-gwot-vst.uni-muenster.de:3333/api",
+    mapboxAccessToken: "pk.eyJ1IjoidGltbWltaW0iLCJhIjoiY2lvMWptMWlrMDB5OHdka2xydXRjYWk0eiJ9.BVxaYUWhELrdWhBNLAYF8Q",
     timeZone: "+0100"
 });

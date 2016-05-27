@@ -6,6 +6,7 @@ var app = angular.module("gwot-vst", [
     // External Modules
     "ngRoute",
     "pascalprecht.translate",
+    "leaflet-directive",
 
     // Own Modules
     "routes",
