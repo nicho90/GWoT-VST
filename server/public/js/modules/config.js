@@ -5,7 +5,15 @@ var app = angular.module("config", []);
  */
 app.constant("config", {
     appName: "GWoT-VST",
-    appDevelopers: ["Nicholas Schiestel", "Heinrich Löwen", "Rehen Aziz Chaudhary", "Timm Kühnel"],
+    appDevelopers: [{
+        name: "Nicholas Schiestel"
+    }, {
+        name: "Heinrich Löwen"
+    }, {
+        name: "Rehan Aziz Chaudhary"
+    }, {
+        name: "Timm Kühnel"
+    }],
     appGithub: "https://github.com/nicho90/GWoT-VST",
     appVersion: "v1.0",
     appLanguage: 'en_US',

@@ -9,7 +9,9 @@ app.config(function($translateProvider, config) {
 
         WELCOME: 'Willkommen',
         SENSORS: 'Sensoren',
-        NONE: 'keine'
+        NONE: 'keine',
+        HOME:'Startseite',
+        THRESHOLDS:'Grenzwerte'
 
     });
 
@@ -17,7 +19,9 @@ app.config(function($translateProvider, config) {
 
         WELCOME: 'Welcome',
         SENSORS: 'Sensors',
-        NONE: 'none'
+        NONE: 'none',
+        HOME:'Home',
+        THRESHOLDS:'Thresholds'
 
     });
 
