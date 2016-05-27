@@ -33,7 +33,6 @@ exports.process = function(message) {
                 function(callback) {
                     var measurements = JSON.parse(message).features;
                     var measurement = median(measurements); //Select the median measurement
-                    //console.log("Half: ", measurement);
                     callback(null, measurement);
                 },
 
@@ -83,7 +82,7 @@ exports.process = function(message) {
 
                 // 4. Check Sensor-Settings for threshold
                 function(measurement, sensor, callback) {
-                    console.log(measurement.properties.distance.value, sensor.threshold_value);
+                    console.log(measurement.properties.distance.value, sensor.threshold_value, new Date());
 
                     var message;
                     if (measurement.properties.distance.value > sensor.threshold_value) {
@@ -99,7 +98,7 @@ exports.process = function(message) {
                                 retain: true // or true
                             };
                             broker.publish(message, function() {
-                                console.log("Message send");
+                                console.log("Message send at time " + new Date());
                             });
                             // change increased_frequency value
                             client.query('UPDATE Sensors SET increased_frequency=true WHERE sensor_id=$1;', [
@@ -130,7 +129,7 @@ exports.process = function(message) {
                                 retain: true // or true
                             };
                             broker.publish(message, function() {
-                                console.log("Message send");
+                                console.log("Message send at time " + new Date());
                             });
                             // change increased_frequency value
                             client.query('UPDATE Sensors SET increased_frequency=false WHERE sensor_id=$1;', [
@@ -272,7 +271,7 @@ exports.process = function(message) {
                 if (err) {
                     console.log(err);
                 } else {
-                    console.log("Pipeline has been finished!");
+                    console.log("Pipeline has been finished! " + new Date());
                 }
             });
         }
