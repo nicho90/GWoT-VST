@@ -137,7 +137,7 @@ var measurementTimer = {
         measurement.timestamp = new Date();
         measurements.push(JSON.parse(JSON.stringify(measurement))); // push measurement to the measurements array
         console.log("Distance " + measurement.distance.value + " measured at time " + measurement.timestamp);
-        this.blink();
+        //this.blink(); // LED blinking disabled 
         this.start();
     },
     blink: function() {
