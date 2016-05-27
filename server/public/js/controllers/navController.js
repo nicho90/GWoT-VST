@@ -24,7 +24,7 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
 
 
     /**
-     * User Authentication
+     * Reset Authentication
      */
     $scope.resetAuthentication = function(){
         delete $scope.authenticated_user;
