@@ -59,7 +59,16 @@ exports.process = function(message) {
                     });
                 },
 
-                // 3. Save new measuremt in Database
+                // 3. Reject measurement if measured distance > sensor height
+                function(measurement, sensor, callback) {
+                    if (measurement.properties.distance.value > sensor.sensor_height) {
+                        callback(new Error(errors.measurement.error_1.message));
+                    } else {
+                        callback(null, measurement, sensor);
+                    }
+                },
+
+                // 4. Save new measuremt in Database
                 function(measurement, sensor, callback) {
 
                     // Database query
@@ -80,12 +89,12 @@ exports.process = function(message) {
                     });
                 },
 
-                // 4. Check Sensor-Settings for threshold
+                // 5. Check Sensor-Settings for threshold
                 function(measurement, sensor, callback) {
-                    console.log(measurement.properties.distance.value, sensor.threshold_value, new Date());
+                    console.log("Distance: " + measurement.properties.distance.value, "Water Level: " + (sensor.sensor_height-measurement.properties.distance.value), "Threshold: " + sensor.threshold_value, new Date());
 
                     var message;
-                    if (measurement.properties.distance.value > sensor.threshold_value) {
+                    if ((sensor.sensor_height-measurement.properties.distance.value) > sensor.threshold_value) {
 
                         // only increase if not increased yet
                         if (!sensor.increased_frequency) {
@@ -150,7 +159,7 @@ exports.process = function(message) {
                     }
                 },
 
-                // 5. Get all subscribed Users for this sensor
+                // 6. Get all subscribed Users for this sensor
                 function(measurement, sensor, callback) {
 
                     var query = "SELECT DISTINCT " +
@@ -176,7 +185,7 @@ exports.process = function(message) {
                     });
                 },
 
-                // 6. Check all Thresholds of subscribed Users for this sensor
+                // 7. Check all Thresholds of subscribed Users for this sensor
                 function(measurement, sensor, users, callback) {
 
                     async.each(users, function(user, callback) {

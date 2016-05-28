@@ -8,6 +8,11 @@ module.exports = {
             message: 'Invalid schema'
         }
     },
+    measurement: {
+        error_1: {
+            message: 'Invalid measurement distance'
+        }
+    },
     database: {
         error_1: {
             code: 500,
