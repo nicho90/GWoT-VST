@@ -68,6 +68,18 @@ module.exports = {
         error_7: {
             code: 404,
             message: 'Vehicle not found'
+        },
+        error_9: {
+            code: 404,
+            message: 'Latitude not found'
+        },
+        error_10: {
+            code: 404,
+            message: 'Longitude not found'
+        },
+        error_11: {
+            code: 404,
+            message: 'Language not found'
         }
     }
 };

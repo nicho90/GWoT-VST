@@ -206,6 +206,7 @@ if(db_settings.status && email_settings.status){
     var vehicles = require ('./routes/vehicles');
     var service_stations = require ('./routes/service_stations');
     var emergency_stations = require ('./routes/emergency_stations');
+    var forecast = require ('./routes/forecast');
 
     // Load Routes
     app.use('/api', login);
@@ -220,6 +221,7 @@ if(db_settings.status && email_settings.status){
     app.use('/api', vehicles);
     app.use('/api', service_stations);
     app.use('/api', emergency_stations);
+    app.use('/api', forecast);
 
 } else {
     console.log("Simple Webserver, no REST-API (no Database, no Websockets, no Email-Notification-Service)");
