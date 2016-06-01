@@ -10,17 +10,19 @@ var ip = require("ip");
 /**
  * Phyiscal connection of a LED
  */
+ /*
 var led = gpio.export(gpio_settings.led, {
     direction: "out",
     ready: function() {}
 });
+*/
 
 
 /**
  * Scheduled measurment
  */
 var scheduledTimer = {
-    status: true,
+    status: false,  //default true
     interval: sensor.interval, // default interval 1 min
     start: function() {
         if (!this.status) return;
@@ -96,25 +98,7 @@ var measurement = {
     lat: sensor.lat // (regarding geoMQTT)
 };
 
-var measurements = []; // collect 5 measurements for publishing
-
-
-/**
- * Ultasonic Sensor initialization. Needs to be called once when script starts
- */
-var initSensor = function() {
-    usonic.init(function(error) {
-        if (error) {
-            console.log("Sensor initialization failed.");
-        } else {
-            console.log("Sensor initialization succeeded. " + new Date());
-            gpio_settings.sensor = usonic.createSensor(gpio_settings.echo, gpio_settings.trig, gpio_settings.measurement_timeout);
-            measurementTimer.start();
-            scheduledTimer.start();
-            realtimeTimer.start();
-        }
-    });
-};
+//var measurements = []; // collect 5 measurements for publishing
 
 
 /**
@@ -135,9 +119,9 @@ var measurementTimer = {
         // Make the measurement
         measurement.distance.value = gpio_settings.sensor();
         measurement.timestamp = new Date();
-        measurements.push(JSON.parse(JSON.stringify(measurement))); // push measurement to the measurements array
+        //measurements.push(JSON.parse(JSON.stringify(measurement))); // push measurement to the measurements array
         console.log("Distance " + measurement.distance.value + " measured at time " + measurement.timestamp);
-        //this.blink(); // LED blinking disabled 
+        //this.blink(); // LED blinking disabled
         this.start();
     },
     blink: function() {
@@ -162,14 +146,35 @@ var setMeasurementTimer = function(iv) {
     measurementTimer.start(iv);
 };
 
+
+/**
+ * Ultasonic Sensor initialization. Needs to be called once when script starts
+ */
+var initSensor = function() {
+    usonic.init(function(error) {
+        if (error) {
+            console.log("Sensor initialization failed.");
+        } else {
+            console.log("Sensor initialization succeeded. " + new Date());
+            gpio_settings.sensor = usonic.createSensor(gpio_settings.echo, gpio_settings.trig, gpio_settings.measurement_timeout);
+            measurementTimer.start();
+            //scheduledTimer.start();
+            //realtimeTimer.start();
+        }
+    });
+};
+
+
 /**
  * Initialize and start the sensor
  */
 initSensor();
 
+
 /**
  * Create MQTT-Client and setup clientId, if MQTT-Broker is online (heartbeat)
  */
+ /*
 var client = mqtt.connect('mqtt://giv-gwot-vst.uni-muenster.de:1883', {
     encoding: 'utf8',
     clientId: 'rpi',
@@ -180,11 +185,13 @@ var client = mqtt.connect('mqtt://giv-gwot-vst.uni-muenster.de:1883', {
         retain: true
     }
 });
+*/
 
 
 /**
  * Connect to MQTT-Broker
  */
+ /*
 client.on('connect', function() {
     console.log("Client connected");
     options = {
@@ -195,7 +202,7 @@ client.on('connect', function() {
     client.subscribe('/settings');
     client.subscribe('/ipcheck');
 });
-
+*/
 
 /**
  * Publish message with scheduled data
@@ -269,6 +276,7 @@ var pubIP = function() {
 /**
  * Recieve Messages from MQTT-Broker
  */
+ /*
 client.on('message', function(topic, message) {
     var message = JSON.parse(message);
     console.log(message);
@@ -290,3 +298,4 @@ client.on('message', function(topic, message) {
         console.log("MQTT receive invalid id.")
     }
 });
+*/
