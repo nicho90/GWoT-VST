@@ -1,14 +1,14 @@
-<br>
-<leaflet id="map" markers="markers" center="center" layers="layers" paths="paths"></leaflet>
+<!DOCTYPE html>
+<leaflet id="map" markers="markers" center="center" layers="layers" paths="paths" event-broadcast="events"></leaflet>
 
 <!-- Map-Resizer -->
 <script>
-    $('#map').css.height = ($(window).height() - 150);
-    $('#map').css("height", ($(window).height()) - 150);
+    $('#map').css.height = ($(window).height() - 90);
+    $('#map').css("height", ($(window).height()) - 90);
     $(window).on("resize", resize);
     resize();
 
     function resize(){
-        $('#map').css("height", ($(window).height() - 150));
+        $('#map').css("height", ($(window).height() - 90));
     }
 </script>
