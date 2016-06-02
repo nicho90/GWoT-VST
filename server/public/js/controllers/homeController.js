@@ -1,24 +1,28 @@
 var app = angular.module("gwot-vst");
+
+
 /**
  * Home and Map Controller
  */
-app.controller("HomeController", function($scope, $rootScope, config, $filter, $translate, $sensorService) {
+app.controller("HomeController", function($scope, $rootScope, config, $filter, $translate, $sensorService, $measurementService) {
 
     /**
      * Load Sensors
      */
     $scope.load = function() {
-        if($rootScope.authenticated_user){
+
+        if($rootScope.authenticated_user) {
+
             // Request public sensors and private sensors of the authenticated user
-                $sensorService.list_private($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, "?public=true").success(function(response) {
+            $sensorService.list_private($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, "?public=true").success(function(response) {
                 $scope.sensors = response;
                 $scope.markers = [];
                 $scope.updateMarker();
             }).error(function(err) {
                 $scope.err = err;
             });
-
         } else {
+
             // Request only public sensors
             $sensorService.list_public().success(function(response) {
                 $scope.sensors = response;
@@ -28,11 +32,15 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
                 $scope.err = err;
             });
         }
+
     };
+
+
     /**
      * Init
      */
     $scope.load();
+
 
     /**
      * Update when user logged in or out
@@ -41,33 +49,71 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
         $scope.load();
     });
 
+
     /**
      *
      */
     $scope.updateMarker = function(){
+
+        // TODO: Check Threshold
+
         angular.forEach($scope.sensors, function(sensor, key){
-            $scope.markers.push(
-                {
-                    layer: 'sensors',
-                    lat: sensor.lat,
-                    lng: sensor.lng,
-                    focus: false,
-                    draggable: false,
-                    icon: $scope.successIcon,
-                    message : sensor.description,
-                    popupOptions : {
-                        closeButton : true
-                    },
-                    compileMessage : false
-                }
-            );
+
+            $measurementService.get(sensor.sensor_id, "?latest=true")
+            .success(function(response){
+                $scope.sensors[key].latest_measurement = response;
+
+                var _message = '<h6>' + sensor.description + '</h6>' +
+                    '<table class="table-sm"><tbody>' +
+                        '<tr>' +
+                            '<th>' + 'DeviceId' + '</th>' +
+                            '<td><kbd>' + sensor.device_id + '</kbd></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<th>' + 'Online' + '</th>' +
+                            '<td>' + sensor.online_status + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<th>' + 'Water Level' + '</th>' +
+                            '<td>' + (sensor.latest_measurement.water_level/100).toFixed(3) + ' m</td>' +
+                        '</tr>' +
+                    '</tbody></table><br>' +
+                    '<center>' +
+                        '<button type="button" class="form-control btn btn-primary btn-sm">Details</button>'+
+                    '</center>';
+
+                $scope.markers.push(
+                    {
+                        layer: 'sensors',
+                        lat: sensor.lat,
+                        lng: sensor.lng,
+                        focus: false,
+                        draggable: false,
+                        icon: $scope.successIcon,
+                        message : _message,
+                        //getMessageScope: $scope,
+                        //compileMessage: true,
+                        compileMessage: false,
+                        popupOptions : {
+                            closeButton : true
+                        },
+                        enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
+                    }
+                );
+            })
+            .error(function(err) {
+                $scope.err = err;
+            });
+
         });
     };
+
+
     /**
      * Map
      */
     angular.extend($scope, {
-       center: {
+        center: {
             lng: 7.70013, // TODO: More generic
             lat: 51.973314, // TODO: More generic
             zoom: 14 // TODO: More generic
@@ -161,8 +207,37 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
             prefix : 'fa',
             icon : 'cube'
         },
-        events : {
-            markers: [ 'dragend' ]
+        events: {
+            map: {
+                enable: ['leafletDirectiveMap.click', 'leafletDirectiveMap.dblclick'],
+                logic: 'emit'
+            }
         }
+    });
+
+
+    /**
+     * Center marker when clicked
+     * (Map function)
+     */
+    $scope.$on("leafletDirectiveMarker.map.click", function(event, args){
+        $scope.center = {
+            lat: args.leafletEvent.latlng.lat,
+            lng: args.leafletEvent.latlng.lng,
+            zoom: $scope.center.zoom
+        };
+    });
+
+
+    /**
+     * Zoom to and center marker when double clicked
+     * (Map function)
+     */
+    $scope.$on("leafletDirectiveMarker.map.dblclick", function(event, args){
+        $scope.center = {
+            lat: args.leafletEvent.latlng.lat,
+            lng: args.leafletEvent.latlng.lng,
+            zoom: 18
+        };
     });
 });

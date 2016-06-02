@@ -9,6 +9,7 @@ var app = angular.module("gwot-vst", [
     "leaflet-directive",
 
     // Own Modules
+    "filters",
     "routes",
     "languages",
 
@@ -16,8 +17,19 @@ var app = angular.module("gwot-vst", [
     "loginService",
     "userService",
     "thresholdService",
-    "sensorService"
+    "sensorService",
+    "measurementService",
+    "forecastService"
 ]);
+
+
+/**
+ * Log Provider
+ * turn on/off debug logging
+ */
+app.config(function($logProvider){
+    $logProvider.debugEnabled(false);
+});
 
 
 /**
