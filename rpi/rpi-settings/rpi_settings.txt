@@ -1,0 +1,2 @@
+# Only activate one cpu
+- Edit /boot/cmdline.txt and add maxcpus=N
