@@ -18,6 +18,10 @@ app.config(function($routeProvider) {
             templateUrl: "/js/templates/sensors/list.html",
             controller: "SensorListController"
         })
+        .when("/sensors/:sensor_id", {
+            templateUrl: "/js/templates/sensors/details.html",
+            controller: "SensorDetailsController"
+        })
 
 
         // Users
