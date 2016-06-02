@@ -2,44 +2,68 @@ var app = angular.module("gwot-vst");
 
 
 // LIST
-app.controller("SensorListController", function($scope, $rootScope, $sensorService) {
+app.controller("SensorListController", function($scope, $rootScope, $location, $sensorService) {
 
-/**
- * Load Sensors
- */
-$scope.load=function(){
+    /**
+     * Load Sensors
+     */
+    $scope.load = function() {
 
-  // Request private sensors, if authenticated user
-  if($rootScope.authenticated_user){
-    $sensorService.list_private($rootScope.authenticated_user.token,
-    $rootScope.authenticated_user.username,
-    "?public=true").success(function (response) {
-      $scope.sensors = response;
-    }).error(function (err) {
-      $scope.err = err;
-    });
-  } else {
+        if($rootScope.authenticated_user) {
 
-    // Request only public sensors
-    $sensorService.list_public().success(function (response) {
-      $scope.sensors = response;
-    }).error(function (err) {
-      $scope.err = err;
-    });
-  }
+            // Request public sensors and private sensors of the authenticated user
+            $sensorService.list_private($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, "?public=true").success(function(response) {
+                $scope.sensors = response;
+            }).error(function(err) {
+                $scope.err = err;
+            });
+        } else {
 
-};
+            // Request only public sensors
+            $sensorService.list_public().success(function(response) {
+                $scope.sensors = response;
+            }).error(function(err) {
+                $scope.err = err;
+            });
+        }
+
+    };
+
+
+    /**
+     * Show Details
+     */
+    $scope.showDetails = function(sensor_id){
+        $location.url("/sensors/" + sensor_id);
+    };
+
+
+    /**
+     * Edit a Sensor
+     */
+    $scope.edit = function(){
+        // TODO
+    };
+
+
+    /**
+     * Delete a Sensor
+     */
+    $scope.delete = function(){
+        // TODO
+    };
+
 
     /**
      * Init
      */
     $scope.load();
 
+
     /**
      * Update when user logged in or out
      */
-    $rootScope.$on('update', function () {
+    $rootScope.$on('update', function(){
         $scope.load();
     });
-
 });
