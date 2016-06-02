@@ -24,16 +24,12 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
 
 
     /**
-     * Reset Authentication
+     * User Authentication
      */
     $scope.resetAuthentication = function(){
         delete $scope.authenticated_user;
         delete $rootScope.authenticated_user;
         $rootScope.$broadcast('update');
-        $scope.user = {
-            username : "",
-            password : ""
-        };
     };
 
 
@@ -41,7 +37,14 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
      * Load App Configuration and check user authentication
      */
     $scope.config = config;
-    $scope.resetAuthentication();
+    if($scope.authenticated_user) {
+        $scope.user = $scope.authenticated_user;
+    } else {
+        $scope.user = {
+            username : "",
+            password : ""
+        };
+    }
 
 
     /**
@@ -67,7 +70,7 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
                 $scope.authenticated_user = response;
                 $rootScope.authenticated_user = response;
 
-                // Update Navbar
+                // Update all Controllers
                 $rootScope.$broadcast('update');
 
                 // Load thresholds

@@ -1,5 +1,6 @@
 var app = angular.module("gwot-vst");
 
+
 /**
  * Footer Controller
  */
@@ -9,31 +10,38 @@ app.controller("FooterController", function($scope, $rootScope, config, $transla
      * Check if user is logged in
      */
     $scope.load = function() {
-        if ($rootScope.authenticated_user) {
+        if($rootScope.authenticated_user) {
             $scope.language = 'en_US';
             // TODO: $scope.language = $rootScope.authenticated_user.language;
             $translate.use($scope.language);
         } else {
             $scope.language = config.appLanguage;
         }
+
+        // Use language
         $translate.use($scope.language);
     };
 
+
     /**
-     * Initialize
+     * Init
      */
     $scope.config = config;
     $scope.load();
+
+
     /**
-     *update language if user logs in
+     * Update language if user logs in
      */
-    $rootScope.$on('update', function() {
+    $rootScope.$on('update', function(){
         $scope.load();
     });
+
+
     /**
-     * Change Language
+     * Change language
      */
-    $scope.changeLanguage = function() {
+    $scope.changeLanguage = function(){
         $translate.use($scope.language);
     };
 
