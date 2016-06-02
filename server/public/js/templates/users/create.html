@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <br>
 <div class="row">
     <div class="col-md-2"></div>
@@ -23,7 +24,12 @@
                     </div>
                     <div class="col-md-6">
                         <label for="inputPassword">{{ 'PASSWORD' | translate }}</label>
-                        <input class="form-control form-control" type="password" placeholder="{{ 'PASSWORD' | translate }}" ng-model="user.password">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-lock"></i>
+                            </span>
+                            <input class="form-control form-control" type="password" placeholder="{{ 'PASSWORD' | translate }}" ng-model="user.password">
+                        </div>
                     </div>
                 </div>
                 <br>
@@ -49,7 +55,14 @@
                 </div>
                 <br>
 
+                <label for="selectLanguage">{{ 'LANGUAGE' | translate }}</label><br>
+                <select class="c-select form-control" id="selectLanguage" ng-model="user.language">
+                    <option value="en_US">{{ 'ENGLISH' | translate}}</option>
+                    <option value="de_DE">{{ 'GERMAN' | translate}}</option>
+                </select>
+                <br>
                 <hr>
+                <br>
                 <div class="row">
                     <div class="col-xs-6">
                         <button class="form-control btn btn-secondary" type="button" role="button" ng-click="cancel()">
@@ -58,7 +71,7 @@
                     </div>
                     <div class="col-xs-6">
                         <button class="form-control btn btn-success" type="submit" role="button">
-                            {{ 'CREATE' | translate }}
+                            {{ 'SUBMIT' | translate }}
                         </button>
                     </div>
                 </div>
