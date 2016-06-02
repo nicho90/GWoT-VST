@@ -7,6 +7,14 @@ var app = angular.module("gwot-vst");
 app.controller("UserCreateController", function($scope, $rootScope, $location, $translate, $userService) {
 
     /**
+     * Redirect
+     */
+    if($rootScope.authenticated_user) {
+        $location.url("/");
+    }
+
+
+    /**
      * Init
      */
     $scope.user = $userService.getDefault();
