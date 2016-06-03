@@ -22,8 +22,8 @@ app.factory('$sensorService', function($http, config) {
                 headers: { 'token': token }
             });
         },
-        get_related_stations: function(sensor_id) {
-            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/related_stations");
+        get_related_sensors: function(sensor_id) {
+            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/related_sensors");
         },
         get_emergency_stations: function(sensor_id) {
             return $http.get(config.apiURL + "/sensors/" + sensor_id + "/emergency_stations");

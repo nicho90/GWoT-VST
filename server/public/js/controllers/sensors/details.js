@@ -36,7 +36,7 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
     $scope.load_realted_data = function() {
 
         // Request related sensors
-        $sensorService.get_related_stations($routeParams.sensor_id)
+        $sensorService.get_related_sensors($routeParams.sensor_id)
         .success(function(response) {
             $scope.sensor.related_sensors = response;
             $scope.updateMarkers('related_sensors');
@@ -73,6 +73,7 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
     $scope.updateMarker = function(){
         $scope.markers.push(
             {
+                sensor_id: $scope.sensor.sensor_id,
                 layer: 'sensor',
                 lat: $scope.sensor.lat,
                 lng: $scope.sensor.lng,
@@ -80,9 +81,8 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
                 draggable: false,
                 icon: $scope.successIcon,
                 message : $scope.sensor.description,
-                //getMessageScope: $scope,
-                //compileMessage: true,
-                compileMessage: false,
+                getMessageScope: function () { return $scope; },
+                compileMessage: true,
                 popupOptions : {
                     closeButton : true
                 },
@@ -101,6 +101,7 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
             angular.forEach($scope.sensor.related_sensors, function(related_sensor, key){
                 $scope.markers.push(
                     {
+                        sensor_id: related_sensor.sensor_id,
                         layer: layer,
                         lat: related_sensor.lat,
                         lng: related_sensor.lng,
@@ -108,9 +109,8 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
                         draggable: false,
                         icon: $scope.successIcon,
                         message : related_sensor.description,
-                        //getMessageScope: $scope,
-                        //compileMessage: true,
-                        compileMessage: false,
+                        getMessageScope: function () { return $scope; },
+                        compileMessage: true,
                         popupOptions : {
                             closeButton : true
                         },
@@ -131,9 +131,8 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
                         draggable: false,
                         icon: $scope.emergencyStationIcon,
                         message : emergency_station.name,
-                        //getMessageScope: $scope,
-                        //compileMessage: true,
-                        compileMessage: false,
+                        getMessageScope: function () { return $scope; },
+                        compileMessage: true,
                         popupOptions : {
                             closeButton : true
                         },
@@ -154,9 +153,8 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
                         draggable: false,
                         icon: $scope.serviceStationIcon,
                         message : service_station.name,
-                        //getMessageScope: $scope,
-                        //compileMessage: true,
-                        compileMessage: false,
+                        getMessageScope: function () { return $scope; },
+                        compileMessage: true,
                         popupOptions : {
                             closeButton : true
                         },
@@ -177,9 +175,10 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
         $scope.markers = [];
 
         // Check if user is authenticated
+        console.log($rootScope.authenticated_user);
         if($rootScope.authenticated_user) {
 
-            // Request private or public sensors of authenticated user
+            // Request private or public sensor of authenticated user
             $sensorService.get_private($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, $routeParams.sensor_id)
             .success(function(response) {
                 $scope.sensor = response;
