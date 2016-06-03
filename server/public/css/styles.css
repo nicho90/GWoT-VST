@@ -70,3 +70,12 @@ body {
     padding-bottom: 25px;
     text-align: center;
 }
+
+
+.online_status_point {
+    font-size: 0.75rem;
+    float: left;
+    padding-left: 3px;
+    padding-right: 5px;
+    padding-top: 1.5px;
+}
