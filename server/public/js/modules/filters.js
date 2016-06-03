@@ -20,7 +20,11 @@ app.filter('distance', function() {
  */
 app.filter('time', function() {
     return function(time) {
-        return time.substring(0, 10) + " " + time.substring(11, 19);
+        if(time === undefined){
+            return "";
+        } else {
+            return time.substring(0, 10) + " " + time.substring(11, 19);
+        }
     };
 });
 
