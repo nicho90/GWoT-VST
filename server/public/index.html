@@ -103,6 +103,10 @@
                                 <i class="fa fa-circle-o" aria-hidden="true" ng-if="threshold.category == 'OTHER' "></i>
                                 &nbsp;{{threshold.description}}
                             </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" ng-click="showSettings()" style="cursor:pointer;">
+                                <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SETTINGS'}}
+                            </a>
                             <div class="dropdown-divider" ng-if="authenticated_user.thresholds.length > 0"></div>
                             <a class="dropdown-item" ng-click="logout()" style="cursor:pointer;">
                                 <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'LOGOUT'}}
@@ -185,6 +189,8 @@
 
         <!-- User Controllers -->
         <script src="js/controllers/users/create.js"></script>
+        <script src="js/controllers/users/details.js"></script>
+
 
         <!-- Sensor Controllers -->
         <script src="js/controllers/sensors/list.js"></script>

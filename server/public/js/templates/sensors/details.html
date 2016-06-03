@@ -45,9 +45,9 @@
                 <!--<h3 class="card-header">{{ 'WEATHER_FORECAST' | translate }}</h3>-->
                 <div class="row">
                     <div class="col-xs-2">
-                        <b>{{ 'CURRENTLY' | translate }}</b><br>
-                        {{weather_forecast.currently.temperature}} °C<br>
-                        {{weather_forecast.currently.humidity | humidity}}%
+                        <b>{{ 'CURRENTLY' | translate }}</b>
+                        <br> {{weather_forecast.currently.temperature}} °C
+                        <br> {{weather_forecast.currently.humidity | humidity}}%
                     </div>
                     <div class="col-xs-2">
 
@@ -102,9 +102,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>{{ 'PRIVATE' | translate }}
-                                        /
-                                        {{ 'PUBLIC' | translate }}</th>
+                                    <th>{{ 'PRIVATE' | translate }} / {{ 'PUBLIC' | translate }}</th>
                                     <td>
                                         <span ng-if="sensor.private" class="text-primary">
                                             <i class="fa fa-lock" aria-hidden="true"></i>
@@ -232,7 +230,7 @@
                                 </td>
                                 <td><kbd>{{related_sensor.device_id}}</kbd></td>
                                 <td>{{related_sensor.description}}</td>
-                                <td class="right" >
+                                <td class="right">
                                     <div class="btn-group" role="group" aria-label="Edit">
                                         <button ng-click="showOnMap(related_sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-secondary">
                                             <i class="fa fa-map"></i>
@@ -270,9 +268,10 @@
                             <div class="row">
                                 <div class="col-xs-2"></div>
                                 <div class="col-xs-5">
-                                    {{emergency_station.street}} {{emergency_station.house_number}} <span ng-if="emergency_station.addition != '' ">({{emergency_station.addition}})</span><br>
-                                    {{emergency_station.zip_code}}, {{emergency_station.city}},<br>
-                                    {{emergency_station.country | translate }}<br>
+                                    {{emergency_station.street}} {{emergency_station.house_number}} <span ng-if="emergency_station.addition != '' ">({{emergency_station.addition}})</span>
+                                    <br> {{emergency_station.zip_code}}, {{emergency_station.city}},
+                                    <br> {{emergency_station.country | translate }}
+                                    <br>
                                 </div>
                                 <div class="col-xs-5">
                                     {{emergency_station.phone_number}}
@@ -304,9 +303,10 @@
                             <div class="row">
                                 <div class="col-xs-2"></div>
                                 <div class="col-xs-5">
-                                    {{service_station.street}} {{service_station.house_number}} <span ng-if="service_station.addition != '' ">({{service_station.addition}})</span><br>
-                                    {{service_station.zip_code}}, {{service_station.city}},<br>
-                                    {{service_station.country | translate }}<br>
+                                    {{service_station.street}} {{service_station.house_number}} <span ng-if="service_station.addition != '' ">({{service_station.addition}})</span>
+                                    <br> {{service_station.zip_code}}, {{service_station.city}},
+                                    <br> {{service_station.country | translate }}
+                                    <br>
                                 </div>
                                 <div class="col-xs-5">
                                     {{service_station.phone_number}}
@@ -350,7 +350,6 @@
     </div>
 
 </div>
-
 
 <!-- MAP-RESIZER -->
 <script>

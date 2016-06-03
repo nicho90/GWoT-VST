@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<ul class="nav nav-tabs centered" style="position: relative; z-index:2;">
+    <li class="nav-item">
+        <a class="nav-link" ng-click="changeTab(1)" ng-class="{ active: tab==1 }" style="cursor:pointer"><i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SETTINGS' | translate }}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" ng-click="changeTab(2)" ng-class="{ active: tab==2 }" style="cursor:pointer"><i class="fa fa-area-chart" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'THRESHOLDS' | translate }}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" ng-click="changeTab(3)" ng-class="{ active: tab==3 }" style="cursor:pointer"><i class="fa fa-bolt" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SENSORS' | translate }}</a>
+    </li>
+</ul>
+
+<!-- Tabs -->
+<div class="card" style="margin-top: -1px; position: relative; z-index:1; padding:20px;">
+
+    <div ng-if="!user">
+        <br>
+        <br>
+        <center><i class="fa fa-spinner fa-pulse"></i></center>
+        <br>
+        <br>
+    </div>
+
+    <!-- Header -->
+    <div class="row">
+
+        <!-- Username -->
+        <div class="col-md-6">
+            <div class="user-title" ng-if="user">
+                <br>
+                <h1 class="display-4 text-primary" style="font-size: 18pt;">
+                    <i class="fa fa-user"></i> {{user.username}}
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1st Tab -->
+    <div class="row" ng-if="tab==1">
+        <div class="col-md-12">
+            <div class="card">
+                TAB 1
+            </div>
+        </div>
+    </div>
+
+    <!-- 2nd Tab -->
+    <div class="row" ng-if="tab==2">
+        <div class="col-md-12">
+            <div class="card">
+                TAB 2
+            </div>
+        </div>
+    </div>
+
+    <!-- 3rd Tab -->
+    <div class="row" ng-if="tab==3">
+        <div class="col-md-12">
+            <div class="card">
+                TAB 3
+            </div>
+        </div>
+    </div>
+
+</div>

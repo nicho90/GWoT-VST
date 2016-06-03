@@ -24,6 +24,16 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
 
 
     /**
+     * Show Settings
+     */
+    $scope.showSettings = function(){
+      if($rootScope.authenticated_user){
+          $location.url("/users/" + $rootScope.authenticated_user.username);
+      }
+    };
+
+
+    /**
      * User Authentication
      */
     $scope.resetAuthentication = function(){
