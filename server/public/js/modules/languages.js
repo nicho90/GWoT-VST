@@ -87,7 +87,11 @@ app.config(function($translateProvider, config) {
         SAME_WATER_BODY: 'vom gleichen Gewässersystem',
         NEARBY_EMERGENCY_STATIONS: 'Notrufstationen in der Nähe',
         NEARBY_SERVICE_STATIONS: 'Autowerkstätten in der Nähe',
-        GERMANY: 'Deutschland'
+        GERMANY: 'Deutschland',
+
+        WATER_LEVEL: 'Pegelstand',
+        WATER_LEVELS: 'Pegelstände',
+        LAST_WATER_LEVEL: 'Letzer Pegelstand'
 
     });
 
@@ -173,7 +177,11 @@ app.config(function($translateProvider, config) {
         SAME_WATER_BODY: 'of the same Water Body',
         NEARBY_EMERGENCY_STATIONS: 'Nearby Emergency-Stations',
         NEARBY_SERVICE_STATIONS: 'Nearby Service-Stations',
-        GERMANY: 'Germany'
+        GERMANY: 'Germany',
+
+        WATER_LEVEL: 'Water level',
+        WATER_LEVELS: 'Water levels',
+        LAST_WATER_LEVEL: 'Last water level'
 
     });
 
