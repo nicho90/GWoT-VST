@@ -29,7 +29,7 @@
     "angular-filter": "~0.5.4",
     "ngDialog": "~0.4.0",
     "ngBootbox": "~0.0.5",
-    "font-awesome": "~4.5.0",
+    "font-awesome": "~4.6.0",
     "flag-icon-css": "^2.0.0",
     "angular-leaflet-directive": "^0.10.0",
     "Leaflet.awesome-markers": "leaflet-awesome-markers#^2.0.2"

@@ -92,8 +92,16 @@
                             <h6 class="dropdown-header" ng-if="authenticated_user.thresholds.length > 0">{{ 'THRESHOLDS' | translate}}</h6>
 
                             <a ng-repeat="threshold in authenticated_user.thresholds" class="dropdown-item" style="cursor:pointer;" ng-click="updateCurrentThreshold(threshold.threshold_id)">
-                                {{threshold.category}}:
-                                {{threshold.description}}
+                                <i class="fa fa-blind" aria-hidden="true" ng-if="threshold.category == 'PEDESTRIAN' "></i>
+                                <i class="fa fa-bicycle" aria-hidden="true" ng-if="threshold.category == 'BIKE' "></i>
+                                <i class="fa fa-wheelchair" aria-hidden="true" ng-if="threshold.category == 'WHEELCHAIR' "></i>
+                                <i class="fa fa-motorcycle" aria-hidden="true" ng-if="threshold.category == 'SCOOTER' "></i>
+                                <i class="fa fa-motorcycle" aria-hidden="true" ng-if="threshold.category == 'MOTORBIKE' "></i>
+                                <i class="fa fa-car" aria-hidden="true" ng-if="threshold.category == 'CAR' "></i>
+                                <i class="fa fa-bus" aria-hidden="true" ng-if="threshold.category == 'BUS' "></i>
+                                <i class="fa fa-truck" aria-hidden="true" ng-if="threshold.category == 'TRUCK' "></i>
+                                <i class="fa fa-circle-o" aria-hidden="true" ng-if="threshold.category == 'OTHER' "></i>
+                                &nbsp;{{threshold.description}}
                             </a>
                             <div class="dropdown-divider" ng-if="authenticated_user.thresholds.length > 0"></div>
                             <a class="dropdown-item" ng-click="logout()" style="cursor:pointer;">
