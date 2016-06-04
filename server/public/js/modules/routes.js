@@ -34,7 +34,11 @@ app.config(function($routeProvider) {
             controller: "UserDetailsController"
         })
 
-
+//thresholdService
+.when("new/threshold",{
+  templateUrl: "/js/templates/thresholds/create.html",
+  controller:"ThresholdCreateController"
+})
         // Redirect
         .otherwise({
             redirectTo: "/"
