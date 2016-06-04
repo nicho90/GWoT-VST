@@ -79,3 +79,29 @@ body {
     padding-right: 5px;
     padding-top: 1.5px;
 }
+
+
+/* Chart */
+.linechart {
+    padding: 15px;
+}
+
+/* Axis */
+.chart .axis > path,
+/* Axis Ticks */
+.chart .axis > .tick line {
+  stroke: rgba(0, 0, 0, 0.5);
+}
+
+/* Axis Tick Labels */
+.chart .axis > .tick text {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+}
+
+/* Legend */
+.chart-legend .item,
+/* Tooltip */
+.chart-tooltip {
+  font-family: 'Open Sans', sans-serif;
+}

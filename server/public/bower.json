@@ -32,6 +32,7 @@
     "font-awesome": "~4.6.0",
     "flag-icon-css": "^2.0.0",
     "angular-leaflet-directive": "^0.10.0",
-    "Leaflet.awesome-markers": "leaflet-awesome-markers#^2.0.2"
+    "Leaflet.awesome-markers": "leaflet-awesome-markers#^2.0.2",
+    "d3": "^3.5.17"
   }
 }

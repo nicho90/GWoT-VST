@@ -7,6 +7,7 @@ var app = angular.module("gwot-vst", [
     "ngRoute",
     "pascalprecht.translate",
     "leaflet-directive",
+    "n3-line-chart",
 
     // Own Modules
     "filters",
@@ -19,6 +20,7 @@ var app = angular.module("gwot-vst", [
     "thresholdService",
     "sensorService",
     "measurementService",
+    "timeseriesService",
     "forecastService"
 ]);
 

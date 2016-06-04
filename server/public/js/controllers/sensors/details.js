@@ -2,19 +2,19 @@ var app = angular.module("gwot-vst");
 
 
 // LIST
-app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $forecastService, config) {
+app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $forecastService, $timeseriesService, config) {
 
 
     /**
      * Load Forecast.io Weather
      */
-    $scope.load_forecast = function(){
+    $scope.load_forecast = function() {
 
         // Check language
         var language;
-        if($translate.use() === 'en_US'){
+        if ($translate.use() === 'en_US') {
             language = 'en';
-        } else if ($translate.use() === 'de_DE'){
+        } else if ($translate.use() === 'de_DE') {
             language = 'de';
         } else {
             language = 'en';
@@ -22,11 +22,101 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
 
         // Request Forecast.io Weather API
         $forecastService.get($scope.sensor.lat, $scope.sensor.lng, language)
-        .success(function(response) {
-            $scope.weather_forecast = response;
-        }).error(function(err) {
-            $scope.err = err;
+            .success(function(response) {
+                $scope.weather_forecast = response;
+            }).error(function(err) {
+                $scope.err = err;
+            });
+    };
+
+
+    /**
+     * Load Timeseries for Sensor
+     */
+    $scope.load_timeseries = function(query) {
+
+        // Create Serie
+        $scope.options.series.push({
+            axis: "y",
+            dataset: "dataset",
+            key: "distance", // TODO: water_level
+            label: $scope.sensor.device_id,
+            color: "rgba(2, 117, 216, 1)",
+            //color: "hsla(88, 48%, 48%, 1)",
+            type: [
+                "line",
+                "dot",
+                "area"
+            ],
+            id: $scope.sensor.sensor_id,
+            /*interpolation: { // round curves
+                mode: 'cardinal', tension: 0.7
+            },*/
         });
+
+        // Check if query was defined
+        if (query === undefined) {
+            query = "";
+        }
+
+        $timeseriesService.get($scope.sensor.sensor_id, query)
+            .success(function(response) {
+                $scope.sensor.timeseries = response;
+
+
+                // Add values to chart
+                angular.forEach($scope.sensor.timeseries, function(timeserie, key) {
+
+                    $scope.data.dataset.push({
+                        timestamp: new Date(timeserie.measurement_date), // TODO: only data, no time!
+                        distance: timeserie.distance // TODO: water_level
+                    });
+
+                });
+
+            }).error(function(err) {
+                $scope.err = err;
+            });
+    };
+
+
+    /**
+     * Linechart
+     */
+    $scope.options = {
+        margin: {
+            top: 10,
+            bottom: 20,
+            right: 50,
+            left: 50
+        },
+        series: [],
+        axes: {
+            x: {
+                key: "timestamp",
+                type: "date"
+            },
+            y: {
+                label: "CENTIMETER",
+                tickFormat: function(value) {
+                    return value + " cm";
+                }
+            }
+        }
+    };
+
+    $scope.data = {
+        dataset: []
+            /*{
+                timestamp: new Date("2016-05-04"),
+                distance: 0 // TODO: water_level
+            }, {
+                timestamp: new Date("2016-05-05"),
+                distance: 0.993
+            }, {
+                timestamp: new Date("2016-05-06"),
+                distance: 1.947
+            }*/
     };
 
 
@@ -37,130 +127,130 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
 
         // Request related sensors
         $sensorService.get_related_sensors($routeParams.sensor_id)
-        .success(function(response) {
-            $scope.sensor.related_sensors = response;
-            $scope.updateMarkers('related_sensors');
+            .success(function(response) {
+                $scope.sensor.related_sensors = response;
+                $scope.updateMarkers('related_sensors');
 
-        }).error(function(err) {
-            $scope.err = err;
-        });
+            }).error(function(err) {
+                $scope.err = err;
+            });
 
         // Request nearby emergency stations
         $sensorService.get_emergency_stations($routeParams.sensor_id)
-        .success(function(response) {
-            $scope.sensor.emergency_stations = response;
-            $scope.updateMarkers('emergency_stations');
+            .success(function(response) {
+                $scope.sensor.emergency_stations = response;
+                $scope.updateMarkers('emergency_stations');
 
-        }).error(function(err) {
-            $scope.err = err;
-        });
+            }).error(function(err) {
+                $scope.err = err;
+            });
 
         // Request nearby service stations
         $sensorService.get_service_stations($routeParams.sensor_id)
-        .success(function(response) {
-            $scope.sensor.service_stations = response;
-            $scope.updateMarkers('service_stations');
+            .success(function(response) {
+                $scope.sensor.service_stations = response;
+                $scope.updateMarkers('service_stations');
 
-        }).error(function(err) {
-            $scope.err = err;
-        });
+            }).error(function(err) {
+                $scope.err = err;
+            });
     };
 
 
     /**
      * Update Marker
      */
-    $scope.updateMarker = function(){
-        $scope.markers.push(
-            {
-                sensor_id: $scope.sensor.sensor_id,
-                layer: 'sensor',
-                lat: $scope.sensor.lat,
-                lng: $scope.sensor.lng,
-                focus: true,
-                draggable: false,
-                icon: $scope.successIcon,
-                message : $scope.sensor.description,
-                getMessageScope: function () { return $scope; },
-                compileMessage: true,
-                popupOptions : {
-                    closeButton : true
-                },
-                enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
-            }
-        );
+    $scope.updateMarker = function() {
+        $scope.markers.push({
+            sensor_id: $scope.sensor.sensor_id,
+            layer: 'sensor',
+            lat: $scope.sensor.lat,
+            lng: $scope.sensor.lng,
+            focus: true,
+            draggable: false,
+            icon: $scope.successIcon,
+            message: $scope.sensor.description,
+            getMessageScope: function() {
+                return $scope;
+            },
+            compileMessage: true,
+            popupOptions: {
+                closeButton: true
+            },
+            enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
+        });
     };
 
     /**
      * Update Markers
      */
-    $scope.updateMarkers = function(layer){
+    $scope.updateMarkers = function(layer) {
 
-        if(layer === 'related_sensors'){
+        if (layer === 'related_sensors') {
 
-            angular.forEach($scope.sensor.related_sensors, function(related_sensor, key){
-                $scope.markers.push(
-                    {
-                        sensor_id: related_sensor.sensor_id,
-                        layer: layer,
-                        lat: related_sensor.lat,
-                        lng: related_sensor.lng,
-                        focus: false,
-                        draggable: false,
-                        icon: $scope.successIcon,
-                        message : related_sensor.description,
-                        getMessageScope: function () { return $scope; },
-                        compileMessage: true,
-                        popupOptions : {
-                            closeButton : true
-                        },
-                        enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
-                    }
-                );
+            angular.forEach($scope.sensor.related_sensors, function(related_sensor, key) {
+                $scope.markers.push({
+                    sensor_id: related_sensor.sensor_id,
+                    layer: layer,
+                    lat: related_sensor.lat,
+                    lng: related_sensor.lng,
+                    focus: false,
+                    draggable: false,
+                    icon: $scope.successIcon,
+                    message: related_sensor.description,
+                    getMessageScope: function() {
+                        return $scope;
+                    },
+                    compileMessage: true,
+                    popupOptions: {
+                        closeButton: true
+                    },
+                    enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
+                });
             });
 
-        } else if(layer === 'emergency_stations'){
+        } else if (layer === 'emergency_stations') {
 
-            angular.forEach($scope.sensor.emergency_stations, function(emergency_station, key){
-                $scope.markers.push(
-                    {
-                        layer: layer,
-                        lat: emergency_station.lat,
-                        lng: emergency_station.lng,
-                        focus: false,
-                        draggable: false,
-                        icon: $scope.emergencyStationIcon,
-                        message : emergency_station.name,
-                        getMessageScope: function () { return $scope; },
-                        compileMessage: true,
-                        popupOptions : {
-                            closeButton : true
-                        },
-                        enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
-                    }
-                );
+            angular.forEach($scope.sensor.emergency_stations, function(emergency_station, key) {
+                $scope.markers.push({
+                    layer: layer,
+                    lat: emergency_station.lat,
+                    lng: emergency_station.lng,
+                    focus: false,
+                    draggable: false,
+                    icon: $scope.emergencyStationIcon,
+                    message: emergency_station.name,
+                    getMessageScope: function() {
+                        return $scope;
+                    },
+                    compileMessage: true,
+                    popupOptions: {
+                        closeButton: true
+                    },
+                    enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
+                });
             });
 
-        } else if(layer === 'service_stations'){
+        } else if (layer === 'service_stations') {
 
-            angular.forEach($scope.sensor.service_stations, function(service_station, key){
-                $scope.markers.push(
-                    {
-                        layer: layer,
-                        lat: service_station.lat,
-                        lng: service_station.lng,
-                        focus: false,
-                        draggable: false,
-                        icon: $scope.serviceStationIcon,
-                        message : service_station.name,
-                        getMessageScope: function () { return $scope; },
-                        compileMessage: true,
-                        popupOptions : {
-                            closeButton : true
-                        },
-                        enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
-                    }
-                );
+            angular.forEach($scope.sensor.service_stations, function(service_station, key) {
+                $scope.markers.push({
+                    layer: layer,
+                    lat: service_station.lat,
+                    lng: service_station.lng,
+                    focus: false,
+                    draggable: false,
+                    icon: $scope.serviceStationIcon,
+                    message: service_station.name,
+                    getMessageScope: function() {
+                        return $scope;
+                    },
+                    compileMessage: true,
+                    popupOptions: {
+                        closeButton: true
+                    },
+                    enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
+                });
             });
 
         }
@@ -175,32 +265,33 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
         $scope.markers = [];
 
         // Check if user is authenticated
-        console.log($rootScope.authenticated_user);
-        if($rootScope.authenticated_user) {
+        if ($rootScope.authenticated_user) {
 
             // Request private or public sensor of authenticated user
             $sensorService.get_private($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, $routeParams.sensor_id)
-            .success(function(response) {
-                $scope.sensor = response;
-                $scope.load_forecast();
-                $scope.load_realted_data();
-                $scope.updateMarker();
-            })
-            .error(function(err) {
-                $scope.err = err;
-            });
+                .success(function(response) {
+                    $scope.sensor = response;
+                    $scope.load_forecast();
+                    $scope.load_timeseries();
+                    $scope.load_realted_data();
+                    $scope.updateMarker();
+                })
+                .error(function(err) {
+                    $scope.err = err;
+                });
         } else {
 
             // Request only public sensor
             $sensorService.get_public($routeParams.sensor_id)
-            .success(function(response) {
-                $scope.sensor = response;
-                $scope.load_forecast();
-                $scope.load_realted_data();
-                $scope.updateMarker();
-            }).error(function(err) {
-                $scope.err = err;
-            });
+                .success(function(response) {
+                    $scope.sensor = response;
+                    $scope.load_forecast();
+                    $scope.load_timeseries();
+                    $scope.load_realted_data();
+                    $scope.updateMarker();
+                }).error(function(err) {
+                    $scope.err = err;
+                });
         }
 
     };
@@ -216,7 +307,7 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
     /**
      * Update when user logged in or out
      */
-    $rootScope.$on('update', function(){
+    $rootScope.$on('update', function() {
         $scope.load();
     });
 
@@ -224,7 +315,7 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
     /**
      * Update when user logged in or out
      */
-    $scope.changeTab = function(tab){
+    $scope.changeTab = function(tab) {
         $scope.tab = tab;
     };
 
@@ -321,38 +412,38 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
         successIcon: {
             type: 'awesomeMarker',
             markerColor: 'green',
-            prefix : 'fa',
-            icon : 'cube'
+            prefix: 'fa',
+            icon: 'cube'
         },
         warningIcon: {
             type: 'awesomeMarker',
             markerColor: 'orange',
-            prefix : 'fa',
-            icon : 'cube'
+            prefix: 'fa',
+            icon: 'cube'
         },
         dangerIcon: {
             type: 'awesomeMarker',
             markerColor: 'red',
-            prefix : 'fa',
-            icon : 'cube'
+            prefix: 'fa',
+            icon: 'cube'
         },
         offlineIcon: {
             type: 'awesomeMarker',
             markerColor: 'lightgray',
-            prefix : 'fa',
-            icon : 'cube'
+            prefix: 'fa',
+            icon: 'cube'
         },
         serviceStationIcon: {
             type: 'awesomeMarker',
             markerColor: 'blue',
-            prefix : 'fa',
-            icon : 'wrench'
+            prefix: 'fa',
+            icon: 'wrench'
         },
         emergencyStationIcon: {
             type: 'awesomeMarker',
             markerColor: 'darkblue',
-            prefix : 'fa',
-            icon : 'ambulance'
+            prefix: 'fa',
+            icon: 'ambulance'
         },
         events: {
             map: {

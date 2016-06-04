@@ -321,12 +321,17 @@
 
     <!-- 2nd Tab -->
     <div class="row" ng-if="tab==2">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card">
-                TAB 2
+                <div class="linechart">
+                    <linechart data="data" options="options" mode=""></linechart>
+                </div>
+                <br>
+                <div class="linechart middle">
+                    BUTTONS
+                </div>
             </div>
         </div>
-        <div class="col-md-6"></div>
     </div>
 
     <!-- 3rd Tab -->

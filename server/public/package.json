@@ -1,0 +1,28 @@
+{
+  "name": "gwot-vst-webclient",
+  "version": "1.0.0",
+  "description": "The Geospatial Web of Things, is a project of the Institute for Geoinformatics Münster (Germany), which took place in summer term 2016. This `package.json` belongs to Virtual Smart Things Group and focuses on the WebClient to install required dependencies.",
+  "author": "GWoT-VST-Group",
+  "contributors": [
+    {
+      "name": "Nicholas Schiestel",
+      "email": "n.schiestel@uni-muenster.de"
+    },
+    {
+      "name": "Heinrich Löwen",
+      "email": "loewen.heinrich@uni-muenster.de"
+    },
+    {
+      "name": "Timm Kühnel",
+      "email": "t_kueh06@uni-muenster.de"
+    },
+    {
+      "name": "Rehan Aziz Chaudhary",
+      "email": "r_chau02@uni-muenster.de"
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "n3-charts": "^2.0.27"
+  }
+}
