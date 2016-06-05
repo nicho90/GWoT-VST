@@ -9,8 +9,8 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 # Data Structures
 
 ## Loginparams (object)
-+ username: `nicho90` (string, required) - Username (unique)
-+ password: `abcdef` (string, required) - Password (length of min 6 characters)
++ username: `test-user` (string, required) - Username
++ password: `abcdef` (string, required) - Password
 
 
 ## Sensor (object)
@@ -18,14 +18,23 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 + device_id: `rpi-1` (string, required) - deviceId of a Sensor
 + description: `Raspberry Pi at Wersehause`(string, required) - description of the sensor
 + private: `false` (boolean, required) - public `true` or public `false` (Default) sensor
-+ water_body_id: `1` (number, required) - WaterBodyId of a river, lake, etc.
++ water_body_id: `1` (number, required) - Water-Body-Id of a river, lake, etc.
 + sensor_height: `300` (number, required) - Sensor height, measured in centimeters from Gauge-Zero to Sensor
 + crossing_height: `100`(number, required) - Crossing height, measured in centimeters from Gauge-Zero to Floodway, Bridge, etc.
 + default_frequency: `60000`(number, required) - Normal measuring interval in milliseconds
 + danger_frequency: `6000` (number, required) - Danger measuring interval in milliseconds, when frequency is increased
-+ threshold_value: `50` (number, required) - ThresholdValue for triggering the dangerFrequency
-+ lng: `7.59572` (number, required) - The Longitude-value of the location
-+ lat: `51.969415` (number, required) - The Latitude-value of the location
++ threshold_value: `50` (number, required) - Threshold-value for triggering the dangerFrequency
++ lng: `7.59572` (number, required) - Longitude-value of the location
++ lat: `51.969415` (number, required) - Latitude-value of the location
+
+
+## User (object)
++ username: `test-user` (string, required) - Username (unique)
++ password: `abcdef` (string, required) - Password (min-length 6 characters)
++ email_address: `test.user@uni-muenster.de` (string, required) - Email-address (valid email-address)
++ first_name: `Test` (string, required) - First name (min-length 1 character)
++ last_name: `User` (string, required) - Last name (min-length 1 character)
++ language: `en_US` (string, required) - Language setting for application: `en_US` (Default), `de_DE`
 
 
 ## Authentication [/login]
@@ -51,6 +60,7 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
                 "email_address": "test.user@uni-muenster.de",
                 "first_name": "Test",
                 "last_name": "User",
+                "language": "en_US",
                 "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0"
             }
             
@@ -61,13 +71,129 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
                 "message": "ERROR-MESSAGE"
             }
 
+## Users [/users]
+
+### List all Users [GET]
+
++ Request
+    
+    + Headers
+
+            Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0
+
++ Response 200 (application/json)
+
+        [
+            {
+                "created": "2016-05-08T11:43:31.397Z",
+                "updated": "2016-05-08T15:03:05.637Z",
+                "username": "testuser",
+                "password": "abcdef",
+                "email_address": "test.user@uni-muenster.de",
+                "first_name": "Test",
+                "last_name": "User",
+                "language": "en_US"
+            }
+        ]
+
+
+### Create a User - Sign up [POST]
+
++ Request
+
+    + Headers
+           
+            Content-Type : application/json
+
++ Attributes (User)
+
++ Response 201 (application/json)
+
+        {
+            "created": "2016-05-08T11:43:31.397Z",
+            "updated": "2016-05-08T15:03:05.637Z",
+            "username": "testuser",
+            "password": "abcdef",
+            "email_address": "test.user@uni-muenster.de",
+            "first_name": "Test",
+            "last_name": "User",
+            "language": "en_US",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0"
+        }
+
+
+
+## User [/users/{username}]
+
++ Parameters
+
+    + username: `test-user` (string, required) - Username
+
+
+### Retrieve a User [GET]
+
++ Request
+    
+    + Headers
+
+            Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0
+
++ Response 200 (application/json)
+
+        {
+            "created": "2016-05-08T11:43:31.397Z",
+            "updated": "2016-05-08T15:03:05.637Z",
+            "username": "testuser",
+            "password": "abcdef",
+            "email_address": "test.user@uni-muenster.de",
+            "first_name": "Test",
+            "last_name": "User",
+            "language": "en_US",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0"
+        }
+
+
+### Edit a User [PUT]
+
++ Request
+
+    + Headers
+
+            Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0
+            Content-Type : application/json
+
++ Attributes (User)
+    
++ Response 200 (application/json)
+
+        {
+            "created": "2016-05-08T11:43:31.397Z",
+            "updated": "2016-05-08T15:03:05.637Z",
+            "username": "testuser",
+            "password": "abcdef",
+            "email_address": "test.user@uni-muenster.de",
+            "first_name": "Test",
+            "last_name": "User",
+            "language": "en_US",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0"
+        }
+
+
+### Delete a User [DELETE]
+
++ Request
+    
+    + Headers
+
+            Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0
+ 
++ Response 204
+
+
 
 ## Sensors [/sensors]
 
 ### List all public (and private) Sensors [GET]
-
-Request all public sensors without a token.
-Request all public and private sensors with a token.
 
 + Request
     
@@ -135,8 +261,7 @@ Request all public and private sensors with a token.
 
 + Parameters
 
-    + username: `testuser` (string, required) - The Username of a User
-
+    + username: `test-user` (string, required) - Username
 
 ### List all private Sensors of a User [GET]
 
@@ -150,7 +275,6 @@ Request all public and private sensors with a token.
 + Response 200 (application/json)
 
 
-
 ### Create a Sensor [POST]
 
 + Request
@@ -158,7 +282,6 @@ Request all public and private sensors with a token.
     + Headers
 
             Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0
-        
             Content-Type : application/json
 
 + Attributes (Sensor)
@@ -169,6 +292,7 @@ Request all public and private sensors with a token.
             
         }
 
+
         
 ## Sensor [/sensors/{sensorId}]
 
@@ -176,7 +300,7 @@ Request all public and private sensors with a token.
 
     + Headers
 
-            Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0"
+            Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0
             Content-Type : application/json
 
 + Parameters
