@@ -323,12 +323,56 @@
     <div class="row" ng-if="tab==2">
         <div class="col-md-12">
             <div class="card">
-                <div class="linechart">
-                    <linechart data="data" options="options" mode=""></linechart>
-                </div>
-                <br>
-                <div class="linechart middle">
-                    BUTTONS
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="linechart"> 
+                            <linechart data="data" options="options" mode="" height="390px"></linechart>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="linechart middle">
+                            {{ 'LAST' | translate }} {{query}}
+                            <select class="c-select" ng-model="query.value" ng-change="changeQuery()">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="40">40</option>
+                                <option value="50">50</option>
+                                <option value="60">60</option>
+                                <option value="70">70</option>
+                                <option value="80">80</option>
+                                <option value="90">90</option>
+                                <option value="100">100</option>
+                                <option value="200">200</option>
+                                <option value="300">300</option>
+                                <option value="400">400</option>
+                                <option value="500">500</option>
+                                <option value="600">600</option>
+                                <option value="700">700</option>
+                                <option value="800">800</option>
+                                <option value="900">900</option>
+                                <option value="1000">1000</option>
+                            </select>
+
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': query.time=='minutes' }" ng-click="changeQuery('minutes')">Minute(s)</button>
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': query.time=='hours' }" ng-click="changeQuery('hours')">Hour(s)</button>
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': query.time=='days' }" ng-click="changeQuery('days')">Day(s)</button>
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': query.time=='weeks' }" ng-click="changeQuery('weeks')">Week(s)</button>
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': query.time=='months' }" ng-click="changeQuery('months')">Month(s)</button>
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': query.time=='years' }" ng-click="changeQuery('years')">Year(s)</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

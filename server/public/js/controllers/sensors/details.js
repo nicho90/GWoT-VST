@@ -4,6 +4,35 @@ var app = angular.module("gwot-vst");
 // LIST
 app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $forecastService, $timeseriesService, config) {
 
+    $scope.query = {
+        value: 3,
+        time: "months"
+    };
+
+    $scope.changeQuery = function(time) {
+        if(time === '' || time === undefined){
+
+        } else if(time === "minutes") {
+            $scope.query.time = "minutes";
+        } else if(time === "hours") {
+            $scope.query.time = "hours";
+        } else if(time === "days") {
+            $scope.query.time = "days";
+        } else if(time === "weeks") {
+            $scope.query.time = "weeks";
+        } else if(time === "months") {
+            $scope.query.time = "months";
+        } else if(time === "years") {
+            $scope.query.time = "years";
+        } else {
+            $scope.query.time = "";
+        }
+
+        $scope.update_timeseries();
+
+    };
+
+
 
     /**
      * Load Forecast.io Weather
@@ -29,11 +58,39 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
             });
     };
 
+    $scope.update_timeseries = function() {
+        $scope.data.dataset = [];
+
+        // Check if query was defined
+        var query = "";
+        if ($scope.query) {
+            query = "?" + $scope.query.time + "=" + $scope.query.value;
+        } else {
+            query = "";
+        }
+
+        $timeseriesService.get($scope.sensor.sensor_id, query)
+        .success(function(response) {
+            $scope.sensor.timeseries = response;
+
+            // Add values to chart
+            angular.forEach($scope.sensor.timeseries, function(timeserie, key) {
+                $scope.data.dataset.push({
+                    timestamp: new Date(timeserie.measurement_date), // TODO: only data, no time!
+                    distance: timeserie.distance // TODO: water_level
+                });
+            });
+
+        }).error(function(err) {
+            $scope.err = err;
+        });
+    };
+
 
     /**
      * Load Timeseries for Sensor
      */
-    $scope.load_timeseries = function(query) {
+    $scope.load_timeseries = function() {
 
         // Create Serie
         $scope.options.series.push({
@@ -55,28 +112,29 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
         });
 
         // Check if query was defined
-        if (query === undefined) {
+        var query = "";
+        if ($scope.query) {
+            query = "?" + $scope.query.time + "=" + $scope.query.value;
+        } else {
             query = "";
         }
 
+
         $timeseriesService.get($scope.sensor.sensor_id, query)
-            .success(function(response) {
-                $scope.sensor.timeseries = response;
+        .success(function(response) {
+            $scope.sensor.timeseries = response;
 
-
-                // Add values to chart
-                angular.forEach($scope.sensor.timeseries, function(timeserie, key) {
-
-                    $scope.data.dataset.push({
-                        timestamp: new Date(timeserie.measurement_date), // TODO: only data, no time!
-                        distance: timeserie.distance // TODO: water_level
-                    });
-
+            // Add values to chart
+            angular.forEach($scope.sensor.timeseries, function(timeserie, key) {
+                $scope.data.dataset.push({
+                    timestamp: new Date(timeserie.measurement_date), // TODO: only data, no time!
+                    distance: timeserie.distance // TODO: water_level
                 });
-
-            }).error(function(err) {
-                $scope.err = err;
             });
+
+        }).error(function(err) {
+            $scope.err = err;
+        });
     };
 
 

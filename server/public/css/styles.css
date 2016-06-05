@@ -84,7 +84,9 @@ body {
 /* Chart */
 .linechart {
     padding: 15px;
+    height: 390px;
 }
+
 
 /* Axis */
 .chart .axis > path,
