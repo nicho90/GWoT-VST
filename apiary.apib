@@ -8,6 +8,10 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 
 # Data Structures
 
+## Loginparams (object)
++ username: `nicho90` (string, required) - Username (unique)
++ password: `abcdef` (string, required) - Password (length of min 6 characters)
+
 
 ## Sensor (object)
 + sensor_id: `1` (number, optional) - `null` (Default)
@@ -24,20 +28,18 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 + lat: `51.969415` (number, required) - The Latitude-value of the location
 
 
-## Token (object)
-+ token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0`: (string, required) - access-token
-
-
 ## Authentication [/login]
 
 ### Login [POST]
 
-+ Body 
++ Request
+    
+    + Headers
+    
+            Content-Type : application/json
+        
 
-        {
-            "username": "testuser",
-            "password": "abcdef"
-        }
++ Attributes (Loginparams)
 
 + Response 200 (application/json)
 
@@ -64,18 +66,18 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 
 ### List all public (and private) Sensors [GET]
 
-* Request all public sensors without a token.
-* Request all public and private sensors with a token.
+Request all public sensors without a token.
+Request all public and private sensors with a token.
 
 + Request
     
     + Headers
 
-            Authorization: Token
+            Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0
             
 
 + Response 200 (application/json)
-
+    
         [
             {
                 "sensor_id": 1,
@@ -126,7 +128,6 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
                 "updated": "2016-06-02T17:57:02.183Z"
             }
         ]
-
             
 
 
@@ -143,7 +144,8 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 
     + Headers
 
-            Authorization: token
+            Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0
+
 
 + Response 200 (application/json)
 
@@ -155,7 +157,8 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 
     + Headers
 
-            Authorization: token
+            Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0
+        
             Content-Type : application/json
 
 + Attributes (Sensor)
@@ -173,7 +176,7 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 
     + Headers
 
-            Authorization: token
+            Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0"
             Content-Type : application/json
 
 + Parameters
@@ -199,7 +202,7 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 
     + Headers
 
-            Authorization: token
+            Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0"
             Content-Type : application/json
 
             
@@ -220,20 +223,20 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 
     + Headers
 
-            Authorization: token
+            Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0"
             Content-Type : application/json
 
 + Response 204
 
 
 
-## Forecast [/forecast?lat={lat}&lng={lng}&lang={lang}]
+## Forecast [/forecast{?lat,lng,lang}]
 
 + Parameters
     
-    + lat: `0.0` (number, required) - Latitude value of a Sensor
-    + lng: `0.0` (number, required) - Longitude value of a Sensor
-    + lang: `en` (string, required) - Language for summaries: `en` (default), `de`
+    + lat: `0.0` (required) - Latitude value of a Sensor
+    + lng: `0.0` (required) - Longitude value of a Sensor
+    + lang: `en` (required) - Language for summaries: `en` (default), `de`
  
 
 ### GET a Forecast [GET]
