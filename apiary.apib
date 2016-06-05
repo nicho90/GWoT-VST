@@ -8,44 +8,133 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 
 # Data Structures
 
+
 ## Sensor (object)
 + sensor_id: `1` (number, optional) - `null` (Default)
-+ device_id: `rpi-1` (string, required) - The DeviceId of a Sensor
-+ description: `RPi am Wersehaus`(string, optional) - The description of the sensor
++ device_id: `rpi-1` (string, required) - deviceId of a Sensor
++ description: `Raspberry Pi at Wersehause`(string, required) - description of the sensor
++ private: `false` (boolean, required) - public `true` or public `false` (Default) sensor
++ water_body_id: `1` (number, required) - WaterBodyId of a river, lake, etc.
++ sensor_height: `300` (number, required) - Sensor height, measured in centimeters from Gauge-Zero to Sensor
++ crossing_height: `100`(number, required) - Crossing height, measured in centimeters from Gauge-Zero to Floodway, Bridge, etc.
++ default_frequency: `60000`(number, required) - Normal measuring interval in milliseconds
++ danger_frequency: `6000` (number, required) - Danger measuring interval in milliseconds, when frequency is increased
++ threshold_value: `50` (number, required) - ThresholdValue for triggering the dangerFrequency
 + lng: `7.59572` (number, required) - The Longitude-value of the location
 + lat: `51.969415` (number, required) - The Latitude-value of the location
 
 
-## Public Sensors [/sensors]
+## Token (object)
++ token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0`: (string, required) - access-token
 
-### List all public Sensors [GET]
+
+## Authentication [/login]
+
+### Login [POST]
+
++ Body 
+
+        {
+            "username": "testuser",
+            "password": "abcdef"
+        }
+
++ Response 200 (application/json)
+
+            {
+                "created": "2016-05-08T11:43:31.397Z",
+                "updated": "2016-05-08T15:03:05.637Z",
+                "username": "testuser",
+                "password": "abcdef",
+                "email_address": "test.user@uni-muenster.de",
+                "first_name": "Test",
+                "last_name": "User",
+                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY2hvOTAiLCJwYXNzd29yZCI6ImFiYyIsImlhdCI6MTQ2MjcxOTAwNCwiZXhwIjoxNDYyODA1NDA0fQ.tAhrym-KBJey4emArB7-zUUE1rYy5aYyg7CNh-qagD0"
+            }
+            
++ Response 401
+        
+            {
+                "code" : "401",
+                "message": "ERROR-MESSAGE"
+            }
+
+
+## Sensors [/sensors]
+
+### List all public (and private) Sensors [GET]
+
+* Request all public sensors without a token.
+* Request all public and private sensors with a token.
+
++ Request
+    
+    + Headers
+
+            Authorization: Token
+            
 
 + Response 200 (application/json)
 
         [
             {
-                "sensor_id" : "1" ,
-                "created" : "",
-                "updated": "",
-                "sensor_description": "RPi Water gauge sensor",
-                "lng": 7.59572,
-                "lat": 51.969415
-            }, {
-                "sensor_id" : "2" ,
-                "created" : "",
-                "updated": "",
-                "sensor_description": "Arduino Water gauge sensor",
-                "lng": 7.59575,
-                "lat": 51.969425
+                "sensor_id": 1,
+                "device_id": "rpi-1",
+                "description": "Raspberry Pi at Wersehause",
+                "private": false,
+                "online_status": true,
+                "water_body_id": 1,
+                "water_body_name": "Werse",
+                "sensor_height": 320,
+                "sensor_height_unit": "CENTIMETER",
+                "crossing_height": 200,
+                "crossing_height_unit": "CENTIMETER",
+                "default_frequency": 60000,
+                "default_frequency_unit": "MILLISECONDS",
+                "danger_frequency": 5000,
+                "danger_frequency_unit": "MILLISECONDS",
+                "increased_frequency": false,
+                "threshold_value": 120,
+                "threshold_value_unit": "CENTIMETER",
+                "lng": 7.70013,
+                "lat": 51.973314,
+                "created": "2016-06-02T17:57:02.183Z",
+                "updated": "2016-06-02T17:57:02.183Z"
+            },
+            {
+                "sensor_id": 3,
+                "device_id": "rpi-3",
+                "description": "3rd private Sensor",
+                "private": false,
+                "online_status": false,
+                "water_body_id": 1,
+                "water_body_name": "Werse",
+                "sensor_height": 300,
+                "sensor_height_unit": "CENTIMETER",
+                "crossing_height": 0,
+                "crossing_height_unit": "CENTIMETER",
+                "default_frequency": 6000000,
+                "default_frequency_unit": "MILLISECONDS",
+                "danger_frequency": 300000,
+                "danger_frequency_unit": "MILLISECONDS",
+                "increased_frequency": false,
+                "threshold_value": 120,
+                "threshold_value_unit": "CENTIMETER",
+                "lng": 7.69888,
+                "lat": 51.973934,
+                "created": "2016-06-02T17:57:02.183Z",
+                "updated": "2016-06-02T17:57:02.183Z"
             }
         ]
 
+            
 
-## Private Sensors [/users/{username}/sensors]
+
+## Sensors of a User [/users/{username}/sensors]
 
 + Parameters
 
-    + username: `nicho90` (string, required) - The Username of a User
+    + username: `testuser` (string, required) - The Username of a User
 
 
 ### List all private Sensors of a User [GET]
@@ -54,27 +143,10 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 
     + Headers
 
-            token : token
+            Authorization: token
 
 + Response 200 (application/json)
 
-        [
-            {
-                "sensor_id" : "1" ,
-                "created" : "",
-                "updated": "",
-                "sensor_description": "RPi Water gauge sensor",
-                "lng": 7.59572,
-                "lat": 51.969415
-            }, {
-                "sensor_id" : "2" ,
-                "created" : "",
-                "updated": "",
-                "sensor_description": "Arduino Water gauge sensor",
-                "lng": 7.59575,
-                "lat": 51.969425
-            }
-        ]
 
 
 ### Create a Sensor [POST]
@@ -83,7 +155,7 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 
     + Headers
 
-            token : token
+            Authorization: token
             Content-Type : application/json
 
 + Attributes (Sensor)
@@ -91,53 +163,18 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 + Response 201 (application/json)
 
         {
-            "sensor_id" : "1" ,
-            "created" : "",
-            "updated": "",
-            "sensor_description": "RPi Water gauge sensor",
-            "lng": 7.59572,
-            "lat": 51.969415
+            
         }
 
-
-## Private & public Sensors [/users/{username}/sensors?public={public}]
-
-### List all private Sensors of a User and all public Sensors [GET]
+        
+## Sensor [/sensors/{sensorId}]
 
 + Request
-    
+
     + Headers
 
-            token : token
-
-+ Parameters
-    
-    + public: `true` (boolean, required) - Merge all private Sensors with all public Sensors
-
-+ Response 200 (application/json)
-
-        [
-            {
-                "sensor_id" : "1" ,
-                "created" : "",
-                "updated": "",
-                "sensor_description": "RPi Water gauge sensor",
-                "lng": 7.59572,
-                "lat": 51.969415
-            }, {
-                "sensor_id" : "2" ,
-                "created" : "",
-                "updated": "",
-                "sensor_description": "Arduino Water gauge sensor",
-                "lng": 7.59575,
-                "lat": 51.969425
-            }
-        ]
-
-
-
-        
-## Public Sensor [/sensors/{sensorId}]
+            Authorization: token
+            Content-Type : application/json
 
 + Parameters
 
@@ -159,9 +196,10 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
 ### Edit a Sensor [PUT]
 
 + Request
-    
+
     + Headers
-        
+
+            Authorization: token
             Content-Type : application/json
 
             
@@ -177,6 +215,13 @@ HOST: http://giv-gwot-vst.uni-muenster.de:3333/api
         }
 
 ### Delete a Sensor [DELETE]
+
++ Request
+
+    + Headers
+
+            Authorization: token
+            Content-Type : application/json
 
 + Response 204
 
