@@ -10,19 +10,17 @@ var ip = require("ip");
 /**
  * Phyiscal connection of a LED
  */
- /*
 var led = gpio.export(gpio_settings.led, {
     direction: "out",
     ready: function() {}
 });
-*/
 
 
 /**
  * Scheduled measurment
  */
 var scheduledTimer = {
-    status: true,  //default true
+    status: true,
     interval: sensor.interval, // default interval 1 min
     start: function() {
         if (!this.status) return;
@@ -158,8 +156,8 @@ var initSensor = function() {
             console.log("Sensor initialization succeeded. " + new Date());
             gpio_settings.sensor = usonic.createSensor(gpio_settings.echo, gpio_settings.trig, gpio_settings.measurement_timeout);
             measurementTimer.start();
-            //scheduledTimer.start();
-            //realtimeTimer.start();
+            scheduledTimer.start();
+            realtimeTimer.start();
         }
     });
 };
