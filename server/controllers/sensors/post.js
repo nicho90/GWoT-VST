@@ -88,27 +88,30 @@ exports.request = function(req, res){
 								} else {
 
 									var query = "SELECT " +
-										"sensor_id, " +
-										"device_id, " +
-										"description ," +
-										"private, " +
-										"sensor_height, " +
+										"sensors.sensor_id, " +
+										"sensors.device_id, " +
+										"sensors.description ," +
+										"sensors.private, " +
+										"sensors.online_status, " +
+										"sensors.water_body_id, " +
+										"water_bodies.name AS water_body_name, " +
+										"sensors.sensor_height, " +
 										"'CENTIMETER' AS sensor_height_unit, " +
-										"crossing_height, " +
+										"sensors.crossing_height, " +
 										"'CENTIMETER' AS crossing_height_unit, " +
-										"threshold_value, " +
-										"'CENTIMETER' AS threshold_value_unit, " +
-										"default_frequency, " +
+										"sensors.default_frequency, " +
 										"'MILLISECONDS' AS default_frequency_unit, " +
-										"danger_frequency, " +
+										"sensors.danger_frequency, " +
 										"'MILLISECONDS' AS danger_frequency_unit, " +
-										"increased_frequency, " +
-										"online_status, " +
-										"ST_X(coordinates::geometry) AS lng, " +
-										"ST_Y(coordinates::geometry) AS lat, " +
-										"created, " +
-										"updated " +
-										"FROM Sensors WHERE created_by=$1 ORDER BY created DESC;";
+										"sensors.increased_frequency, " +
+										"sensors.threshold_value, " +
+										"'CENTIMETER' AS threshold_value_unit, " +
+										"ST_X(sensors.coordinates::geometry) AS lng, " +
+										"ST_Y(sensors.coordinates::geometry) AS lat, " +
+										"sensors.created, " +
+										"sensors.updated " +
+										"FROM Sensors sensors JOIN Water_Bodies water_bodies ON sensors.water_body_id=water_bodies.water_body_id " +
+										"WHERE created_by=$1 ORDER BY created DESC;";
 
 									// Database Query
 									client.query(query, [

@@ -46,18 +46,19 @@ exports.request = function(req, res) {
                             "'METER' AS distance_unit, " +
                             "related_sensors.device_id, " +
                             "related_sensors.description, " +
-                            "related_sensors.created_by, " +
                             "related_sensors.private, " +
+                            "related_sensors.online_status, " +
                             "related_sensors.water_body_id, " +
-                            "water_bodies.name, " +
+                            "water_bodies.name AS water_body_name, " +
                             "related_sensors.sensor_height, " +
                             "'CENTIMETER' AS sensor_height_unit, " +
                             "related_sensors.crossing_height, " +
-                            "'CENTIMETER' AS crossing_height, " +
+                            "'CENTIMETER' AS crossing_height_unit, " +
                             "related_sensors.default_frequency, " +
                             "'MILLISECONDS' AS default_frequency_unit, " +
                             "related_sensors.danger_frequency, " +
                             "'MILLISECONDS' AS danger_frequency_unit, " +
+                            "related_sensors.increased_frequency, " +
                             "related_sensors.threshold_value, " +
                             "'CENTIMETER' AS threshold_value_unit, " +
                             "ST_X(related_sensors.coordinates::geometry) AS lng, " +
