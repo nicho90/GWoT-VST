@@ -81,5 +81,11 @@ module.exports = {
             code: 404,
             message: 'Language not found'
         }
+    },
+    development: {
+        error_1: {
+            code: 501,
+            message: 'Not implemented'
+        }
     }
 };
