@@ -50,7 +50,7 @@ if(!db_settings.status){
                 function (callback) {
 
                     // Database Query
-                    client.query("SELECT (sensor_id) FROM Sensors", function(err, result) {
+                    client.query("SELECT * FROM Sensors", function(err, result) {
                         done();
 
                         if (err) {
@@ -74,7 +74,7 @@ if(!db_settings.status){
                     async.each(sensors, function (sensor, callback) {
 
                         // Database Query
-                        client.query("SELECT AVG(distance) FROM Measurements WHERE sensor_id=$1 AND created >=$2 AND created <=$3;", [
+                        client.query("SELECT AVG(water_level) AS avg_water_level FROM Measurements WHERE sensor_id=$1 AND measurement_timestamp >=$2 AND measurement_timestamp <=$3;", [
                             sensor.sensor_id,
                             begin,
                             end
@@ -85,26 +85,43 @@ if(!db_settings.status){
                                 return console.error('Error running query', err);
                             } else {
 
-                                if(result.rows[0].avg !== null){
+                                if(result.rows[0].avg_water_level !== null){
 
                                     // Database Query
-                                    client.query("INSERT INTO Timeseries (created, updated, sensor_id, distance, water_level, measurement_date) VALUES (now(), now(), $1, $2, $3, $4);", [
+                                    client.query("INSERT INTO Timeseries (created, updated, sensor_id, water_level, measurement_date, valid_data) VALUES (now(), now(), $1, $2, $3, $4);", [
                                         sensor.sensor_id,
-                                        result.rows[0].avg,
-                                        sensor.sensor_height-result.rows[0].avg,
-                                        _begin
+                                        result.rows[0].avg_water_level,
+                                        _begin,
+                                        true
                                     ], function(err, result) {
                                         done();
 
                                         if (err) {
                                             return console.error('Error running query', err);
                                         } else {
-                                            callback(null);
+                                            console.log("Timeseries created for SensorId:" + sensor.sensor_id + " on date " + _begin);
+                                            callback(null, _begin);
                                         }
                                     });
                                 } else {
-                                    console.log("No distances found for Sensor-Id '" + sensor.sensor_id + "'!");
-                                    callback(null);
+
+                                    console.log("No distances found for SensorId '" + sensor.sensor_id + "'!");
+
+                                    // Database Query
+                                    client.query("INSERT INTO Timeseries (created, updated, sensor_id, water_level, measurement_date, valid_data) VALUES (now(), now(), $1, $2, $3, $4);", [
+                                        sensor.sensor_id,
+                                        0,
+                                        _begin,
+                                        false
+                                    ], function(err, result) {
+                                        done();
+
+                                        if (err) {
+                                            return console.error('Error running query', err);
+                                        } else {
+                                            callback(null, _begin);
+                                        }
+                                    });
                                 }
                             }
                         });
@@ -112,12 +129,12 @@ if(!db_settings.status){
                         if (err) {
                             console.error(err.message);
                         } else {
-                            callback(null);
+                            callback(null, _begin);
                         }
                     });
                 }
-            ], function(result){
-                console.log("Time-Series created!");
+            ], function(err, result){
+                console.log("Timeseries-Creator finished for date: " + result);
             });
         }
     });
