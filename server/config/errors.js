@@ -26,6 +26,10 @@ module.exports = {
             code: 400,
             message: 'No valid query parameters'
         }
+        error_4: {
+          code: 404,
+          message: 'Client not found'
+        }
     },
     authentication: {
         error_1: {

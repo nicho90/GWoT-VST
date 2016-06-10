@@ -29,8 +29,8 @@ if (broker !== undefined) {
                 ], function(err, result) {
                     done();
                     if (err) {
-                        console.error(errors.database.error_2.message, err);
-                        callback(new Error(errors.database.error_2.message));
+                        console.error(errors.database.error_4.message, err);
+                        callback(new Error(errors.database.error_4.message));
                     } else {
                         console.log("Online status changes for " + client.id + ": true".);
                     }
@@ -54,8 +54,8 @@ if (broker !== undefined) {
                 ], function(err, result) {
                     done();
                     if (err) {
-                        console.error(errors.database.error_2.message, err);
-                        callback(new Error(errors.database.error_2.message));
+                        console.error(errors.database.error_4.message, err);
+                        callback(new Error(errors.database.error_4.message));
                     } else {
                         console.log("Online status changes for " + client.id + ": false");
                     }
