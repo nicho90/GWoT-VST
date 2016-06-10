@@ -21,6 +21,7 @@ program
 
     .option('-emu, --email_user [email-address]', 'Enter the SMTP-address, which is needed to start the Email-Notification-Service (example: user@gmail.com)', 'user@gmail.com')
     .option('-empw, --email_password [password]', 'Enter the Email-Password, which is needed to start Email-Notification-Service', 'password')
+    .option('-sio, --socket_io', 'Use socket.io communication engine')
     .parse(process.argv);
 
 
@@ -107,65 +108,68 @@ app.use(express.static(__dirname + '/public'));
  */
 var io = require('socket.io')(server);
 var web_clients = [];
-io.on('connection', function (socket) {
+if(program.socket_io){
+  console.log("Socket.io activated");
+  
+  io.on('connection', function (socket) {
 
-    console.log("Socket connected: " + socket);
+      console.log("Socket connected: " + socket);
 
-    // Add new webClient-User to web_clients[]
-    /*web_clients.push({
-        id: socket,
-        sensor_ids: []
-    });
-    console.log("New WebClient has been conneted!");
-
-
-    // Request Real-time data
-    socket.on('getRT', function (data) {
-        _.findWhere(web_clients, {newsroom: "The New York Times"});
-        sensor_ids
+      // Add new webClient-User to web_clients[]
+      /*web_clients.push({
+          id: socket,
+          sensor_ids: []
+      });
+      console.log("New WebClient has been conneted!");
 
 
-         // we tell the client to execute 'new message'
-         socket.broadcast.emit('test', {
-             username: "Max",
-             message: "I wrote this message"
-         });
-     });
+      // Request Real-time data
+      socket.on('getRT', function (data) {
+          _.findWhere(web_clients, {newsroom: "The New York Times"});
+          sensor_ids
 
-     // when the client emits 'new message', this listens and executes
-     /*socket.on('new message', function (data) {
-         // we tell the client to execute 'new message'
-         socket.broadcast.emit('new message', {
-             username: "Max",
-             message: "I wrote this message"
-         });
-     });*/
 
-     // when the user disconnects.. perform this
-     socket.on('disconnect', function () {
-         console.log("Socket disconnected: " + socket);
-         /*if (addedUser) {
-             --numUsers;
+           // we tell the client to execute 'new message'
+           socket.broadcast.emit('test', {
+               username: "Max",
+               message: "I wrote this message"
+           });
+       });
 
-             // echo globally that this client has left
-             socket.broadcast.emit('user left', {
-                 username: socket.username,
-                 numUsers: numUsers
-             });
-         }*/
-     });
+       // when the client emits 'new message', this listens and executes
+       /*socket.on('new message', function (data) {
+           // we tell the client to execute 'new message'
+           socket.broadcast.emit('new message', {
+               username: "Max",
+               message: "I wrote this message"
+           });
+       });*/
 
-     /*var i = 0;
-      setInterval(function() {
-          socket.broadcast.emit('test', {
-              username: "Max",
-              message: "I wrote this message"
-          });
-          console.log('test: ' + '{ "username": "Max", "message": "I wrote this message" }')
-      i += 1;
-  }, 3000);*/
- });
+       // when the user disconnects.. perform this
+       socket.on('disconnect', function () {
+           console.log("Socket disconnected: " + socket);
+           /*if (addedUser) {
+               --numUsers;
 
+               // echo globally that this client has left
+               socket.broadcast.emit('user left', {
+                   username: socket.username,
+                   numUsers: numUsers
+               });
+           }*/
+       });
+
+       /*var i = 0;
+        setInterval(function() {
+            socket.broadcast.emit('test', {
+                username: "Max",
+                message: "I wrote this message"
+            });
+            console.log('test: ' + '{ "username": "Max", "message": "I wrote this message" }')
+        i += 1;
+    }, 3000);*/
+   });
+}
 
 
 /**
