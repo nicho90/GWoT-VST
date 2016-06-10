@@ -174,7 +174,7 @@ initSensor();
  */
 var client = mqtt.connect('mqtt://giv-gwot-vst.uni-muenster.de:1883', {
     encoding: 'utf8',
-    clientId: 'rpi',
+    clientId: sensor.device_id,
     will: { // Last Will (if Sensor goes offline)
         topic: 'dead',
         payload: 'mypayload',
