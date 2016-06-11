@@ -34,7 +34,9 @@ exports.request = function(req, res){
             } else {
 
                 // Database Query
-                client.query('SELECT * FROM users WHERE username=$1;', [req.body.username], function(err, result) {
+                client.query('SELECT * FROM users WHERE username=$1;', [
+                    req.body.username
+                ], function(err, result) {
                     done();
 
                     if(err) {
@@ -42,13 +44,13 @@ exports.request = function(req, res){
                         return console.error(errors.database.error_2.message, err);
                     } else {
 
-                        // Check if user exist
+                        // Check if User exists
                         if(result.rows.length === 0) {
-                            res.status(404).send({
-                                message: 'User not found'
-                            });
+                            res.status(errors.query.error_1.code).send(errors.query.error_1);
+                            return console.error(errors.query.error_1.message);
                         } else {
 
+                            // Prepare result
                             var user = result.rows[0];
 
                             // Validate password
@@ -59,12 +61,12 @@ exports.request = function(req, res){
                                     expiresIn: '1d' // Default: 1 day
                                 });
 
+                                // Send result
                                 res.status(200).send(user);
 
                             } else {
-                                res.status(401).send({
-                                    message: 'Wrong password'
-                                });
+                                res.status(errors.authentication.error_1.code).send(errors.authentication.error_1);
+                                return console.error(errors.authentication.error_1.message);
                             }
                         }
                     }
