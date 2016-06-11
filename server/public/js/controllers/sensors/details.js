@@ -2,7 +2,20 @@ var app = angular.module("gwot-vst");
 
 
 // LIST
-app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $forecastService, $timeseriesService, config) {
+app.controller("SensorDetailsController", function($socket, $sce, $scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $forecastService, $timeseriesService, config) {
+
+    /**
+     * Sockets testing
+     */
+    $socket.on('test', function(data) {
+        console.log("Socket received. Data:", data);
+        //TODO
+    });
+
+    $socket.emit('test', {
+        //TODO
+        test: "data"
+    });
 
     // Standard Query
     $scope.query = {
@@ -15,19 +28,19 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
      * Change Query for updating the timeseries chart
      */
     $scope.changeQuery = function(time) {
-        if(time === '' || time === undefined){
+        if (time === '' ||  time === undefined) {
 
-        } else if(time === "minutes") {
+        } else if (time === "minutes") {
             $scope.query.time = "minutes";
-        } else if(time === "hours") {
+        } else if (time === "hours") {
             $scope.query.time = "hours";
-        } else if(time === "days") {
+        } else if (time === "days") {
             $scope.query.time = "days";
-        } else if(time === "weeks") {
+        } else if (time === "weeks") {
             $scope.query.time = "weeks";
-        } else if(time === "months") {
+        } else if (time === "months") {
             $scope.query.time = "months";
-        } else if(time === "years") {
+        } else if (time === "years") {
             $scope.query.time = "years";
         } else {
             $scope.query.time = "";
@@ -55,11 +68,11 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
 
         // Request Forecast.io Weather API
         $forecastService.get($scope.sensor.lat, $scope.sensor.lng, language)
-        .success(function(response) {
-            $scope.weather_forecast = response;
-        }).error(function(err) {
-            $scope.err = err;
-        });
+            .success(function(response) {
+                $scope.weather_forecast = response;
+            }).error(function(err) {
+                $scope.err = err;
+            });
     };
 
 
@@ -79,20 +92,20 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
 
         // Request timeseries
         $timeseriesService.get($scope.sensor.sensor_id, query)
-        .success(function(response) {
-            $scope.sensor.timeseries = response;
+            .success(function(response) {
+                $scope.sensor.timeseries = response;
 
-            // Add values to chart
-            angular.forEach($scope.sensor.timeseries, function(timeserie, key) {
-                $scope.data.dataset.push({
-                    timestamp: new Date(timeserie.measurement_date), // TODO: only data, no time!
-                    water_level: timeserie.water_level
+                // Add values to chart
+                angular.forEach($scope.sensor.timeseries, function(timeserie, key) {
+                    $scope.data.dataset.push({
+                        timestamp: new Date(timeserie.measurement_date), // TODO: only data, no time!
+                        water_level: timeserie.water_level
+                    });
                 });
-            });
 
-        }).error(function(err) {
-            $scope.err = err;
-        });
+            }).error(function(err) {
+                $scope.err = err;
+            });
     };
 
 
@@ -130,20 +143,20 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
 
         // Request timeseries
         $timeseriesService.get($scope.sensor.sensor_id, query)
-        .success(function(response) {
-            $scope.sensor.timeseries = response;
+            .success(function(response) {
+                $scope.sensor.timeseries = response;
 
-            // Add values to chart
-            angular.forEach($scope.sensor.timeseries, function(timeserie, key) {
-                $scope.data.dataset.push({
-                    timestamp: new Date(timeserie.measurement_date), // TODO: only data, no time!
-                    distance: timeserie.distance // TODO: water_level
+                // Add values to chart
+                angular.forEach($scope.sensor.timeseries, function(timeserie, key) {
+                    $scope.data.dataset.push({
+                        timestamp: new Date(timeserie.measurement_date), // TODO: only data, no time!
+                        distance: timeserie.distance // TODO: water_level
+                    });
                 });
-            });
 
-        }).error(function(err) {
-            $scope.err = err;
-        });
+            }).error(function(err) {
+                $scope.err = err;
+            });
     };
 
 
@@ -194,33 +207,33 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
 
         // Request related sensors
         $sensorService.get_related_sensors($routeParams.sensor_id)
-        .success(function(response) {
-            $scope.sensor.related_sensors = response;
-            $scope.updateMarkers('related_sensors');
+            .success(function(response) {
+                $scope.sensor.related_sensors = response;
+                $scope.updateMarkers('related_sensors');
 
-        }).error(function(err) {
-            $scope.err = err;
-        });
+            }).error(function(err) {
+                $scope.err = err;
+            });
 
         // Request nearby emergency stations
         $sensorService.get_emergency_stations($routeParams.sensor_id)
-        .success(function(response) {
-            $scope.sensor.emergency_stations = response;
-            $scope.updateMarkers('emergency_stations');
+            .success(function(response) {
+                $scope.sensor.emergency_stations = response;
+                $scope.updateMarkers('emergency_stations');
 
-        }).error(function(err) {
-            $scope.err = err;
-        });
+            }).error(function(err) {
+                $scope.err = err;
+            });
 
         // Request nearby service stations
         $sensorService.get_service_stations($routeParams.sensor_id)
-        .success(function(response) {
-            $scope.sensor.service_stations = response;
-            $scope.updateMarkers('service_stations');
+            .success(function(response) {
+                $scope.sensor.service_stations = response;
+                $scope.updateMarkers('service_stations');
 
-        }).error(function(err) {
-            $scope.err = err;
-        });
+            }).error(function(err) {
+                $scope.err = err;
+            });
     };
 
 

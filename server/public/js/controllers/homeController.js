@@ -11,7 +11,7 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
      */
     $scope.load = function() {
 
-        if($rootScope.authenticated_user) {
+        if ($rootScope.authenticated_user) {
 
             // Request public sensors and private sensors of the authenticated user
             $sensorService.list_private($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, "?public=true").success(function(response) {
@@ -45,7 +45,7 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
     /**
      * Update when user logged in or out
      */
-    $rootScope.$on('update', function(){
+    $rootScope.$on('update', function() {
         $scope.load();
     });
 
@@ -53,7 +53,7 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
     /**
      * Show Details
      */
-    $scope.showDetails = function(sensor_id){
+    $scope.showDetails = function(sensor_id) {
         $location.url("/sensors/" + sensor_id);
     };
 
@@ -61,67 +61,67 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
     /**
      *
      */
-    $scope.updateMarker = function(){
+    $scope.updateMarker = function() {
 
         // TODO: Check Threshold
 
 
-        angular.forEach($scope.sensors, function(sensor, key){
+        angular.forEach($scope.sensors, function(sensor, key) {
 
             // Request lastest measurement for sensor
             $measurementService.get(sensor.sensor_id, "?latest=true")
-            .success(function(response){
-                $scope.sensors[key].latest_measurement = response;
+                .success(function(response) {
+                    $scope.sensors[key].latest_measurement = response;
 
-                // Check if latest measurement exists
-                var water_level = "-";
-                if (sensor.latest_measurement.water_level !== undefined) {
-                    water_level = (sensor.latest_measurement.water_level/100).toFixed(3) + " m";
-                }
+                    // Check if latest measurement exists
+                    var water_level = "-";
+                    if (sensor.latest_measurement.water_level !== undefined) {
+                        water_level = (sensor.latest_measurement.water_level / 100).toFixed(3) + " m";
+                    }
 
-                // Check online-status of sensor
-                var online_status = '<span class="text-danger online_status_point"><i class="fa fa-circle" aria-hidden="true"></i></span>';
-                if(sensor.online_status) {
-                    online_status = '<span class="text-success online_status_point"><i class="fa fa-circle" aria-hidden="true"></i></span>';
-                }
+                    // Check online-status of sensor
+                    var online_status = '<span class="text-danger online_status_point"><i class="fa fa-circle" aria-hidden="true"></i></span>';
+                    if (sensor.online_status) {
+                        online_status = '<span class="text-success online_status_point"><i class="fa fa-circle" aria-hidden="true"></i></span>';
+                    }
 
-                // Create Popup-Message
-                var _message = online_status + '<h6>' + sensor.description + '</h6>' +
-                    '<table class="table-sm"><tbody>' +
+                    // Create Popup-Message
+                    var _message = online_status + '<h6>' + sensor.description + '</h6>' +
+                        '<table class="table-sm"><tbody>' +
                         '<tr>' +
-                            '<th>' + '{{ \'DEVICE_ID\' | translate }}' + '</th>' +
-                            '<td><kbd>' + sensor.device_id + '</kbd></td>' +
+                        '<th>' + '{{ \'DEVICE_ID\' | translate }}' + '</th>' +
+                        '<td><kbd>' + sensor.device_id + '</kbd></td>' +
                         '</tr>' +
                         '<tr>' +
-                            '<th>' + '{{ \'WATER_LEVEL\' | translate }}' + '</th>' +
-                            '<td>' + water_level + '</td>' +
+                        '<th>' + '{{ \'WATER_LEVEL\' | translate }}' + '</th>' +
+                        '<td>' + water_level + '</td>' +
                         '</tr>' +
-                    '</tbody></table><br>' +
-                    '<center>' +
-                        '<button ng-click="showDetails(' + sensor.sensor_id + ')" type="button" class="form-control btn btn-primary btn-sm">{{ \'DETAILS\' | translate }}</a>'+
-                    '</center>';
+                        '</tbody></table><br>' +
+                        '<center>' +
+                        '<button ng-click="showDetails(' + sensor.sensor_id + ')" type="button" class="form-control btn btn-primary btn-sm">{{ \'DETAILS\' | translate }}</a>' +
+                        '</center>';
 
-                $scope.markers.push(
-                    {
+                    $scope.markers.push({
                         layer: 'sensors',
                         lat: sensor.lat,
                         lng: sensor.lng,
                         focus: false,
                         draggable: false,
                         icon: $scope.successIcon,
-                        message : _message,
-                        getMessageScope: function () { return $scope; },
+                        message: _message,
+                        getMessageScope: function() {
+                            return $scope;
+                        },
                         compileMessage: true,
-                        popupOptions : {
-                            closeButton : true
+                        popupOptions: {
+                            closeButton: true
                         },
                         enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
-                    }
-                );
-            })
-            .error(function(err) {
-                $scope.err = err;
-            });
+                    });
+                })
+                .error(function(err) {
+                    $scope.err = err;
+                });
 
         });
     };
@@ -204,26 +204,26 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
         successIcon: {
             type: 'awesomeMarker',
             markerColor: 'green',
-            prefix : 'fa',
-            icon : 'cube'
+            prefix: 'fa',
+            icon: 'cube'
         },
         warningIcon: {
             type: 'awesomeMarker',
             markerColor: 'orange',
-            prefix : 'fa',
-            icon : 'cube'
+            prefix: 'fa',
+            icon: 'cube'
         },
         dangerIcon: {
             type: 'awesomeMarker',
             markerColor: 'red',
-            prefix : 'fa',
-            icon : 'cube'
+            prefix: 'fa',
+            icon: 'cube'
         },
         offlineIcon: {
             type: 'awesomeMarker',
             markerColor: 'lightgrey',
-            prefix : 'fa',
-            icon : 'cube'
+            prefix: 'fa',
+            icon: 'cube'
         },
         events: {
             map: {
@@ -238,7 +238,7 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
      * Center marker when clicked
      * (Map function)
      */
-    $scope.$on("leafletDirectiveMarker.map.click", function(event, args){
+    $scope.$on("leafletDirectiveMarker.map.click", function(event, args) {
         $scope.center = {
             lat: args.leafletEvent.latlng.lat,
             lng: args.leafletEvent.latlng.lng,
@@ -251,7 +251,7 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
      * Zoom to and center marker when double clicked
      * (Map function)
      */
-    $scope.$on("leafletDirectiveMarker.map.dblclick", function(event, args){
+    $scope.$on("leafletDirectiveMarker.map.dblclick", function(event, args) {
         $scope.center = {
             lat: args.leafletEvent.latlng.lat,
             lng: args.leafletEvent.latlng.lng,
