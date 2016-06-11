@@ -110,7 +110,7 @@ exports.process = function(message) {
                                 console.log("Message send at time " + new Date());
                             });
                             // change increased_frequency value
-                            client.query('UPDATE Sensors SET increased_frequency=true WHERE sensor_id=$1;', [
+                            client.query('UPDATE Sensors SET increased_frequency=true WHERE device_id=$1;', [
                                 sensor.sensor_id
                             ], function(err, result) {
                                 done();
@@ -141,7 +141,7 @@ exports.process = function(message) {
                                 console.log("Message send at time " + new Date());
                             });
                             // change increased_frequency value
-                            client.query('UPDATE Sensors SET increased_frequency=false WHERE sensor_id=$1;', [
+                            client.query('UPDATE Sensors SET increased_frequency=false WHERE device_id=$1;', [
                                 sensor.sensor_id
                             ], function(err, result) {
                                 done();
