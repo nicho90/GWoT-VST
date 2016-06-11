@@ -26,7 +26,7 @@ exports.request = function(req, res) {
 			// Start pipeline
             async.waterfall([
 
-                // 1. Check if sensor exist
+                // 1. Check if Sensor exists
                 function(callback) {
 
 					// Database Query
@@ -40,7 +40,7 @@ exports.request = function(req, res) {
 		                    return console.error(errors.database.error_2.message, err);
 		                } else {
 
-		                    // Check if sensor exists
+		                    // Check if Sensor exists
 		                    if(result.rows.length === 0) {
 		                        res.status(errors.query.error_2.code).send(errors.query.error_2);
 		                        return console.error(errors.query.error_2.message);

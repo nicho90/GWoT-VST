@@ -23,6 +23,8 @@ exports.request = function(req, res){
 			return console.error(errors.database.error_1.message, err);
 		} else {
 
+			// TODO: Check if Sensor exists
+
 			// PostgreSQL-timestamp: "2016-05-17 00:20:53.248363+02"
 			var now = moment();
 			var begin = "";

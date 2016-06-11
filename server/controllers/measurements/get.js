@@ -33,8 +33,15 @@ exports.request = function(req, res) {
                     return console.error(errors.database.error_2.message, err);
                 } else {
 
-                    // Send Result
-                    res.status(200).send(result.rows[0]);
+                    // Check if Measurement exists
+                    if(result.rows.length === 0) {
+                        res.status(errors.query.error_3.code).send(errors.query.error_3);
+                        return console.error(errors.query.error_3.message);
+                    } else {
+
+                        // Send Result
+                        res.status(200).send(result.rows[0]);
+                    }
                 }
             });
         }

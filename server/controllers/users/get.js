@@ -48,11 +48,10 @@ exports.request = function(req, res){
 								return console.error(errors.database.error_2.message, err);
 							} else {
 
-								// Check if user exists
+								// Check if User exists
 								if(result.rows.length === 0) {
-									res.status(404).send({
-										message: 'User not found'
-									});
+									res.status(errors.query.error_1.code).send(errors.query.error_1);
+				                    return console.error(errors.query.error_1.message);
 								} else {
 
 									// Attach Access-Token

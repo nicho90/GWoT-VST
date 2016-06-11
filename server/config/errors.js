@@ -88,6 +88,18 @@ module.exports = {
         error_11: {
             code: 404,
             message: 'Language not found'
+        },
+        error_12: {
+            code: 404,
+            message: 'Water-Body not found'
+        },
+        error_13: {
+            code: 404,
+            message: 'Emergency-Station not found'
+        },
+        error_14: {
+            code: 404,
+            message: 'Service-Station not found'
         }
     },
     development: {

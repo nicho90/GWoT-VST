@@ -51,7 +51,7 @@ exports.request = function(req, res){
 								return console.error(errors.database.error_2.message, err);
 							} else {
 
-								// Check if threshold exists
+								// Check if Threshold exists
 								if(result.rows.length === 0) {
 									res.status(errors.query.error_5.code).send(errors.query.error_5);
 									return console.error(errors.query.error_5.message);
