@@ -111,7 +111,7 @@ exports.process = function(message) {
                             });
                             // change increased_frequency value
                             client.query('UPDATE Sensors SET increased_frequency=true WHERE device_id=$1;', [
-                                sensor.sensor_id
+                                sensor.device_id
                             ], function(err, result) {
                                 done();
 
@@ -142,7 +142,7 @@ exports.process = function(message) {
                             });
                             // change increased_frequency value
                             client.query('UPDATE Sensors SET increased_frequency=false WHERE device_id=$1;', [
-                                sensor.sensor_id
+                                sensor.device_id
                             ], function(err, result) {
                                 done();
 
