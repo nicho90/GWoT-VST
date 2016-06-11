@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-var list_public = require('../controllers/sensors/list_public');
-var list_private = require('../controllers/sensors/list_private');
+var list = require('../controllers/sensors/list');
+var list_user = require('../controllers/sensors/list_user');
 var post = require('../controllers/sensors/post');
 var get_public = require('../controllers/sensors/get_public');
 var get_private = require('../controllers/sensors/get_private');
@@ -12,11 +12,11 @@ var put_private = require('../controllers/sensors/put_private');
 var delete_private = require('../controllers/sensors/delete_private');
 
 
-// LIST (only public sensors)
-router.get('/sensors', list_public.request);
+// LIST
+router.get('/sensors', list.request);
 
-// LIST (private sensors & optional public sensors)
-router.get('/users/:username/sensors', list_private.request);
+// LIST (only created sensors of the user)
+router.get('/users/:username/sensors', list_user.request);
 
 // POST
 router.post('/users/:username/sensors', post.request);
