@@ -73,15 +73,14 @@ exports.request = function(req, res){
 				// Decode Token
 				jwt.verify(req.headers.authorization, secret.key, function(err, decoded) {
 					if (err) {
-						res.status(401).json({
-							message: 'Failed to authenticate with this token'
-						});
+						res.status(errors.authentication.error_2.code).send(errors.authentication.error_2);
+						return console.error(errors.authentication.error_2.message);
 			        }
 
 					// Get username from authenticated user
 					var username = decoded.username;
 
-					// Check if User is Admin
+					// Check if authenticated user is admin
 					if(username === db.admin) {
 
 						// SELECT ALL SENSORS

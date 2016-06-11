@@ -39,7 +39,7 @@ exports.request = function(req, res){
 						// Get username from authenticated user
 						var username = decoded.username;
 
-						// Check if authenticated user is right user or admin
+						// Check if authenticated user is the right user or admin
 						if(username === req.params.username || username === db.admin) {
 
 							// Database Query
