@@ -1,36 +1,31 @@
 {
-  "name": "gwot-vst-rpi",
-  "version": "1.0.0",
-  "description": "The Geospatial Web of Things, is a project of the Institute for Geoinformatics Münster (Germany), which took place in summer term 2016. This `package.json` belongs to Virtual Smart Things Group and focuses on the Raspberry Pi, which is a part of the overall architecture. The RPi uses a conneted ultra sonic sensor to measure the water gauge and sends the data to a server for post-processing and storing. A WebClient will visualize this data as timeseries.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "GWoT-VST-Group",
-  "contributors": [
-    {
-      "name": "Nicholas Schiestel",
-      "email": "n.schiestel@uni-muenster.de"
+    "name": "gwot-vst-rpi",
+    "version": "1.0.0",
+    "description": "The Geospatial Web of Things, is a project of the Institute for Geoinformatics Münster (Germany), which took place in summer term 2016. This `package.json` belongs to Virtual Smart Things Group and focuses on the Raspberry Pi, which is a part of the overall architecture. The RPi uses a conneted ultra sonic sensor to measure the water gauge and sends the data to a server for post-processing and storing. A WebClient will visualize this data as timeseries.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
-    {
-      "name": "Heinrich Löwen",
-      "email": "loewen.heinrich@uni-muenster.de"
-    },
-    {
-      "name": "Timm Kühnel",
-      "email": "t_kueh06@uni-muenster.de"
-    },
-    {
-      "name": "Rehan Aziz Chaudhary",
-      "email": "r_chau02@uni-muenster.de"
+    "author": "GWoT-VST-Group",
+    "contributors": [{
+        "name": "Nicholas Schiestel",
+        "email": "n.schiestel@uni-muenster.de"
+    }, {
+        "name": "Heinrich Löwen",
+        "email": "loewen.heinrich@uni-muenster.de"
+    }, {
+        "name": "Timm Kühnel",
+        "email": "t_kueh06@uni-muenster.de"
+    }, {
+        "name": "Rehan Aziz Chaudhary",
+        "email": "r_chau02@uni-muenster.de"
+    }],
+    "license": "MIT",
+    "dependencies": {
+        "geojson": "^0.3.0",
+        "gpio": "^0.2.7",
+        "ip": "^1.1.3",
+        "mqtt": "^1.10.0",
+        "r-pi-usonic": "^2.5.0"
     }
-  ],
-  "license": "MIT",
-  "dependencies": {
-    "geojson": "^0.3.0",
-    "gpio": "^0.2.7",
-    "ip": "^1.1.3",
-    "mqtt": "^1.10.0",
-    "r-pi-usonic": "^2.5.0"
-  }
 }

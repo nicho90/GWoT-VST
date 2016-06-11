@@ -1,4 +1,4 @@
-// Require packages
+// Required packages
 var usonic = require("r-pi-usonic");
 var gpio = require("gpio");
 var mqtt = require("mqtt");
@@ -123,7 +123,7 @@ var measurementTimer = {
         this.start();
     },
     blink: function() {
-        led.set()
+        led.set();
         setTimeout(function() {
             led.set(0);
         }, 100);
@@ -221,7 +221,7 @@ var verifySD = function(message) {
         setMeasurementTimer(scheduledTimer.interval / 5);
         resetScheduledTimer();
     }
-}
+};
 
 
 /**
@@ -253,7 +253,8 @@ var verifyRT = function(message) {
         resetRealtimeTimer();
         resetScheduledTimer();
     }
-}
+};
+
 
 /**
  * Publish the ip of the PI
@@ -287,8 +288,8 @@ client.on('message', function(topic, message) {
                 break;
             default:
                 console.log("MQTT receive invalid topic.");
-        };
+        }
     } else {
-        console.log("MQTT receive invalid id.")
+        console.log("MQTT receive invalid id.");
     }
 });

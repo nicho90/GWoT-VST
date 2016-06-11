@@ -32,7 +32,7 @@ if (broker !== undefined) {
                         console.error(errors.database.error_4.message, err);
                         callback(new Error(errors.database.error_4.message));
                     } else {
-                        console.log("Online status changes for " + client.id + ": true".);
+                        console.log("Online status changes for " + client.id + ": true");
                     }
                 });
             }
@@ -93,6 +93,7 @@ if (broker !== undefined) {
         }
 
     });
-};
+}
+
 
 module.exports = broker;

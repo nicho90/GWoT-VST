@@ -32,7 +32,7 @@ exports.process = function(message) {
                 // 1. Calculate Median
                 function(callback) {
                     var measurements = JSON.parse(message).features;
-                    var measurement = median(measurements); //Select the median measurement
+                    var measurement = median(measurements); // Select the median measurement
                     callback(null, measurement);
                 },
 
@@ -89,27 +89,28 @@ exports.process = function(message) {
                     });
                 },
 
-                // 5. Check Sensor-Settings for threshold
+                // 5. Check Sensor-Settings for sensor-threshold
                 function(measurement, sensor, callback) {
                     console.log("Distance: " + measurement.properties.distance.value, "Water Level: " + (sensor.sensor_height-measurement.properties.distance.value), "Threshold: " + sensor.threshold_value, new Date());
 
                     var message;
                     if ((sensor.sensor_height-measurement.properties.distance.value) > sensor.threshold_value) {
 
-                        // only increase if not increased yet
+                        // Only increase if not increased yet
                         if (!sensor.increased_frequency) {
 
                             // Send MQTT-Message increase frequency
                             message = {
                                 topic: '/settings',
-                                payload: '{"device_id": "rpi-1","interval": ' + sensor.danger_frequency + '}', // String or a Buffer
+                                payload: '{"device_id": "' + sensor.device_id + '","interval": ' + sensor.danger_frequency + '}', // String or a Buffer
                                 qos: 1, // quality of service: 0, 1, or 2
                                 retain: true // or true
                             };
                             broker.publish(message, function() {
                                 console.log("Message send at time " + new Date());
                             });
-                            // change increased_frequency value
+
+                            // Change increased_frequency value
                             client.query('UPDATE Sensors SET increased_frequency=true WHERE sensor_id=$1;', [
                                 sensor.sensor_id
                             ], function(err, result) {
@@ -128,19 +129,21 @@ exports.process = function(message) {
 
                     } else {
 
-                        //only decrease if not decrease
+                        // Only decrease if not decrease
                         if (sensor.increased_frequency) {
+
                             // Send MQTT-Message decrease frequency
                             message = {
                                 topic: '/settings',
-                                payload: '{"device_id": "rpi-1","interval": ' + sensor.default_frequency + '}', // String or a Buffer
+                                payload: '{"device_id": "' + sensor.device_id + '","interval": ' + sensor.default_frequency + '}', // String or a Buffer
                                 qos: 1, // quality of service: 0, 1, or 2
                                 retain: true // or true
                             };
                             broker.publish(message, function() {
                                 console.log("Message send at time " + new Date());
                             });
-                            // change increased_frequency value
+
+                            // Change increased_frequency value
                             client.query('UPDATE Sensors SET increased_frequency=false WHERE sensor_id=$1;', [
                                 sensor.sensor_id
                             ], function(err, result) {
@@ -290,8 +293,8 @@ exports.process = function(message) {
 
 /**
  * Calculate Median from 5 measurement values
- * @param  {[type]} values [description]
- * @return {[type]}        [description]
+ * @param  values
+ * @return median
  */
 function median(values) {
     values.sort(function(a, b) {
