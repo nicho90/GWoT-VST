@@ -25,10 +25,10 @@ module.exports = {
         error_3: {
             code: 400,
             message: 'No valid query parameters'
-        }
+        },
         error_4: {
-          code: 404,
-          message: 'Client not found'
+            code: 404,
+            message: 'Client not found'
         }
     },
     authentication: {
@@ -41,6 +41,10 @@ module.exports = {
             message: 'Failed to authenticate with this token'
         },
         error_3: {
+            code: 401,
+            message: 'Failed to authenticate, no token has been sent'
+        },
+        error_4_: { // TODO: Check old error_3 functions!
             code: 401
         }
     },

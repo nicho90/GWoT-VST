@@ -18,11 +18,13 @@ if (broker !== undefined) {
     // Client Connect
     broker.on('clientConnected', function(client) {
         console.log('Client connected', client.id);
+        
         // Connect to Database
         pg.connect(url, function(err, pgclient, done) {
             if (err) {
                 return console.error(errors.database.error_1.message, err);
             } else {
+
                 // Database query
                 pgclient.query('UPDATE Sensors SET online_status=true WHERE device_id=$1;', [
                     client.id
@@ -43,11 +45,13 @@ if (broker !== undefined) {
     // Client Disconnect
     broker.on('clientDisconnected', function(client) {
         console.log('Client disconnected', client.id);
+
         // Connect to Database
         pg.connect(url, function(err, pgclient, done) {
             if (err) {
                 return console.error(errors.database.error_1.message, err);
             } else {
+
                 // Database query
                 pgclient.query('UPDATE Sensors SET online_status=false WHERE device_id=$1;', [
                     client.id
@@ -89,7 +93,7 @@ if (broker !== undefined) {
         } else if (packet.topic == "/sensor/realtime/measurement") {
             console.log('Message realtime measurement', packet.payload.toString());
             // Here are the realtime measurment messages incomming
-            // TODO handle incomming data
+            // TODO: send Websocket-Message
         }
 
     });
