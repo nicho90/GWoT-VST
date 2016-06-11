@@ -24,7 +24,7 @@ if (broker !== undefined) {
                 return console.error(errors.database.error_1.message, err);
             } else {
                 // Database query
-                pgclient.query('UPDATE Sensors SET online_status=true WHERE sensor_id=$1;', [
+                pgclient.query('UPDATE Sensors SET online_status=true WHERE device_id=$1;', [
                     client.id
                 ], function(err, result) {
                     done();
@@ -49,7 +49,7 @@ if (broker !== undefined) {
                 return console.error(errors.database.error_1.message, err);
             } else {
                 // Database query
-                pgclient.query('UPDATE Sensors SET online_status=false WHERE sensor_id=$1;', [
+                pgclient.query('UPDATE Sensors SET online_status=false WHERE device_id=$1;', [
                     client.id
                 ], function(err, result) {
                     done();
