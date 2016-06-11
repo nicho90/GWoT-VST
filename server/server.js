@@ -199,6 +199,7 @@ if(db_settings.status && email_settings.status){
     var water_bodies = require ('./routes/water_bodies');
     var sensors = require ('./routes/sensors');
     var related_sensors = require ('./routes/related_sensors');
+    var statistics = require ('./routes/statistics');
     var measurements = require ('./routes/measurements');
     var timeseries = require ('./routes/timeseries');
     var thresholds = require ('./routes/thresholds');
@@ -214,6 +215,7 @@ if(db_settings.status && email_settings.status){
     app.use('/api', water_bodies);
     app.use('/api', sensors);
     app.use('/api', related_sensors);
+    app.use('/api', statistics);
     app.use('/api', measurements);
     app.use('/api', timeseries);
     app.use('/api', thresholds);
