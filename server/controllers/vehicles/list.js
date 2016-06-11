@@ -43,6 +43,10 @@ exports.request = function(req, res) {
                         category += "'CAR'";
                         break;
                     }
+                    case 'bus': {
+                        category += "'BUS'";
+                        break;
+                    }
                     case 'truck': {
                         category += "'TRUCK'";
                         break;
