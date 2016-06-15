@@ -33,10 +33,12 @@ app.config(function($logProvider) {
     $logProvider.debugEnabled(false);
 });
 
+
 /**
  * Sockets
  */
 app.factory('$socket', ['$rootScope', function($rootScope) {
+
     var socket = io.connect();
 
     return {
@@ -49,6 +51,8 @@ app.factory('$socket', ['$rootScope', function($rootScope) {
         }
     };
 }]);
+
+
 
 /**
  * Start application
