@@ -106,7 +106,6 @@ exports.request = function(req, res){
 
 									// Get username from authenticated user
 									var username = decoded.username;
-									console.log(username);
 
 									// Check if authenticated user is the right user
 									if(username === sensor.creator) {

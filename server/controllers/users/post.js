@@ -41,14 +41,14 @@ exports.request = function(req, res) {
 	        } else {
 
 	            // Database Query
-	            client.query('INSERT INTO Users VALUES(now(), now(), $1, $2, $3, $4, $5, $6);', [
+	            client.query('INSERT INTO Users VALUES(now(), now(), $1, $2, $3, $4, $5, $6, $7);', [
 	                req.body.username,
 	                req.body.password,
 	                req.body.email_address,
 	                req.body.first_name,
 	                req.body.last_name,
-	                // TODO: Add req.body.language,
-	                'user' // User-Role (Standard)
+	                req.body.language,
+	                'user' // User-Role (Default)
 	            ], function(err, result) {
 	                done();
 
@@ -68,14 +68,13 @@ exports.request = function(req, res) {
 								return console.error(errors.database.error_2.message, err);
 	                        } else {
 
-	                            // Check if user exists
+	                            // Check if User exists
 	                            if (result.rows.length === 0) {
-	                                res.status(404).send({
-	                                    'Error': 'User not found'
-	                                });
+									res.status(errors.query.error_1.code).send(errors.query.error_1);
+									return console.error(errors.query.error_1.message);
 	                            } else {
 
-	                                // Create Access-Token
+	                                // Create and attach Access-Token
 	                                var user = result.rows[0];
 	                                user.token = jwt.sign({
 	                                    username: user.username,
@@ -112,7 +111,7 @@ exports.request = function(req, res) {
 	                                        if (error) {
 	                                            return console.log(error);
 	                                        } else {
-	                                            console.log('Message sent: ' + info.response);
+	                                            console.log('Email has been sent: ' + info.response);
 	                                        }
 	                                    });
 	                                });

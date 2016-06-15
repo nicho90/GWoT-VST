@@ -13,6 +13,8 @@ var verifier = require('./../../config/verifier');
 // PUT
 exports.request = function(req, res) {
 
+    // TODO: Schema-Validation
+
     // Create URL
     var url = "postgres://" + db_settings.user + ":" + db_settings.password + "@" + db_settings.host + ":" + db_settings.port + "/" + db_settings.database_name;
 
