@@ -52,7 +52,8 @@ exports.request = function(req, res){
 					"sensors.created, " +
 					"sensors.updated " +
 					"FROM Sensors sensors JOIN Water_Bodies water_bodies ON sensors.water_body_id=water_bodies.water_body_id " +
-					"WHERE sensors.private=false;";
+					"WHERE sensors.private=false " +
+					"ORDER BY sensors.sensor_id ASC;";
 
 				// Database Query
 				client.query(query, function(err, result) {
@@ -109,7 +110,7 @@ exports.request = function(req, res){
 							"sensors.created, " +
 							"sensors.updated " +
 						"FROM Sensors sensors JOIN Water_Bodies water_bodies ON sensors.water_body_id=water_bodies.water_body_id " +
-						"ORDER BY device_id;";
+						"ORDER BY sensors.sensor_id ASC;";
 
 						// Database Query
 						client.query(query, function(err, result) {
@@ -207,7 +208,8 @@ exports.request = function(req, res){
 									"sensors.updated " +
 								"FROM Sensors sensors JOIN Water_Bodies water_bodies ON sensors.water_body_id=water_bodies.water_body_id " +
 								"WHERE sensors.creator=$1" +
-							") AS Sensors;";
+							") AS Sensors " +
+							"ORDER BY sensor_id ASC;";
 
 						// Database Query
 						client.query(query, [
