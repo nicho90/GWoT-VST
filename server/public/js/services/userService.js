@@ -20,18 +20,18 @@ app.factory('$userService', function($http, config) {
         },
         get: function(token, username){
             return $http.get(config.apiURL + "/users/" + username, {
-                headers: { 'token': token }
+                headers: { 'authorization': token }
             });
         },
         edit: function(token, username, data){
             return $http.put(config.apiURL + "/users/" + username, {
-                headers: { 'token': token },
+                headers: { 'authorization': token },
                 body: data
             });
         },
         delete: function(token, username){
             return $http.delete(config.apiURL + "/users/" + username, {
-                headers: { 'token': token }
+                headers: { 'authorization': token }
             });
         }
     };

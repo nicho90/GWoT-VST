@@ -6,30 +6,49 @@ var app = angular.module("sensorService", []);
 app.factory('$sensorService', function($http, config) {
 
     return {
-        list_public: function() {
-            return $http.get(config.apiURL + "/sensors");
-        },
-        list_private: function(token, username, query) {
-            return $http.get(config.apiURL + "/users/" + username + "/sensors" + query, {
-                headers: { 'token': token }
+
+        list: function(token) {
+            return $http.get(config.apiURL + "/sensors", {
+                headers: { 'authorization': token }
             });
         },
-        get_public: function(sensor_id) {
-            return $http.get(config.apiURL + "/sensors/" + sensor_id);
+        get: function(token, sensor_id) {
+            return $http.get(config.apiURL + "/sensors/" + sensor_id, {
+                headers: { 'authorization': token }
+            });
         },
-        get_private: function(token, username, sensor_id) {
+
+        // Sensors of a User
+        user_list: function(token, username) {
+            return $http.get(config.apiURL + "/users/" + username + "/sensors", {
+                headers: { 'authorization': token }
+            });
+        },
+        user_get: function(token, username, sensor_id) {
             return $http.get(config.apiURL + "/users/" + username + "/sensors/" + sensor_id, {
-                headers: { 'token': token }
+                headers: { 'authorization': token }
             });
         },
-        get_related_sensors: function(sensor_id) {
-            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/related_sensors");
+
+        // Related (nearby) Sensors of a Sensor
+        get_related_sensors: function(token, sensor_id) {
+            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/related_sensors", {
+                headers: { 'authorization': token }
+            });
         },
-        get_emergency_stations: function(sensor_id) {
-            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/emergency_stations");
+
+        // Nearby Emergency-Stations of a Sensor
+        get_emergency_stations: function(token, sensor_id) {
+            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/emergency_stations", {
+                headers: { 'authorization': token }
+            });
         },
-        get_service_stations: function(sensor_id) {
-            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/service_stations");
+
+        // Nearby Service-Stations of a Sensor
+        get_service_stations: function(token, sensor_id) {
+            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/service_stations", {
+                headers: { 'authorization': token }
+            });
         }
     };
 });
