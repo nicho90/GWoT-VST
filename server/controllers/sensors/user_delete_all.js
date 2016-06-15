@@ -43,7 +43,7 @@ exports.request = function(req, res){
 						if(username === req.params.username || username === db.admin) {
 
 							// Database Query
-			                client.query('SELECT * FROM users WHERE username=$1;', [
+			                client.query('SELECT * FROM Users WHERE username=$1;', [
 			                    req.params.username
 			                ], function(err, result) {
 			                    done();

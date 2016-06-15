@@ -34,7 +34,7 @@ exports.request = function(req, res){
             } else {
 
                 // Database Query
-                client.query('SELECT * FROM users WHERE username=$1;', [
+                client.query('SELECT * FROM Users WHERE username=$1;', [
                     req.body.username
                 ], function(err, result) {
                     done();
