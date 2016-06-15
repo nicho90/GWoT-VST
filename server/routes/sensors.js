@@ -11,7 +11,7 @@ var delete_all = require('../controllers/sensors/delete_all');
 var user_list = require('../controllers/sensors/user_list');
 var user_post = require('../controllers/sensors/user_post');
 var user_get = require('../controllers/sensors/user_get');
-//var user_put = require('../controllers/sensors/user_put');
+var user_put = require('../controllers/sensors/user_put');
 var user_delete = require('../controllers/sensors/user_delete');
 var user_delete_all = require('../controllers/sensors/user_delete_all');
 
@@ -48,7 +48,7 @@ router.post('/users/:username/sensors', user_post.request);
 router.get('/users/:username/sensors/:sensor_id', user_get.request);
 
 // PUT
-// router.put('/users/:username/sensors/:sensor_id', user_put.request);
+router.put('/users/:username/sensors/:sensor_id', user_put.request);
 
 // DELETE
 router.delete('/users/:username/sensors/:sensor_id', user_delete.request);
