@@ -10,5 +10,6 @@ server/public/docs/*
 *.directory
 *.idea
 *.vsc
+*.Rhistory
 npm-debug.log
 .idea/vcs.xml
