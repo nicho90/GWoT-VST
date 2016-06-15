@@ -9,23 +9,18 @@ app.controller("SensorListController", function($scope, $rootScope, $location, $
      */
     $scope.load = function() {
 
-        if($rootScope.authenticated_user) {
-
-            // Request public sensors and private sensors of the authenticated user
-            $sensorService.list_private($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, "?public=true").success(function(response) {
-                $scope.sensors = response;
-            }).error(function(err) {
-                $scope.err = err;
-            });
-        } else {
-
-            // Request only public sensors
-            $sensorService.list_public().success(function(response) {
-                $scope.sensors = response;
-            }).error(function(err) {
-                $scope.err = err;
-            });
+        // Check if User is authenticated
+        var token = "";
+        if ($rootScope.authenticated_user) {
+            token = $rootScope.authenticated_user.token;
         }
+
+        // Request only public sensors (or also private sensors of an user, if the user is authenticated)
+        $sensorService.list(token).success(function(response) {
+            $scope.sensors = response;
+        }).error(function(err) {
+            $scope.err = err;
+        });
 
     };
 
@@ -41,8 +36,8 @@ app.controller("SensorListController", function($scope, $rootScope, $location, $
     /**
      * Edit a Sensor
      */
-    $scope.edit = function(){
-        // TODO
+    $scope.edit = function(sensor_id){
+        $location.url("/sensors/" + sensor_id + "/edit");
     };
 
 
