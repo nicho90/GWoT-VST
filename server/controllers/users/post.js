@@ -47,6 +47,7 @@ exports.request = function(req, res) {
 	                req.body.email_address,
 	                req.body.first_name,
 	                req.body.last_name,
+	                // TODO: Add req.body.language,
 	                'user' // User-Role (Standard)
 	            ], function(err, result) {
 	                done();

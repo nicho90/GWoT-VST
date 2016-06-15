@@ -83,7 +83,7 @@ exports.request = function(req, res){
 												"sensors.created, " +
 												"sensors.updated " +
 											"FROM Sensors sensors JOIN Water_Bodies water_bodies ON sensors.water_body_id=water_bodies.water_body_id " +
-											"WHERE sensors.creator=$1;";
+											"WHERE sensors.creator=$1 ORDER BY sensors.sensor_id ASC;";
 
 										// Database Query
 										client.query(query, [
