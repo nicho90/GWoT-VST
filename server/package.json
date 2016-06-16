@@ -30,7 +30,6 @@
   "dependencies": {
     "ajv": "^4.0.5",
     "async": "^2.0.0-rc.5",
-    "async-waterfall": "^0.1.5",
     "body-parser": "^1.15.0",
     "commander": "^2.9.0",
     "cookie": "^0.2.3",
