@@ -14,6 +14,7 @@ exports.process = function(message) {
     var path = require('path');
     var fs = require('fs');
     var mustache = require('mustache');
+    var io = require('../server.js').io;
 
 
     // Create URL
@@ -91,10 +92,10 @@ exports.process = function(message) {
 
                 // 5. Check Sensor-Settings for sensor-threshold
                 function(measurement, sensor, callback) {
-                    console.log("Distance: " + measurement.properties.distance.value, "Water Level: " + (sensor.sensor_height-measurement.properties.distance.value), "Threshold: " + sensor.threshold_value, new Date());
+                    console.log("Distance: " + measurement.properties.distance.value, "Water Level: " + (sensor.sensor_height - measurement.properties.distance.value), "Threshold: " + sensor.threshold_value, new Date());
 
                     var message;
-                    if ((sensor.sensor_height-measurement.properties.distance.value) > sensor.threshold_value) {
+                    if ((sensor.sensor_height - measurement.properties.distance.value) > sensor.threshold_value) {
 
                         // Only increase if not increased yet
                         if (!sensor.increased_frequency) {
@@ -194,23 +195,23 @@ exports.process = function(message) {
                     async.each(users, function(user, callback) {
 
                         var query = "" +
-                                "(SELECT " +
-                                    "subscriptions.subscription_id, " +
-                                    "subscriptions.threshold_id, " +
-                                    "thresholds.description, " +
-                                    "thresholds.category, " +
-                                    "'warning' AS level " + // warning-level
-                                    "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                                    "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.username='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") >= (" + sensor.crossing_height + " + thresholds.warning_threshold) AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.critical_threshold)) " +
+                            "(SELECT " +
+                            "subscriptions.subscription_id, " +
+                            "subscriptions.threshold_id, " +
+                            "thresholds.description, " +
+                            "thresholds.category, " +
+                            "'warning' AS level " + // warning-level
+                            "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
+                            "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.username='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") >= (" + sensor.crossing_height + " + thresholds.warning_threshold) AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.critical_threshold)) " +
                             "UNION ALL " + // Merge with critical-level
-                                "(SELECT " +
-                                    "subscriptions.subscription_id, " +
-                                    "subscriptions.threshold_id, " +
-                                    "thresholds.description, " +
-                                    "thresholds.category, " +
-                                    "'danger' AS level " + // danger-level
-                                    "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                                    "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.username='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") >= (" + sensor.crossing_height + " + thresholds.critical_threshold));";
+                            "(SELECT " +
+                            "subscriptions.subscription_id, " +
+                            "subscriptions.threshold_id, " +
+                            "thresholds.description, " +
+                            "thresholds.category, " +
+                            "'danger' AS level " + // danger-level
+                            "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
+                            "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.username='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") >= (" + sensor.crossing_height + " + thresholds.critical_threshold));";
 
                         // Database query
                         client.query(query, function(err, result) {
@@ -259,8 +260,15 @@ exports.process = function(message) {
                                         });*/
                                     });
 
-                                    // TODO:
+                                    // TODO: test
                                     // - Emit Websocket-notification if result.rows.lenght > 0!
+                                    io.on('connection', function(socket) {
+                                        for (row in result.rows) {
+                                            socket.emit('/notification/threshold', {
+                                                row
+                                            });
+                                        }
+                                    });
 
                                     callback();
                                 } else {

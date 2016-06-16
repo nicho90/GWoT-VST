@@ -14,6 +14,7 @@ exports.process = function(message) {
     var path = require('path');
     var fs = require('fs');
     var mustache = require('mustache');
+    var io = require('../server.js').io;
 
     // Start pipeline
     async.waterfall([
@@ -66,7 +67,12 @@ exports.process = function(message) {
 
             // 3. Forward message via websockets
             function(measurement, callback) {
-                //TODO
+                //TODO test
+                io.on('connection', function(socket) {
+                    socket.emit('/data/realtime', {
+                        measurement
+                    });
+                });
                 callback();
             }
 

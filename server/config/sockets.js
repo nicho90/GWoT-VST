@@ -4,12 +4,13 @@
 var io = require('../server.js').io;
 var broker = require('./mqtt-message-handler.js');
 
-console.log("Socket.io activated");
+//console.log("Socket.io activated", io);
 io.on('connection', function(socket) {
 
     console.log("Socket connected: "+ socket);
 
     //Testing
+    /*
     socket.on('test', function(data) {
         console.log("Socket received. Data:", data);
     });
@@ -17,6 +18,7 @@ io.on('connection', function(socket) {
     socket.emit('test', {
         test: "data"
     });
+    */
 
     //  Activating realtime measurements
     socket.on('/data/realtime', function(data) {

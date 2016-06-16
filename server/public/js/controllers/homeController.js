@@ -6,64 +6,51 @@ var app = angular.module("gwot-vst");
  */
 app.controller("HomeController", function($scope, $rootScope, config, $filter, $location, $translate, $sensorService, $measurementService, $socket) {
 
-  /**
-   * Sockets testing
-   */
-  $socket.on('test', function(data) {
-      console.log("Socket received. Data:", data);
-      //TODO
-  });
+    /**
+     * Sockets testing
+     */
+    /*
+    $socket.on('test', function(data) {
+        console.log("Socket received. Data:", data);
+        //TODO
+    });
 
-  $socket.emit('test', {
-      //TODO
-      test: "data"
-  });
+    $socket.emit('test', {
+        //TODO
+        test: "data"
+    });
+    */
 
-  /*
-   * Activate socket for thresholds
-   */
-  $socket.emit('/thresholds/activate', {
-      status: true
-  });
+    /*
+     * Activate socket for thresholds
+     */
+    $socket.emit('/thresholds/activate', {
+        status: true
+    });
 
-  /*
-   * Deactivate socket for thresholds
-   */
-  /*
-  $socket.emit('/thresholds/activate', {
-      status: false
-  });
-  */
+    /*
+     * Deactivate socket for thresholds
+     */
+    /*
+    $socket.emit('/thresholds/activate', {
+        status: false
+    });
+    */
 
-  /*
-   * Activate socket for realtime data
-   */
-  $socket.emit('/thresholds/activate', {
-      status: true
-  });
 
-  /*
-   * Dectivate socket for realtime data
-   */
-  /*
-  $socket.emit('/thresholds/activate', {
-      status: false
-  });
-  */
+    /*
+     * Receiving notifications when specific thresholds are reached
+     */
+    $socket.on('/notification/threshold', function(data) {
+        console.log("Threshold notification received: ", data);
+    });
 
-  /*
-   * Receiving notifications when specific thresholds are reached
-   */
-  $socket.on('/notification/threshold', function(data) {
-      console.log("Threshold notification received");
-  });
-
-  /*
-   * Receiving realtime data
-   */
-  $socket.on('/notification/threshold', function(data) {
-      console.log("Threshold notification received");
-  });
+    /*
+     * Receiving realtime data
+     */
+    $socket.on('/data/realtime', function(data) {
+        console.log("Realtime data received");
+    });
 
 
     /**
