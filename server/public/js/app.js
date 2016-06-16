@@ -3,6 +3,7 @@ var app = angular.module("gwot-vst", [
         // External Modules
         //"ngRoute",
         "pascalprecht.translate",
+        "btford.socket-io",
 
         // Own Modules
         //"routes"
@@ -15,6 +16,7 @@ var app = angular.module("gwot-vst", [
 /**
  * Sockets
  */
+ /*
 app.factory('$socket', ['$rootScope', function($rootScope) {
 
     var socket = io.connect();
@@ -29,7 +31,7 @@ app.factory('$socket', ['$rootScope', function($rootScope) {
         }
     };
 }]);
-
+*/
 
 // Start App
 app.run(function($translate) {
