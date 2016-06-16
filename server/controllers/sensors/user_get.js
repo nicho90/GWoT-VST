@@ -7,7 +7,6 @@ var secret = require('./../../config/secret');
 var db = require('./../../config/db');
 var db_settings = require('../../server.js').db_settings;
 var errors = require('./../../config/errors');
-var verifier = require('./../../config/verifier');
 
 
 // GET

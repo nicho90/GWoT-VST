@@ -6,7 +6,6 @@ var jwt = require('jsonwebtoken');
 var secret = require('./../../config/secret');
 var db_settings = require('../../server.js').db_settings;
 var errors = require('./../../config/errors');
-var verifier = require('./../../config/verifier');
 
 
 // LIST
@@ -21,7 +20,7 @@ exports.request = function(req, res) {
             res.status(errors.database.error_1.code).send(errors.database.error_1);
             return console.error(errors.database.error_1.message, err);
         } else {
-            
+
             // Check for longitude & latitude
             if(req.query.lng && req.query.lat){
                 query = "SELECT " +

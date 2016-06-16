@@ -7,11 +7,12 @@ var secret = require('./../../config/secret');
 var db = require('./../../config/db');
 var db_settings = require('../../server.js').db_settings;
 var errors = require('./../../config/errors');
-var verifier = require('./../../config/verifier');
 
 
 // POST
 exports.request = function(req, res){
+
+	// TODO: Schema-Validation
 
 	// Create URL
 	var url = "postgres://" + db_settings.user + ":" + db_settings.password + "@" + db_settings.host + ":" + db_settings.port + "/" + db_settings.database_name;
