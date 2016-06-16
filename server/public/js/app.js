@@ -40,6 +40,7 @@ app.run(function($translate) {
 
     // Use Translator and set
     $translate.use('en_US');
+});
 
 /**
  * Log Provider
