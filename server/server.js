@@ -27,16 +27,16 @@ program
 
 // Check for local or in-production database
 var devStatus = false;
-if(program.dev){
+if (program.dev) {
     devStatus = true;
 }
 exports.dev = devStatus;
 
 // Check if Redis or MongoDB was selected as pub-sub-database, otherwise run only simple webserver
 var pubSubOption;
-if(program.redis){
+if (program.redis) {
     pubSubOption = "redis";
-} else if (program.mongodb){
+} else if (program.mongodb) {
     pubSubOption = "mongodb";
 } else {
     pubSubOption = "";
@@ -51,7 +51,7 @@ var db_settings = {
 };
 db_settings = _.extend(db_settings, require('./config/db'));
 
-if(program.postgres_user != "admin" && program.postgres_password != "password"){
+if (program.postgres_user != "admin" && program.postgres_password != "password") {
     db_settings.status = true;
     db_settings.user = program.postgres_user;
     db_settings.password = program.postgres_password;
@@ -60,11 +60,11 @@ if(program.postgres_user != "admin" && program.postgres_password != "password"){
 
 // Check if a SMTP-address and Password were set, otherwise run only simple webserver without REST-API
 var email_settings = {
-    status : false,
+    status: false,
     user: "",
     password: ""
 };
-if(program.email_user != "user@gmail.com" && program.email_password != "password"){
+if (program.email_user != "user@gmail.com" && program.email_password != "password") {
     email_settings.status = true;
     email_settings.user = program.email_user;
     email_settings.password = program.email_password;
@@ -124,7 +124,7 @@ if (program.socket_io) {
 /**
  * Start Email-Notification-Service
  */
-if(db_settings.status && email_settings.status){
+if (db_settings.status && email_settings.status) {
     console.log('Email-Notification-Service was started');
 }
 
@@ -133,7 +133,7 @@ if(db_settings.status && email_settings.status){
 /**
  * Use REST-API
  */
-if(db_settings.status && email_settings.status){
+if (db_settings.status && email_settings.status) {
 
     console.log('PostgreSQL-Database is listening at port ' + db_settings.port);
     console.log('REST-API is listening at endpoint /api/...');

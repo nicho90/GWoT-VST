@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<br>
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="jumbotron">
+
+            <form class="form-horizontal" ng-submit="create()">
+
+                <center>
+                    <h1 class="display-4">{{ 'REGISTRATION' | translate }}</h1>
+                </center>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="inputUsername">{{ 'USERNAME' | translate }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-user"></i>
+                            </span>
+                            <input class="form-control form-control" type="text" placeholder="{{ 'USERNAME' | translate }}" ng-model="user.username">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputPassword">{{ 'PASSWORD' | translate }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-lock"></i>
+                            </span>
+                            <input class="form-control form-control" type="password" placeholder="{{ 'PASSWORD' | translate }}" ng-model="user.password">
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <label for="inputEmailAddress">{{ 'EMAIL_ADDRESS' | translate }}</label>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <b>@</b>
+                    </span>
+                    <input type="email" class="form-control" ng-model="user.email_address" id="inputEmailAddress" placeholder="{{ 'EMAIL_ADDRESS' | translate }}">
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="inputFirstName">{{ 'FIRST_NAME' | translate }}</label>
+                        <input type="text" class="form-control" ng-model="user.first_name" id="inputFirstName" placeholder="{{ 'FIRST_NAME' | translate }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputLastName">{{ 'LAST_NAME' | translate }}</label>
+                        <input type="text" class="form-control" ng-model="user.last_name" id="inputLastName" placeholder="{{ 'LAST_NAME' | translate }}">
+                    </div>
+                </div>
+                <br>
+
+                <label for="selectLanguage">{{ 'LANGUAGE' | translate }}</label><br>
+                <select class="c-select form-control" id="selectLanguage" ng-model="user.language">
+                    <option value="en_US">{{ 'ENGLISH' | translate}}</option>
+                    <option value="de_DE">{{ 'GERMAN' | translate}}</option>
+                </select>
+                <br>
+                <hr>
+                <br>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <button class="form-control btn btn-secondary" type="button" role="button" ng-click="cancel()">
+                            {{ 'CANCEL' | translate }}
+                        </button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button class="form-control btn btn-success" type="submit" role="button">
+                            {{ 'SUBMIT' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>

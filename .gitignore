@@ -3,6 +3,8 @@ rpi/tests/testGPIO/node_modules/*
 server/node_modules/*
 server/public/node_modules/*
 server/public/lib/*
+server/public/node_modules/*
+server/public/api/*
 server/public/docs/*
 server/public/api/*
 *.DS_Store
@@ -10,5 +12,7 @@ server/public/api/*
 *.directory
 *.idea
 *.vsc
+*.Rhistory
+npm-debug.log
 .idea/vcs.xml
 npm-debug.log
