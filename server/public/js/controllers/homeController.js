@@ -3,11 +3,11 @@ var app = angular.module("gwot-vst");
 
 // Home Controller
 //app.controller("HomeController", function($socket, $scope, $translate) {
-app.controller("HomeController", function($scope, $translate) {
+app.controller("HomeController", function($scope, $translate, $socket) {
 
   /**
    * Sockets testing
-   *
+   */
   $socket.on('test', function(data) {
       console.log("Socket received. Data:", data);
       //TODO
@@ -16,7 +16,7 @@ app.controller("HomeController", function($scope, $translate) {
   $socket.emit('test', {
       //TODO
       test: "data"
-  });*/
+  });
 
 
   // Standard Query

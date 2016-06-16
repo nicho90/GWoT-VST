@@ -16,22 +16,11 @@ var app = angular.module("gwot-vst", [
 /**
  * Sockets
  */
- /*
-app.factory('$socket', ['$rootScope', function($rootScope) {
+app.factory('$socket', function (socketFactory) {
+  console.log(socketFactory);
+  return socketFactory();
+});
 
-    var socket = io.connect();
-
-    return {
-        on: function(eventName, callback) {
-            socket.on(eventName, callback);
-        },
-        emit: function(eventName, data) {
-            socket.emit(eventName, data);
-            console.log("Socket emitted. Topic:", eventName, "; Data:", data);
-        }
-    };
-}]);
-*/
 
 // Start App
 app.run(function($translate) {
