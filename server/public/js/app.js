@@ -1,7 +1,7 @@
 var app = angular.module("gwot-vst", [
 
         // External Modules
-        //"ngRoute",
+        "ngRoute",
         "pascalprecht.translate",
 
         // Own Modules
