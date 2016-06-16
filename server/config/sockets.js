@@ -2,6 +2,7 @@
  * Socket Message Handler
  */
 var io = require('../server.js').io;
+var broker = require('./mqtt-message-handler.js');
 
 console.log("Socket.io activated");
 io.on('connection', function(socket) {
@@ -15,6 +16,47 @@ io.on('connection', function(socket) {
 
     socket.emit('test', {
         test: "data"
+    });
+
+    //  Activating realtime measurements
+    socket.on('/data/realtime', function(data) {
+        /*
+         * Data should look like this:
+         {
+            device_id: [id],
+            status: [bool],
+         }
+         */
+        console.log("Socket received realtime adjusting message: ", data);
+        message = {
+            topic: '/data/realtime',
+            payload: '{"device_id": "' + data.device_id + '","status": ' + data.status + '}', // String or a Buffer
+            qa: 1, // quality of service: 0, 1, or 2
+            retain: true // or true
+        };
+        broker.publish(message);
+    });
+
+    // Activation threshold notifications
+    socket.on('/thresholds/activate', function(data) {
+        /*
+         * Data should look like this:
+         {
+            status: [bool],
+         }
+         */
+        console.log("Socket received realtime adjusting message: ", data);
+        // TODO save a global boolean that can be accessed in the postprocess-scheduled l.263
+    });
+
+    // Code for emitting threshold notifications
+    socket.emit('/notification/threshold', {
+        //TODO
+    });
+
+    // Code for emitting realtime data
+    socket.emit('/data/realtime', {
+        //TODO
     });
 
     // Add new webClient-User to web_clients[]

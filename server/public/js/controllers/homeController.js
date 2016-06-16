@@ -18,6 +18,52 @@ app.controller("HomeController", function($scope, $translate, $socket) {
       test: "data"
   });
 
+  /*
+   * Activate socket for thresholds
+   */
+  $socket.emit('/thresholds/activate', {
+      status: true
+  });
+
+  /*
+   * Deactivate socket for thresholds
+   */
+  /*
+  $socket.emit('/thresholds/activate', {
+      status: false
+  });
+  */
+
+  /*
+   * Activate socket for realtime data
+   */
+  $socket.emit('/thresholds/activate', {
+      status: true
+  });
+
+  /*
+   * Dectivate socket for realtime data
+   */
+  /*
+  $socket.emit('/thresholds/activate', {
+      status: false
+  });
+  */
+
+  /*
+   * Receiving notifications when specific thresholds are reached
+   */
+  $socket.on('/notification/threshold', function(data) {
+      console.log("Threshold notification received");
+  });
+
+  /*
+   * Receiving realtime data
+   */
+  $socket.on('/notification/threshold', function(data) {
+      console.log("Threshold notification received");
+  });
+
 
   // Standard Query
   $scope.query = {
