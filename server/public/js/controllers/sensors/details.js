@@ -63,7 +63,7 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
         $scope.data.dataset = [];
 
         // Check if query was defined
-        var query = "";
+        var query;
         if ($scope.query) {
             query = "?" + $scope.query.time + "=" + $scope.query.value;
         } else {
@@ -98,19 +98,18 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
         $scope.options.series.push({
             axis: "y",
             dataset: "dataset",
-            key: "distance", // TODO: water_level
+            key: "water_level",
             label: $scope.sensor.device_id,
-            color: "rgba(2, 117, 216, 1)",
-            //color: "hsla(88, 48%, 48%, 1)",
+            color: "rgba(2, 117, 216, 1)", //color: "hsla(88, 48%, 48%, 1)",
             type: [
                 "line",
                 "dot",
                 "area"
             ],
-            id: $scope.sensor.sensor_id,
+            id: $scope.sensor.sensor_id
             /*interpolation: { // round curves
                 mode: 'cardinal', tension: 0.7
-            },*/
+            }*/
         });
 
         // Check if query was defined
@@ -130,7 +129,7 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
             angular.forEach($scope.sensor.timeseries, function(timeserie, key) {
                 $scope.data.dataset.push({
                     timestamp: new Date(timeserie.measurement_date), // TODO: only data, no time!
-                    distance: timeserie.distance // TODO: water_level
+                    water_level: timeserie.water_level
                 });
             });
 
@@ -164,19 +163,8 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
             }
         }
     };
-
     $scope.data = {
         dataset: []
-            /*{
-                timestamp: new Date("2016-05-04"),
-                water_level: 0 // TODO: water_level
-            }, {
-                timestamp: new Date("2016-05-05"),
-                water_level: 0.993
-            }, {
-                timestamp: new Date("2016-05-06"),
-                water_level: 1.947
-            }*/
     };
 
 
@@ -250,6 +238,7 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
             enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
         });
     };
+
 
     /**
      * Update Markers
@@ -361,6 +350,10 @@ app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $ro
      */
     $scope.load();
     $scope.tab = 1;
+    $scope.query = {
+        time: "months",
+        value: 3
+    };
 
 
     /**
