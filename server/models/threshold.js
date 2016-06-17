@@ -4,7 +4,7 @@
  */
 module.exports = {
     "properties": {
-        "username": {
+        "creator": {
             "type": "string",
             "minLength": 2
         },
@@ -36,7 +36,7 @@ module.exports = {
         }
     },
     "required": [
-        "username",
+        "creator",
         "description",
         "warning_threshold",
         "critical_threshold",
