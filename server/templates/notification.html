@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+        <title>Threshold-Alert</title>
+
+        <style>
+            body {
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+
+            table thead, table tbody {
+                background-color: #FFFFFF;
+            }
+
+            thead {
+                border-bottom: 1px solid #333333;
+            }
+
+            .name {
+                color: #0275d8;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="jumbotron">
+                    <br>
+                    <center>
+                        <h1 class="display-4">Attention <span class="name">{{first_name}} {{last_name}}</span></h1>
+                        <p>At least one of your thresholds has been triggered for a sensor, which you are subscribed to!</p>
+                    </center>
+                    <br>
+                    <hr>
+                    <br>
+                    <h3>Sensor: {{sensor.description}} <small>({{sensor.device_id}})</small></h3>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Threshold</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#triggered_thresholds}}
+                            <tr>
+                                <td>
+                                    {{description}}
+                                </td>
+                            </tr>
+                            {{/triggered_thresholds}}
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <center>
+                    <small><b>GWoT-VST</b> by <a href="https://www.uni-muenster.de/Geoinformatics/en/index.html" target="_blank">Institute for Geoinformatics</a><br>
+                    Heisenbergstraße 2 • 48149 • Münster • Germany</small>
+                </center>
+            </div>
+        </div>
+    </body>
+</html>

@@ -74,7 +74,7 @@ client.on('connect', function () {
 
         // Publish message
         client.publish(topic, message, options, function(){
-            console.log("rpi: Hello from rpi")
+            console.log("rpi: Hello from rpi");
         });
         i += 1;
     }, 3000);

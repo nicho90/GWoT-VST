@@ -1,10 +1,12 @@
 rpi/node_modules/*
 rpi/tests/testGPIO/node_modules/*
 server/node_modules/*
+server/public/node_modules/*
 server/public/lib/*
 server/public/node_modules/*
 server/public/api/*
 server/public/docs/*
+server/public/api/*
 *.DS_Store
 *.rdb
 *.directory
@@ -13,3 +15,4 @@ server/public/docs/*
 *.Rhistory
 npm-debug.log
 .idea/vcs.xml
+npm-debug.log

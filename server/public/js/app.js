@@ -8,6 +8,7 @@ var app = angular.module("gwot-vst", [
     "pascalprecht.translate",
     "leaflet-directive",
     "n3-line-chart",
+    "btford.socket-io",
 
     // Own Modules
     "filters",
@@ -26,32 +27,28 @@ var app = angular.module("gwot-vst", [
 
 
 /**
+ * Sockets
+ */
+app.factory('$socket', function (socketFactory) {
+  console.log(socketFactory);
+  return socketFactory();
+});
+
+
+// Start App
+app.run(function($translate) {
+
+    // Use Translator and set
+    $translate.use('en_US');
+});
+
+/**
  * Log Provider
  * turn on/off debug logging
  */
 app.config(function($logProvider) {
     $logProvider.debugEnabled(false);
 });
-
-
-/**
- * Sockets
- */
-app.factory('$socket', ['$rootScope', function($rootScope) {
-
-    var socket = io.connect();
-
-    return {
-        on: function(eventName, callback) {
-            socket.on(eventName, callback);
-        },
-        emit: function(eventName, data) {
-            socket.emit(eventName, data);
-            console.log("Socket emitted. Topic:", eventName, "; Data:", data);
-        }
-    };
-}]);
-
 
 
 /**

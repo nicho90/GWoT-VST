@@ -2,29 +2,7 @@ var app = angular.module("gwot-vst");
 
 
 // LIST
-app.controller("SensorDetailsController", function($socket, $sce, $scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $forecastService, $timeseriesService, config) {
-
-
-    /**
-     * Sockets testing
-     */
-    $socket.on('test', function(data) {
-        console.log("Socket received. Data:", data);
-        //TODO
-    });
-
-    $socket.emit('test', {
-        //TODO
-        test: "data"
-    });
-
-
-    // Standard Query
-    $scope.query = {
-        value: 3,
-        time: "months"
-    };
-
+app.controller("SensorDetailsController", function($sce, $scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $forecastService, $timeseriesService, config) {
 
     /**
      * Change Query for updating the timeseries chart
