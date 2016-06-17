@@ -58,9 +58,6 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
      */
     $scope.load = function() {
 
-        console.log(token);
-        console.log($rootScope.authenticated_user);
-
         // Check if User is authenticated
         var token;
         if ($rootScope.authenticated_user) {
