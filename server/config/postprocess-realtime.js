@@ -34,7 +34,7 @@ exports.process = function(message) {
                         return console.error(errors.database.error_1.message, err);
                     } else {
 
-                        // Database query
+                        // Database query: select sensors
                         client.query('SELECT * FROM Sensors WHERE device_id=$1;', [
                             measurement.properties.device_id
                         ], function(err, result) {
@@ -45,6 +45,7 @@ exports.process = function(message) {
                                 callback(new Error(errors.database.error_2.message));
                             } else {
                                 if (result.rows.length > 0) {
+                                    console.log(result.rows[0]);
                                     callback(null, measurement, result.rows[0]);
                                 } else {
                                     console.error(errors.query.error_2.message);
@@ -67,6 +68,7 @@ exports.process = function(message) {
 
             // 3. Forward message via websockets
             function(measurement, callback) {
+                console.log("Send socket notification for realtime:", measurement);
                 io.socket.emit('/data/realtime', measurement);
                 callback();
             }
