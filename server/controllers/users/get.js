@@ -2,6 +2,7 @@ var pg = require('pg');
 var _ = require('underscore');
 var jwt = require('jsonwebtoken');
 var secret = require('./../../config/secret');
+var db = require('./../../config/db');
 var db_settings = require('../../server.js').db_settings;
 var errors = require('./../../config/errors');
 
