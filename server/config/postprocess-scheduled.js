@@ -40,14 +40,14 @@ exports.process = function(message) {
                 // 2. Find sensor_id in Sensors with device_id
                 function(measurement, callback) {
 
-                    // Database query
+                    // Database query: select sensors
                     client.query('SELECT * FROM Sensors WHERE device_id=$1;', [
                         measurement.properties.device_id
                     ], function(err, result) {
                         done();
 
                         if (err) {
-                            console.error(errors.database.error_2.message, err);
+                            console.error("Step 2: select sensors", errors.database.error_2.message, err);
                             callback(new Error(errors.database.error_2.message));
                         } else {
                             if (result.rows.length > 0) {
@@ -72,7 +72,7 @@ exports.process = function(message) {
                 // 4. Save new measuremt in Database
                 function(measurement, sensor, callback) {
 
-                    // Database query
+                    // Database query: save measurment to DB
                     client.query('INSERT INTO Measurements (created, updated, sensor_id, distance, water_level, measurement_timestamp) VALUES (now(), now(), $1, $2, $3, $4);', [
                         sensor.sensor_id,
                         measurement.properties.distance.value,
@@ -82,7 +82,7 @@ exports.process = function(message) {
                         done();
 
                         if (err) {
-                            console.error(errors.database.error_2.message, err);
+                            console.error("Step 4: save measurement", errors.database.error_2.message, err);
                             callback(new Error(errors.database.error_2.message));
                         } else {
                             callback(null, measurement, sensor);
@@ -118,7 +118,7 @@ exports.process = function(message) {
                                 done();
 
                                 if (err) {
-                                    console.error(errors.database.error_2.message, err);
+                                    console.error("Step 5: change increased_frequency value", errors.database.error_2.message, err);
                                     callback(new Error(errors.database.error_2.message));
                                 } else {
                                     callback(null, measurement, sensor);
@@ -151,7 +151,7 @@ exports.process = function(message) {
                                 done();
 
                                 if (err) {
-                                    console.error(errors.database.error_2.message, err);
+                                    console.error("Step 5: change increased_frequency value", errors.database.error_2.message, err);
                                     callback(new Error(errors.database.error_2.message));
                                 } else {
                                     callback(null, measurement, sensor);
@@ -187,7 +187,7 @@ exports.process = function(message) {
                         done();
 
                         if (err) {
-                            console.error(errors.database.error_2.message, err);
+                            console.error("Step 6: query subscribers", errors.database.error_2.message, err);
                             callback(new Error(errors.database.error_2.message));
                         } else {
                             console.log("Result of query: subscribed users", results);
@@ -232,7 +232,7 @@ exports.process = function(message) {
                             done();
 
                             if (err) {
-                                console.error(errors.database.error_2.message, err);
+                                console.error("Step 7: query warning and critical thresholds", errors.database.error_2.message, err);
                                 callback(new Error(errors.database.error_2.message));
                             } else {
                                 console.log("Result of query: warning and danger threshold values", results);
