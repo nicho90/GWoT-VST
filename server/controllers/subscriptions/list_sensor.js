@@ -39,6 +39,9 @@ exports.request = function(req, res) {
 						return console.error(errors.query.error_2.message);
 					} else {
 
+                        // Get Sensor from results
+                        var sensor = result.rows[0];
+
 						// Check if User was authenticated
 						if(!req.headers.authorization || req.headers.authorization === ""){
 							res.status(errors.authentication.error_3.code).send(errors.authentication.error_3);
@@ -47,13 +50,11 @@ exports.request = function(req, res) {
 
 							// Decode Token
 							jwt.verify(req.headers.authorization, secret.key, function(err, decoded) {
+
 								if (err) {
 									res.status(errors.authentication.error_2.code).send(errors.authentication.error_2);
 									return console.error(errors.authentication.error_2.message);
 								} else {
-
-									// Get Sensor from results
-									var sensor = result.rows[0];
 
 									// Prepare Query
 									var query;
@@ -62,7 +63,7 @@ exports.request = function(req, res) {
 									var username = decoded.username;
 
 									// Check if Sensor was public or User was creator of private Sensor
-									if(sensor.public || username === sensor.creator){
+									if(!sensor.private || username === sensor.creator){
 
 										query = "SELECT " +
 												"subscriptions.subscription_id, " +
@@ -77,7 +78,7 @@ exports.request = function(req, res) {
 												"thresholds.category AS threshold_category " +
 											"FROM Subscriptions subscriptions JOIN Sensors sensors ON subscriptions.sensor_id=sensors.sensor_id " +
 											"JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id "+
-											"WHERE subscriptions.creator=$2 AND subscriptions.sensor_id=$1 " +
+											"WHERE subscriptions.creator=$1 AND subscriptions.sensor_id=$2 " +
 											"ORDER BY subscriptions.created DESC;";
 
 										// Database query
