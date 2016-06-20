@@ -67,12 +67,7 @@ exports.process = function(message) {
 
             // 3. Forward message via websockets
             function(measurement, callback) {
-                //TODO test
-                io.on('connection', function(socket) {
-                    socket.emit('/data/realtime', {
-                        measurement
-                    });
-                });
+                io.socket.emit('/data/realtime', measurement);
                 callback();
             }
 

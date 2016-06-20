@@ -277,16 +277,12 @@ exports.process = function(message) {
 
                                     // - Emit Websocket-notification if result.rows.lenght > 0!
                                     console.log("Publishing socket");
-                                    // TODO revise this part - not working yet --> publishes on initial connection but than not any more
-
                                     for (row in result.rows) {
                                         console.log("Send socket notification for threshold:", row);
                                         /* e.g. message conteent
                                         { subscription_id: 2, threshold_id: 2, description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                         */
-                                        io.sockets.emit('/notification/threshold',
-                                            result.rows[row]
-                                        );
+                                        io.sockets.emit('/notification/threshold', result.rows[row]);
                                     }
 
                                     callback();
