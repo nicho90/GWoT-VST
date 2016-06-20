@@ -279,12 +279,14 @@ exports.process = function(message) {
                                     console.log("Publishing socket");
                                     // TODO revise this part - not working yet
                                     io.on('connection', function(socket) {
-                                        console.log("Inside socket connection")
                                         for (row in result.rows) {
                                             console.log("Send socket notification for threshold:", row);
-                                            socket.emit('/notification/threshold', {
-                                                result.rows[row];
-                                            });
+                                            /* e.g. message conteent
+					    { subscription_id: 2, threshold_id: 2, description: "VW Golf (2015)", category: "CAR", level: "danger" }
+					    */
+					    socket.emit('/notification/threshold', 
+                                                result.rows[row]
+                                            );
                                         }
                                     });
 
