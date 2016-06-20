@@ -166,17 +166,23 @@ exports.process = function(message) {
                 // 6. Get all subscribed Users for this sensor
                 function(measurement, sensor, callback) {
 
+                    // Query distinct subscriber for possibly several subscriptions
+                    /* e.g.
+                    username | email_address | first_name | last_name
+                    ---------+---------------+------------+-----------
+                    m_must1  | max@muster.de | Max        | M.
+                    */
                     var query = "SELECT DISTINCT " +
                         "users.username, " +
                         "users.email_address, " +
                         "users.first_name, " +
                         "users.last_name " +
-                        "FROM Subscriptions subscriptions JOIN Users users ON subscriptions.username=users.username " +
+                        "FROM Subscriptions subscriptions JOIN Users users ON subscriptions.creator=users.username " +
                         "WHERE subscriptions.sensor_id=$1;";
 
                     // Database query
                     client.query(query, [
-                        sensor.sensor_id
+                        sensor.sensor_id  //inject sensor_id into query
                     ], function(err, result) {
                         done();
 
@@ -184,6 +190,7 @@ exports.process = function(message) {
                             console.error(errors.database.error_2.message, err);
                             callback(new Error(errors.database.error_2.message));
                         } else {
+                            console.log("Result of query: subscribed users", results);
                             callback(null, measurement, sensor, result.rows);
                         }
                     });
@@ -194,6 +201,13 @@ exports.process = function(message) {
 
                     async.each(users, function(user, callback) {
 
+                        // Query warning and danger threshold values
+                        /* e.g.
+                        subscription_id | threshold_id |     description     |  category  |  level
+                        ----------------+--------------+---------------------+------------+---------
+                                      1 |            1 | Myself              | PEDESTRIAN | warning
+                                      2 |            2 | VW Golf (2015)      | CAR        | danger
+                        */
                         var query = "" +
                             "(SELECT " +
                             "subscriptions.subscription_id, " +
@@ -202,7 +216,7 @@ exports.process = function(message) {
                             "thresholds.category, " +
                             "'warning' AS level " + // warning-level
                             "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                            "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.username='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") >= (" + sensor.crossing_height + " + thresholds.warning_threshold) AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.critical_threshold)) " +
+                            "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") >= (" + sensor.crossing_height + " + thresholds.warning_threshold) AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.critical_threshold)) " +
                             "UNION ALL " + // Merge with critical-level
                             "(SELECT " +
                             "subscriptions.subscription_id, " +
@@ -211,7 +225,7 @@ exports.process = function(message) {
                             "thresholds.category, " +
                             "'danger' AS level " + // danger-level
                             "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                            "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.username='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") >= (" + sensor.crossing_height + " + thresholds.critical_threshold));";
+                            "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") >= (" + sensor.crossing_height + " + thresholds.critical_threshold));";
 
                         // Database query
                         client.query(query, function(err, result) {
@@ -221,6 +235,7 @@ exports.process = function(message) {
                                 console.error(errors.database.error_2.message, err);
                                 callback(new Error(errors.database.error_2.message));
                             } else {
+                                console.log("Result of query: warning and danger threshold values", results);
 
                                 if (result.rows.lenght > 0) {
 
@@ -264,6 +279,7 @@ exports.process = function(message) {
                                     // - Emit Websocket-notification if result.rows.lenght > 0!
                                     io.on('connection', function(socket) {
                                         for (row in result.rows) {
+                                            console.log("Send socket notification for threshold:", row);
                                             socket.emit('/notification/threshold', {
                                                 row
                                             });
