@@ -59,7 +59,22 @@ exports.request = function(req, res){
 			                        } else {
 
 										// Database Query
-										var query = "SELECT * FROM Subscriptions WHERE creator=$1";
+										var query = "SELECT " +
+												"subscriptions.subscription_id, " +
+												"subscriptions.created, " +
+												"subscriptions.updated, " +
+												"subscriptions.creator, " +
+												"subscriptions.active, " +
+												"subscriptions.sensor_id, " +
+												"sensors.description AS sensor_description, " +
+												"subscriptions.threshold_id, " +
+												"thresholds.description AS threshold_description, " +
+												"thresholds.category AS threshold_category " +
+											"FROM Subscriptions subscriptions JOIN Sensors sensors ON subscriptions.sensor_id=sensors.sensor_id " +
+											"JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id "+
+											"WHERE subscriptions.creator=$1 " +
+											"ORDER BY created DESC;";
+
 										client.query(query, [
 											req.params.username
 										], function(err, result) {
