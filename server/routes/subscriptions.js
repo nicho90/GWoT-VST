@@ -6,7 +6,7 @@ var post = require('../controllers/subscriptions/post');
 var get = require('../controllers/subscriptions/get');
 var put = require('../controllers/subscriptions/put');
 var del = require('../controllers/subscriptions/delete');
-var del_all = require('../controllers/subscriptions/delete_all');
+var delete_all = require('../controllers/subscriptions/delete_all');
 
 
 // LIST
@@ -25,7 +25,7 @@ router.put('/users/:username/subscriptions/:subscription_id', put.request);
 router.delete('/users/:username/subscriptions/:subscription_id', del.request);
 
 // DELETE ALL
-router.delete('/users/:username/subscriptions', del_all.request);
+router.delete('/users/:username/subscriptions', delete_all.request);
 
 
 

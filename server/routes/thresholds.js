@@ -6,7 +6,7 @@ var post = require('../controllers/thresholds/post');
 var get = require('../controllers/thresholds/get');
 var put = require('../controllers/thresholds/put');
 var del = require('../controllers/thresholds/delete');
-var del_all = require('../controllers/thresholds/delete_all');
+var delete_all = require('../controllers/thresholds/delete_all');
 
 
 // LIST
@@ -25,7 +25,7 @@ router.put('/users/:username/thresholds/:threshold_id', put.request);
 router.delete('/users/:username/thresholds/:threshold_id', del.request);
 
 // DELETE ALL
-router.delete('/users/:username/thresholds', del_all.request);
+router.delete('/users/:username/thresholds', delete_all.request);
 
 
 
