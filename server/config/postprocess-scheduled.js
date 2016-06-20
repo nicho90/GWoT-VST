@@ -283,7 +283,7 @@ exports.process = function(message) {
                                         for (row in result.rows) {
                                             console.log("Send socket notification for threshold:", row);
                                             socket.emit('/notification/threshold', {
-                                                row
+                                                result.rows[row];
                                             });
                                         }
                                     });
