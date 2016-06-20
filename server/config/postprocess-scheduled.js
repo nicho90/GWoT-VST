@@ -288,6 +288,7 @@ exports.process = function(message) {
 
                                     callback();
                                 } else {
+                                    console.log("Thresholds length = 0");
                                     callback();
                                 }
                             }
