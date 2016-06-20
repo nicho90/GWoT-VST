@@ -277,7 +277,9 @@ exports.process = function(message) {
 
                                     // - Emit Websocket-notification if result.rows.lenght > 0!
                                     console.log("Publishing socket");
+                                    // TODO revise this part - not working yet
                                     io.on('connection', function(socket) {
+                                        console.log("Inside socket connection")
                                         for (row in result.rows) {
                                             console.log("Send socket notification for threshold:", row);
                                             socket.emit('/notification/threshold', {
