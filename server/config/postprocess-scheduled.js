@@ -182,7 +182,7 @@ exports.process = function(message) {
 
                     // Database query
                     client.query(query, [
-                        sensor.sensor_id  //inject sensor_id into query
+                        sensor.sensor_id //inject sensor_id into query
                     ], function(err, result) {
                         done();
 
@@ -277,18 +277,17 @@ exports.process = function(message) {
 
                                     // - Emit Websocket-notification if result.rows.lenght > 0!
                                     console.log("Publishing socket");
-                                    // TODO revise this part - not working yet
-                                    io.on('connection', function(socket) {
-                                        for (row in result.rows) {
-                                            console.log("Send socket notification for threshold:", row);
-                                            /* e.g. message conteent
-					    { subscription_id: 2, threshold_id: 2, description: "VW Golf (2015)", category: "CAR", level: "danger" }
-					    */
-					    socket.emit('/notification/threshold', 
-                                                result.rows[row]
-                                            );
-                                        }
-                                    });
+                                    // TODO revise this part - not working yet --> publishes on initial connection but than not any more
+
+                                    for (row in result.rows) {
+                                        console.log("Send socket notification for threshold:", row);
+                                        /* e.g. message conteent
+                                        { subscription_id: 2, threshold_id: 2, description: "VW Golf (2015)", category: "CAR", level: "danger" }
+                                        */
+                                        io.sockets.emit('/notification/threshold',
+                                            result.rows[row]
+                                        );
+                                    }
 
                                     callback();
                                 } else {
