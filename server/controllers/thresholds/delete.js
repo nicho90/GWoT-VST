@@ -9,7 +9,7 @@ var db_settings = require('../../server.js').db_settings;
 var errors = require('./../../config/errors');
 
 
-// DELETE ALL
+// DELETE
 exports.request = function(req, res){
 
 	// Create URL

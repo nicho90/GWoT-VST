@@ -9,8 +9,10 @@ var db_settings = require('../../server.js').db_settings;
 var errors = require('./../../config/errors');
 
 
-// GET
+// PUT
 exports.request = function(req, res){
+
+	// TODO: Schema-Validation
 
 	// Create URL
 	var url = "postgres://" + db_settings.user + ":" + db_settings.password + "@" + db_settings.host + ":" + db_settings.port + "/" + db_settings.database_name;
@@ -57,7 +59,7 @@ exports.request = function(req, res){
 										res.status(errors.query.error_1.code).send(errors.query.error_1);
 										return console.error(errors.query.error_1.message);
 			                        } else {
-
+										
 										// Prepare Query
 										var query = "UPDATE Thresholds SET " +
 											"updated=now(), " +
@@ -102,23 +104,22 @@ exports.request = function(req, res){
 												], function(err, result) {
 													done();
 
-								                    if(err) {
+													if(err) {
 														res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
-									                    return console.error(errors.database.error_2.message, err);
-								                    } else {
+														return console.error(errors.database.error_2.message, err);
+													} else {
 
 														// Check if Threshold exists
-								                        if(result.rows.length === 0) {
+														if(result.rows.length === 0) {
 															res.status(errors.query.error_4.code).send(errors.query.error_4);
 															return console.error(errors.query.error_4.message);
-								                        } else {
+														} else {
 
 															// Send Result
 															res.status(200).send(result.rows[0]);
 														}
 													}
 												});
-
 											}
 										});
 									}
