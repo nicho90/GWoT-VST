@@ -190,7 +190,7 @@ exports.process = function(message) {
                             console.error("Step 6: query subscribers", errors.database.error_2.message, err);
                             callback(new Error(errors.database.error_2.message));
                         } else {
-                            console.log("Result of query: subscribed users", results);
+                            console.log("Result of query: subscribed users", result);
                             callback(null, measurement, sensor, result.rows);
                         }
                     });
@@ -235,7 +235,7 @@ exports.process = function(message) {
                                 console.error("Step 7: query warning and critical thresholds", errors.database.error_2.message, err);
                                 callback(new Error(errors.database.error_2.message));
                             } else {
-                                console.log("Result of query: warning and danger threshold values", results);
+                                console.log("Result of query: warning and danger threshold values", result);
 
                                 if (result.rows.lenght > 0) {
 
