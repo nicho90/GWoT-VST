@@ -69,7 +69,7 @@ exports.process = function(message) {
             // 3. Forward message via websockets
             function(measurement, callback) {
                 console.log("Send socket notification for realtime:", measurement);
-                io.socket.emit('/data/realtime', measurement);
+                io.sockets.emit('/data/realtime', measurement);
                 callback();
             }
 
