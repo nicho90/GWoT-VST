@@ -239,7 +239,7 @@ exports.process = function(message) {
 
                                 if (result.rows.length > 0) {
 
-                                    console.log(result.rows);
+                                    console.log("Thresholds length = ", result.rows.length);
                                     var triggered_thresholds = result.rows;
 
                                     // Read Template
@@ -275,8 +275,8 @@ exports.process = function(message) {
                                         });*/
                                     });
 
-                                    // TODO: test
                                     // - Emit Websocket-notification if result.rows.lenght > 0!
+                                    console.log("Publishing socket");
                                     io.on('connection', function(socket) {
                                         for (row in result.rows) {
                                             console.log("Send socket notification for threshold:", row);
