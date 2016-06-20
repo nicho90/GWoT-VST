@@ -237,7 +237,7 @@ exports.process = function(message) {
                             } else {
                                 console.log("Result of query: warning and danger threshold values", result.rows);
 
-                                if (result.rows.lenght > 0) {
+                                if (result.rows.length > 0) {
 
                                     console.log(result.rows);
                                     var triggered_thresholds = result.rows;
