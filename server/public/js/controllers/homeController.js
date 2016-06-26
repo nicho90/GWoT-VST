@@ -37,14 +37,6 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
     });
     */
 
-
-    /*
-     * Receiving notifications when specific thresholds are reached
-     */
-    $socket.on('/notification/threshold', function(data) {
-        console.log("Threshold notification received: ", data);
-    });
-
     /*
      * Receiving realtime data
      */
