@@ -203,15 +203,16 @@ exports.process = function(message) {
 
                             // Query warning and danger threshold values
                             /* e.g.
-                            subscription_id | threshold_id |     description     |  category  |  level
-                            ----------------+--------------+---------------------+------------+---------
-                                          1 |            1 | Myself              | PEDESTRIAN | warning
-                                          2 |            2 | VW Golf (2015)      | CAR        | danger
+                            subscription_id | threshold_id | creator |     description     |  category  |  level
+                            ----------------+--------------+---------+---------------------+------------+---------
+                                          1 |            1 | nicho90 | Myself              | PEDESTRIAN | warning
+                                          2 |            2 | nicho90 | VW Golf (2015)      | CAR        | danger
                             */
                             var query = "" +
                                 "(SELECT " +
                                 "subscriptions.subscription_id, " +
                                 "subscriptions.threshold_id, " +
+                                "subscriptions.creator, " +
                                 "thresholds.description, " +
                                 "thresholds.category, " +
                                 "'warning' AS level " + // warning-level
@@ -221,6 +222,7 @@ exports.process = function(message) {
                                 "(SELECT " +
                                 "subscriptions.subscription_id, " +
                                 "subscriptions.threshold_id, " +
+                                "subscriptions.creator, " +
                                 "thresholds.description, " +
                                 "thresholds.category, " +
                                 "'danger' AS level " + // danger-level
@@ -246,7 +248,7 @@ exports.process = function(message) {
                                         // TODO test if working
                                         for (row in triggered_thresholds) {
                                             /* e.g. message conteent
-                                            { subscription_id: 2, threshold_id: 2, description: "VW Golf (2015)", category: "CAR", level: "danger" }
+                                            { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                             */
                                             if (triggered_thresholds[row].level == "warning") {
                                                 // Change warning_notified value
@@ -308,12 +310,12 @@ exports.process = function(message) {
                                             });*/
                                         });
 
-                                        // - Emit Websocket-notification if triggered_thresholds.lenght > 0!
+                                        // Emit Websocket-notification if triggered_thresholds.length > 0!
                                         console.log("Publishing socket");
                                         for (row in triggered_thresholds) {
                                             console.log("Send socket notification for threshold:", row);
                                             /* e.g. message conteent
-                                            { subscription_id: 2, threshold_id: 2, description: "VW Golf (2015)", category: "CAR", level: "danger" }
+                                            { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                             */
                                             io.sockets.emit('/notification/threshold', triggered_thresholds[row]);
                                         }

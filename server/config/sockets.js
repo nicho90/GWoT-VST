@@ -51,10 +51,10 @@ io.on('connection', function(socket) {
         // TODO save a global boolean that can be accessed in the postprocess-scheduled l.263
     });
 
-    // Code for emitting threshold notifications
-    socket.emit('/notification/threshold', {
-        //TODO
-    });
+    // Code for emitting threshold notifications: TESTING
+    setTimeout(function () {
+      socket.emit('/notification/threshold', { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" });
+    }, 20000);
 
     // Code for emitting realtime data
     socket.emit('/data/realtime', {
