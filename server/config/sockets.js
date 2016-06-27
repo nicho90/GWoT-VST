@@ -9,17 +9,6 @@ io.on('connection', function(socket) {
 
     console.log("Socket connected: "+ socket);
 
-    //Testing
-    /*
-    socket.on('test', function(data) {
-        console.log("Socket received. Data:", data);
-    });
-
-    socket.emit('test', {
-        test: "data"
-    });
-    */
-
     //  Activating realtime measurements
     socket.on('/data/realtime', function(data) {
         /*
@@ -51,7 +40,8 @@ io.on('connection', function(socket) {
         // TODO save a global boolean that can be accessed in the postprocess-scheduled l.263
     });
 
-    // Code for emitting threshold notifications: TESTING
+    // TESTING
+    // Code for emitting threshold notifications
     setTimeout(function () {
       socket.emit('/notification/threshold', { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" });
     }, 20000);
@@ -61,59 +51,10 @@ io.on('connection', function(socket) {
         //TODO
     });
 
-    // Add new webClient-User to web_clients[]
-    /*web_clients.push({
-        id: socket,
-        sensor_ids: []
-    });
-    console.log("New WebClient has been conneted!");*/
-
-
-    // Request Real-time data
-    /*socket.on('getRT', function (data) {
-        _.findWhere(web_clients, {newsroom: "The New York Times"});
-        sensor_ids
-
-
-         // we tell the client to execute 'new message'
-         socket.broadcast.emit('test', {
-             username: "Max",
-             message: "I wrote this message"
-         });
-     });*/
-
-     // when the client emits 'new message', this listens and executes
-     /*socket.on('new message', function (data) {
-         // we tell the client to execute 'new message'
-         socket.broadcast.emit('new message', {
-             username: "Max",
-             message: "I wrote this message"
-         });
-     });*/
-
-    // when the user disconnects.. perform this
+    // when the user disconnects
     socket.on('disconnect', function() {
         console.log("Socket disconnected: "+ socket);
-        /*if (addedUser) {
-            --numUsers;
-
-            // echo globally that this client has left
-            socket.broadcast.emit('user left', {
-                username: socket.username,
-                numUsers: numUsers
-            });
-        }*/
     });
-
-    /*var i = 0;
-    setInterval(function() {
-        socket.broadcast.emit('test', {
-            username: "Max",
-            message: "I wrote this message"
-        });
-        console.log('test: ' + '{ "username": "Max", "message": "I wrote this message" }')
-    i += 1;
-}, 3000);*/
 });
 
 exports.sockets = io;
