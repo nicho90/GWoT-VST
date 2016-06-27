@@ -4,15 +4,7 @@ var app = angular.module("gwot-vst");
 /**
  * Home and Map Controller
  */
-app.controller("HomeController", function($scope, $rootScope, config, $filter, $location, $translate, $sensorService, $measurementService, $socket) {
-
-    /*
-     * Sockets: Receiving realtime data
-     */
-    $socket.on('/data/realtime', function(data) {
-        console.log("Realtime data received");
-    });
-
+app.controller("HomeController", function($scope, $rootScope, config, $filter, $location, $translate, $sensorService, $measurementService) {
 
     /**
      * Load Sensors

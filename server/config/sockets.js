@@ -7,7 +7,12 @@ var broker = require('./mqtt-message-handler.js');
 //console.log("Socket.io activated", io);
 io.on('connection', function(socket) {
 
-    console.log("Socket connected: "+ socket);
+    console.log("Socket connected:", socket.client.id);
+
+    // On disconnect
+    socket.on('disconnect', function() {
+        console.log("Socket disconnected:", socket.client.id);
+    });
 
     //  Activating realtime measurements
     socket.on('/data/realtime', function(data) {
@@ -28,33 +33,11 @@ io.on('connection', function(socket) {
         broker.publish(message);
     });
 
-    // Activation threshold notifications
-    socket.on('/thresholds/activate', function(data) {
-        /*
-         * Data should look like this:
-         {
-            status: [bool],
-         }
-         */
-        console.log("Socket received realtime adjusting message: ", data);
-        // TODO save a global boolean that can be accessed in the postprocess-scheduled l.263
-    });
-
     // TESTING
     // Code for emitting threshold notifications
     setTimeout(function () {
       socket.emit('/notification/threshold', { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" });
     }, 20000);
-
-    // Code for emitting realtime data
-    socket.emit('/data/realtime', {
-        //TODO
-    });
-
-    // when the user disconnects
-    socket.on('disconnect', function() {
-        console.log("Socket disconnected: "+ socket);
-    });
 });
 
 exports.sockets = io;
