@@ -56,6 +56,7 @@ exports.request = function(req, res) {
 
                         // Prepare Query
                         var query = "SELECT " +
+								"measurement_id, " +
 								"created, " +
 								"updated, " +
 								"sensor_id, " +
