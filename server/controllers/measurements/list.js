@@ -55,7 +55,16 @@ exports.request = function(req, res) {
 						}
 
                         // Prepare Query
-                        var query = "SELECT * FROM Measurements WHERE sensor_id=$1 ORDER BY measurement_timestamp DESC" + limit + ";";
+                        var query = "SELECT " +
+								"created, " +
+								"updated, " +
+								"sensor_id, " +
+								"distance, " +
+								"'CENTIMETER' AS distance_unit, " +
+								"water_level, " +
+								"'CENTIMETER' AS water_level_unit, " +
+								"measurement_timestamp " +
+							"FROM Measurements WHERE sensor_id=$1 ORDER BY measurement_timestamp DESC" + limit + ";";
 
                         // Check if Sensor was public
                         if(!sensor.private) {
