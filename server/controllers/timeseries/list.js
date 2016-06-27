@@ -147,8 +147,8 @@ exports.request = function(req, res) {
 						} else if(req.query.months) {
 
 							// Validate parameter
-							if(Number(req.query.weeks) > 0){
-								begin = now.subtract(req.query.weeks, 'weeks').format("YYYY-MM-DD hh:mm:ss");
+							if(Number(req.query.months) > 0){
+								begin = now.subtract(req.query.months, 'months').format("YYYY-MM-DD hh:mm:ss");
 								query = "SELECT " +
 										"timeserie_id, " +
 										"created, " +
