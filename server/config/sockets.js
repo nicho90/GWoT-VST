@@ -7,18 +7,12 @@ var broker = require('./mqtt-message-handler.js');
 //console.log("Socket.io activated", io);
 io.on('connection', function(socket) {
 
-    console.log("Socket connected: "+ socket);
+    console.log("Socket connected:", socket.client.id);
 
-    //Testing
-    /*
-    socket.on('test', function(data) {
-        console.log("Socket received. Data:", data);
+    // On disconnect
+    socket.on('disconnect', function() {
+        console.log("Socket disconnected:", socket.client.id);
     });
-
-    socket.emit('test', {
-        test: "data"
-    });
-    */
 
     //  Activating realtime measurements
     socket.on('/data/realtime', function(data) {
@@ -39,81 +33,11 @@ io.on('connection', function(socket) {
         broker.publish(message);
     });
 
-    // Activation threshold notifications
-    socket.on('/thresholds/activate', function(data) {
-        /*
-         * Data should look like this:
-         {
-            status: [bool],
-         }
-         */
-        console.log("Socket received realtime adjusting message: ", data);
-        // TODO save a global boolean that can be accessed in the postprocess-scheduled l.263
-    });
-
+    // TESTING
     // Code for emitting threshold notifications
-    socket.emit('/notification/threshold', {
-        //TODO
-    });
-
-    // Code for emitting realtime data
-    socket.emit('/data/realtime', {
-        //TODO
-    });
-
-    // Add new webClient-User to web_clients[]
-    /*web_clients.push({
-        id: socket,
-        sensor_ids: []
-    });
-    console.log("New WebClient has been conneted!");*/
-
-
-    // Request Real-time data
-    /*socket.on('getRT', function (data) {
-        _.findWhere(web_clients, {newsroom: "The New York Times"});
-        sensor_ids
-
-
-         // we tell the client to execute 'new message'
-         socket.broadcast.emit('test', {
-             username: "Max",
-             message: "I wrote this message"
-         });
-     });*/
-
-     // when the client emits 'new message', this listens and executes
-     /*socket.on('new message', function (data) {
-         // we tell the client to execute 'new message'
-         socket.broadcast.emit('new message', {
-             username: "Max",
-             message: "I wrote this message"
-         });
-     });*/
-
-    // when the user disconnects.. perform this
-    socket.on('disconnect', function() {
-        console.log("Socket disconnected: "+ socket);
-        /*if (addedUser) {
-            --numUsers;
-
-            // echo globally that this client has left
-            socket.broadcast.emit('user left', {
-                username: socket.username,
-                numUsers: numUsers
-            });
-        }*/
-    });
-
-    /*var i = 0;
-    setInterval(function() {
-        socket.broadcast.emit('test', {
-            username: "Max",
-            message: "I wrote this message"
-        });
-        console.log('test: ' + '{ "username": "Max", "message": "I wrote this message" }')
-    i += 1;
-}, 3000);*/
+    setTimeout(function () {
+      socket.emit('/notification/threshold', { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" });
+    }, 20000);
 });
 
 exports.sockets = io;

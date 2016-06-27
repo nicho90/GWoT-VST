@@ -4,62 +4,12 @@ var app = angular.module("gwot-vst");
 /**
  * Home and Map Controller
  */
-app.controller("HomeController", function($scope, $rootScope, config, $filter, $location, $translate, $sensorService, $measurementService, $socket) {
-
-    /**
-     * Sockets testing
-     */
-    /*
-    $socket.on('test', function(data) {
-        console.log("Socket received. Data:", data);
-        //TODO
-    });
-
-    $socket.emit('test', {
-        //TODO
-        test: "data"
-    });
-    */
-
-    /*
-     * Activate socket for thresholds
-     */
-    $socket.emit('/thresholds/activate', {
-        status: true
-    });
-
-    /*
-     * Deactivate socket for thresholds
-     */
-    /*
-    $socket.emit('/thresholds/activate', {
-        status: false
-    });
-    */
-
-
-    /*
-     * Receiving notifications when specific thresholds are reached
-     */
-    $socket.on('/notification/threshold', function(data) {
-        console.log("Threshold notification received: ", data);
-    });
-
-    /*
-     * Receiving realtime data
-     */
-    $socket.on('/data/realtime', function(data) {
-        console.log("Realtime data received");
-    });
-
+app.controller("HomeController", function($scope, $rootScope, config, $filter, $location, $translate, $sensorService, $measurementService) {
 
     /**
      * Load Sensors
      */
     $scope.load = function() {
-
-        console.log(token);
-        console.log($rootScope.authenticated_user);
 
         // Check if User is authenticated
         var token;

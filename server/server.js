@@ -115,6 +115,7 @@ app.use(express.static(__dirname + '/public'));
 var io = require('socket.io')(server);
 var web_clients = [];
 if (program.socket_io) {
+    console.log("Websocket-Server-Service was started");
     exports.io = io;
     var sockets = require('./config/sockets.js').sockets;
 }

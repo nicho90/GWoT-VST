@@ -18,7 +18,7 @@ if (broker !== undefined) {
     // Client Connect
     broker.on('clientConnected', function(client) {
         console.log('Client connected', client.id);
-        
+
         // Connect to Database
         pg.connect(url, function(err, pgclient, done) {
             if (err) {
@@ -91,7 +91,8 @@ if (broker !== undefined) {
             //console.log('Message scheduled measurement ', packet.payload.toString());
             postprocessScheduled.process(packet.payload);
         } else if (packet.topic == "/sensor/realtime/measurement") {
-            console.log('Message realtime measurement', packet.payload.toString());
+            //console.log('Message realtime measurement', packet.payload.toString());
+            postprocessRealtime.process(packet.payload);
             // Here are the realtime measurment messages incomming
             // TODO: send Websocket-Message
         }

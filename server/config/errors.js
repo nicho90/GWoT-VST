@@ -43,9 +43,6 @@ module.exports = {
         error_3: {
             code: 401,
             message: 'Failed to authenticate, no token has been sent'
-        },
-        error_4_: { // TODO: Check old error_3 functions!
-            code: 401
         }
     },
     query: {

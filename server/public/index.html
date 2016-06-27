@@ -49,7 +49,7 @@
         <script src="lib/d3/d3.min.js"></script>
         <script src="node_modules/n3-charts/build/LineChart.min.js"></script>
         <script src="node_modules/socket.io/node_modules/socket.io-client/socket.io.js"></script>
-        <!-- <script src="node_modules/socket.io-client/socket.io.js"></script> -->
+        <script src="node_modules/socket.io-client/socket.io.js"></script> <!-- Alternative -->
         <script src="lib/angular-socket-io/socket.min.js"></script>
 
     </head>
@@ -142,6 +142,10 @@
         </div>
 
 
+        <!-- NOTIFICATIONS -->
+        <div ng-controller="NotificationController"></div>
+
+
         <!-- VIEW -->
         <div class="container-fluid main" ng-view></div>
 
@@ -195,6 +199,7 @@
         <script src="js/controllers/alertController.js"></script>
         <script src="js/controllers/navController.js"></script>
         <script src="js/controllers/footerController.js"></script>
+        <script src="js/controllers/notificationController.js"></script>
 
         <!-- User Controllers -->
         <script src="js/controllers/users/create.js"></script>
@@ -204,8 +209,8 @@
         <script src="js/controllers/sensors/list.js"></script>
         <script src="js/controllers/sensors/details.js"></script>
         <script src="js/controllers/sensors/create.js"></script>
-        <!--Threshold controllers-->
 
+        <!--Threshold controllers-->
         <script src="js/controllers/thresholds/create.js"></script>
 
 

@@ -10,10 +10,8 @@ var errors = require('./../../config/errors');
 var verifier = require('./../../config/verifier');
 
 
-// POST
+// DELETE ALL
 exports.request = function(req, res) {
-
-    // TODO: Schema-Validation
 
     // Create URL
 	var url = "postgres://" + db_settings.user + ":" + db_settings.password + "@" + db_settings.host + ":" + db_settings.port + "/" + db_settings.database_name;
@@ -65,21 +63,11 @@ exports.request = function(req, res) {
                                     if(username === sensor.creator || username === db.admin){
 
                                         // Prepare Query
-                                        var query = "INSERT INTO Measurements (" +
-                                                "created, " +
-                                                "updated, " +
-                                                "sensor_id, " +
-                                                "distance, " +
-                                                "water_level, " +
-                                                "measurement_timestamp" +
-                                            ") VALUES (now(), now(), $1, $2, $3, $4);";
+                                        var query = "DELETE FROM Timeseries WHERE sensor_id=$1;";
 
                                         // Database query
                                         client.query(query, [
-                                            req.params.sensor_id,
-                                            req.body.distance,
-                                            req.body.water_level,
-                                            req.body.measurement_timestamp
+                                            req.params.sensor_id
                                         ], function(err, result) {
                                             done();
 
@@ -88,34 +76,8 @@ exports.request = function(req, res) {
                                                 return console.error(errors.database.error_2.message, err);
                                             } else {
 
-												// Prepare Query
-						                        var query = "SELECT " +
-														"measurement_id, " +
-														"created, " +
-														"updated, " +
-														"sensor_id, " +
-														"distance, " +
-														"'CENTIMETER' AS distance_unit, " +
-														"water_level, " +
-														"'CENTIMETER' AS water_level_unit, " +
-														"measurement_timestamp " +
-													"FROM Measurements WHERE sensor_id=$1 ORDER BY measurement_timestamp DESC LIMIT 1;";
-
-												// Database query
-												client.query(query, [
-		                                            req.params.sensor_id
-		                                        ], function(err, result) {
-
-													// Check if Measurement exists
-													if(result.rows.length === 0) {
-														res.status(errors.query.error_3.code).send(errors.query.error_3);
-														return console.error(errors.query.error_3.message);
-													} else {
-
-														// Send Result
-		                                                res.status(201).send(result.rows[0]);
-													}
-												});
+                                                // Send Result
+                                                res.status(204).send();
                                             }
                                         });
 
