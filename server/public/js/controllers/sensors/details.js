@@ -1,7 +1,7 @@
 var app = angular.module("gwot-vst");
 
 
-// LIST
+// DETAILS
 app.controller("SensorDetailsController", function($scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $statisticService, $forecastService, $timeseriesService, config, $socket) {
 
 

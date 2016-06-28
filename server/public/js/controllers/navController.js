@@ -18,7 +18,7 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
     /**
      * Sign up
      */
-    $scope.sign_up = function(){
+    $scope.signUp = function(){
         $location.url("/new/user");
     };
 

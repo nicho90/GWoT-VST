@@ -112,7 +112,6 @@ exports.request = function(req, res) {
 											res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 											return console.error(errors.database.error_2.message, err);
 										} else {
-											//console.log(result.rows);
 											callback(null, result.rows[0].minimum);
 										}
 									});
@@ -398,7 +397,7 @@ exports.request = function(req, res) {
 						if(err){
 
 						} else {
-							console.log(statistics);
+							//console.log(statistics);
 
 							// Send results
 							res.status(200).send(statistics);

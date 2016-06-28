@@ -34,6 +34,6 @@ app.filter('time', function() {
  */
 app.filter('humidity', function() {
     return function(humidity) {
-        return humidity*100;
+        return (humidity*100).toFixed(2);
     };
 });
