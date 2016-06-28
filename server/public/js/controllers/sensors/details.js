@@ -155,7 +155,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
         // Create Sensor-Height-Serie
         $scope.options.series.push({
-            visible: true,
+            visible: false,
             axis: "y",
             dataset: "dataset",
             key: "sensor_height",
@@ -200,7 +200,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
         // Create Warning-Threshold-Serie
         $scope.options.series.push({
-            visible: true,
+            visible: false,
             axis: "y",
             dataset: "dataset",
             key: "warning_threshold",
@@ -215,7 +215,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
         // Create Critical-Threshold-Serie
         $scope.options.series.push({
-            visible: true,
+            visible: false,
             axis: "y",
             dataset: "dataset",
             key: "critical_threshold",
