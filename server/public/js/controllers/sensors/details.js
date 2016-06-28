@@ -88,9 +88,17 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
                 // Add values to chart
                 angular.forEach($scope.sensor.timeseries, function(timeserie, key) {
+
+                    // Draw dots
                     $scope.data.dataset.push({
                         timestamp: new Date(timeserie.measurement_date), // TODO: only data, no time!
-                        water_level: timeserie.water_level
+                        water_level: timeserie.water_level,
+                        sensor_height: $scope.sensor.sensor_height,
+                        crossing_height: $scope.sensor.crossing_height,
+                        gauge_zero: 0,
+                        sensor_threshold_value: $scope.sensor.threshold_value,
+                        warning_threshold: $scope.sensor.crossing_height + $scope.currentThreshold.warning_threshold,
+                        critical_threshold: $scope.sensor.crossing_height + $scope.currentThreshold.critical_threshold
                     });
                 });
 
@@ -104,6 +112,96 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
      * Load Timeseries for Sensor
      */
     $scope.load_timeseries = function() {
+
+        // Create Gauge-Zero-Serie
+        $scope.options.series.push({
+            visible: true,
+            axis: "y",
+            dataset: "dataset",
+            key: "gauge_zero",
+            label: "Gauge Zero", // TODO: translate
+            color: "rgba(0, 0, 0, 1)", //color: "hsla(88, 48%, 48%, 1)",
+            type: [
+                "line",
+                "dot"
+            ],
+            id: "gaugeZero"
+        });
+
+        // Create Sensor-Height-Serie
+        $scope.options.series.push({
+            visible: true,
+            axis: "y",
+            dataset: "dataset",
+            key: "sensor_height",
+            label: "Sensor-Height", // TODO: translate
+            color: "rgba(0, 204, 204, 1)",
+            type: [
+                "line",
+                "dot"
+            ],
+            id: "sensorHeight"
+        });
+
+        // Create Sensor-Threshold-Height-Serie
+        $scope.options.series.push({
+            visible: false,
+            axis: "y",
+            dataset: "dataset",
+            key: "sensor_threshold_value",
+            label: "Sensor-Threshold-Height", // TODO: translate
+            color: "rgba(205, 205, 0, 1)",
+            type: [
+                "line",
+                "dot"
+            ],
+            id: "sensorThresholdHeight"
+        });
+
+        // Create Crossing-Height-Serie
+        $scope.options.series.push({
+            visible: true,
+            axis: "y",
+            dataset: "dataset",
+            key: "crossing_height",
+            label: "Crossing-Height", // TODO: translate
+            color: "rgba(102, 0, 102, 1)",
+            type: [
+                "line",
+                "dot"
+            ],
+            id: "crossingHeight"
+        });
+
+        // Create Warning-Threshold-Serie
+        $scope.options.series.push({
+            visible: true,
+            axis: "y",
+            dataset: "dataset",
+            key: "warning_threshold",
+            label: "Warning Threshold", // TODO: translate
+            color: "rgba(255, 128, 0, 1)",
+            type: [
+                "line",
+                "dot"
+            ],
+            id: "warningThreshold"
+        });
+
+        // Create Critical-Threshold-Serie
+        $scope.options.series.push({
+            visible: true,
+            axis: "y",
+            dataset: "dataset",
+            key: "critical_threshold",
+            label: "Critical Threshold", // TODO: translate
+            color: "rgba(255, 0, 0, 1)",
+            type: [
+                "line",
+                "dot"
+            ],
+            id: "criticalThreshold"
+        });
 
         // Create Timeseries-Serie
         $scope.options.series.push({
@@ -124,89 +222,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             }*/
         });
 
-        // Create Gauge-Zero-Serie
-        $scope.options.series.push({
-            visible: true,
-            axis: "y",
-            dataset: "dataset",
-            key: "gauge_zero",
-            label: "Gauge Zero", // TODO: translate
-            color: "rgba(0, 0, 0, 1)", //color: "hsla(88, 48%, 48%, 1)",
-            type: [
-                "line",
-                "dot"
-            ],
-            id: "gaugeZero"
-        });
-
-        // Create Crossing-Height-Serie
-        $scope.options.series.push({
-            visible: true,
-            axis: "y",
-            dataset: "dataset",
-            key: "crossing_height",
-            label: "Crossing-Height", // TODO: translate
-            color: "rgba(102, 0, 102, 1)",
-            type: [
-                "line",
-                "dot"
-            ],
-            id: "crossingHeight"
-        });
-
-        // Create Sensor-Height-Serie
-        $scope.options.series.push({
-            visible: true,
-            axis: "y",
-            dataset: "dataset",
-            key: "sensor_height",
-            label: "Sensor-Height", // TODO: translate
-            color: "rgba(0, 204, 204, 1)",
-            type: [
-                "line",
-                "dot"
-            ],
-            id: "sensorHeight"
-        });
-
-        // Check if query was defined
-        var query = "";
-        if ($scope.query) {
-            query = "?" + $scope.query.time + "=" + $scope.query.value;
-        } else {
-            query = "";
-        }
-
-        // Check if User is authenticated
-        var token;
-        if ($rootScope.authenticated_user) {
-            token = $rootScope.authenticated_user.token;
-        } else {
-            token = "";
-        }
-
-
-        // Request timeseries
-        $timeseriesService.list(token, $scope.sensor.sensor_id, query)
-            .success(function(response) {
-                $scope.sensor.timeseries = response;
-
-                // Add values to chart
-                angular.forEach($scope.sensor.timeseries, function(timeserie, key) {
-
-                    // Draw timeseries
-                    $scope.data.dataset.push({
-                        timestamp: new Date(timeserie.measurement_date), // TODO: only data, no time!
-                        water_level: timeserie.water_level,
-                        sensor_height: $scope.sensor.sensor_height,
-                        crossing_height: $scope.sensor.crossing_height,
-                        gauge_zero: 0
-                    });
-                });
-
-            }).error(function(err) {
-                $scope.err = err;
-            });
+        $scope.update_timeseries();
     };
 
 
@@ -240,6 +256,11 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
      */
     $scope.data = {
         dataset: []
+    };
+    // Test
+    $scope.currentThreshold = {
+        warning_threshold: 10,
+        critical_threshold: 20,
     };
 
 
