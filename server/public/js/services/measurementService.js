@@ -6,12 +6,19 @@ var app = angular.module("measurementService", []);
 app.factory('$measurementService', function($http, config) {
 
     return {
-        list: function(sensor_id) {
-            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/measurements");
+
+        list: function(token, sensor_id, query) {
+            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/measurements" + query, {
+                headers: { 'authorization': token }
+            });
         },
-        get: function(sensor_id, query) {
-            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/measurements" + query);
+
+        get_latest: function(token, sensor_id) {
+            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/latest/measurement", {
+                headers: { 'authorization': token }
+            });
         }
+
     };
 
 });

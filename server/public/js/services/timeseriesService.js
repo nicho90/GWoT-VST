@@ -6,9 +6,13 @@ var app = angular.module("timeseriesService", []);
 app.factory('$timeseriesService', function($http, config) {
 
     return {
-        get: function(sensor_id, query) {
-            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/timeseries" + query);
+
+        list: function(token, sensor_id, query) {
+            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/timeseries" + query, {
+                headers: { 'authorization': token }
+            });
         }
+
     };
 
 });

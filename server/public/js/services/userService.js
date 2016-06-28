@@ -6,6 +6,8 @@ var app = angular.module("userService", []);
 app.factory('$userService', function($http, config) {
 
     return {
+
+        // New User
         getDefault: function() {
             return {
                 username : "",
@@ -15,6 +17,7 @@ app.factory('$userService', function($http, config) {
                 language : "en_US"
             };
         },
+
         create: function(data){
             return $http.post(config.apiURL + "/users", data);
         },
@@ -34,6 +37,7 @@ app.factory('$userService', function($http, config) {
                 headers: { 'authorization': token }
             });
         }
+
     };
 
 });
