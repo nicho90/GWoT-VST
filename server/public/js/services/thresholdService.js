@@ -6,6 +6,8 @@ var app = angular.module("thresholdService", []);
 app.factory('$thresholdService', function($http, config) {
 
     return {
+
+        // New Threshold
         getDefault: function() {
             return {
                     description: "",
@@ -14,6 +16,7 @@ app.factory('$thresholdService', function($http, config) {
                     category: "OTHER"
             };
         },
+        
         list: function(token, username) {
             return $http.get(config.apiURL + "/users/" + username + "/thresholds", {
                 headers: { 'authorization': token }

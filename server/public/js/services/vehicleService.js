@@ -6,11 +6,15 @@ var app = angular.module("vehicleService", []);
 app.factory('$vehicleService', function($http, config) {
 
     return {
-        /*getDefault: function() {
+
+        /*
+        // New Vehicle
+        getDefault: function() {
             return {
 
             };
         },*/
+
         list: function() {
             return $http.get(config.apiURL + "/vehicles");
         },
@@ -39,6 +43,7 @@ app.factory('$vehicleService', function($http, config) {
                 headers: { 'token': token }
             });
         }*/
+
     };
 
 });

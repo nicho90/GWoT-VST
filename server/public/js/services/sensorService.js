@@ -7,6 +7,23 @@ app.factory('$sensorService', function($http, config) {
 
     return {
 
+        // New Sensor
+        getDefault: function() {
+            return {
+                device_id: "",
+                description: "",
+                private: false,
+                water_body_id: "",
+                sensor_height: 100,
+                crossing_height: 0,
+                default_frequency: 60000,
+                danger_frequency: 6000,
+                threshold_value: 50,
+                lng: 0.0,
+                lat: 0.0
+            };
+        },
+
         list: function(token) {
             return $http.get(config.apiURL + "/sensors", {
                 headers: { 'authorization': token }
