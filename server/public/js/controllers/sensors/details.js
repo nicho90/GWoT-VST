@@ -646,6 +646,15 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
 
     /**
+     * Show Details
+     * @param  {number} sensor_id [The Id of a Sensor]
+     */
+    $scope.showDetails = function(sensor_id){
+        $location.url("/sensors/" + sensor_id);
+    };
+
+
+    /**
      * Init
      */
     $scope.load();
