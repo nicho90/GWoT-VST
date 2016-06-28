@@ -6,27 +6,54 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
 
     /**
-     * Change Query for updating the timeseries chart
+     * Change the time query more specific by a number to update the timeseries chart
+     * @param  {string} time  [minutes, hours, days, weeks, months, years]
+     * @param  {number} value [number]
      */
-    $scope.changeQuery = function(time) {
-        if (time === '' ||  time === undefined) {
+    $scope.changeQuery = function(time, value) {
 
-        } else if (time === "minutes") {
+        $scope.query.time = time;
+        $scope.query.value = value;
+
+        // Refresh Timeseries
+        $scope.update_timeseries();
+    };
+
+
+
+    /**
+     * Change the time query by an option update the timeseries chart
+     * @param  {string} option [hours, days, weeks, months, years or all]
+     */
+    $scope.changeOption = function(option) {
+
+        if (option === "hours") {
+            $scope.timeoption = "hours";
             $scope.query.time = "minutes";
-        } else if (time === "hours") {
-            $scope.query.time = "hours";
-        } else if (time === "days") {
+            $scope.query.value = 30;
+        } else if (option === "days") {
+            $scope.timeoption = "days";
             $scope.query.time = "days";
-        } else if (time === "weeks") {
+            $scope.query.value = 1;
+        } else if (option === "weeks") {
+            $scope.timeoption = "weeks";
             $scope.query.time = "weeks";
-        } else if (time === "months") {
+            $scope.query.value = 1;
+        } else if (option === "months") {
+            $scope.timeoption = "months";
             $scope.query.time = "months";
-        } else if (time === "years") {
+            $scope.query.value = 1;
+        } else if (option === "years") {
+            $scope.timeoption = "years";
             $scope.query.time = "years";
-        } else {
+            $scope.query.value = 1;
+        } else if (option === "all") {
+            $scope.timeoption = "all";
             $scope.query.time = "";
+            $scope.query.value = "";
         }
 
+        // Refresh Timeseries
         $scope.update_timeseries();
     };
 
@@ -67,7 +94,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
         // Check if query was defined
         var query;
-        if ($scope.query) {
+        if ($scope.query.time !== "" && $scope.query.value !== "") {
             query = "?" + $scope.query.time + "=" + $scope.query.value;
         } else {
             query = "";
@@ -249,18 +276,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                 }
             }
         }
-    };
-
-    /**
-     * Init
-     */
-    $scope.data = {
-        dataset: []
-    };
-    // Test
-    $scope.currentThreshold = {
-        warning_threshold: 10,
-        critical_threshold: 20,
     };
 
 
@@ -452,17 +467,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
 
     /**
-     * Init
-     */
-    $scope.load();
-    $scope.tab = 1;
-    $scope.query = {
-        time: "months",
-        value: 3
-    };
-
-
-    /**
      * Update when user logged in or out
      */
     $rootScope.$on('update', function() {
@@ -639,4 +643,31 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             }
         }
     });
+
+
+    /**
+     * Init
+     */
+    $scope.load();
+
+    // Select General-tab (Overview of the Sensor)
+    $scope.tab = 1;
+
+    // Prepare Timeoption and Timequery for Linechart
+    $scope.timeoption = "hours";
+    $scope.query = {
+        time: "minutes",
+        value: 30
+    };
+
+    // Prepare Datasets for Linechart
+    $scope.data = {
+        dataset: []
+    };
+
+    // TODO: Support for current Threshold
+    $scope.currentThreshold = {
+        warning_threshold: 10,
+        critical_threshold: 20,
+    };
 });
