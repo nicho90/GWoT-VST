@@ -21,6 +21,7 @@ var app = angular.module("gwot-vst", [
     "thresholdService",
     "sensorService",
     "measurementService",
+    "statisticService",
     "timeseriesService",
     "forecastService"
 ]);

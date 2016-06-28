@@ -60,11 +60,18 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
 
         // TODO: Check Threshold
 
+        // Check if User is authenticated
+        var token;
+        if ($rootScope.authenticated_user) {
+            token = $rootScope.authenticated_user.token;
+        } else {
+            token = "";
+        }
 
         angular.forEach($scope.sensors, function(sensor, key) {
 
             // Request lastest measurement for sensor
-            $measurementService.get(sensor.sensor_id, "?latest=true")
+            $measurementService.get_latest(token, sensor.sensor_id)
                 .success(function(response) {
                     $scope.sensors[key].latest_measurement = response;
 
