@@ -81,6 +81,43 @@ body {
 }
 
 
+/* Weather Forecast */
+.forecast {
+    width: 100%;
+}
+
+.forecast td, .forecast th {
+    width: 10%;
+    padding: 3px;
+    font-size: 0.75rem;
+}
+
+.headline th,
+.weatherIcon td,
+.normal td {
+    text-align: center;
+}
+
+.normal th {
+    text-align: right;
+}
+
+.weatherIcon > td {
+    font-size: 2.0rem;
+    color: #e6550d;
+}
+
+.red {
+    color: red;
+}
+
+.blue {
+    color: blue;
+}
+
+
+
+
 /* Chart */
 .linechart {
     padding: 15px;

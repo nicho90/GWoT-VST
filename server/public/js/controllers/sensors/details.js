@@ -19,8 +19,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         $scope.update_timeseries();
     };
 
-
-
     /**
      * Change the time query by an option update the timeseries chart
      * @param  {string} option [hours, days, weeks, months, years or all]

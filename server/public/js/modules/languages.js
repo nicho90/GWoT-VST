@@ -91,7 +91,18 @@ app.config(function($translateProvider, config) {
 
         WATER_LEVEL: 'Pegelstand',
         WATER_LEVELS: 'Pegelstände',
-        LAST_WATER_LEVEL: 'Letzer Pegelstand'
+        LAST_WATER_LEVEL: 'Letzer Pegelstand',
+
+        CURRENTLY: 'Aktuell',
+        TODAY: 'Heute',
+        TOMORROW: 'Morgen',
+        Monday: 'Montag',
+        Tuesday: 'Dienstag',
+        Wednesday: 'Mittwoch',
+        Thursday: 'Donnerstag',
+        Friday: 'Freitag',
+        Saturday: 'Samstag',
+        Sunday: 'Sonntag'
 
     });
 
@@ -181,7 +192,11 @@ app.config(function($translateProvider, config) {
 
         WATER_LEVEL: 'Water level',
         WATER_LEVELS: 'Water levels',
-        LAST_WATER_LEVEL: 'Last water level'
+        LAST_WATER_LEVEL: 'Last water level',
+
+        CURRENTLY: 'Currently',
+        TODAY: 'Today',
+        TOMORROW: 'Tomorrow',
 
     });
 

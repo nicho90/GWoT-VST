@@ -2,7 +2,8 @@ var app = angular.module("filters", []);
 
 /**
  * Distance Filter
- * Switch to 1km after 1000m
+ * @param  {number} 'distance' [Raw distance value]
+ * @return {string} 'distance' [Beautified distance, which will be in km after 1000m]
  */
 app.filter('distance', function() {
     return function(distance) {
@@ -17,6 +18,8 @@ app.filter('distance', function() {
 
 /**
  * Timestamp Filter
+ * @param  {string} 'time' [Raw timestamp]
+ * @return {string} 'time' [Beautified timestamp]
  */
 app.filter('time', function() {
     return function(time) {
@@ -30,7 +33,25 @@ app.filter('time', function() {
 
 
 /**
+ * Weekday Filter
+ * @param  {number} 'unixtime' [The unixtime in Milliseconds]
+ * @return {string} 'weekday' [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]
+ */
+app.filter('unixtime', function() {
+    return function(unixtime) {
+        if(unixtime === undefined){
+            return "";
+        } else {
+            return moment.unix(unixtime).format("dddd");
+        }
+    };
+});
+
+
+/**
  * Humidity Filter
+ * @param  {number} 'humidity' [Raw humidity value]
+ * @return {number} 'humidity' [Beautified humidity value]
  */
 app.filter('humidity', function() {
     return function(humidity) {

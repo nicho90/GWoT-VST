@@ -30,7 +30,7 @@
     <div class="row">
 
         <!-- Sensor Description -->
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="sensor-title" ng-if="sensor">
                 <br>
                 <h1 class="display-4 text-primary" style="font-size: 18pt;">
@@ -40,32 +40,73 @@
         </div>
 
         <!-- Forecast -->
-        <div class="col-md-6">
-            <div class="card" style="margin-bottom: 0px;">
-                <!--<h3 class="card-header">{{ 'WEATHER_FORECAST' | translate }}</h3>-->
-                <div class="row">
-                    <div class="col-xs-2">
-                        <b>{{ 'CURRENTLY' | translate }}</b>
-                        <br> {{weather_forecast.currently.temperature}} °C
-                        <br> {{weather_forecast.currently.humidity | humidity}}%
-                    </div>
-                    <div class="col-xs-2">
+        <div class="col-md-8" ng-if="sensor">
 
-                    </div>
-                    <div class="col-xs-2">
-
-                    </div>
-                    <div class="col-xs-2">
-
-                    </div>
-                    <div class="col-xs-2">
-
-                    </div>
-                    <div class="col-xs-2">
-
-                    </div>
-                </div>
-            </div>
+            <table class="forecast">
+                <tr ng-if="!weather_forecast">
+                    <td colspan="10">
+                        <center><i class="fa fa-spinner fa-pulse"></i></center>
+                    </td>
+                </tr>
+                <tr class="headline" ng-if="weather_forecast">
+                    <th></th>
+                    <th>{{ 'CURRENTLY' | translate }}</th>
+                    <th></th>
+                    <th>{{ 'TODAY' | translate }}</th>
+                    <th>{{ 'TOMORROW' | translate }}</th>
+                    <th>{{ weather_forecast.daily.data[2].time | unixtime | translate }}</th>
+                    <th>{{ weather_forecast.daily.data[3].time | unixtime | translate}}</th>
+                    <th>{{ weather_forecast.daily.data[4].time | unixtime | translate}}</th>
+                    <th>{{ weather_forecast.daily.data[5].time | unixtime | translate}}</th>
+                    <th>{{ weather_forecast.daily.data[6].time | unixtime | translate}}</th>
+                </tr>
+                <tr class="weatherIcon" ng-if="weather_forecast">
+                    <th></th>
+                    <td><i class="wi wi-forecast-io-{{weather_forecast.currently.icon}}"></i></td>
+                    <th></th>
+                    <td><i class="wi wi-forecast-io-{{weather_forecast.daily.data[0].icon}}"></i></td>
+                    <td><i class="wi wi-forecast-io-{{weather_forecast.daily.data[1].icon}}"></i></td>
+                    <td><i class="wi wi-forecast-io-{{weather_forecast.daily.data[2].icon}}"></i></td>
+                    <td><i class="wi wi-forecast-io-{{weather_forecast.daily.data[3].icon}}"></i></td>
+                    <td><i class="wi wi-forecast-io-{{weather_forecast.daily.data[4].icon}}"></i></td>
+                    <td><i class="wi wi-forecast-io-{{weather_forecast.daily.data[5].icon}}"></i></td>
+                    <td><i class="wi wi-forecast-io-{{weather_forecast.daily.data[6].icon}}"></i></td>
+                </tr>
+                <tr class="normal" ng-if="weather_forecast">
+                    <th rowspan="2"><i class="wi wi-thermometer"></i></th>
+                    <td rowspan="2"><b>{{weather_forecast.currently.temperature}}°C</b></td>
+                    <th><i class="wi wi-thermometer"></i></th>
+                    <td>{{ weather_forecast.daily.data[0].temperatureMax}}°C</td>
+                    <td>{{ weather_forecast.daily.data[1].temperatureMax}}°C</td>
+                    <td>{{ weather_forecast.daily.data[2].temperatureMax}}°C</td>
+                    <td>{{ weather_forecast.daily.data[3].temperatureMax}}°C</td>
+                    <td>{{ weather_forecast.daily.data[4].temperatureMax}}°C</td>
+                    <td>{{ weather_forecast.daily.data[5].temperatureMax}}°C</td>
+                    <td>{{ weather_forecast.daily.data[6].temperatureMax}}°C</td>
+                </tr>
+                <tr class="normal" ng-if="weather_forecast">
+                    <th><i class="wi wi-thermometer-exterior"></i></th>
+                    <td>{{ weather_forecast.daily.data[0].temperatureMin}}°C</td>
+                    <td>{{ weather_forecast.daily.data[1].temperatureMin}}°C</td>
+                    <td>{{ weather_forecast.daily.data[2].temperatureMin}}°C</td>
+                    <td>{{ weather_forecast.daily.data[3].temperatureMin}}°C</td>
+                    <td>{{ weather_forecast.daily.data[4].temperatureMin}}°C</td>
+                    <td>{{ weather_forecast.daily.data[5].temperatureMin}}°C</td>
+                    <td>{{ weather_forecast.daily.data[6].temperatureMin}}°C</td>
+                </tr>
+                <tr class="normal" ng-if="weather_forecast">
+                    <th><i class="wi wi-humidity"></i></th>
+                    <td><b>{{weather_forecast.currently.humidity | humidity}}%</b></td>
+                    <th><i class="wi wi-humidity"></i></th>
+                    <td>{{weather_forecast.daily.data[0].humidity | humidity}}%</td>
+                    <td>{{weather_forecast.daily.data[1].humidity | humidity}}%</td>
+                    <td>{{weather_forecast.daily.data[2].humidity | humidity}}%</td>
+                    <td>{{weather_forecast.daily.data[3].humidity | humidity}}%</td>
+                    <td>{{weather_forecast.daily.data[4].humidity | humidity}}%</td>
+                    <td>{{weather_forecast.daily.data[5].humidity | humidity}}%</td>
+                    <td>{{weather_forecast.daily.data[6].humidity | humidity}}%</td>
+                </tr>
+            </table>
         </div>
     </div>
     <br>
@@ -340,22 +381,22 @@
                     <div class="col-md-5">
                         <div class="middle">
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': timeoption =='hours' }" ng-click="changeOption('hours')">
+                                <button type="button" class="btn " ng-class="{ 'btn-primary': timeoption == 'hours', 'btn-primary-outline': timeoption != 'hours' }" ng-click="changeOption('hours')">
                                     {{ 'HOURS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': timeoption =='days' }" ng-click="changeOption('days')">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': timeoption == 'days', 'btn-primary-outline': timeoption != 'days' }" ng-click="changeOption('days')">
                                     {{ 'DAYS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': timeoption =='weeks' }" ng-click="changeOption('weeks')">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': timeoption == 'weeks', 'btn-primary-outline': timeoption != 'weeks' }" ng-click="changeOption('weeks')">
                                     {{ 'WEEKS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': timeoption =='months' }" ng-click="changeOption('months')">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': timeoption == 'months', 'btn-primary-outline': timeoption != 'months' }" ng-click="changeOption('months')">
                                     {{ 'MONTHS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': timeoption =='years' }" ng-click="changeOption('years')">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': timeoption == 'years', 'btn-primary-outline': timeoption != 'years' }" ng-click="changeOption('years')">
                                     {{ 'YEARS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': timeoption =='all' }" ng-click="changeOption('all')">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': timeoption == 'all', 'btn-primary-outline': timeoption != 'all' }" ng-click="changeOption('all')">
                                     {{ 'ALL' | translate }}
                                 </button>
                             </div>
@@ -366,83 +407,83 @@
 
                             <!-- Minutes & Hours -->
                             <div class="btn-group" role="group" ng-if="query.time=='minutes' || query.time=='hours'">
-                                <button type="button" class="btn" ng-class="{ 'btn-primary':  (query.time=='minutes' && query.value == 30) }" ng-click="changeQuery('minutes', 30)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='minutes' && query.value == 30), 'btn-primary-outline': (query.time!='minutes' && query.value != 30) }" ng-click="changeQuery('minutes', 30)">
                                     30 {{ 'MINUTES' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='hours' && query.value == 1) }" ng-click="changeQuery('hours', 1)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='hours' && query.value == 1), 'btn-primary-outline': ((query.time!='minutes' || query.time!='hours') && query.value != 1) }" ng-click="changeQuery('hours', 1)">
                                     1 {{ 'HOUR' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='hours' && query.value == 3) }" ng-click="changeQuery('hours', 3)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='hours' && query.value == 3), 'btn-primary-outline': ((query.time!='minutes' || query.time!='hours') && query.value != 3) }" ng-click="changeQuery('hours', 3)">
                                     3 {{ 'HOURS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='hours' && query.value == 6) }" ng-click="changeQuery('hours', 6)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='hours' && query.value == 6), 'btn-primary-outline': ((query.time!='minutes' || query.time!='hours') && query.value != 6) }" ng-click="changeQuery('hours', 6)">
                                     6 {{ 'HOURS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='hours' && query.value == 12) }" ng-click="changeQuery('hours', 12)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='hours' && query.value == 12), 'btn-primary-outline': ((query.time!='minutes' || query.time!='hours') && query.value != 12) }" ng-click="changeQuery('hours', 12)">
                                     12 {{ 'HOURS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='hours' && query.value == 24) }" ng-click="changeQuery('hours', 24)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='hours' && query.value == 24), 'btn-primary-outline': ((query.time!='minutes' || query.time!='hours') && query.value != 24) }" ng-click="changeQuery('hours', 24)">
                                     24 {{ 'HOURS' | translate }}
                                 </button>
                             </div>
 
                             <!-- Days -->
                             <div class="btn-group" role="group" ng-if="query.time=='days'">
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='days' && query.value == 1) }" ng-click="changeQuery('days', 1)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='days' && query.value == 1), 'btn-primary-outline': (query.time=='days' && query.value != 1) }" ng-click="changeQuery('days', 1)">
                                     1 {{ 'DAY' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='days' && query.value == 3) }" ng-click="changeQuery('days', 3)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='days' && query.value == 3), 'btn-primary-outline': (query.time=='days' && query.value != 3) }" ng-click="changeQuery('days', 3)">
                                     3 {{ 'DAYS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='days' && query.value == 5) }" ng-click="changeQuery('days', 5)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='days' && query.value == 5), 'btn-primary-outline': (query.time=='days' && query.value != 5) }" ng-click="changeQuery('days', 5)">
                                     5 {{ 'DAYS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='days' && query.value == 7) }" ng-click="changeQuery('days', 7)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='days' && query.value == 7), 'btn-primary-outline': (query.time=='days' && query.value != 7) }" ng-click="changeQuery('days', 7)">
                                     7 {{ 'DAYS' | translate }}
                                 </button>
                             </div>
 
                             <!-- Weeks -->
                             <div class="btn-group" role="group" ng-if="query.time=='weeks'">
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='weeks' && query.value == 1) }" ng-click="changeQuery('weeks', 1)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='weeks' && query.value == 1), 'btn-primary-outline': (query.time=='weeks' && query.value != 1) }" ng-click="changeQuery('weeks', 1)">
                                     1 {{ 'WEEK' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='weeks' && query.value == 2) }" ng-click="changeQuery('weeks', 2)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='weeks' && query.value == 2), 'btn-primary-outline': (query.time=='weeks' && query.value != 2) }" ng-click="changeQuery('weeks', 2)">
                                     2 {{ 'WEEKS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='weeks' && query.value == 3) }" ng-click="changeQuery('weeks', 3)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='weeks' && query.value == 3), 'btn-primary-outline': (query.time=='weeks' && query.value != 3) }" ng-click="changeQuery('weeks', 3)">
                                     3 {{ 'WEEKS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='weeks' && query.value == 4) }" ng-click="changeQuery('weeks', 4)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='weeks' && query.value == 4), 'btn-primary-outline': (query.time=='weeks' && query.value != 4) }" ng-click="changeQuery('weeks', 4)">
                                     4 {{ 'WEEKS' | translate }}
                                 </button>
                             </div>
 
                             <!-- Months -->
                             <div class="btn-group" role="group" ng-if="query.time=='months'">
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='months' && query.value == 1) }" ng-click="changeQuery('months', 1)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='months' && query.value == 1), 'btn-primary-outline': (query.time=='months' && query.value != 1) }" ng-click="changeQuery('months', 1)">
                                     1 {{ 'MONTH' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='months' && query.value == 3) }" ng-click="changeQuery('months', 3)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='months' && query.value == 3), 'btn-primary-outline': (query.time=='months' && query.value != 3) }" ng-click="changeQuery('months', 3)">
                                     3 {{ 'MONTHS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='months' && query.value == 6) }" ng-click="changeQuery('months', 6)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='months' && query.value == 6), 'btn-primary-outline': (query.time=='months' && query.value != 6) }" ng-click="changeQuery('months', 6)">
                                     6 {{ 'MONTHS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='months' && query.value == 12) }" ng-click="changeQuery('months', 12)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='months' && query.value == 12), 'btn-primary-outline': (query.time=='months' && query.value != 12) }" ng-click="changeQuery('months', 12)">
                                     12 {{ 'MONTHS' | translate }}
                                 </button>
                             </div>
 
                             <!-- Years -->
                             <div class="btn-group" role="group" ng-if="query.time=='years'">
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='years' && query.value == 1) }" ng-click="changeQuery('years', 1)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='years' && query.value == 1), 'btn-primary-outline': (query.time=='years' && query.value != 1) }" ng-click="changeQuery('years', 1)">
                                     1 {{ 'YEAR' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='years' && query.value == 5) }" ng-click="changeQuery('years', 5)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='years' && query.value == 5), 'btn-primary-outline': (query.time=='years' && query.value != 5) }" ng-click="changeQuery('years', 5)">
                                     5 {{ 'YEARS' | translate }}
                                 </button>
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='years' && query.value == 10) }" ng-click="changeQuery('years', 10)">
+                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='years' && query.value == 10), 'btn-primary-outline': (query.time=='years' && query.value != 10) }" ng-click="changeQuery('years', 10)">
                                     10 {{ 'YEARS' | translate }}
                                 </button>
                             </div>

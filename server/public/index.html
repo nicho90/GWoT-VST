@@ -24,6 +24,9 @@
         <!-- Font-Awesome -->
         <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
 
+        <!-- Weather-Icons -->
+        <link href="lib/weather-icons/css/weather-icons.min.css" rel="stylesheet"/>
+
         <!-- Flag Icons -->
         <link href="lib/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
 
@@ -40,6 +43,7 @@
         <!-- JavaScript Dependecies -->
         <script src="lib/jquery/dist/jquery.min.js"></script>
         <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="lib/moment/moment.js"></script>
         <script src="lib/angular/angular.min.js"></script>
         <script src="lib/angular-route/angular-route.min.js"></script>
         <script src="lib/angular-translate/angular-translate.min.js"></script>
@@ -86,7 +90,7 @@
                     <button class="btn btn-primary" type="submit" ng-click="login()">
                         <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'LOGIN' | translate }}
                     </button>
-                    <button class="btn btn-secondary" type="button" ng-click="sign_up()">
+                    <button class="btn btn-secondary" type="button" ng-click="signUp()">
                         <i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SIGN_UP' | translate }}
                     </button>
                 </form>
