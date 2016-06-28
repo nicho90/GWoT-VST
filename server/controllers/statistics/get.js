@@ -151,7 +151,6 @@ exports.request = function(req, res) {
 										});
 
 									} else {
-										console.log("null in Timeseries");
 
 										async.waterfall([
 
@@ -168,7 +167,6 @@ exports.request = function(req, res) {
 														res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 														return console.error(errors.database.error_2.message, err);
 													} else {
-														//console.log(result.rows[0]);
 														callback(null, result.rows[0].minimum);
 													}
 												});
@@ -200,8 +198,6 @@ exports.request = function(req, res) {
 													});
 
 												} else {
-
-													console.log("null in Measurements");
 
 													var min = {
   														water_level: "-",
@@ -250,7 +246,6 @@ exports.request = function(req, res) {
 											res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 											return console.error(errors.database.error_2.message, err);
 										} else {
-											console.log(result.rows);
 											callback(null, result.rows[0].maximum);
 										}
 									});
@@ -289,7 +284,6 @@ exports.request = function(req, res) {
 										});
 
 									} else {
-										console.log("null in Timeseries");
 
 										async.waterfall([
 
@@ -306,7 +300,6 @@ exports.request = function(req, res) {
 														res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 														return console.error(errors.database.error_2.message, err);
 													} else {
-														console.log(result.rows[0]);
 														callback(null, result.rows[0].maximum);
 													}
 												});
@@ -338,8 +331,6 @@ exports.request = function(req, res) {
 													});
 
 												} else {
-
-													console.log("null in Measurements");
 
 													var max = {
   														water_level: "-",
@@ -390,8 +381,6 @@ exports.request = function(req, res) {
 										callback(null, null);
 									} else {
 
-										console.log("No measurements found");
-
 										var latest_measurement = {
 										    water_level: "-",
 										    water_level_unit: "CENTIMETER",
@@ -420,7 +409,7 @@ exports.request = function(req, res) {
 	            if (err) {
 	            	console.log(err);
 	            } else {
-	            	console.log("Finished");
+	            	//console.log("Finished");
 	            }
 	        });
 		}

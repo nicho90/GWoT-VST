@@ -77,7 +77,7 @@ exports.request = function(req, res) {
 										"water_level, " +
 										"'CENTIMETER' AS water_level_unit, " +
 										"measurement_timestamp AS measurement_date, " +
-										"'true' AS valid_data " +
+										"true AS valid_data " +
 									"FROM Measurements WHERE sensor_id=$1 AND measurement_timestamp >=$2 ORDER BY measurement_timestamp DESC" + limit + ";";
 							} else {
 								res.status(errors.database.error_3.code).send(errors.database.error_3);
@@ -97,7 +97,7 @@ exports.request = function(req, res) {
 										"water_level, " +
 										"'CENTIMETER' AS water_level_unit, " +
 										"measurement_timestamp AS measurement_date, " +
-										"'true' AS valid_data " +
+										"true AS valid_data " +
 									"FROM Measurements WHERE sensor_id=$1 AND measurement_timestamp >=$2 ORDER BY measurement_timestamp DESC" + limit + ";";
 							} else {
 								res.status(errors.database.error_3.code).send(errors.database.error_3);
