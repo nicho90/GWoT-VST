@@ -16,7 +16,7 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
         } else {
             username = "";
         }
-        console.log("Authenticated user: ", $rootScope.authenticated_user);
+        //console.log("Authenticated user: ", $rootScope.authenticated_user);
     });
 
     /*

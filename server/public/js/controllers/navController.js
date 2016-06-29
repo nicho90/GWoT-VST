@@ -37,8 +37,10 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
      * User Authentication
      */
     $scope.resetAuthentication = function(){
-        delete $scope.authenticated_user;
         delete $rootScope.authenticated_user;
+        delete $scope.authenticated_user;
+
+        // Update all Controllers
         $rootScope.$broadcast('update');
     };
 
@@ -80,14 +82,23 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
                 $scope.authenticated_user = response;
                 $rootScope.authenticated_user = response;
 
-                // Update all Controllers
-                $rootScope.$broadcast('update');
-
                 // Load thresholds
                 $thresholdService.list($scope.authenticated_user.token, $scope.authenticated_user.username).success(function(response){
 
                     $scope.authenticated_user.thresholds = response;
                     $rootScope.authenticated_user.thresholds = response;
+
+                    // Select first threshold as currentThreshold
+                    if($rootScope.authenticated_user.thresholds.length !== 0){
+                        $scope.authenticated_user.currentThreshold = $rootScope.authenticated_user.thresholds[0];
+                        $rootScope.authenticated_user.currentThreshold = $rootScope.authenticated_user.thresholds[0];
+                    } else {
+                        $rootScope.authenticated_user.currentThreshold = {
+                            threshold_id: 0
+                        };
+                    }
+
+                    // Update all Controllers again
                     $rootScope.$broadcast('update');
 
                     // Throw Alert
@@ -146,4 +157,15 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
         $scope.isAlert = false;
     };
 
+
+    /**
+     * Set new current Threshold
+     */
+    $scope.updateCurrentThreshold = function(threshold){
+
+        $scope.authenticated_user.currentThreshold = threshold;
+
+        // Update all Controllers
+        $rootScope.$broadcast('update');
+    };
 });

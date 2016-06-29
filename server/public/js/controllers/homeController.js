@@ -58,8 +58,6 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
      */
     $scope.updateMarker = function() {
 
-        // TODO: Check Threshold
-
         // Check if User is authenticated
         var token;
         if ($rootScope.authenticated_user) {
@@ -74,6 +72,28 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
             $measurementService.get_latest(token, sensor.sensor_id)
                 .success(function(response) {
                     $scope.sensors[key].latest_measurement = response;
+
+                    // Prepare Icon
+                    var _icon = $scope.defaultIcon;
+
+                    // Check if User is authenticated
+                    if($rootScope.authenticated_user !== undefined){
+
+                        // Check if User has set a current Threshold
+                        if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
+
+                            // Check if water_level exists
+                            if(sensor.latest_measurement.water_level !== undefined){
+                                if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].water_level + $rootScope.authenticated_user.currentThreshold.warning_threshold && $scope.sensor.latest_measurement.water_level < sensor.water_level + $rootScope.authenticated_user.currentThreshold.critical_threshold){
+                                    _icon = $scope.warningIcon;
+                                } else if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].water_level + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
+                                    _icon = $scope.dangerIcon;
+                                } else {
+                                    _icon = $scope.successIcon;
+                                }
+                            }
+                        }
+                    }
 
                     // Check if latest measurement exists
                     var water_level = "-";
@@ -109,7 +129,7 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
                         lng: sensor.lng,
                         focus: false,
                         draggable: false,
-                        icon: $scope.successIcon,
+                        icon: _icon,
                         message: _message,
                         getMessageScope: function() {
                             return $scope;
@@ -203,6 +223,12 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
             }
         },
         markers: [],
+        defaultIcon: {
+            type: 'awesomeMarker',
+            markerColor: 'lightgray',
+            prefix: 'fa',
+            icon: 'cube'
+        },
         successIcon: {
             type: 'awesomeMarker',
             markerColor: 'green',
@@ -218,12 +244,6 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
         dangerIcon: {
             type: 'awesomeMarker',
             markerColor: 'red',
-            prefix: 'fa',
-            icon: 'cube'
-        },
-        offlineIcon: {
-            type: 'awesomeMarker',
-            markerColor: 'lightgrey',
             prefix: 'fa',
             icon: 'cube'
         },

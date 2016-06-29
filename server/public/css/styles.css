@@ -25,6 +25,10 @@ body {
     z-index: 2147483647;
 }
 
+.bold {
+    font-weight: bold;
+}
+
 .main {
     padding-top: 70px;
 }

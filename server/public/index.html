@@ -103,7 +103,7 @@
                         <div class="dropdown-menu dropdown-menu-right">
                             <h6 class="dropdown-header" ng-if="authenticated_user.thresholds.length > 0">{{ 'THRESHOLDS' | translate}}</h6>
 
-                            <a ng-repeat="threshold in authenticated_user.thresholds" class="dropdown-item" style="cursor:pointer;" ng-click="updateCurrentThreshold(threshold.threshold_id)">
+                            <a ng-repeat="threshold in authenticated_user.thresholds" class="dropdown-item" style="cursor:pointer;" ng-click="updateCurrentThreshold(threshold)">
                                 <i class="fa fa-blind" aria-hidden="true" ng-if="threshold.category == 'PEDESTRIAN' "></i>
                                 <i class="fa fa-bicycle" aria-hidden="true" ng-if="threshold.category == 'BIKE' "></i>
                                 <i class="fa fa-wheelchair" aria-hidden="true" ng-if="threshold.category == 'WHEELCHAIR' "></i>
@@ -113,7 +113,7 @@
                                 <i class="fa fa-bus" aria-hidden="true" ng-if="threshold.category == 'BUS' "></i>
                                 <i class="fa fa-truck" aria-hidden="true" ng-if="threshold.category == 'TRUCK' "></i>
                                 <i class="fa fa-circle-o" aria-hidden="true" ng-if="threshold.category == 'OTHER' "></i>
-                                &nbsp;{{threshold.description}}
+                                &nbsp;<span ng-class="{'bold': authenticated_user.currentThreshold.threshold_id === threshold.threshold_id}">{{threshold.description}}</span>
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" ng-click="showSettings()" style="cursor:pointer;">
