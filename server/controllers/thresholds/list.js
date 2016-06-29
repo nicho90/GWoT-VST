@@ -59,6 +59,7 @@ exports.request = function(req, res){
 			                        } else {
 
 										var query = "SELECT " +
+												"threshold_id, " +
 												"created, " +
 												"updated, " +
 												"creator, " +

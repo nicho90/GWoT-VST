@@ -72,8 +72,9 @@ exports.request = function(req, res) {
 
 									// Check if Measurements exists
 									if(result.rows.length === 0) {
-										res.status(errors.query.error_2.code).send(errors.query.error_2);
-										return console.error(errors.query.error_2.message);
+
+										// Send empty Result
+										res.status(204).send();
 									} else {
 
 										// Send Result
@@ -117,14 +118,15 @@ exports.request = function(req, res) {
 
                                                     // Check if Measurements exists
 													if(result.rows.length === 0) {
-														res.status(errors.query.error_2.code).send(errors.query.error_2);
-														return console.error(errors.query.error_2.message);
+
+														// Send empty Result
+														res.status(204).send();
+
 													} else {
 
 														// Send Result
 					                                    res.status(200).send(result.rows[0]);
 													}
-
                                                 }
                                             });
 
