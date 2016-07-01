@@ -83,10 +83,10 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
                         if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
 
                             // Check if water_level exists
-                            if(sensor.latest_measurement.water_level !== undefined){
-                                if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].water_level + $rootScope.authenticated_user.currentThreshold.warning_threshold && $scope.sensor.latest_measurement.water_level < sensor.water_level + $rootScope.authenticated_user.currentThreshold.critical_threshold){
+                            if($scope.sensors[key].latest_measurement.water_level !== undefined){
+                                if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].water_level + $rootScope.authenticated_user.currentThreshold.warning_threshold && $scope.sensors[key].latest_measurement.water_level < $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold){
                                     _icon = $scope.warningIcon;
-                                } else if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].water_level + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
+                                } else if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
                                     _icon = $scope.dangerIcon;
                                 } else {
                                     _icon = $scope.successIcon;
@@ -225,7 +225,7 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
         markers: [],
         defaultIcon: {
             type: 'awesomeMarker',
-            markerColor: 'lightgray',
+            markerColor: 'gray',
             prefix: 'fa',
             icon: 'cube'
         },
@@ -246,6 +246,21 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
             markerColor: 'red',
             prefix: 'fa',
             icon: 'cube'
+        },
+        legend: {
+            position: 'bottomleft',
+            colors: [
+                '#70B211',
+                '#F8981B',
+                '#D83D20',
+                '#575757'
+            ],
+            labels: [ // TODO: translate
+                'Passable',
+                'Attention',
+                'Danger',
+                'N/A'
+            ]
         },
         events: {
             map: {

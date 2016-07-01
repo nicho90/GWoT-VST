@@ -209,7 +209,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             dataset: "dataset",
             key: "sensor_height",
             label: "Sensor-Height", // TODO: translate
-            color: "rgba(0, 204, 204, 1)",
+            color: "rgba(128, 128, 128, 1)",
             type: [
                 "line",
                 "dot"
@@ -224,7 +224,8 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             dataset: "dataset",
             key: "sensor_threshold_value",
             label: "Sensor-Threshold-Height", // TODO: translate
-            color: "rgba(205, 205, 0, 1)",
+            // color: "rgba(205, 205, 0, 1)",
+            color: "rgba(0, 204, 204, 1)",
             type: [
                 "line",
                 "dot"
@@ -292,7 +293,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             axis: "y",
             dataset: "dataset",
             key: "water_level",
-            label: $scope.sensor.device_id,
+            label: "Water Level",// $scope.sensor.device_id,
             color: "rgba(2, 117, 216, 1)", //color: "hsla(88, 48%, 48%, 1)",
             type: [
                 "line",
@@ -334,8 +335,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         $sensorService.get_related_sensors(token, $routeParams.sensor_id)
             .success(function(response) {
                 $scope.sensor.related_sensors = response;
-
-
                 $scope.updateMarkers('related_sensors');
             }).error(function(err) {
                 $scope.err = err;
@@ -374,7 +373,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
     $scope.updateMarker = function() {
 
         // Prepare Icon
-        var _icon = $scope.defaultIcon;
+        var _icon = $scope.main_defaultIcon;
 
         // Check if User is authenticated
         if($rootScope.authenticated_user !== undefined){
@@ -384,12 +383,12 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
                 // Check if water_level exists
                 if($scope.sensor.latest_measurement.water_level !== undefined){
-                    if($scope.sensor.latest_measurement.water_level >= $scope.sensor.water_level + $rootScope.authenticated_user.currentThreshold.warning_threshold && $scope.sensor.latest_measurement.water_level < $scope.sensor.water_level + $rootScope.authenticated_user.currentThreshold.critical_threshold){
+                    if($scope.sensor.latest_measurement.water_level >= $scope.sensor.crossing_height + $rootScope.authenticated_user.currentThreshold.warning_threshold && $scope.sensor.latest_measurement.water_level < $scope.sensor.crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold){
                         _icon = $scope.warningIcon;
-                    } else if($scope.sensor.latest_measurement >= $scope.sensor.water_level + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
-                        _icon = $scope.dangerIcon;
+                    } else if($scope.sensor.latest_measurement.water_level >= $scope.sensor.crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
+                        _icon = $scope.main_dangerIcon;
                     } else {
-                        _icon = $scope.successIcon;
+                        _icon = $scope.main_successIcon;
                     }
                 }
             }
@@ -426,6 +425,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             lng: $scope.sensor.lng,
             focus: true,
             draggable: false,
+            extraClasses:'mainMarker',
             icon: _icon,
             message: _message,
             getMessageScope: function() {
@@ -445,26 +445,66 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
      */
     $scope.updateMarkers = function(layer) {
 
+        // Check if User is authenticated
+        var token = "";
+        if ($rootScope.authenticated_user) {
+            token = $rootScope.authenticated_user.token;
+        }
+
         if (layer === 'related_sensors') {
 
             angular.forEach($scope.sensor.related_sensors, function(related_sensor, key) {
-                $scope.markers.push({
-                    sensor_id: related_sensor.sensor_id,
-                    layer: layer,
-                    lat: related_sensor.lat,
-                    lng: related_sensor.lng,
-                    focus: false,
-                    draggable: false,
-                    icon: $scope.defaultIcon,
-                    message: related_sensor.description,
-                    getMessageScope: function() {
-                        return $scope;
-                    },
-                    compileMessage: true,
-                    popupOptions: {
-                        closeButton: true
-                    },
-                    enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
+
+                // Request lastest measurement for sensor
+                $measurementService.get_latest(token, related_sensor.sensor_id)
+                .success(function(response) {
+                    $scope.sensor.related_sensors[key].latest_measurement = response;
+
+                    // Prepare Icon
+                    var _icon = $scope.defaultIcon;
+
+                    // Check if User is authenticated
+                    if($rootScope.authenticated_user !== undefined){
+
+                        // Check if User has set a current Threshold
+                        if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
+
+                            // Check if water_level exists
+                            if($scope.sensor.related_sensors[key].latest_measurement.water_level !== undefined){
+                                if(
+                                    ($scope.sensor.related_sensors[key].latest_measurement.water_level >= $scope.sensor.related_sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.warning_threshold) && ($scope.sensor.related_sensors[key].latest_measurement.water_level < $scope.sensor.related_sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold)){
+                                    _icon = $scope.warningIcon;
+                                } else if($scope.sensor.related_sensors[key].latest_measurement.water_level >= $scope.sensor.related_sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
+                                    _icon = $scope.dangerIcon;
+                                } else {
+                                    _icon = $scope.successIcon;
+                                }
+                            }
+                        }
+                    }
+
+                    $scope.markers.push({
+                        sensor_id: related_sensor.sensor_id,
+                        layer: layer,
+                        lat: related_sensor.lat,
+                        lng: related_sensor.lng,
+                        focus: false,
+                        draggable: false,
+                        icon: _icon,
+                        message: related_sensor.description,
+                        getMessageScope: function() {
+                            return $scope;
+                        },
+                        compileMessage: true,
+                        popupOptions: {
+                            closeButton: true
+                        },
+                        enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
+                    });
+
+                })
+                .error(function(err) {
+                    $scope.err = err;
                 });
             });
 
@@ -698,9 +738,15 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         markers: [],
         defaultIcon: {
             type: 'awesomeMarker',
-            markerColor: 'lightgray',
+            markerColor: 'gray',
             prefix: 'fa',
             icon: 'cube'
+        },
+        main_defaultIcon: {
+            type: 'awesomeMarker',
+            markerColor: 'gray',
+            prefix: 'fa',
+            icon: 'star'
         },
         successIcon: {
             type: 'awesomeMarker',
@@ -708,11 +754,23 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             prefix: 'fa',
             icon: 'cube'
         },
+        main_successIcon: {
+            type: 'awesomeMarker',
+            markerColor: 'green',
+            prefix: 'fa',
+            icon: 'star'
+        },
         warningIcon: {
             type: 'awesomeMarker',
             markerColor: 'orange',
             prefix: 'fa',
             icon: 'cube'
+        },
+        main_warningIcon: {
+            type: 'awesomeMarker',
+            markerColor: 'orange',
+            prefix: 'fa',
+            icon: 'star'
         },
         dangerIcon: {
             type: 'awesomeMarker',
@@ -720,11 +778,11 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             prefix: 'fa',
             icon: 'cube'
         },
-        relatedSensorIcon: {
+        main_dangerIcon: {
             type: 'awesomeMarker',
-            markerColor: 'darkgrey',
+            markerColor: 'red',
             prefix: 'fa',
-            icon: 'cube'
+            icon: 'star'
         },
         serviceStationIcon: {
             type: 'awesomeMarker',
@@ -737,6 +795,25 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             markerColor: 'darkblue',
             prefix: 'fa',
             icon: 'ambulance'
+        },
+        legend: {
+            position: 'bottomleft',
+            colors: [
+                '#70B211',
+                '#F8981B',
+                '#D83D20',
+                '#575757',
+                '#0066A5',
+                '#30A8DE'
+            ],
+            labels: [ // TODO: translate
+                'Passable',
+                'Attention',
+                'Danger',
+                'N/A',
+                'Emergency-Station',
+                'Service-Station'
+            ]
         },
         events: {
             map: {
