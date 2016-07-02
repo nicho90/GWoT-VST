@@ -26,6 +26,7 @@ app.config(function($translateProvider, config) {
         CANCEL: 'Abbrechen',
         SUBMIT: 'Senden',
         CREATE: 'Erstellen',
+        SETTINGS: 'Einstellungen',
 
         GENERAL: 'Allgemein',
         TIMESERIES: 'Zeitreihe',
@@ -92,7 +93,16 @@ app.config(function($translateProvider, config) {
         WATER_LEVEL: 'Pegelstand',
         WATER_LEVELS: 'Pegelstände',
         LAST_WATER_LEVEL: 'Letzer Pegelstand',
+        STATISTICS: 'Statistik',
+        MEASURED: 'Gemessen um',
+        MAXIMUM: 'Maximum',
+        MINIMUM: 'Minimum',
+        AVERAGE: 'Durchschnitt',
+        STD: 'Standardabweichung',
 
+        WEATHER_FORECAST: 'Wettervorhersage',
+        SHOW_MEASUREMENTS: 'Show measurements',
+        HIDE_MEASUREMENTS: 'Hide measurements',
         CURRENTLY: 'Aktuell',
         TODAY: 'Heute',
         TOMORROW: 'Morgen',
@@ -102,7 +112,9 @@ app.config(function($translateProvider, config) {
         Thursday: 'Donnerstag',
         Friday: 'Freitag',
         Saturday: 'Samstag',
-        Sunday: 'Sonntag'
+        Sunday: 'Sonntag',
+        NEXT_HOURS: 'Die nächsten Stunden',
+        NEXT_DAYS: 'Die nächsten Tage'
 
     });
 
@@ -127,6 +139,7 @@ app.config(function($translateProvider, config) {
         CANCEL: 'Cancel',
         SUBMIT: 'Submit',
         CREATE: 'Create',
+        SETTINGS: 'Settings',
 
         GENERAL: 'General',
         TIMESERIES: 'Timeseries',
@@ -193,10 +206,28 @@ app.config(function($translateProvider, config) {
         WATER_LEVEL: 'Water level',
         WATER_LEVELS: 'Water levels',
         LAST_WATER_LEVEL: 'Last water level',
+        STATISTICS: 'Statistics',
+        MEASURED: 'Measured',
+        MAXIMUM: 'Maximum',
+        MINIMUM: 'Minimum',
+        AVERAGE: 'Average',
+        STD: 'Standard deviation',
 
+        WEATHER_FORECAST: 'Weather forecast',
+        SHOW_MEASUREMENTS: 'Show measurements',
+        HIDE_MEASUREMENTS: 'Hide measurements',
         CURRENTLY: 'Currently',
         TODAY: 'Today',
         TOMORROW: 'Tomorrow',
+        Monday: 'Monday',
+        Tuesday: 'Tuesday',
+        Wednesday: 'Wednesday',
+        Thursday: 'Thursday',
+        Friday: 'Friday',
+        Saturday: 'Saturday',
+        Sunday: 'Sunday',
+        NEXT_HOURS: 'Next hours',
+        NEXT_DAYS: 'Next days'
 
     });
 

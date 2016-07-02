@@ -17,6 +17,24 @@ app.filter('distance', function() {
 
 
 /**
+ * Water Level Filter
+ * @param  {number} 'water_level' [Raw water level]
+ * @return {string} 'water_level' [Beautified water level in Meters]
+ */
+app.filter('water_level', function() {
+    return function(water_level) {
+        if(water_level !== undefined) {
+            return (water_level/100).toFixed(3);
+        } else {
+            return "-";
+        }
+    };
+});
+
+
+
+
+/**
  * Timestamp Filter
  * @param  {string} 'time' [Raw timestamp]
  * @return {string} 'time' [Beautified timestamp]

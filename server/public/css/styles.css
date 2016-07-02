@@ -7,6 +7,10 @@ body {
     margin-bottom: 40px;
 }
 
+.deviceId {
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+}
+
 .legend {
     padding: 6px 8px;
     font: 14px/16px Arial, Helvetica, sans-serif;
@@ -105,13 +109,18 @@ body {
     padding-top: 1.5px;
 }
 
+/* Statistics */
+.statistics th, .statistics td {
+    padding: 3px;
+}
+
 
 /* Weather Forecast */
 .forecast {
     width: 100%;
 }
 
-.forecast td, .forecast th {
+.forecast th, .forecast td {
     padding: 3px;
 }
 

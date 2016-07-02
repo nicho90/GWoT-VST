@@ -30,20 +30,92 @@
     <div class="row">
 
         <!-- Sensor Description -->
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="sensor-title" ng-if="sensor">
                 <h1 class="display-4 text-primary" style="font-size: 18pt;">
                     <i class="fa fa-cube"></i> {{sensor.description}}
                 </h1>
+
+                <span style="font-size: 11pt; font-weight:bold;">{{ 'DEVICE_ID' | translate }}</span>
+                <kbd style="font-size: 8pt;">{{sensor.device_id}}</kbd>
+
             </div>
         </div>
+        <div class="col-md-7" ng-if="sensor">
 
-        <!-- Statistics -->
-        <div class="col-md-6" ng-if="sensor">
-            <!-- TODO: current water_level & statistics -->
+            <div class="row">
+                <div class="col-xs-5">
+
+                    <!-- Latest Measurement -->
+                    <table class="statistics">
+                        <tr>
+                            <td colspan="2" class="middle">
+                                <span class="display-4 text-primary" style="font-size: 12pt;">
+                                    {{ 'LAST_WATER_LEVEL' | translate }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                {{ 'WATER_LEVEL' | translate }}
+                            </th>
+                            <td>
+                                <span class="label label-primary" style="font-size: 11pt;">
+                                    {{sensor.latest_measurement.water_level | water_level }}m
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                {{ 'MEASURED' | translate }}
+                            </th>
+                            <td>
+                                <small>{{sensor.latest_measurement.measurement_timestamp | time }}</small>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-xs-7">
+
+                    <!-- Statistics -->
+                    <table class="statistics">
+                        <tr>
+                            <td colspan="6" class="middle">
+                                <span class="display-4 text-primary" style="font-size: 12pt;">
+                                    {{ 'STATISTICS' | translate }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ 'MAXIMUM' | translate }}</th>
+                            <td>
+                                {{sensor.statistics.maximum.water_level | water_level }}m
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <th>{{ 'STD' | translate }}</th>
+                            <td>
+                                {{sensor.statistics.std.std_water_level | water_level }}m
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ 'MINIMUM' | translate }}</th>
+                            <td>
+                                {{sensor.statistics.minimum.water_level | water_level }}m
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <th>{{ 'AVERAGE' | translate }}</th>
+                            <td>
+                                {{sensor.statistics.average.avg_water_level | water_level }}m
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-
+    <br>
 
     <!-- 1st Tab -->
     <div ng-if="tab==1 && sensor">
@@ -67,12 +139,6 @@
                                                 {{ 'OFFLINE_' | translate }}
                                             </span>
                                         </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>{{ 'DEVICE_ID' | translate }}</th>
-                                    <td>
-                                        <kbd>{{sensor.device_id}}</kbd>
                                     </td>
                                 </tr>
                                 <tr>
