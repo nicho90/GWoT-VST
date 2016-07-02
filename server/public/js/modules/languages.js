@@ -90,6 +90,13 @@ app.config(function($translateProvider, config) {
         NEARBY_SERVICE_STATIONS: 'Autowerkstätten in der Nähe',
         GERMANY: 'Deutschland',
 
+        PASSABLE: 'Passierbar',
+        RISK: 'Risiko',
+        HIGH_RISK: 'Hohes Risiko',
+        N_A: 'Nicht verfügbar',
+        EMERGENCY_STATION: 'Notrufstation',
+        SERIVE_STATION: 'Autowerkstatt',
+
         WATER_LEVEL: 'Pegelstand',
         WATER_LEVELS: 'Pegelstände',
         LAST_WATER_LEVEL: 'Letzer Pegelstand',
@@ -202,6 +209,13 @@ app.config(function($translateProvider, config) {
         NEARBY_EMERGENCY_STATIONS: 'Nearby Emergency-Stations',
         NEARBY_SERVICE_STATIONS: 'Nearby Service-Stations',
         GERMANY: 'Germany',
+
+        PASSABLE: 'Passable',
+        RISK: 'Risk',
+        HIGH_RISK: 'High risk',
+        N_A: 'n/a',
+        EMERGENCY_STATION: 'Emergency station',
+        SERIVE_STATION: 'Service station',
 
         WATER_LEVEL: 'Water level',
         WATER_LEVELS: 'Water levels',

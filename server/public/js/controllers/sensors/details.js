@@ -829,13 +829,13 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                 '#0066A5',
                 '#30A8DE'
             ],
-            labels: [ // TODO: translate
-                'Passable',
-                'Attention',
-                'Danger',
-                'N/A',
-                'Emergency-Station',
-                'Service-Station'
+            labels: [
+                $translate.instant('PASSABLE'),
+                $translate.instant('RISK'),
+                $translate.instant('HIGH_RISK'),
+                $translate.instant('N_A'),
+                $translate.instant('EMERGENCY_STATION'),
+                $translate.instant('SERIVE_STATION')
             ]
         },
         events: {

@@ -93,9 +93,9 @@
                             </td>
                             <td></td>
                             <td></td>
-                            <th>{{ 'STD' | translate }}</th>
+                            <th>{{ 'AVERAGE' | translate }}</th>
                             <td>
-                                {{sensor.statistics.std.std_water_level | water_level }}m
+                                {{sensor.statistics.average.avg_water_level | water_level }}m
                             </td>
                         </tr>
                         <tr>
@@ -105,9 +105,9 @@
                             </td>
                             <td></td>
                             <td></td>
-                            <th>{{ 'AVERAGE' | translate }}</th>
+                            <th>{{ 'STD' | translate }}</th>
                             <td>
-                                {{sensor.statistics.average.avg_water_level | water_level }}m
+                                {{sensor.statistics.std.std_water_level | water_level }}m
                             </td>
                         </tr>
                     </table>

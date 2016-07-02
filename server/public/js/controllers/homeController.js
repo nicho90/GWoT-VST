@@ -255,11 +255,11 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
                 '#D83D20',
                 '#575757'
             ],
-            labels: [ // TODO: translate
-                'Passable',
-                'Attention',
-                'Danger',
-                'N/A'
+            labels: [
+                $translate.instant('PASSABLE'),
+                $translate.instant('RISK'),
+                $translate.instant('HIGH_RISK'),
+                $translate.instant('N_A')
             ]
         },
         events: {
