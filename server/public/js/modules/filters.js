@@ -49,6 +49,23 @@ app.filter('unixtime', function() {
 
 
 /**
+ * Hours Filter
+ * @param  {number} 'unixtime' [The unixtime in Milliseconds]
+ * @return {string} 'time' [12:00, 13:00, etc.]
+ */
+app.filter('unixtime_2', function() {
+    return function(unixtime) {
+        if(unixtime === undefined){
+            return "";
+        } else {
+            return moment.unix(unixtime).format("HH:mm");
+            //return moment.unix(unixtime).format("HH") + '°°';
+        }
+    };
+});
+
+
+/**
  * Humidity Filter
  * @param  {number} 'humidity' [Raw humidity value]
  * @return {number} 'humidity' [Beautified humidity value]

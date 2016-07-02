@@ -81,7 +81,7 @@ body {
     float:none;
     display:inline-block;
     *display:inline; /* ie7 fix */
-     zoom:1; /* hasLayout ie7 trigger */
+    zoom:1; /* hasLayout ie7 trigger */
 }
 
 .nav-tabs.centered, .nav-pills.centered {
@@ -112,13 +112,19 @@ body {
 }
 
 .forecast td, .forecast th {
-    width: 10%;
     padding: 3px;
+}
+
+.forecast td {
+    font-size: 0.6rem;
+}
+.forecast th {
     font-size: 0.75rem;
 }
 
 .headline th,
 .weatherIcon td,
+.weatherIcon_2 td,
 .normal td {
     text-align: center;
 }
@@ -129,17 +135,21 @@ body {
 
 .weatherIcon > td {
     font-size: 2.0rem;
-    color: #e6550d;
+    color: #575757;
 }
 
-.red {
-    color: red;
+.weatherIcon_2 > td {
+    font-size: 1.5rem;
+    color: #575757;
 }
 
 .blue {
-    color: blue;
+    color: #0275d8;
 }
 
+.orange {
+    color: #e6550d;
+}
 
 
 

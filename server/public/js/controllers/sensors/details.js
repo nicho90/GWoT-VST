@@ -4,6 +4,29 @@ var app = angular.module("gwot-vst");
 // DETAILS
 app.controller("SensorDetailsController", function($scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $statisticService, $forecastService, $measurementService, $timeseriesService, config, $socket) {
 
+
+    /**
+     * Change the weather forecast
+     * @param  {string} interval [Hourly or daily weather forecasts]
+     */
+    $scope.setWeatherInterval = function(interval){
+        $scope.weather_interval = interval;
+    };
+
+
+    /**
+     * Show Measurements (temperature and humidity values) in the weather forecast
+     */
+    $scope.showWeatherMeasurements = function(){
+        if($scope.weather_measurements){
+            $scope.weather_measurements = false;
+        } else {
+            $scope.weather_measurements = true;
+        }
+    };
+
+
+
     /**
      * Update when user logged out or set a new current Threshold
      */
@@ -884,5 +907,10 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         critical_threshold: false,
         water_level: true
     };
+
+    // Init weather forecast
+    $scope.weather_forecast_status = true;
+    $scope.weather_interval = 'hourly';
+    $scope.weather_measurements = false;
 
 });
