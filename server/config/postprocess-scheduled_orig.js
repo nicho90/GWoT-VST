@@ -194,7 +194,7 @@ exports.process = function(message) {
                                 callback(null, measurement, sensor, result.rows);
                             }
                         });
-                    } //,
+                    },
 
                     // 7. Check all Thresholds of subscribed Users for this sensor
                     function(measurement, sensor, users, callback) {
@@ -352,7 +352,6 @@ exports.process = function(message) {
                                 "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.warning_threshold));";
 
                             // Database query
-                            /*
                             client.query(query, function(err, result) {
                                 done();
 
@@ -363,7 +362,6 @@ exports.process = function(message) {
                                     // Do nothing
                                 }
                             });
-                            */
 
                             //TODO select danger subscriptions that have been notified and lie (x cm) unter danger level
                             var query = "" +
@@ -372,7 +370,7 @@ exports.process = function(message) {
                                 "SET danger_notified=false" +
                                 "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.danger_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.danger_threshold));";
 
-                            /*
+/*
                             client.query(query, function(err, result) {
                                 done();
 
@@ -383,7 +381,7 @@ exports.process = function(message) {
                                     // Do nothing
                                 }
                             });
-                            */  
+*/  
                         }, function(err) {
                             if (err) {
                                 console.log(err);
@@ -419,5 +417,4 @@ function median(values) {
     });
     var half = Math.floor(values.length / 2);
     return values[half];
-};
-
+}
