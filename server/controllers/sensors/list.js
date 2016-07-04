@@ -32,6 +32,7 @@ exports.request = function(req, res){
 					"sensors.device_id, " +
 					"sensors.description ," +
 					"sensors.private, " +
+					"sensors.creator, " +
 					"sensors.online_status, " +
 					"sensors.water_body_id, " +
 					"water_bodies.name AS water_body_name, " +
@@ -89,8 +90,8 @@ exports.request = function(req, res){
 							"sensors.device_id, " +
 							"sensors.description ," +
 							"sensors.private, " +
-							"sensors.online_status, " +
 							"sensors.creator, " +
+							"sensors.online_status, " +
 							"sensors.water_body_id, " +
 							"water_bodies.name AS water_body_name, " +
 							"sensors.sensor_height, " +
@@ -134,6 +135,7 @@ exports.request = function(req, res){
 								"device_id, " +
 								"description ," +
 								"private, " +
+								"creator, " +
 								"online_status, " +
 								"water_body_id, " +
 								"water_body_name, " +
@@ -155,11 +157,11 @@ exports.request = function(req, res){
 							"FROM " +
 							"(" +
 								"SELECT " +
-									"sensors.creator, " +
 									"sensors.sensor_id, " +
 									"sensors.device_id, " +
 									"sensors.description ," +
 									"sensors.private, " +
+									"sensors.creator, " +
 									"sensors.online_status, " +
 									"sensors.water_body_id, " +
 									"water_bodies.name AS water_body_name, " +
@@ -182,11 +184,11 @@ exports.request = function(req, res){
 								"WHERE sensors.private=false " +
 							"UNION ALL " +
 								"SELECT " +
-									"sensors.creator, " +
 									"sensors.sensor_id, " +
 									"sensors.device_id, " +
 									"sensors.description ," +
 									"sensors.private, " +
+									"sensors.creator, " +
 									"sensors.online_status, " +
 									"sensors.water_body_id, " +
 									"water_bodies.name AS water_body_name, " +

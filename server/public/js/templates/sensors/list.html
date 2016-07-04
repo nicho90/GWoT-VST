@@ -7,7 +7,7 @@
                 <th>{{ 'DEVICE_ID' | translate }}</th>
                 <th>{{ 'PRIVATE' | translate }} / {{ 'PUBLIC' | translate }}</th>
                 <th>{{ 'DESCRIPTION' | translate }}</th>
-                <th>{{ 'COORDINATES' | translate }}</th>
+                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -41,15 +41,19 @@
                     </span>
                 </td>
                 <td>{{sensor.description}}</td>
-                <td>
-                    ({{sensor.lat}}, {{sensor.lng}})
-                </td>
-                <td class="right" >
+                <td class="right">
                     <div class="btn-group" role="group" aria-label="Edit">
-                        <button ng-click="edit(sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-secondary" ng-if="authenticated_user && (sensor.created_by == authenticated_user.username)">
+                        <button ng-click="showOnMap(sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-secondary">
+                            <i class="fa fa-map"></i>&nbsp;&nbsp;{{ 'SHOW_ON_MAP' | translate }}
+                        </button>
+                    </div>
+                </td>
+                <td class="right">
+                    <div class="btn-group" role="group" aria-label="Edit">
+                        <button ng-click="edit(sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-info" ng-if="authenticated_user && (sensor.creator == authenticated_user.username || authenticated_user.role == 'ADMIN')">
                             <i class="fa fa-pencil"></i>
                         </button>
-                        <button ng-click="delete(sensor); $event.stopPropagation();" class="btn btn-sm btn-danger" ng-if="authenticated_user && (sensor.created_by == authenticated_user.username)">
+                        <button ng-click="delete(sensor); $event.stopPropagation();" class="btn btn-sm btn-danger" ng-if="authenticated_user && (sensor.creator == authenticated_user.username || authenticated_user.role == 'ADMIN')">
                             <i class="fa fa-trash"></i>
                         </button>
                     </div>

@@ -27,9 +27,19 @@ app.controller("SensorListController", function($scope, $rootScope, $location, $
 
     /**
      * Show Details
+     * @param  {number} sensor_id [Redirect to sensorDetailsView]
      */
     $scope.showDetails = function(sensor_id){
         $location.url("/sensors/" + sensor_id);
+    };
+
+
+    /**
+     * Show Sensor on map
+     * @param  {number} sensor_id [Redirect to homeView, find Sensor and highlight it on map]
+     */
+    $scope.showOnMap = function(sensor_id){
+        $location.url("/map/" + sensor_id);
     };
 
 

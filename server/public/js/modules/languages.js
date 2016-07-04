@@ -57,6 +57,7 @@ app.config(function($translateProvider, config) {
         INCREASED_FREQUENCY: 'Gefahrinterval aktiv',
         CREATED: 'Erstellt am',
         UPDATED: 'Zuletzt geändert am',
+        SHOW_ON_MAP: 'Auf der Karte anzeigen',
 
         CENTIMETER: 'Zentimeter',
         METER: 'Meter',
@@ -177,6 +178,7 @@ app.config(function($translateProvider, config) {
         INCREASED_FREQUENCY: 'Frequency increased',
         CREATED: 'Created',
         UPDATED: 'Last updated',
+        SHOW_ON_MAP: 'Show on map',
 
         CENTIMETER: 'Centimeter',
         METER: 'Meter',
