@@ -349,7 +349,7 @@ exports.process = function(message) {
                                 "(UPDATE " +
                                 "subscriptions " +
                                 "SET warning_notified=false" +
-                                "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=true" + " AND subscriptions.creator='" + users.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.warning_threshold));";
+                                "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.warning_threshold));";
 
                             // Database query
                             client.query(query, function(err, result) {
@@ -370,7 +370,7 @@ exports.process = function(message) {
                                 "SET danger_notified=false" +
                                 "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.danger_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.danger_threshold));";
 
-                            /*
+
                             client.query(query, function(err, result) {
                                 done();
 
@@ -381,7 +381,7 @@ exports.process = function(message) {
                                     // Do nothing
                                 }
                             });
-                            */
+                            
                         }, function(err) {
                             if (err) {
                                 console.log(err);
