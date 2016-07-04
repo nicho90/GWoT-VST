@@ -9,6 +9,7 @@ var app = angular.module("gwot-vst", [
     "leaflet-directive",
     "n3-line-chart",
     "btford.socket-io",
+    "underscore",
 
     // Own Modules
     "filters",
@@ -20,6 +21,7 @@ var app = angular.module("gwot-vst", [
     "userService",
     "thresholdService",
     "sensorService",
+    "subscriptionService",
     "measurementService",
     "statisticService",
     "timeseriesService",

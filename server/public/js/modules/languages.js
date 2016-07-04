@@ -122,7 +122,11 @@ app.config(function($translateProvider, config) {
         Saturday: 'Samstag',
         Sunday: 'Sonntag',
         NEXT_HOURS: 'Die nächsten Stunden',
-        NEXT_DAYS: 'Die nächsten Tage'
+        NEXT_DAYS: 'Die nächsten Tage',
+
+        SUBSCRIBED: 'Abonniert',
+        SUBSCRIBE: 'Abonnieren',
+        UNSUBSCRIBE: 'Abo beenden'
 
     });
 
@@ -243,7 +247,11 @@ app.config(function($translateProvider, config) {
         Saturday: 'Saturday',
         Sunday: 'Sunday',
         NEXT_HOURS: 'Next hours',
-        NEXT_DAYS: 'Next days'
+        NEXT_DAYS: 'Next days',
+
+        SUBSCRIBED: 'Subscribed',
+        SUBSCRIBE: 'Subscribe',
+        UNSUBSCRIBE: 'Unubscribe'
 
     });
 

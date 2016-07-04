@@ -10,10 +10,28 @@
     <li class="nav-item">
         <a class="nav-link" ng-click="changeTab(3)" ng-class="{ active: tab==3 }" style="cursor:pointer"><i class="fa fa-bolt" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'REAL_TIME_DATA' | translate }}</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" ng-click="changeTab(4)" ng-class="{ active: tab==4 }" style="cursor:pointer"><i class="fa fa-rss" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SUBSCRIPTIONS' | translate }}</a>
-    </li>
 </ul>
+
+<div style="float:right; position: relative; z-index:2; margin-top:-35px; margin-right:1px;" ng-if="authenticated_user && authenticated_user.thresholds.length > 0 ">
+
+    <!-- Subscribe-Button -->
+    <button class="btn btn-sm btn-primary" ng-if="!currentSubscription" ng-click="subscribe()">
+        <i class="fa fa-rss-square" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SUBSCRIBE' | translate }}
+    </button>
+
+    <!-- Subscribed-Button and Unsubscribe-Button-->
+    <div class="dropdown closed" ng-if="currentSubscription">
+        <button class="btn btn-sm btn-success dropdown-toggle" type="button" id="dropdownButton" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style="cursor: pointer;">
+            <i class="fa fa-bell" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SUBSCRIBED' | translate }}
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownButton">
+            <a class="dropdown-item" ng-click="unsubscribe()" style="cursor: pointer;">
+                {{ 'UNSUBSCRIBE' | translate }}
+            </a>
+        </div>
+    </div>
+
+</div>
 
 <!-- Tabs -->
 <div class="card" style="margin-top: -1px; position: relative; z-index:1; padding:20px;">
@@ -1094,22 +1112,21 @@
 
     <!-- 3rd Tab -->
     <div class="row" ng-if="tab==3">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card">
-                TAB 3
-            </div>
-        </div>
-        <div class="col-md-6"></div>
-    </div>
 
-    <!-- 4th Tab -->
-    <div class="row" ng-if="tab==4">
-        <div class="col-md-6">
-            <div class="card">
-                TAB 4
+                <!-- 2nd Linechart -->
+                <div class="linechart" ng-if="data_2.dataset.length > 0">
+                    <linechart data="data_2" options="options_2" height="390px"></linechart>
+                </div>
+                <div class="linechart" ng-if="data_2.dataset.length == 0">
+                    <div style="height: 390px; line-height:390px; text-align: center;">
+                        - {{ 'NO' | translate}} {{ 'MEASUREMENTS' | translate}} {{ 'FOUND' | translate}}-
+                    </div>
+                </div>
+
             </div>
         </div>
-        <div class="col-md-6"></div>
     </div>
 
 </div>

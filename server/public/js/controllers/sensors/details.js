@@ -2,7 +2,7 @@ var app = angular.module("gwot-vst");
 
 
 // DETAILS
-app.controller("SensorDetailsController", function($scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $statisticService, $forecastService, $measurementService, $timeseriesService, config, $socket) {
+app.controller("SensorDetailsController", function($scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $subscriptionService, $statisticService, $forecastService, $measurementService, $timeseriesService, config, $socket, _) {
 
 
     /**
@@ -25,6 +25,116 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         }
     };
 
+
+    /**
+     * Unsubscribe with current Threshold to current Sensor
+     */
+    $scope.unsubscribe = function(){
+
+        var token;
+        if ($rootScope.authenticated_user) {
+            token = $rootScope.authenticated_user.token;
+
+            // Check if current Subscription exists
+            if($scope.currentSubscription){
+
+                // Send request
+                $subscriptionService.delete(token, $rootScope.authenticated_user.username, $scope.currentSubscription.subscription_id)
+                .success(function(response) {
+
+                    console.log("Response:");
+                    console.log(response);
+
+                    // Reset current Subscription
+                    delete $scope.currentSubscription;
+                    $scope.currentSubscription = undefined;
+                    $scope.load_subscriptions();
+
+                }).error(function(err) {
+                    $scope.err = err;
+                });
+            }
+        }
+    };
+
+
+    /**
+     * Subscribe with current Threshold to current Sensor
+     */
+    $scope.subscribe = function(){
+
+        // Check if User is authenticated
+        var token;
+        if ($rootScope.authenticated_user) {
+            token = $rootScope.authenticated_user.token;
+
+            // Check if User is authenticated
+            if($rootScope.authenticated_user){
+                if($rootScope.authenticated_user.currentThreshold !== undefined && $rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
+
+                    // Find current Threshold in Subscriptions
+                    var result = _.findWhere($rootScope.authenticated_user.subscriptions, {
+                        sensor_id: $scope.sensor.sensor_id,
+                        threshold_id: $rootScope.authenticated_user.currentThreshold.threshold_id
+                    });
+
+                    // Check if current Threshold is not already defined in Subscriptions
+                    if(result === undefined){
+
+                        // Create new Subscription
+                        var subscription = $subscriptionService.getDefault();
+
+                        subscription.sensor_id = $scope.sensor.sensor_id;
+                        subscription.threshold_id = $rootScope.authenticated_user.currentThreshold.threshold_id;
+
+                        // Send request
+                        $subscriptionService.create(token, $rootScope.authenticated_user.username, subscription)
+                        .success(function(response) {
+
+                            // Reset current Subscription
+                            delete $scope.currentSubscription;
+                            $scope.currentSubscription = undefined;
+                            $scope.load_subscriptions();
+
+                        }).error(function(err) {
+                            $scope.err = err;
+                        });
+
+                    }
+                }
+            }
+        }
+    };
+
+
+    /**
+     * Check if User is subscribed with current Threshold to this Sensor
+     */
+    $scope.check_subscription = function(){
+
+        // Check if User is authenticated
+        if($rootScope.authenticated_user){
+            if($rootScope.authenticated_user.currentThreshold !== undefined && $rootScope.authenticated_user.currentThreshold.threshold_id !== 0 && $rootScope.authenticated_user.subscriptions.length > 0){
+
+                // Find currentThreshold in subscriptions
+                $scope.currentSubscription = _.findWhere($rootScope.authenticated_user.subscriptions, {
+                    sensor_id: $scope.sensor.sensor_id,
+                    threshold_id: $rootScope.authenticated_user.currentThreshold.threshold_id
+                });
+
+                if($scope.currentSubscription !== undefined){
+                    $scope.subscribed_status = true;
+                } else {
+                    $scope.subscribed_status = false;
+                }
+
+            } else {
+                $scope.subscribed_status = false;
+            }
+        } else {
+            $scope.subscribed_status = false;
+        }
+    };
 
 
     /**
@@ -335,6 +445,30 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
 
     /**
+     * Load Subscriptions
+     */
+    $scope.load_subscriptions = function(){
+
+        // Check if User is authenticated
+        var token = "";
+        if ($rootScope.authenticated_user) {
+            token = $rootScope.authenticated_user.token;
+
+            // Load Subscriptions
+            $subscriptionService.list($scope.authenticated_user.token, $rootScope.authenticated_user.username).success(function(response){
+                $rootScope.authenticated_user.subscriptions = response;
+
+                // Check Subscriptions
+                $scope.check_subscription();
+
+            }).error(function(err){
+                $scope.err = err;
+            });
+        }
+    };
+
+
+    /**
      * Load related data
      */
     $scope.load_related_data = function() {
@@ -344,6 +478,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         if ($rootScope.authenticated_user) {
             token = $rootScope.authenticated_user.token;
         }
+
 
         // Request Statistics
         $statisticService.get(token, $routeParams.sensor_id)
@@ -601,6 +736,9 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             token = $rootScope.authenticated_user.token;
         }
 
+        // TODO: Find bug /sensors/sensor_id -> undefined??
+        // console.log($routeParams.sensor_id);
+
         // Request public sensor (or private sensor only when User is authenticated)
         $sensorService.get(token, $routeParams.sensor_id)
             .success(function(response) {
@@ -627,7 +765,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                 $scope.load_forecast();
                 $scope.load_timeseries();
                 $scope.load_related_data();
-
+                $scope.load_subscriptions();
             })
             .error(function(err) {
                 $scope.err = err;
@@ -685,7 +823,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         layers: {
             baselayers: {
                 mapbox_streets: {
-                    name: $translate.instant('MAP_TILES_STREETS'),
+                    name: $filter('translate')('MAP_TILES_STREETS'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
@@ -705,7 +843,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                     }
                 },
                 mapbox_satellite_streets: {
-                    name: $translate.instant('MAP_TILES_SATELLITE_2'),
+                    name: $filter('translate')('MAP_TILES_SATELLITE_2'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
@@ -715,7 +853,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                     }
                 },
                 mapbox_night: {
-                    name: $translate.instant('MAP_TILES_DARK'),
+                    name: $filter('translate')('MAP_TILES_DARK'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
@@ -725,7 +863,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                     }
                 },
                 mapbox_light: {
-                    name: $translate.instant('MAP_TILES_LIGHT'),
+                    name: $filter('translate')('MAP_TILES_LIGHT'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
@@ -830,12 +968,12 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                 '#30A8DE'
             ],
             labels: [
-                $translate.instant('PASSABLE'),
-                $translate.instant('RISK'),
-                $translate.instant('HIGH_RISK'),
-                $translate.instant('N_A'),
-                $translate.instant('EMERGENCY_STATION'),
-                $translate.instant('SERIVE_STATION')
+                $filter('translate')('PASSABLE'),
+                $filter('translate')('RISK'),
+                $filter('translate')('HIGH_RISK'),
+                $filter('translate')('N_A'),
+                $filter('translate')('EMERGENCY_STATION'),
+                $filter('translate')('SERIVE_STATION')
             ]
         },
         events: {
@@ -913,4 +1051,12 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
     $scope.weather_interval = 'hourly';
     $scope.weather_measurements = false;
 
+    // Prepare Subscription
+    $scope.currentSubscription = undefined;
+    $scope.subscribed_status = false;
+
+    // Prepare RT-Diagram
+    $scope.data_2 = {
+        dataset: []
+    };
 });
