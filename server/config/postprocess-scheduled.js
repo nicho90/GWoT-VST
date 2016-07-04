@@ -194,7 +194,7 @@ exports.process = function(message) {
                                 callback(null, measurement, sensor, result.rows);
                             }
                         });
-                    } //,
+                    },
 
                     // 7. Check all Thresholds of subscribed Users for this sensor
                     function(measurement, sensor, users, callback) {
@@ -383,7 +383,7 @@ exports.process = function(message) {
                                     // Do nothing
                                 }
                             });
-                            */  
+                            */
                         }, function(err) {
                             if (err) {
                                 console.log(err);
@@ -420,4 +420,3 @@ function median(values) {
     var half = Math.floor(values.length / 2);
     return values[half];
 };
-
