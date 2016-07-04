@@ -343,44 +343,53 @@ exports.process = function(message) {
                     // 8. Check all Threshold notifications
                     function(measurement, sensor, users, callback) {
                         //TODO update warning subscriptions that have been notified and lie (x cm) unter warning level
-                        /*
-                        var query = "" +
-                            "(UPDATE " +
-                            "subscriptions " +
-                            "SET warning_notified=false" +
-                            "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=true" + " AND subscriptions.creator='" + users.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.warning_threshold));";
+                        async.each(users, function(user, callback) {
 
-                        // Database query
-                        client.query(query, function(err, result) {
-                            done();
+                            var query = "" +
+                                "(UPDATE " +
+                                "subscriptions " +
+                                "SET warning_notified=false" +
+                                "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=true" + " AND subscriptions.creator='" + users.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.warning_threshold));";
 
+                            // Database query
+                            client.query(query, function(err, result) {
+                                done();
+
+                                if (err) {
+                                    console.error("Step 8: reset warning thresholds notification", errors.database.error_2.message, err);
+                                    callback(new Error(errors.database.error_2.message));
+                                } else {
+                                    // Do nothing
+                                }
+                            });
+
+                            //TODO select danger subscriptions that have been notified and lie (x cm) unter danger level
+                            var query = "" +
+                                "(UPDATE " +
+                                "subscriptions " +
+                                "SET danger_notified=false" +
+                                "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.danger_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.danger_threshold));";
+
+                            client.query(query, function(err, result) {
+                                done();
+
+                                if (err) {
+                                    console.error("Step 8: reset danger thresholds notification", errors.database.error_2.message, err);
+                                    callback(new Error(errors.database.error_2.message));
+                                } else {
+                                    // Do nothing
+                                }
+                            });
+                        }, function(err) {
                             if (err) {
-                                console.error("Step 8: reset warning thresholds notification", errors.database.error_2.message, err);
-                                callback(new Error(errors.database.error_2.message));
+                                console.log(err);
+                                callback(err);
                             } else {
-                                // Do nothing
+                                //console.log("Emails were sent to all users!");
+                                callback(null);
                             }
                         });
 
-                        //TODO select danger subscriptions that have been notified and lie (x cm) unter danger level
-                        var query = "" +
-                            "(UPDATE " +
-                            "subscriptions " +
-                            "SET danger_notified=false" +
-                            "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.danger_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.danger_threshold));";
-
-                        client.query(query, function(err, result) {
-                            done();
-
-                            if (err) {
-                                console.error("Step 8: reset danger thresholds notification", errors.database.error_2.message, err);
-                                callback(new Error(errors.database.error_2.message));
-                            } else {
-                                // Do nothing
-                            }
-                        });
-*/
-                        callback(null);
                     }
                 ],
                 function(err, callback) {
