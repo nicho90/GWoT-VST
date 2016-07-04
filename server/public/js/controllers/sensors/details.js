@@ -657,7 +657,10 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                         popupOptions: {
                             closeButton: true
                         },
-                        enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
+                        enable: [
+                            'leafletDirectiveMarker.map.click',
+                            'leafletDirectiveMarker.map.dblclick'
+                        ]
                     });
 
                 })
@@ -978,10 +981,39 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         },
         events: {
             map: {
-                enable: ['leafletDirectiveMap.click', 'leafletDirectiveMap.dblclick'],
+                enable: [
+                    'leafletDirectiveMap.click',
+                    'leafletDirectiveMap.dblclick'
+                ],
                 logic: 'emit'
             }
         }
+    });
+
+
+    /**
+     * Center marker when clicked
+     * (Map function)
+     */
+    $scope.$on("leafletDirectiveMarker.map_2.click", function(event, args) {
+        $scope.center = {
+            lat: args.leafletEvent.latlng.lat,
+            lng: args.leafletEvent.latlng.lng,
+            zoom: $scope.center.zoom
+        };
+    });
+
+
+    /**
+     * Zoom to and center marker when double clicked
+     * (Map function)
+     */
+    $scope.$on("leafletDirectiveMarker.map_2.dblclick", function(event, args) {
+        $scope.center = {
+            lat: args.leafletEvent.latlng.lat,
+            lng: args.leafletEvent.latlng.lng,
+            zoom: 18
+        };
     });
 
 

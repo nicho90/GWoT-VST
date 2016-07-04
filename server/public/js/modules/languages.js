@@ -58,6 +58,7 @@ app.config(function($translateProvider, config) {
         CREATED: 'Erstellt am',
         UPDATED: 'Zuletzt geändert am',
         SHOW_ON_MAP: 'Auf der Karte anzeigen',
+        DISTANCE: 'Distanz',
 
         CENTIMETER: 'Zentimeter',
         METER: 'Meter',
@@ -183,6 +184,7 @@ app.config(function($translateProvider, config) {
         CREATED: 'Created',
         UPDATED: 'Last updated',
         SHOW_ON_MAP: 'Show on map',
+        DISTANCE: 'Distance',
 
         CENTIMETER: 'Centimeter',
         METER: 'Meter',
