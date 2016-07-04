@@ -4,7 +4,7 @@ var app = angular.module("gwot-vst");
 /**
  * Home and Map Controller
  */
-app.controller("HomeController", function($scope, $rootScope, config, $filter, $location, $translate, $sensorService, $measurementService) {
+app.controller("HomeController", function($scope, $rootScope, $routeParams, config, $filter, $location, $translate, $sensorService, $measurementService) {
 
     /**
      * Load Sensors
@@ -68,6 +68,14 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
 
         angular.forEach($scope.sensors, function(sensor, key) {
 
+            // Prepare focus
+            var _focus = false;
+
+            // Check if routeParams were set
+            if($routeParams.sensor_id !== undefined && Number($routeParams.sensor_id) === sensor.sensor_id){
+                _focus = true;
+            }
+
             // Request lastest measurement for sensor
             $measurementService.get_latest(token, sensor.sensor_id)
                 .success(function(response) {
@@ -127,7 +135,7 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
                         layer: 'sensors',
                         lat: sensor.lat,
                         lng: sensor.lng,
-                        focus: false,
+                        focus: _focus,
                         draggable: false,
                         icon: _icon,
                         message: _message,

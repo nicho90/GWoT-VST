@@ -11,8 +11,7 @@ app.controller("FooterController", function($scope, $rootScope, config, $transla
      */
     $scope.load = function() {
         if($rootScope.authenticated_user) {
-            $scope.language = 'en_US';
-            // TODO: $scope.language = $rootScope.authenticated_user.language;
+            $scope.language = $rootScope.authenticated_user.language;
             $translate.use($scope.language);
         } else {
             $scope.language = config.appLanguage;
@@ -42,7 +41,12 @@ app.controller("FooterController", function($scope, $rootScope, config, $transla
      * Change language
      */
     $scope.changeLanguage = function(){
+
+        // Change language
         $translate.use($scope.language);
+
+        // Update all Controllers
+        $rootScope.$broadcast('updateLanguage');
     };
 
 });
