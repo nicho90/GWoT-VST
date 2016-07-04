@@ -342,11 +342,12 @@ exports.process = function(message) {
                     // 8. Check all Threshold notifications
                     function(measurement, sensor, users, callback) {
                         //TODO update warning subscriptions that have been notified and lie (x cm) unter warning level
+                        /*
                         var query = "" +
                             "(UPDATE " +
                             "subscriptions " +
                             "SET warning_notified=false" +
-                            "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.warning_threshold));";
+                            "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=true" + " AND subscriptions.creator='" + users.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.warning_threshold));";
 
                         // Database query
                         client.query(query, function(err, result) {
@@ -377,8 +378,8 @@ exports.process = function(message) {
                                 // Do nothing
                             }
                         });
-
-                        callback(null)
+*/
+                        callback(null);
                     }
                 ],
                 function(err, callback) {
