@@ -172,7 +172,7 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
         layers: {
             baselayers: {
                 mapbox_streets: {
-                    name: $translate.instant('MAP_TILES_STREETS'),
+                    name: $filter('translate')('MAP_TILES_STREETS'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
@@ -182,7 +182,7 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                     }
                 },
                 mapbox_satellite: {
-                    name: $translate.instant('MAP_TILES_SATELLITE'),
+                    name: $filter('translate')('MAP_TILES_SATELLITE'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
@@ -192,7 +192,7 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                     }
                 },
                 mapbox_satellite_streets: {
-                    name: $translate.instant('MAP_TILES_SATELLITE_2'),
+                    name: $filter('translate')('MAP_TILES_SATELLITE_2'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
@@ -202,7 +202,7 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                     }
                 },
                 mapbox_night: {
-                    name: $translate.instant('MAP_TILES_DARK'),
+                    name: $filter('translate')('MAP_TILES_DARK'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
@@ -212,7 +212,7 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                     }
                 },
                 mapbox_light: {
-                    name: $translate.instant('MAP_TILES_LIGHT'),
+                    name: $filter('translate')('MAP_TILES_LIGHT'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
@@ -264,10 +264,10 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                 '#575757'
             ],
             labels: [
-                $translate.instant('PASSABLE'),
-                $translate.instant('RISK'),
-                $translate.instant('HIGH_RISK'),
-                $translate.instant('N_A')
+                $filter('translate')('PASSABLE'),
+                $filter('translate')('RISK'),
+                $filter('translate')('HIGH_RISK'),
+                $filter('translate')('N_A')
             ]
         },
         events: {
