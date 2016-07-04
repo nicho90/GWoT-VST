@@ -23,9 +23,11 @@ app.factory('$thresholdService', function($http, config) {
             });
         },
         create: function(token, username, data) {
-            return $http.post(config.apiURL + "/users/" + username + "/thresholds", {
-                headers: { 'authorization': token },
-                body: data
+            return $http.post(config.apiURL + "/users/" + username + "/thresholds", data, {
+                headers: {
+                    'authorization': token,
+                    'content-type': 'application/json'
+                }
             });
         },
         get: function(token, username, threshold_id) {
@@ -34,9 +36,11 @@ app.factory('$thresholdService', function($http, config) {
             });
         },
         edit: function(token, username, threshold_id, data) {
-            return $http.put(config.apiURL + "/users/" + username + "/thresholds/" + threshold_id, {
-                headers: { 'authorization': token },
-                body: data
+            return $http.put(config.apiURL + "/users/" + username + "/thresholds/" + threshold_id, data, {
+                headers: {
+                    'authorization': token,
+                    'content-type': 'application/json'
+                }
             });
         },
         delete: function(token, username, threshold_id) {
