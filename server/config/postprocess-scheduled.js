@@ -344,18 +344,18 @@ exports.process = function(message) {
                         //TODO update warning subscriptions that have been notified and lie (x cm) unter warning level
                         async.each(users, function(user, callback) {
 
-                            var query = "" +
+                            var query_1 = "" +
                                 "(UPDATE " +
-                                "Subscriptions " +
-                                "SET warning_notified=false" +
-                                "WHERE sensor_id=" + sensor.sensor_id + " AND warning_notified=true" + " AND creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + warning_threshold));";
+                                "Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
+                                "SET subscriptions.warning_notified=false" +
+                                "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.warning_threshold));";
 
                             //
                             console.log("8.Sensor for DB query: ", sensor);
                             console.log("8.User for DB query: ", user);
                             // Database query
 
-                            client.query(query, function(err, result) {
+                            client.query(query_1, function(err, result) {
                                 done();
 
                                 if (err) {
@@ -368,14 +368,14 @@ exports.process = function(message) {
 
 
                             //TODO select danger subscriptions that have been notified and lie (x cm) unter danger level
-                            var query = "" +
+                            var query_2 = "" +
                                 "(UPDATE " +
-                                "Subscriptions " +
-                                "SET danger_notified=false" +
-                                "WHERE sensor_id=" + sensor.sensor_id + " AND danger_notified=true" + " AND creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + danger_threshold));";
+                                "Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
+                                "SET subscriptions.danger_notified=false" +
+                                "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.danger_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.danger_threshold));";
 
 
-                            client.query(query, function(err, result) {
+                            client.query(query_2, function(err, result) {
                                 done();
 
                                 if (err) {
@@ -421,4 +421,4 @@ function median(values) {
     });
     var half = Math.floor(values.length / 2);
     return values[half];
-};
+}
