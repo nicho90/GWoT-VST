@@ -359,45 +359,12 @@ exports.request = function(req, res) {
 									callback(null, null);
 								}
 							});
-						},
-						// 2.4. Get the latest measurement
-						function(callback){
-
-							// Database Query
-							client.query("SELECT * FROM Measurements WHERE sensor_id=$1 ORDER BY measurement_timestamp DESC LIMIT 1;", [
-								req.params.sensor_id
-							], function(err, result) {
-								done();
-
-								if(err) {
-									res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
-									return console.error(errors.database.error_2.message, err);
-								} else {
-
-									// Check if latest measuement exists
-									if(result.rows.length !== 0) {
-										statistics.latest_measurement = result.rows[0];
-										callback(null, null);
-									} else {
-
-										var latest_measurement = {
-										    water_level: "-",
-										    water_level_unit: "CENTIMETER",
-										    measurement_timestamp: "-",
-											valid_entry: false
-										};
-										statistics.latest_measurement = latest_measurement;
-										callback(null, null);
-									}
-								}
-							});
-					    }
+						}
 					],
 					function(err, results){
 						if(err){
-
+							console.log(err);
 						} else {
-							//console.log(statistics);
 
 							// Send results
 							res.status(200).send(statistics);

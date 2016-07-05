@@ -44,7 +44,7 @@ app.filter('time', function() {
         if(time === undefined){
             return "";
         } else {
-            return time.substring(0, 10) + " " + time.substring(11, 19);
+            return moment(time).format("DD.MM.YYYY HH:mm:ss");
         }
     };
 });
