@@ -345,7 +345,7 @@ exports.process = function(message) {
                         async.each(users, function(user, callback) {
 
                             var query = "UPDATE Subscriptions AS sc " +
-                                "SET warning_notified=false" +
+                                "SET warning_notified=false " +
                                 "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
                                 "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.warning_threshold);";
 
@@ -364,7 +364,7 @@ exports.process = function(message) {
                                 } else {
                                   //TODO select danger subscriptions that have been notified and lie (x cm) unter danger level
                                   query = "UPDATE Subscriptions AS sc " +
-                                      "SET danger_notified=false" +
+                                      "SET danger_notified=false " +
                                       "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
                                       "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.danger_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.danger_threshold);";
 
