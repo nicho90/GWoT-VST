@@ -60,6 +60,7 @@ exports.process = function(message) {
             // 2. Reject measurement if measured distance > sensor height
             function(measurement, sensor, callback) {
                 if (measurement.properties.distance.value > sensor.sensor_height) {
+                    console.log("Distance: ", measurement.properties.distance.value);
                     callback(new Error(errors.measurement.error_1.message));
                 } else {
                     callback(null, measurement);

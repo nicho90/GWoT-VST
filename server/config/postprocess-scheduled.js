@@ -260,7 +260,7 @@ exports.process = function(message) {
                                                     if (err) {
                                                         console.error("Step 7: change warning_notified value", errors.database.error_2.message, err);
                                                     } else {
-                                                        callback(null);
+                                                        callback();
                                                     }
                                                 });
                                             } else if (triggered_thresholds[row].level == "danger") {
@@ -272,7 +272,7 @@ exports.process = function(message) {
                                                     if (err) {
                                                         console.error("Step 7: change warning_notified value", errors.database.error_2.message, err);
                                                     } else {
-                                                        callback(null);
+                                                        callback();
                                                     }
                                                 });
                                             }
@@ -321,7 +321,7 @@ exports.process = function(message) {
                                             { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                             */
                                             io.sockets.emit('/notification/threshold', triggered_thresholds[row]);
-                                            callback(null);
+                                            callback();
                                         }, function(err) {
                                           //TODO
                                         });
@@ -347,7 +347,7 @@ exports.process = function(message) {
 
                     // 8. Check all Threshold notifications
                     function(measurement, sensor, users, callback) {
-                        //TODO update warning subscriptions that have been notified and lie (x cm) unter warning level
+                        // update warning subscriptions that have been notified and lie (x cm) under warning level
                         async.each(users, function(user, callback) {
 
                             var query = "UPDATE Subscriptions AS sc " +
@@ -355,10 +355,6 @@ exports.process = function(message) {
                                 "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
                                 "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.warning_threshold);";
 
-                            // Testing
-                            console.log("8.Query: ", query);
-                            console.log("8.Sensor for DB query: ", sensor);
-                            console.log("8.User for DB query: ", user);
                             // Database query
 
                             client.query(query, function(err, result) {
@@ -368,7 +364,7 @@ exports.process = function(message) {
                                     console.error("Step 8: reset warning thresholds notification", errors.database.error_2.message, err);
                                     callback(new Error(errors.database.error_2.message));
                                 } else {
-                                  //TODO select danger subscriptions that have been notified and lie (x cm) unter danger level
+                                  // update danger subscriptions that have been notified and lie (x cm) under danger level
                                   query = "UPDATE Subscriptions AS sc " +
                                       "SET danger_notified=false " +
                                       "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
@@ -382,7 +378,7 @@ exports.process = function(message) {
                                           console.error("Step 8: reset danger thresholds notification", errors.database.error_2.message, err);
                                           callback(new Error(errors.database.error_2.message));
                                       } else {
-                                          callback(null);
+                                          callback();
                                       }
                                   });
                                 }
