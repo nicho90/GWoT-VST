@@ -324,10 +324,12 @@ exports.process = function(message) {
                                             /* e.g. message conteent
                                             { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                             */
-                                            var content = "{" +
-                                                "description: " + row.description +
-                                                "category: " + row.category +
-                                            "}";
+                                            var content = {
+                                                "device_id": measurement.properties.device_id,
+                                                "height": sensor.sensor_height - measurement.properties.distance.value,
+                                                "description": row.description,
+                                                "category": row.category,
+                                            };
                                             io.sockets.emit('/notification/threshold', content);
                                             callback();
                                         }, function(err) {
