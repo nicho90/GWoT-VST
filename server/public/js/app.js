@@ -64,10 +64,13 @@ app.run(function($translate, config) {
 app.config(function(toastrConfig) {
     angular.extend(toastrConfig, {
         timeOut: "60000",
+        extendedTimeOut: "60000",
         newestOnTop: false,
         positionClass: 'toast-top-center',
         closeButton: true,
         showDuration : "250",
 		    hideDuration : "250",
+        progressBar: true,
+        allowHtml: true,
     });
 });

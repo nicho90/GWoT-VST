@@ -38,7 +38,7 @@ io.on('connection', function(socket) {
     setTimeout(function () {
       socket.emit('/notification/threshold', { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" });
       socket.emit('/notification/threshold', { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "warning" });
-    }, 10000);
+    }, 5000);
 });
 
 exports.sockets = io;

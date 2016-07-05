@@ -287,7 +287,7 @@ exports.process = function(message) {
 
                                             // Render HTML-content
                                             var output = mustache.render(data.toString(), user, sensor, triggered_thresholds);
-
+                                            console.log("Email notification output: ", output);
                                             // Create Text for Email-Previews and Email without HTML-support
                                             var text =
                                                 'Attention ' + user.first_name + ' ' + user.last_name + '!\n' +

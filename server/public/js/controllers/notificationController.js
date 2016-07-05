@@ -29,7 +29,6 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
         // Handle notification depending on data, e.g.
         // { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
         if (data.creator == username) {
-            console.log("username " + username + " correct.");
             if (data.level == "warning") {
                 console.log("Warning level notification");
                 /*
@@ -41,7 +40,19 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
                 $rootScope.$broadcast('alert');
                 */
                 // TODO insert notification content
-                toastr.warning("Message", "Warning");
+                toastr.warning(
+                    '<table>' +
+                    '<tr>' +
+                    '<td>Description: </td>' +
+                    '<td>' + data.description + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>Category: </td>' +
+                    '<td>' + data.category + '</td>' +
+                    '</tr>' +
+                    '</table>',
+                    'Warning'
+                );
             } else if (data.level == "danger") {
                 console.log("Danger level notification");
                 /*
@@ -53,7 +64,18 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
                 $rootScope.$broadcast('alert');
                 */
                 // TODO insert notification content
-                toastr.error("Message", "Danger");
+                toastr.error(
+                    '<table>' +
+                    '<tr>' +
+                    '<td>Description: </td>' +
+                    '<td>' + data.description + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>Category: </td>' +
+                    '<td>' + data.category + '</td>' +
+                    '</tr>' +
+                    '</table>',
+                    'Danger');
             }
         }
     });
