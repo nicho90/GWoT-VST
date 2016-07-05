@@ -248,6 +248,7 @@ exports.process = function(message) {
                                         // TODO test if working
                                         //for (var row in triggered_thresholds) {
                                         async.each(triggered_thresholds, function(row, callback) {
+                                            console.log("Row: ", row);
                                             /* e.g. message conteent
                                             { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                             */
