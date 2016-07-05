@@ -346,14 +346,15 @@ exports.process = function(message) {
 
                             var query = "" +
                                 "(UPDATE " +
-                                "subscriptions " +
+                                "Subscriptions " +
                                 "SET warning_notified=false" +
-                                "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.warning_threshold));";
+                                "WHERE sensor_id=" + sensor.sensor_id + " AND warning_notified=true" + " AND creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + warning_threshold));";
 
+                            //
                             console.log("8.Sensor for DB query: ", sensor);
                             console.log("8.User for DB query: ", user);
                             // Database query
-                            /*
+
                             client.query(query, function(err, result) {
                                 done();
 
@@ -364,16 +365,16 @@ exports.process = function(message) {
                                     // Do nothing
                                 }
                             });
-                            */
+
 
                             //TODO select danger subscriptions that have been notified and lie (x cm) unter danger level
                             var query = "" +
                                 "(UPDATE " +
-                                "subscriptions " +
+                                "Subscriptions " +
                                 "SET danger_notified=false" +
-                                "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.danger_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.danger_threshold));";
+                                "WHERE sensor_id=" + sensor.sensor_id + " AND danger_notified=true" + " AND creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + danger_threshold));";
 
-                            /*
+
                             client.query(query, function(err, result) {
                                 done();
 
@@ -384,7 +385,7 @@ exports.process = function(message) {
                                     // Do nothing
                                 }
                             });
-                            */
+
                         }, function(err) {
                             if (err) {
                                 console.log(err);
