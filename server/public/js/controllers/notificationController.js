@@ -4,7 +4,7 @@ var app = angular.module("gwot-vst");
 /**
  * Notification Controller: Checks incomming socket notifications and alerts if user matches subscription
  */
-app.controller("NotificationController", function($scope, $rootScope, $timeout, $socket, toastr) {
+app.controller("NotificationController", function($scope, $rootScope, $timeout, $translate, $filter, $socket, toastr) {
 
     /*
      * Check if User is authenticated
@@ -29,6 +29,24 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
         // Handle notification depending on data, e.g.
         // { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
         if (data.creator == username) {
+            var message = '<table style="font-size: 0.8em">' +
+                '<tr>' +
+                '<td>' + $filter('translate')("SENSOR_NOTIFICATION") + ': </td>' +
+                '<td>' + data.device_id + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>' + $filter('translate')("HEIGHT_NOTIFICATION") + ': </td>' +
+                '<td>' + data.height + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>' + $filter('translate')("DESCRIPTION_NOTIFICATION") + ': </td>' +
+                '<td>' + data.description + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>' + $filter('translate')("CATEGORY_NOTIFICATION") + ': </td>' +
+                '<td>' + data.category + '</td>' +
+                '</tr>' +
+                '</table>';
             if (data.level == "warning") {
                 console.log("Warning level notification");
                 /*
@@ -40,27 +58,7 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
                 $rootScope.$broadcast('alert');
                 */
                 // TODO insert notification content
-                toastr.warning(
-                    '<table style="font-size: 0.8em">' +
-                    '<tr>' +
-                    '<td>Sensor: </td>' +
-                    '<td>' + data.device_id + '</td>' +
-                    '</tr>' +
-                    '<tr>' +
-                    '<td>Height: </td>' +
-                    '<td>' + data.height + '</td>' +
-                    '</tr>' +
-                    '<tr>' +
-                    '<td>Description: </td>' +
-                    '<td>' + data.description + '</td>' +
-                    '</tr>' +
-                    '<tr>' +
-                    '<td>Category: </td>' +
-                    '<td>' + data.category + '</td>' +
-                    '</tr>' +
-                    '</table>',
-                    'Warning'
-                );
+                toastr.warning(message, $filter('translate')("WARNING_NOTIFICATION"));
             } else if (data.level == "danger") {
                 console.log("Danger level notification");
                 /*
@@ -72,26 +70,7 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
                 $rootScope.$broadcast('alert');
                 */
                 // TODO insert notification content
-                toastr.error(
-                    '<table style="font-size: 0.8em">' +
-                    '<tr>' +
-                    '<td>Sensor: </td>' +
-                    '<td>' + data.device_id + '</td>' +
-                    '</tr>' +
-                    '<tr>' +
-                    '<td>Height: </td>' +
-                    '<td>' + data.height + '</td>' +
-                    '</tr>' +
-                    '<tr>' +
-                    '<td>Description:</td>' +
-                    '<td>' + data.description + '</td>' +
-                    '</tr>' +
-                    '<tr>' +
-                    '<td>Category:</td>' +
-                    '<td>' + data.category + '</td>' +
-                    '</tr>' +
-                    '</table>',
-                    'Danger');
+                toastr.error(message, $filter('translate')("CRITICAL_NOTIFICATION"));
             }
         }
     });

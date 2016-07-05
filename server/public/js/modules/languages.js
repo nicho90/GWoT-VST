@@ -130,7 +130,15 @@ app.config(function($translateProvider, config) {
 
         SUBSCRIBED: 'Abonniert',
         SUBSCRIBE: 'Abonnieren',
-        UNSUBSCRIBE: 'Abo beenden'
+        UNSUBSCRIBE: 'Abo beenden',
+
+        WARNING_NOTIFICATION: 'Warnung',
+        CRITICAL_NOTIFICATION: 'Gefahr',
+        SENSOR_NOTIFICATION: 'Sensor',
+        HEIGHT_NOTIFICATION: 'Höhe',
+        DESCRIPTION_NOTIFICATION: 'Beschreibung',
+        CATEGORY_NOTIFICATION: 'Kategorie',
+
 
     });
 
@@ -259,7 +267,14 @@ app.config(function($translateProvider, config) {
 
         SUBSCRIBED: 'Subscribed',
         SUBSCRIBE: 'Subscribe',
-        UNSUBSCRIBE: 'Unubscribe'
+        UNSUBSCRIBE: 'Unubscribe',
+
+        WARNING_NOTIFICATION: 'Warning',
+        CRITICAL_NOTIFICATION: 'Danger',
+        SENSOR_NOTIFICATION: 'Sensor',
+        HEIGHT_NOTIFICATION: 'Height',
+        DESCRIPTION_NOTIFICATION: 'Description',
+        CATEGORY_NOTIFICATION: 'Category',
 
     });
 
