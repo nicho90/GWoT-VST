@@ -37,6 +37,7 @@
     "angular-socket-io": "~0.7.0",
     "weather-icons": "^2.0.10",
     "angular-underscore-module": "^1.0.3",
-    "angular-toastr": "~1.7.0"
+    "angular-toastr": "~1.7.0",
+    "angular-animate": "~1.5.7"
   }
 }

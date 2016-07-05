@@ -10,6 +10,7 @@ var app = angular.module("gwot-vst", [
     "n3-line-chart",
     "btford.socket-io",
     "underscore",
+    "ngAnimate",
     "toastr",
 
     // Own Modules
@@ -68,8 +69,10 @@ app.config(function(toastrConfig) {
         newestOnTop: false,
         positionClass: 'toast-top-center',
         closeButton: true,
-        showDuration : "250",
-		    hideDuration : "250",
+        showDuration : "100",
+		    hideDuration : "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
         progressBar: true,
         allowHtml: true,
     });

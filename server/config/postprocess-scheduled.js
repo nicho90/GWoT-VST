@@ -317,13 +317,10 @@ exports.process = function(message) {
                                         // Emit Websocket-notification if triggered_thresholds.length > 0!
                                         console.log("Publishing socket");
                                         async.each(triggered_thresholds, function(row, callback) {
-                                            console.log("Send socket notification for threshold:", row);
-                                            /* e.g. message conteent
-                                            { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
-                                            */
+                                            //console.log("Send socket notification for threshold:", row);
                                             var content = {
                                                 "subscription_id": row.subscription_id,
-                                                "threshold_id": row.threshold_id, 
+                                                "threshold_id": row.threshold_id,
                                                 "creator": row.creator,
                                                 "description": row.description,
                                                 "category": row.category,
