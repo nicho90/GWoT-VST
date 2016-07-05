@@ -33,8 +33,8 @@ var app = angular.module("gwot-vst", [
 /**
  * Sockets
  */
-app.factory('$socket', function (socketFactory) {
-  return socketFactory();
+app.factory('$socket', function(socketFactory) {
+    return socketFactory();
 });
 
 
@@ -55,4 +55,19 @@ app.run(function($translate, config) {
     // Use Translator and set Language
     $translate.use(config.appLanguage);
 
+});
+
+
+/**
+ * Configure toastr notifications
+ */
+app.config(function(toastrConfig) {
+    angular.extend(toastrConfig, {
+        timeOut: "60000",
+        newestOnTop: false,
+        positionClass: 'toast-top-center',
+        closeButton: true,
+        showDuration : "250",
+		    hideDuration : "250",
+    });
 });

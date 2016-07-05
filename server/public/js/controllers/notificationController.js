@@ -19,6 +19,7 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
         //console.log("Authenticated user: ", $rootScope.authenticated_user);
     });
 
+
     /*
      * Receiving notifications when specific thresholds are reached
      */
@@ -39,6 +40,7 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
                 };
                 $rootScope.$broadcast('alert');
                 */
+                // TODO insert notification content
                 toastr.warning("Message", "Warning");
             } else if (data.level == "danger") {
                 console.log("Danger level notification");
@@ -50,6 +52,7 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
                 };
                 $rootScope.$broadcast('alert');
                 */
+                // TODO insert notification content
                 toastr.error("Message", "Danger");
             }
         }
