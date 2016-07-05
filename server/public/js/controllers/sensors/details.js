@@ -323,11 +323,11 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             axis: "y",
             dataset: "dataset",
             key: "gauge_zero",
-            label: "Gauge Zero", // TODO: translate
-            color: "rgba(0, 0, 0, 1)", //color: "hsla(88, 48%, 48%, 1)",
+            label: $filter('translate')("GAUGE_ZERO"),
+            color: "rgba(0, 0, 0, 1)",
             type: [
-                "line",
-                "dot"
+                "line"
+                //"dot"
             ],
             id: "gaugeZero"
         });
@@ -338,11 +338,10 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             axis: "y",
             dataset: "dataset",
             key: "sensor_height",
-            label: "Sensor-Height", // TODO: translate
+            label: $filter('translate')("SENSOR_HEIGHT"),
             color: "rgba(128, 128, 128, 1)",
             type: [
-                "line",
-                "dot"
+                "line"
             ],
             id: "sensorHeight"
         });
@@ -353,12 +352,10 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             axis: "y",
             dataset: "dataset",
             key: "sensor_threshold_value",
-            label: "Sensor-Threshold-Height", // TODO: translate
-            // color: "rgba(205, 205, 0, 1)",
+            label: $filter('translate')("SENSOR_THRESHOLD_HEIGHT"),
             color: "rgba(0, 204, 204, 1)",
             type: [
-                "line",
-                "dot"
+                "line"
             ],
             id: "sensorThresholdHeight"
         });
@@ -369,11 +366,10 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             axis: "y",
             dataset: "dataset",
             key: "crossing_height",
-            label: "Crossing-Height", // TODO: translate
+            label: $filter('translate')("CROSSING_HEIGHT"),
             color: "rgba(102, 0, 102, 1)",
             type: [
-                "line",
-                "dot"
+                "line"
             ],
             id: "crossingHeight"
         });
@@ -391,11 +387,10 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                     axis: "y",
                     dataset: "dataset",
                     key: "warning_threshold",
-                    label: "Warning Threshold", // TODO: translate
+                    label: $filter('translate')("WARNING_THRESHOLD"),
                     color: "rgba(255, 128, 0, 1)",
                     type: [
-                        "line",
-                        "dot"
+                        "line"
                     ],
                     id: "warningThreshold"
                 });
@@ -406,11 +401,10 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                     axis: "y",
                     dataset: "dataset",
                     key: "critical_threshold",
-                    label: "Critical Threshold", // TODO: translate
+                    label: $filter('translate')("CRITICAL_THRESHOLD"),
                     color: "rgba(255, 0, 0, 1)",
                     type: [
-                        "line",
-                        "dot"
+                        "line"
                     ],
                     id: "criticalThreshold"
                 });
@@ -423,11 +417,10 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             axis: "y",
             dataset: "dataset",
             key: "water_level",
-            label: "Water Level",// $scope.sensor.device_id,
-            color: "rgba(2, 117, 216, 1)", //color: "hsla(88, 48%, 48%, 1)",
+            label: $filter('translate')("WATER_LEVEL"),
+            color: "rgba(2, 117, 216, 1)",
             type: [
                 "line",
-                "dot",
                 "area"
             ],
             id: "mainWaterLevels"
@@ -833,7 +826,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                     }
                 },
                 mapbox_satellite: {
-                    name: $translate.instant('MAP_TILES_SATELLITE'),
+                    name: $filter('translate')('MAP_TILES_SATELLITE'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
