@@ -4,7 +4,7 @@ var app = angular.module("gwot-vst");
 /**
  * Notification Controller: Checks incomming socket notifications and alerts if user matches subscription
  */
-app.controller("NotificationController", function($scope, $rootScope, $timeout, $socket, toastr) {
+app.controller("NotificationController", function($scope, $rootScope, $timeout, $socket) {
 
     /*
      * Check if User is authenticated
@@ -39,7 +39,7 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
                 };
                 $rootScope.$broadcast('alert');
                 */
-                toastr.warning("Message", "Warning");
+                //toastr.warning("Message", "Warning");
             } else if (data.level == "danger") {
                 console.log("Danger level notification");
                 /*
@@ -50,7 +50,7 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
                 };
                 $rootScope.$broadcast('alert');
                 */
-                toastr.error("Message", "Danger");
+                //toastr.error("Message", "Danger");
             }
         }
     });
