@@ -316,9 +316,6 @@ exports.process = function(message) {
 
                                         // Emit Websocket-notification if triggered_thresholds.length > 0!
                                         console.log("Publishing socket");
-                                        console.log("Measurement: ", measurement);
-                                        console.log("Sensor: ", sensor);
-                                        console.log("User: ", users);
                                         async.each(triggered_thresholds, function(row, callback) {
                                             console.log("Send socket notification for threshold:", row);
                                             /* e.g. message conteent
@@ -327,6 +324,7 @@ exports.process = function(message) {
                                             var content = {
                                                 "device_id": measurement.properties.device_id,
                                                 "height": sensor.sensor_height - measurement.properties.distance.value,
+                                                "creator": row.creator,
                                                 "description": row.description,
                                                 "category": row.category,
                                             };
