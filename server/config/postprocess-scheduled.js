@@ -322,11 +322,14 @@ exports.process = function(message) {
                                             { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                             */
                                             var content = {
-                                                "device_id": measurement.properties.device_id,
-                                                "height": sensor.sensor_height - measurement.properties.distance.value,
+                                                "subscription_id": row.subscription_id,
+                                                "threshold_id": row.threshold_id, 
                                                 "creator": row.creator,
                                                 "description": row.description,
                                                 "category": row.category,
+                                                "level": row.level,
+                                                "device_id": measurement.properties.device_id,
+                                                "height": sensor.sensor_height - measurement.properties.distance.value,
                                             };
                                             io.sockets.emit('/notification/threshold', content);
                                             callback();
