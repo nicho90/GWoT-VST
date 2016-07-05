@@ -1092,7 +1092,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
     $scope.load_realtime_value = function(measurement) {
       var dot = {
           timestamp: new Date(measurement.properties.timestamp),
-          water_level: $scope.sensor.sensor_height - measurement.properties.distance,
+          water_level: $scope.sensor.sensor_height - measurement.properties.distance.value,
           sensor_height: $scope.sensor.sensor_height,
           crossing_height: $scope.sensor.crossing_height,
           gauge_zero: 0,
@@ -1154,7 +1154,8 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
              label: $filter('translate')("GAUGE_ZERO"),
              color: "rgba(0, 0, 0, 1)",
              type: [
-                 "line"
+                 "line",
+                 "dot",
              ],
              id: "gaugeZero"
          });
@@ -1168,7 +1169,8 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
              label: $filter('translate')("SENSOR_HEIGHT"),
              color: "rgba(128, 128, 128, 1)",
              type: [
-                 "line"
+                 "line",
+                 "dot",
              ],
              id: "sensorHeight"
          });
@@ -1182,7 +1184,8 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
              label: $filter('translate')("SENSOR_THRESHOLD_HEIGHT"),
              color: "rgba(0, 204, 204, 1)",
              type: [
-                 "line"
+                 "line",
+                 "dot",
              ],
              id: "sensorThresholdHeight"
          });
@@ -1196,47 +1199,12 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
              label: $filter('translate')("CROSSING_HEIGHT"),
              color: "rgba(102, 0, 102, 1)",
              type: [
-                 "line"
+                 "line",
+                 "dot",
              ],
              id: "crossingHeight"
          });
 
-
-         // Check if User is authenticated
-         if($rootScope.authenticated_user !== undefined){
-
-             // Check if User has set a current Threshold
-             if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
-
-                 // Create Warning-Threshold-Serie
-                 $scope.options_2.series.push({
-                     visible: $scope.status.warning_threshold,
-                     axis: "y",
-                     dataset: "dataset",
-                     key: "warning_threshold",
-                     label: $filter('translate')("WARNING_THRESHOLD"),
-                     color: "rgba(255, 128, 0, 1)",
-                     type: [
-                         "line"
-                     ],
-                     id: "warningThreshold"
-                 });
-
-                 // Create Critical-Threshold-Serie
-                 $scope.options_2.series.push({
-                     visible: $scope.status.critical_threshold,
-                     axis: "y",
-                     dataset: "dataset",
-                     key: "critical_threshold",
-                     label: $filter('translate')("CRITICAL_THRESHOLD"),
-                     color: "rgba(255, 0, 0, 1)",
-                     type: [
-                         "line"
-                     ],
-                     id: "criticalThreshold"
-                 });
-             }
-         }
 
          // Create Measurement values
          $scope.options_2.series.push({
@@ -1248,6 +1216,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
              color: "rgba(2, 117, 216, 1)",
              type: [
                  "line",
+                 "dot",
                  "area"
              ],
              id: "mainWaterLevels"
