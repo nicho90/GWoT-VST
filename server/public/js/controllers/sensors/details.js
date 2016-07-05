@@ -280,7 +280,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                 angular.forEach($scope.sensor.timeseries, function(timeserie, key) {
 
                     var dot = {
-                        timestamp: new Date(timeserie.measurement_date), // TODO: only data, no time!
+                        timestamp: new Date(timeserie.measurement_date),
                         water_level: timeserie.water_level,
                         sensor_height: $scope.sensor.sensor_height,
                         crossing_height: $scope.sensor.crossing_height,
@@ -327,7 +327,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             color: "rgba(0, 0, 0, 1)",
             type: [
                 "line"
-                //"dot"
             ],
             id: "gaugeZero"
         });
@@ -424,9 +423,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                 "area"
             ],
             id: "mainWaterLevels"
-            /*interpolation: { // round curves
-                mode: 'cardinal', tension: 0.7
-            }*/
         });
 
         // Refresh Chart
