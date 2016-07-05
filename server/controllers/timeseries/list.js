@@ -68,7 +68,7 @@ exports.request = function(req, res) {
 
 							// Validate parameter
 							if(Number(req.query.minutes) > 0){
-								begin = now.subtract(req.query.minutes, 'minutes').format("YYYY-MM-DD hh:mm:ss");
+								begin = now.subtract(req.query.minutes, 'minutes').format("YYYY-MM-DD HH:mm:ss");
 								query = "SELECT " +
 										"measurement_id, " +
 										"created, " +
@@ -88,7 +88,7 @@ exports.request = function(req, res) {
 
 							// Validate parameter
 							if(Number(req.query.hours) > 0){
-								begin = now.subtract(req.query.hours, 'hours').format("YYYY-MM-DD hh:mm:ss");
+								begin = now.subtract(req.query.hours, 'hours').format("YYYY-MM-DD HH:mm:ss");
 								query = "SELECT " +
 										"measurement_id, " +
 										"created, " +
@@ -128,7 +128,7 @@ exports.request = function(req, res) {
 
 							// Validate parameter
 							if(Number(req.query.weeks) > 0){
-								begin = now.subtract(req.query.weeks, 'weeks').format("YYYY-MM-DD hh:mm:ss");
+								begin = now.subtract(req.query.weeks, 'weeks').format("YYYY-MM-DD HH:mm:ss");
 								query = "SELECT " +
 										"timeserie_id, " +
 										"created, " +
@@ -148,7 +148,7 @@ exports.request = function(req, res) {
 
 							// Validate parameter
 							if(Number(req.query.months) > 0){
-								begin = now.subtract(req.query.months, 'months').format("YYYY-MM-DD hh:mm:ss");
+								begin = now.subtract(req.query.months, 'months').format("YYYY-MM-DD HH:mm:ss");
 								query = "SELECT " +
 										"timeserie_id, " +
 										"created, " +
@@ -168,7 +168,7 @@ exports.request = function(req, res) {
 
 							// Validate parameter
 							if(Number(req.query.years) > 0){
-								begin = now.subtract(req.query.years, 'years').format("YYYY-MM-DD hh:mm:ss");
+								begin = now.subtract(req.query.years, 'years').format("YYYY-MM-DD HH:mm:ss");
 								query = "SELECT " +
 										"timeserie_id, " +
 										"created, " +
