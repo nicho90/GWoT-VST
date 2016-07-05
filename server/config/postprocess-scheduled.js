@@ -287,7 +287,7 @@ exports.process = function(message) {
 
                                             // Render HTML-content
                                             var output = mustache.render(data.toString(), user, sensor, triggered_thresholds);
-                                            console.log("Email notification output: ", output);
+
                                             // Create Text for Email-Previews and Email without HTML-support
                                             var text =
                                                 'Attention ' + user.first_name + ' ' + user.last_name + '!\n' +
@@ -316,12 +316,19 @@ exports.process = function(message) {
 
                                         // Emit Websocket-notification if triggered_thresholds.length > 0!
                                         console.log("Publishing socket");
+                                        console.log("Measurement: ", measurement);
+                                        console.log("Sensor: ", sensor);
+                                        console.log("User: ", users);
                                         async.each(triggered_thresholds, function(row, callback) {
                                             console.log("Send socket notification for threshold:", row);
                                             /* e.g. message conteent
                                             { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                             */
-                                            io.sockets.emit('/notification/threshold', row);
+                                            var content = "{" +
+                                                "description: " + row.description +
+                                                "category: " + row.category +
+                                            "}";
+                                            io.sockets.emit('/notification/threshold', content);
                                             callback();
                                         }, function(err) {
                                           //TODO

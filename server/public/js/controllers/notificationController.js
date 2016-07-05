@@ -41,7 +41,7 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
                 */
                 // TODO insert notification content
                 toastr.warning(
-                    '<table>' +
+                    '<table style="font-size: 0.8em">' +
                     '<tr>' +
                     '<td>Description: </td>' +
                     '<td>' + data.description + '</td>' +
@@ -65,13 +65,13 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
                 */
                 // TODO insert notification content
                 toastr.error(
-                    '<table>' +
+                    '<table style="font-size: 0.8em">' +
                     '<tr>' +
-                    '<td>Description: </td>' +
+                    '<td>Description:</td>' +
                     '<td>' + data.description + '</td>' +
                     '</tr>' +
                     '<tr>' +
-                    '<td>Category: </td>' +
+                    '<td>Category:</td>' +
                     '<td>' + data.category + '</td>' +
                     '</tr>' +
                     '</table>',
