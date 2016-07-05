@@ -1110,8 +1110,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
          // Reset Dataset
          $scope.data_2.dataset = [];
-
-         /*
+         
          // Check if User is authenticated
          var token;
          if ($rootScope.authenticated_user) {
@@ -1138,7 +1137,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
          .error(function(err) {
              $scope.err = err;
          });
-         */
      };
 
 
