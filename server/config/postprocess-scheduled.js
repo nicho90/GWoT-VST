@@ -252,10 +252,10 @@ exports.process = function(message) {
                                             /* e.g. message conteent
                                             { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                             */
-                                            if (triggered_thresholds[row].level == "warning") {
+                                            if (row.level == "warning") {
                                                 // Change warning_notified value
                                                 client.query('UPDATE Subscriptions SET warning_notified=true WHERE subscription_id=$1;', [
-                                                    triggered_thresholds[row].subscription_id
+                                                    row.subscription_id
                                                 ], function(err, result) {
                                                     done();
                                                     if (err) {
@@ -264,10 +264,10 @@ exports.process = function(message) {
                                                         callback();
                                                     }
                                                 });
-                                            } else if (triggered_thresholds[row].level == "danger") {
+                                            } else if (row.level == "danger") {
                                                 // Change warning_notified value
                                                 client.query('UPDATE Subscriptions SET danger_notified=true WHERE subscription_id=$1;', [
-                                                    triggered_thresholds[row].subscription_id
+                                                    row.subscription_id
                                                 ], function(err, result) {
                                                     done();
                                                     if (err) {
@@ -321,7 +321,7 @@ exports.process = function(message) {
                                             /* e.g. message conteent
                                             { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                             */
-                                            io.sockets.emit('/notification/threshold', triggered_thresholds[row]);
+                                            io.sockets.emit('/notification/threshold', row);
                                             callback();
                                         }, function(err) {
                                           //TODO
