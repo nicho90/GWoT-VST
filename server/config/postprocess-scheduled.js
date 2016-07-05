@@ -317,8 +317,7 @@ exports.process = function(message) {
                                             /* e.g. message conteent
                                             { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                             */
-                                            //TODO
-                                            //io.sockets.emit('/notification/threshold', triggered_thresholds[row]);
+                                            io.sockets.emit('/notification/threshold', triggered_thresholds[row]);
                                         }
 
                                         callback();
