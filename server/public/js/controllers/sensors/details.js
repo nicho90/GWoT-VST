@@ -42,9 +42,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                 $subscriptionService.delete(token, $rootScope.authenticated_user.username, $scope.currentSubscription.subscription_id)
                 .success(function(response) {
 
-                    console.log("Response:");
-                    console.log(response);
-
                     // Reset current Subscription
                     delete $scope.currentSubscription;
                     $scope.currentSubscription = undefined;
