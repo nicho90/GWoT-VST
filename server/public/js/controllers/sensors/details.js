@@ -1064,7 +1064,8 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                  status: true,
              });
              $scope.realtime = true;
-             console.log($scope.sensor.latest_measurement);
+
+             // Load latest value and build chart
              $scope.load_realtime();
          } else if ($scope.realtime) {
              // Sockets: Deactivate realtime data
@@ -1080,13 +1081,30 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
       * Sockets: Receiving realtime data
       */
      $socket.on('/data/realtime', function(data) {
-         console.log("Realtime data received");
-         //TODO write realtime data to chart
+         console.log("Realtime data received", data);
+         $scope.load_realtime_value(data);
      });
 
 
      /**
-      * Update Realtime
+      * Update Realtime Chart with realtime value from Sockets
+      */
+    $scope.load_realtime_value = function(measurement) {
+      var dot = {
+          timestamp: new Date(measurement.properties.timestamp),
+          water_level: $scope.sensor.sensor_height - measurement.properties.distance,
+          sensor_height: $scope.sensor.sensor_height,
+          crossing_height: $scope.sensor.crossing_height,
+          gauge_zero: 0,
+          sensor_threshold_value: $scope.sensor.threshold_value
+      };
+
+      // Draw dot
+      $scope.data_2.dataset.push(dot);
+    };
+
+     /**
+      * Update Realtime Chart with lastes value in DB
       */
      $scope.update_realtime = function() {
 
@@ -1104,8 +1122,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
          // Request lastest measurement for sensor
          $measurementService.get_latest(token, $scope.sensor.sensor_id)
          .success(function(response) {
-
-             console.log("Latest: ", response);
              var dot = {
                  timestamp: new Date(response.measurement_timestamp),
                  water_level: response.water_level,
@@ -1114,20 +1130,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                  gauge_zero: 0,
                  sensor_threshold_value: $scope.sensor.threshold_value
              };
-
-             // Check if User is authenticated
-             if($rootScope.authenticated_user !== undefined){
-
-                 // Check if User has set a current Threshold
-                 if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
-
-                     // Add Warning Threshold to chart
-                     dot.warning_threshold = $scope.sensor.crossing_height + $rootScope.authenticated_user.currentThreshold.warning_threshold;
-
-                     // Add Critical Threshold to chart
-                     dot.critical_threshold = $scope.sensor.crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold;
-                 }
-             }
 
              // Draw dot
              $scope.data_2.dataset.push(dot);
