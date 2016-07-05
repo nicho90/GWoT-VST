@@ -1236,7 +1236,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
              }
          }
 
-         // Create Timeseries-Serie
+         // Create Measurement values
          $scope.options_2.series.push({
              visible: $scope.status.water_level,
              axis: "y",
