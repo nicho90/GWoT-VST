@@ -246,7 +246,8 @@ exports.process = function(message) {
 
                                         // Change warning and danger notification status in DB
                                         // TODO test if working
-                                        for (row in triggered_thresholds) {
+                                        //for (var row in triggered_thresholds) {
+                                        async.each(triggered_thresholds, function(row, callback) {
                                             /* e.g. message conteent
                                             { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                             */
@@ -259,7 +260,7 @@ exports.process = function(message) {
                                                     if (err) {
                                                         console.error("Step 7: change warning_notified value", errors.database.error_2.message, err);
                                                     } else {
-                                                        // Do nothing
+                                                        callback(null);
                                                     }
                                                 });
                                             } else if (triggered_thresholds[row].level == "danger") {
@@ -271,11 +272,13 @@ exports.process = function(message) {
                                                     if (err) {
                                                         console.error("Step 7: change warning_notified value", errors.database.error_2.message, err);
                                                     } else {
-                                                        // Do nothing
+                                                        callback(null);
                                                     }
                                                 });
                                             }
-                                        };
+                                        }, function(err) {
+                                          //TODO
+                                        });
 
                                         // Read Template
                                         fs.readFile(path.join(__dirname, '../templates/notification.html'), function(err, data) {
@@ -312,13 +315,16 @@ exports.process = function(message) {
 
                                         // Emit Websocket-notification if triggered_thresholds.length > 0!
                                         console.log("Publishing socket");
-                                        for (row in triggered_thresholds) {
+                                        async.each(triggered_thresholds, function(row, callback) {
                                             console.log("Send socket notification for threshold:", row);
                                             /* e.g. message conteent
                                             { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                             */
                                             io.sockets.emit('/notification/threshold', triggered_thresholds[row]);
-                                        }
+                                            callback(null);
+                                        }, function(err) {
+                                          //TODO
+                                        });
 
                                         callback();
                                     } else {
