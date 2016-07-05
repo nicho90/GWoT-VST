@@ -344,43 +344,41 @@ exports.process = function(message) {
                         //TODO update warning subscriptions that have been notified and lie (x cm) unter warning level
                         async.each(users, function(user, callback) {
 
-                            var query_1 = "UPDATE Subscriptions AS sc " +
+                            var query = "UPDATE Subscriptions AS sc " +
                                 "SET warning_notified=false" +
                                 "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
                                 "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.warning_threshold);";
 
-                            //
+                            // Testing
+                            console.log("8.Query: ", query);
                             console.log("8.Sensor for DB query: ", sensor);
                             console.log("8.User for DB query: ", user);
                             // Database query
 
-                            client.query(query_1, function(err, result) {
+                            client.query(query, function(err, result) {
                                 done();
 
                                 if (err) {
                                     console.error("Step 8: reset warning thresholds notification", errors.database.error_2.message, err);
                                     callback(new Error(errors.database.error_2.message));
                                 } else {
-                                    // Do nothing
-                                }
-                            });
+                                  //TODO select danger subscriptions that have been notified and lie (x cm) unter danger level
+                                  query = "UPDATE Subscriptions AS sc " +
+                                      "SET danger_notified=false" +
+                                      "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
+                                      "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.danger_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.danger_threshold);";
 
 
-                            //TODO select danger subscriptions that have been notified and lie (x cm) unter danger level
-                            var query_2 = "UPDATE Subscriptions AS sc " +
-                                "SET danger_notified=false" +
-                                "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                                "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.danger_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.danger_threshold);";
+                                  client.query(query, function(err, result) {
+                                      done();
 
-
-                            client.query(query_2, function(err, result) {
-                                done();
-
-                                if (err) {
-                                    console.error("Step 8: reset danger thresholds notification", errors.database.error_2.message, err);
-                                    callback(new Error(errors.database.error_2.message));
-                                } else {
-                                    // Do nothing
+                                      if (err) {
+                                          console.error("Step 8: reset danger thresholds notification", errors.database.error_2.message, err);
+                                          callback(new Error(errors.database.error_2.message));
+                                      } else {
+                                          callback(null);
+                                      }
+                                  });
                                 }
                             });
 
