@@ -10,6 +10,7 @@ var app = angular.module("gwot-vst", [
     "n3-line-chart",
     "btford.socket-io",
     "underscore",
+    "toastr",
 
     // Own Modules
     "filters",

@@ -36,6 +36,7 @@
     "d3": "^3.5.17",
     "angular-socket-io": "~0.7.0",
     "weather-icons": "^2.0.10",
-    "angular-underscore-module": "^1.0.3"
+    "angular-underscore-module": "^1.0.3",
+    "toastr": "~2.1.2"
   }
 }
