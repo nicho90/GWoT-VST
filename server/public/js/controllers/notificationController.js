@@ -6,7 +6,7 @@ var app = angular.module("gwot-vst");
  */
 app.controller("NotificationController", function($scope, $rootScope, $timeout, $translate, $filter, $socket, toastr) {
 
-    /*
+    /**
      * Check if User is authenticated
      */
     var username;
@@ -20,15 +20,14 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
     });
 
 
-    /*
+    /**
      * Receiving notifications when specific thresholds are reached
      */
     $socket.on('/notification/threshold', function(data) {
         console.log("Threshold notification received: ", data);
-
-        // Handle notification depending on data, e.g.
-        // { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
+        // check logged in user
         if (data.creator == username) {
+            // Define message content dynamically as HTML
             var message = '<table style="font-size: 0.8em">' +
                 '<tr>' +
                 '<td>' + $filter('translate')("SENSOR_NOTIFICATION") + ': </td>' +
@@ -47,29 +46,11 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
                 '<td>' + data.category + '</td>' +
                 '</tr>' +
                 '</table>';
-            if (data.level == "warning") {
+            if (data.level == "warning") {  // Throw warning notifications
                 console.log("Warning level notification");
-                /*
-                $rootScope.alert = {
-                    status: 3,
-                    info: "Error ",
-                    message: "Warning message"
-                };
-                $rootScope.$broadcast('alert');
-                */
-                // TODO insert notification content
                 toastr.warning(message, $filter('translate')("WARNING_NOTIFICATION"));
-            } else if (data.level == "danger") {
+            } else if (data.level == "danger") {  // Throw danger notifications
                 console.log("Danger level notification");
-                /*
-                $rootScope.alert = {
-                    status: 2,
-                    info: "Error ",
-                    message: "Danger message"
-                };
-                $rootScope.$broadcast('alert');
-                */
-                // TODO insert notification content
                 toastr.error(message, $filter('translate')("CRITICAL_NOTIFICATION"));
             }
         }

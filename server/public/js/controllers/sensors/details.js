@@ -719,6 +719,11 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         // Reset realtime
         $scope.realtime = false;
 
+        // Prepare RT-Diagram
+        $scope.data_2 = {
+            dataset: []
+        };
+
         // Check if User is authenticated
         var token = "";
         if ($rootScope.authenticated_user) {
@@ -764,37 +769,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             });
 
     };
-
-
-    /**
-     * Update when user logged in or out
-     */
-    $scope.changeTab = function(tab) {
-        $scope.tab = tab;
-        if (tab == 3) {
-            // Sockets: Activate realtime data
-            $socket.emit('/data/realtime', {
-                device_id: $scope.sensor.device_id,
-                status: true,
-            });
-            $scope.realtime = true;
-        } else if ($scope.realtime) {
-            // Sockets: Deactivate realtime data
-            $socket.emit('/data/realtime', {
-                device_id: $scope.sensor.device_id,
-                status: false,
-            });
-            $scope.realtime = false;
-        }
-    };
-
-    /*
-     * Sockets: Receiving realtime data
-     */
-    $socket.on('/data/realtime', function(data) {
-        console.log("Realtime data received");
-        //TODO write realtime data to chart
-    });
 
 
     /**
@@ -1073,8 +1047,310 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
     $scope.currentSubscription = undefined;
     $scope.subscribed_status = false;
 
-    // Prepare RT-Diagram
-    $scope.data_2 = {
-        dataset: []
-    };
+
+    /***************************************
+     * REALTIME
+     ***************************************/
+
+     /**
+      * Update when user logged in or out
+      */
+     $scope.changeTab = function(tab) {
+         $scope.tab = tab;
+         if (tab == 3) {
+             // Sockets: Activate realtime data
+             $socket.emit('/data/realtime', {
+                 device_id: $scope.sensor.device_id,
+                 status: true,
+             });
+             $scope.realtime = true;
+             console.log($scope.sensor.latest_measurement);
+         } else if ($scope.realtime) {
+             // Sockets: Deactivate realtime data
+             $socket.emit('/data/realtime', {
+                 device_id: $scope.sensor.device_id,
+                 status: false,
+             });
+             $scope.realtime = false;
+         }
+     };
+
+     /*
+      * Sockets: Receiving realtime data
+      */
+     $socket.on('/data/realtime', function(data) {
+         console.log("Realtime data received");
+         //TODO write realtime data to chart
+     });
+
+
+     /**
+      * Update Realtime
+      */
+     $scope.update_realtime = function() {
+
+         // Reset Dataset
+         $scope.data_2.dataset = [];
+
+         // Check if query was defined
+         var query = "";
+         /*
+         if ($scope.query.time !== "" && $scope.query.value !== "") {
+             query = "?" + $scope.query.time + "=" + $scope.query.value;
+         } else {
+             query = "";
+         }
+         */
+
+         // Check if User is authenticated
+         var token;
+         if ($rootScope.authenticated_user) {
+             token = $rootScope.authenticated_user.token;
+         } else {
+             token = "";
+         }
+
+         // Request lastest measurement for sensor
+         $measurementService.get_latest(token, related_sensor.sensor_id)
+         .success(function(response) {
+             $scope.sensor.related_sensors[key].latest_measurement = response;
+             console.log("Latest: ", response);
+             /*
+             // Prepare Icon
+             var _icon = $scope.defaultIcon;
+
+             // Check if User is authenticated
+             if($rootScope.authenticated_user !== undefined){
+
+                 // Check if User has set a current Threshold
+                 if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
+
+                     // Check if water_level exists
+                     if($scope.sensor.related_sensors[key].latest_measurement.water_level !== undefined){
+                         if(
+                             ($scope.sensor.related_sensors[key].latest_measurement.water_level >= $scope.sensor.related_sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.warning_threshold) && ($scope.sensor.related_sensors[key].latest_measurement.water_level < $scope.sensor.related_sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold)){
+                             _icon = $scope.warningIcon;
+                         } else if($scope.sensor.related_sensors[key].latest_measurement.water_level >= $scope.sensor.related_sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
+                             _icon = $scope.dangerIcon;
+                         } else {
+                             _icon = $scope.successIcon;
+                         }
+                     }
+                 }
+             }
+
+             $scope.markers.push({
+                 sensor_id: related_sensor.sensor_id,
+                 layer: layer,
+                 lat: related_sensor.lat,
+                 lng: related_sensor.lng,
+                 focus: false,
+                 draggable: false,
+                 icon: _icon,
+                 message: related_sensor.description,
+                 getMessageScope: function() {
+                     return $scope;
+                 },
+                 compileMessage: true,
+                 popupOptions: {
+                     closeButton: true
+                 },
+                 enable: [
+                     'leafletDirectiveMarker.map.click',
+                     'leafletDirectiveMarker.map.dblclick'
+                 ]
+             });
+             */
+         })
+         .error(function(err) {
+             $scope.err = err;
+         });
+
+
+         // Request timeseries
+         $timeseriesService.list(token, $scope.sensor.sensor_id, query)
+             .success(function(response) {
+                 $scope.sensor.timeseries = response;
+
+                 // Add values to chart
+                 angular.forEach($scope.sensor.timeseries, function(timeserie, key) {
+                      console.log("Timeseries", timeserie);
+                      /*
+                     var dot = {
+                         timestamp: new Date(timeserie.measurement_date),
+                         water_level: timeserie.water_level,
+                         sensor_height: $scope.sensor.sensor_height,
+                         crossing_height: $scope.sensor.crossing_height,
+                         gauge_zero: 0,
+                         sensor_threshold_value: $scope.sensor.threshold_value
+                     };
+
+                     // Check if User is authenticated
+                     if($rootScope.authenticated_user !== undefined){
+
+                         // Check if User has set a current Threshold
+                         if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
+
+                             // Add Warning Threshold to chart
+                             dot.warning_threshold = $scope.sensor.crossing_height + $rootScope.authenticated_user.currentThreshold.warning_threshold;
+
+                             // Add Critical Threshold to chart
+                             dot.critical_threshold = $scope.sensor.crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold;
+                         }
+                     }
+
+                     // Draw dot
+                     $scope.data.dataset.push(dot);
+                     */
+                 });
+
+             }).error(function(err) {
+                 $scope.err = err;
+             });
+     };
+
+
+     /**
+      * Load Realtime for Sensor
+      */
+     $scope.load_realtime = function() {
+
+         // Create Gauge-Zero-Serie
+         $scope.options_2.series.push({
+             visible: $scope.status.gauge_zero,
+             axis: "y",
+             dataset: "dataset",
+             key: "gauge_zero",
+             label: $filter('translate')("GAUGE_ZERO"),
+             color: "rgba(0, 0, 0, 1)",
+             type: [
+                 "line"
+             ],
+             id: "gaugeZero"
+         });
+
+         // Create Sensor-Height-Serie
+         $scope.options_2.series.push({
+             visible: $scope.status.sensor_height,
+             axis: "y",
+             dataset: "dataset",
+             key: "sensor_height",
+             label: $filter('translate')("SENSOR_HEIGHT"),
+             color: "rgba(128, 128, 128, 1)",
+             type: [
+                 "line"
+             ],
+             id: "sensorHeight"
+         });
+
+         // Create Sensor-Threshold-Height-Serie
+         $scope.options_2.series.push({
+             visible: $scope.status.sensor_threshold,
+             axis: "y",
+             dataset: "dataset",
+             key: "sensor_threshold_value",
+             label: $filter('translate')("SENSOR_THRESHOLD_HEIGHT"),
+             color: "rgba(0, 204, 204, 1)",
+             type: [
+                 "line"
+             ],
+             id: "sensorThresholdHeight"
+         });
+
+         // Create Crossing-Height-Serie
+         $scope.options_2.series.push({
+             visible: $scope.status.crossing_height,
+             axis: "y",
+             dataset: "dataset",
+             key: "crossing_height",
+             label: $filter('translate')("CROSSING_HEIGHT"),
+             color: "rgba(102, 0, 102, 1)",
+             type: [
+                 "line"
+             ],
+             id: "crossingHeight"
+         });
+
+
+         // Check if User is authenticated
+         if($rootScope.authenticated_user !== undefined){
+
+             // Check if User has set a current Threshold
+             if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
+
+                 // Create Warning-Threshold-Serie
+                 $scope.options_2.series.push({
+                     visible: $scope.status.warning_threshold,
+                     axis: "y",
+                     dataset: "dataset",
+                     key: "warning_threshold",
+                     label: $filter('translate')("WARNING_THRESHOLD"),
+                     color: "rgba(255, 128, 0, 1)",
+                     type: [
+                         "line"
+                     ],
+                     id: "warningThreshold"
+                 });
+
+                 // Create Critical-Threshold-Serie
+                 $scope.options_2.series.push({
+                     visible: $scope.status.critical_threshold,
+                     axis: "y",
+                     dataset: "dataset",
+                     key: "critical_threshold",
+                     label: $filter('translate')("CRITICAL_THRESHOLD"),
+                     color: "rgba(255, 0, 0, 1)",
+                     type: [
+                         "line"
+                     ],
+                     id: "criticalThreshold"
+                 });
+             }
+         }
+
+         // Create Timeseries-Serie
+         $scope.options_2.series.push({
+             visible: $scope.status.water_level,
+             axis: "y",
+             dataset: "dataset",
+             key: "water_level",
+             label: $filter('translate')("WATER_LEVEL"),
+             color: "rgba(2, 117, 216, 1)",
+             type: [
+                 "line",
+                 "area"
+             ],
+             id: "mainWaterLevels"
+         });
+
+         // Refresh Chart
+         $scope.update_realtime();
+     };
+
+
+     /**
+      * Linechart
+      */
+     $scope.options_2 = {
+         margin: {
+             top: 10,
+             bottom: 20,
+             right: 50,
+             left: 50
+         },
+         series: [],
+         axes: {
+             x: {
+                 key: "timestamp",
+                 type: "date"
+             },
+             y: {
+                 label: "CENTIMETER",
+                 tickFormat: function(value) {
+                     return value + " cm";
+                 }
+             }
+         }
+     };
+
 });

@@ -135,7 +135,7 @@
     </div>
     <br>
 
-    <!-- 1st Tab -->
+    <!-- 1st Tab: General -->
     <div ng-if="tab==1 && sensor">
         <div class="row">
             <div class="col-md-6">
@@ -245,6 +245,7 @@
         </div>
         <br>
 
+        <!-- Weather Forecast Card -->
         <div class="row">
             <div class="col-md-12" ng-if="sensor">
                 <div class="card" style="margin-bottom: 0px;">
@@ -842,6 +843,7 @@
         </div>
         <br>
 
+        <!-- Nearby Sensors Card -->
         <div class="row">
             <div class="col-md-12">
                 <div class="card" style="margin-bottom: 0px;">
@@ -901,6 +903,7 @@
         </div>
         <br>
 
+        <!-- Nearby Stations Cards -->
         <div class="row">
             <div class="col-md-6">
 
@@ -975,7 +978,7 @@
         </div>
     </div>
 
-    <!-- 2nd Tab -->
+    <!-- 2nd Tab: Timeseries -->
     <div class="row" ng-if="tab==2">
         <div class="col-md-12">
             <div class="card">
@@ -993,6 +996,7 @@
                 <br>
                 <br>
                 <div class="row">
+                    <!-- Left selector: Hours, days, weeks, ... -->
                     <div class="col-md-5">
                         <div class="middle">
                             <div class="btn-group" role="group">
@@ -1017,6 +1021,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Right selector: Entries dependend on left selector -->
                     <div class="col-md-7">
                         <div class="left">
 
@@ -1110,7 +1115,7 @@
         </div>
     </div>
 
-    <!-- 3rd Tab -->
+    <!-- 3rd Tab: Realtime -->
     <div class="row" ng-if="tab==3">
         <div class="col-md-12">
             <div class="card">
@@ -1133,5 +1138,5 @@
 
 <!-- MAP-RESIZER -->
 <script>
-    $('#map_2').height( $('#details').height()-174 );
+    $('#map_2').height($('#details').height() - 174);
 </script>
