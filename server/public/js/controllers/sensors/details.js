@@ -1204,7 +1204,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
              color: "rgba(102, 0, 102, 1)",
              type: [
                  "line",
-                 "dot",
              ],
              id: "crossingHeight"
          });
