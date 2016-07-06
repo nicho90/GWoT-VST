@@ -1159,7 +1159,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
              color: "rgba(0, 0, 0, 1)",
              type: [
                  "line",
-                 "dot",
              ],
              id: "gaugeZero"
          });
@@ -1174,11 +1173,11 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
              color: "rgba(128, 128, 128, 1)",
              type: [
                  "line",
-                 "dot",
              ],
              id: "sensorHeight"
          });
 
+         /*
          // Create Sensor-Threshold-Height-Serie
          $scope.options_2.series.push({
              visible: $scope.status.sensor_threshold,
@@ -1193,6 +1192,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
              ],
              id: "sensorThresholdHeight"
          });
+         */
 
          // Create Crossing-Height-Serie
          $scope.options_2.series.push({
