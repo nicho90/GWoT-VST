@@ -60,7 +60,7 @@ exports.process = function(message) {
             // 2. Reject measurement if measured distance > sensor height
             function(measurement, sensor, callback) {
                 if (measurement.properties.distance.value > sensor.sensor_height) {
-                    console.log("Distance: ", measurement.properties.distance.value);
+                    //console.log("Distance: ", measurement.properties.distance.value);
                     callback(new Error(errors.measurement.error_1.message));
                 } else {
                     callback(null, measurement);
@@ -69,7 +69,7 @@ exports.process = function(message) {
 
             // 3. Forward message via websockets
             function(measurement, callback) {
-                console.log("Send socket notification for realtime:", measurement);
+                //console.log("Send socket notification for realtime:", measurement);
                 io.sockets.emit('/data/realtime', measurement);
                 callback();
             }
@@ -79,7 +79,7 @@ exports.process = function(message) {
             if (err) {
                 console.log(err);
             } else {
-                console.log("Pipeline has been finished! " + new Date());
+                console.log("RT-Pipeline has been finished! " + new Date());
             }
         });
 };

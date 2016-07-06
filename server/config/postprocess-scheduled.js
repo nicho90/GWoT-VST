@@ -92,7 +92,7 @@ exports.process = function(message) {
 
                     // 5. Check Sensor-Settings for sensor-threshold
                     function(measurement, sensor, callback) {
-                        console.log("Distance: " + measurement.properties.distance.value, "Water Level: " + (sensor.sensor_height - measurement.properties.distance.value), "Threshold: " + sensor.threshold_value, new Date());
+                        /*console.log("Distance: " + measurement.properties.distance.value, "Water Level: " + (sensor.sensor_height - measurement.properties.distance.value), "Threshold: " + sensor.threshold_value, new Date());*/
 
                         var message;
                         if ((sensor.sensor_height - measurement.properties.distance.value) > sensor.threshold_value) {
@@ -108,7 +108,7 @@ exports.process = function(message) {
                                     retain: true // or true
                                 };
                                 broker.publish(message, function() {
-                                    console.log("Message send at time " + new Date());
+                                    //console.log("Message send at time " + new Date());
                                 });
 
                                 // Change increased_frequency value
@@ -141,7 +141,7 @@ exports.process = function(message) {
                                     retain: true // or true
                                 };
                                 broker.publish(message, function() {
-                                    console.log("Message send at time " + new Date());
+                                    //console.log("Message send at time " + new Date());
                                 });
 
                                 // Change increased_frequency value
@@ -190,7 +190,7 @@ exports.process = function(message) {
                                 console.error("Step 6: query subscribers", errors.database.error_2.message, err);
                                 callback(new Error(errors.database.error_2.message));
                             } else {
-                                console.log("Result of query: subscribed users", result.rows);
+                                //console.log("Result of query: subscribed users", result.rows);
                                 callback(null, measurement, sensor, result.rows);
                             }
                         });
@@ -237,18 +237,18 @@ exports.process = function(message) {
                                     console.error("Step 7: query warning and critical thresholds", errors.database.error_2.message, err);
                                     callback(new Error(errors.database.error_2.message));
                                 } else {
-                                    console.log("Result of query: warning and danger threshold values", result.rows);
+                                    //console.log("Result of query: warning and danger threshold values", result.rows);
 
                                     if (result.rows.length > 0) {
 
-                                        console.log("Thresholds length = ", result.rows.length);
+                                        //console.log("Thresholds length = ", result.rows.length);
                                         var triggered_thresholds = result.rows;
 
                                         // Change warning and danger notification status in DB
                                         // TODO test if working
                                         //for (var row in triggered_thresholds) {
                                         async.each(triggered_thresholds, function(row, callback) {
-                                            console.log("Row: ", row);
+                                            //console.log("Row: ", row);
                                             /* e.g. message conteent
                                             { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                             */
@@ -315,7 +315,7 @@ exports.process = function(message) {
                                         });
 
                                         // Emit Websocket-notification if triggered_thresholds.length > 0!
-                                        console.log("Publishing socket");
+                                        //console.log("Publishing socket");
                                         async.each(triggered_thresholds, function(row, callback) {
                                             //console.log("Send socket notification for threshold:", row);
                                             var content = {
@@ -332,11 +332,11 @@ exports.process = function(message) {
                                             callback();
                                         }, function(err) {
                                           //TODO
+                                          callback();
                                         });
 
-                                        callback();
                                     } else {
-                                        console.log("Thresholds length = 0");
+                                        //console.log("Thresholds length = 0");
                                         callback();
                                     }
                                 }
@@ -408,7 +408,7 @@ exports.process = function(message) {
                     if (err) {
                         console.log(err);
                     } else {
-                        console.log("Pipeline has been finished! " + new Date());
+                        console.log("SD-Pipeline has been finished! " + new Date());
                     }
                 });
         }
