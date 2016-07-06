@@ -267,7 +267,7 @@ app.config(function($translateProvider, config) {
 
         SUBSCRIBED: 'Subscribed',
         SUBSCRIBE: 'Subscribe',
-        UNSUBSCRIBE: 'Unubscribe',
+        UNSUBSCRIBE: 'Unsubscribe',
 
         WARNING_NOTIFICATION: 'Warning',
         CRITICAL_NOTIFICATION: 'Danger',

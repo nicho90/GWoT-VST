@@ -24,7 +24,7 @@ app.filter('distance', function() {
 app.filter('water_level', function() {
     return function(water_level) {
         if(water_level !== undefined) {
-            return (water_level/100).toFixed(3);
+            return (water_level/100).toFixed(3) + "m";
         } else {
             return "-";
         }

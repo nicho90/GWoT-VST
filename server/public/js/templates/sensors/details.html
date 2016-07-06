@@ -79,7 +79,7 @@
                             </th>
                             <td>
                                 <span class="label label-primary" style="font-size: 11pt;">
-                                    {{sensor.latest_measurement.water_level | water_level }}m
+                                    {{sensor.latest_measurement.water_level | water_level }}
                                 </span>
                             </td>
                         </tr>
@@ -107,25 +107,25 @@
                         <tr>
                             <th>{{ 'MAXIMUM' | translate }}</th>
                             <td>
-                                {{sensor.statistics.maximum.water_level | water_level }}m
+                                {{sensor.statistics.maximum.water_level | water_level }}
                             </td>
                             <td></td>
                             <td></td>
                             <th>{{ 'AVERAGE' | translate }}</th>
                             <td>
-                                {{sensor.statistics.average.avg_water_level | water_level }}m
+                                {{sensor.statistics.average.avg_water_level | water_level }}
                             </td>
                         </tr>
                         <tr>
                             <th>{{ 'MINIMUM' | translate }}</th>
                             <td>
-                                {{sensor.statistics.minimum.water_level | water_level }}m
+                                {{sensor.statistics.minimum.water_level | water_level }}
                             </td>
                             <td></td>
                             <td></td>
                             <th>{{ 'STD' | translate }}</th>
                             <td>
-                                {{sensor.statistics.std.std_water_level | water_level }}m
+                                {{sensor.statistics.std.std_water_level | water_level }}
                             </td>
                         </tr>
                     </table>
