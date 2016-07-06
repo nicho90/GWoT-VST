@@ -380,17 +380,17 @@ exports.request = function(req, res) {
 						if(err){
 							console.log(err);
 						} else {
-
-							// Send results
-							res.status(200).send(statistics);
+							callback(null, results);
 						}
 					});
 				}
-			], function(err, result) {
+			], function(err, results) {
 	            if (err) {
 	            	console.log(err);
 	            } else {
-	            	//console.log("Finished");
+
+					// Send results
+					res.status(200).send(statistics);
 	            }
 	        });
 		}
