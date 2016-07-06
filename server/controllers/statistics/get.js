@@ -267,6 +267,9 @@ exports.request = function(req, res) {
 								// Get maximum in Timeseries with date (full row)
 								function(ts_maximum, callback){
 
+									console.log("ts_maximum");
+									console.log(ts_maximum);
+
 									// Check if a maximum in Timeseries was found
 									if(ts_maximum !== null){
 
@@ -320,6 +323,9 @@ exports.request = function(req, res) {
 											},
 											// Get maximum in Measurements with date (full row)
 											function(ms_maximum, callback){
+
+												console.log("ms_maximum");
+												console.log(ms_maximum);
 
 												// Check if a maximum in Measurements was found
 												if(ms_maximum !== null){
