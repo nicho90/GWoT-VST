@@ -291,6 +291,7 @@ exports.request = function(req, res) {
 										], function(err, result) {
 											done();
 
+console.log(result.rows);
 											if(err) {
 												res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 												return console.error(errors.database.error_2.message, err);
