@@ -71,7 +71,15 @@ exports.request = function(req, res) {
 									res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 									return console.error(errors.database.error_2.message, err);
 								} else {
-									statistics.average = result.rows[0];
+
+									if(result.rows[0].avg_water_level === null){
+										statistics.average = {
+											avg_water_level: "-",
+											avg_water_level_unit: "CENTIMETER"
+										};
+									} else {
+										statistics.average = result.rows[0];
+									}
 									callback(null, null);
 								}
 							});
@@ -89,7 +97,14 @@ exports.request = function(req, res) {
 									res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 									return console.error(errors.database.error_2.message, err);
 								} else {
-									statistics.std = result.rows[0];
+									if(result.rows[0].std_water_level === null){
+										statistics.std = {
+											std_water_level: "-",
+											std_water_level_unit: "CENTIMETER"
+										};
+									} else {
+										statistics.std = result.rows[0];
+									}
 									callback(null, null);
 								}
 							});
@@ -333,7 +348,7 @@ exports.request = function(req, res) {
 
 													var max = {
   														water_level: "-",
-  														water_level_unit: "METER",
+  														water_level_unit: "CENTIMETER",
   														measurement_date: "-",
 														valid_entry: false
 													};
