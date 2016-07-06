@@ -9,7 +9,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
      * Change the weather forecast
      * @param  {string} interval [Hourly or daily weather forecasts]
      */
-    $scope.setWeatherInterval = function(interval){
+    $scope.setWeatherInterval = function(interval) {
         $scope.weather_interval = interval;
     };
 
@@ -17,8 +17,8 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
     /**
      * Show Measurements (temperature and humidity values) in the weather forecast
      */
-    $scope.showWeatherMeasurements = function(){
-        if($scope.weather_measurements){
+    $scope.showWeatherMeasurements = function() {
+        if ($scope.weather_measurements) {
             $scope.weather_measurements = false;
         } else {
             $scope.weather_measurements = true;
@@ -29,27 +29,27 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
     /**
      * Unsubscribe with current Threshold to current Sensor
      */
-    $scope.unsubscribe = function(){
+    $scope.unsubscribe = function() {
 
         var token;
         if ($rootScope.authenticated_user) {
             token = $rootScope.authenticated_user.token;
 
             // Check if current Subscription exists
-            if($scope.currentSubscription){
+            if ($scope.currentSubscription) {
 
                 // Send request
                 $subscriptionService.delete(token, $rootScope.authenticated_user.username, $scope.currentSubscription.subscription_id)
-                .success(function(response) {
+                    .success(function(response) {
 
-                    // Reset current Subscription
-                    delete $scope.currentSubscription;
-                    $scope.currentSubscription = undefined;
-                    $scope.load_subscriptions();
+                        // Reset current Subscription
+                        delete $scope.currentSubscription;
+                        $scope.currentSubscription = undefined;
+                        $scope.load_subscriptions();
 
-                }).error(function(err) {
-                    $scope.err = err;
-                });
+                    }).error(function(err) {
+                        $scope.err = err;
+                    });
             }
         }
     };
@@ -58,7 +58,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
     /**
      * Subscribe with current Threshold to current Sensor
      */
-    $scope.subscribe = function(){
+    $scope.subscribe = function() {
 
         // Check if User is authenticated
         var token;
@@ -66,8 +66,8 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             token = $rootScope.authenticated_user.token;
 
             // Check if User is authenticated
-            if($rootScope.authenticated_user){
-                if($rootScope.authenticated_user.currentThreshold !== undefined && $rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
+            if ($rootScope.authenticated_user) {
+                if ($rootScope.authenticated_user.currentThreshold !== undefined && $rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
 
                     // Find current Threshold in Subscriptions
                     var result = _.findWhere($rootScope.authenticated_user.subscriptions, {
@@ -76,7 +76,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                     });
 
                     // Check if current Threshold is not already defined in Subscriptions
-                    if(result === undefined){
+                    if (result === undefined) {
 
                         // Create new Subscription
                         var subscription = $subscriptionService.getDefault();
@@ -86,16 +86,16 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
                         // Send request
                         $subscriptionService.create(token, $rootScope.authenticated_user.username, subscription)
-                        .success(function(response) {
+                            .success(function(response) {
 
-                            // Reset current Subscription
-                            delete $scope.currentSubscription;
-                            $scope.currentSubscription = undefined;
-                            $scope.load_subscriptions();
+                                // Reset current Subscription
+                                delete $scope.currentSubscription;
+                                $scope.currentSubscription = undefined;
+                                $scope.load_subscriptions();
 
-                        }).error(function(err) {
-                            $scope.err = err;
-                        });
+                            }).error(function(err) {
+                                $scope.err = err;
+                            });
 
                     }
                 }
@@ -107,11 +107,11 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
     /**
      * Check if User is subscribed with current Threshold to this Sensor
      */
-    $scope.check_subscription = function(){
+    $scope.check_subscription = function() {
 
         // Check if User is authenticated
-        if($rootScope.authenticated_user){
-            if($rootScope.authenticated_user.currentThreshold !== undefined && $rootScope.authenticated_user.currentThreshold.threshold_id !== 0 && $rootScope.authenticated_user.subscriptions.length > 0){
+        if ($rootScope.authenticated_user) {
+            if ($rootScope.authenticated_user.currentThreshold !== undefined && $rootScope.authenticated_user.currentThreshold.threshold_id !== 0 && $rootScope.authenticated_user.subscriptions.length > 0) {
 
                 // Find currentThreshold in subscriptions
                 $scope.currentSubscription = _.findWhere($rootScope.authenticated_user.subscriptions, {
@@ -119,7 +119,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                     threshold_id: $rootScope.authenticated_user.currentThreshold.threshold_id
                 });
 
-                if($scope.currentSubscription !== undefined){
+                if ($scope.currentSubscription !== undefined) {
                     $scope.subscribed_status = true;
                 } else {
                     $scope.subscribed_status = false;
@@ -140,7 +140,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
     $rootScope.$on('update', function() {
 
         // Save visible status for redrawing
-        if($scope.options.series.length == 5){
+        if ($scope.options.series.length == 5) {
             $scope.status = {
                 gauge_zero: $scope.options.series[0].visible,
                 sensor_height: $scope.options.series[1].visible,
@@ -289,10 +289,10 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                     };
 
                     // Check if User is authenticated
-                    if($rootScope.authenticated_user !== undefined){
+                    if ($rootScope.authenticated_user !== undefined) {
 
                         // Check if User has set a current Threshold
-                        if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
+                        if ($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
 
                             // Add Warning Threshold to chart
                             dot.warning_threshold = $scope.sensor.crossing_height + $rootScope.authenticated_user.currentThreshold.warning_threshold;
@@ -375,10 +375,10 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
 
         // Check if User is authenticated
-        if($rootScope.authenticated_user !== undefined){
+        if ($rootScope.authenticated_user !== undefined) {
 
             // Check if User has set a current Threshold
-            if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
+            if ($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
 
                 // Create Warning-Threshold-Serie
                 $scope.options.series.push({
@@ -433,7 +433,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
     /**
      * Load Subscriptions
      */
-    $scope.load_subscriptions = function(){
+    $scope.load_subscriptions = function() {
 
         // Check if User is authenticated
         var token = "";
@@ -441,13 +441,13 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             token = $rootScope.authenticated_user.token;
 
             // Load Subscriptions
-            $subscriptionService.list($scope.authenticated_user.token, $rootScope.authenticated_user.username).success(function(response){
+            $subscriptionService.list($scope.authenticated_user.token, $rootScope.authenticated_user.username).success(function(response) {
                 $rootScope.authenticated_user.subscriptions = response;
 
                 // Check Subscriptions
                 $scope.check_subscription();
 
-            }).error(function(err){
+            }).error(function(err) {
                 $scope.err = err;
             });
         }
@@ -520,16 +520,16 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         var _icon = $scope.main_defaultIcon;
 
         // Check if User is authenticated
-        if($rootScope.authenticated_user !== undefined){
+        if ($rootScope.authenticated_user !== undefined) {
 
             // Check if User has set a current Threshold
-            if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
+            if ($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
 
                 // Check if water_level exists
-                if($scope.sensor.latest_measurement.water_level !== undefined){
-                    if($scope.sensor.latest_measurement.water_level >= $scope.sensor.crossing_height + $rootScope.authenticated_user.currentThreshold.warning_threshold && $scope.sensor.latest_measurement.water_level < $scope.sensor.crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold){
+                if ($scope.sensor.latest_measurement.water_level !== undefined) {
+                    if ($scope.sensor.latest_measurement.water_level >= $scope.sensor.crossing_height + $rootScope.authenticated_user.currentThreshold.warning_threshold && $scope.sensor.latest_measurement.water_level < $scope.sensor.crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
                         _icon = $scope.warningIcon;
-                    } else if($scope.sensor.latest_measurement.water_level >= $scope.sensor.crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
+                    } else if ($scope.sensor.latest_measurement.water_level >= $scope.sensor.crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
                         _icon = $scope.main_dangerIcon;
                     } else {
                         _icon = $scope.main_successIcon;
@@ -569,7 +569,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             lng: $scope.sensor.lng,
             focus: true,
             draggable: false,
-            extraClasses:'mainMarker',
+            extraClasses: 'mainMarker',
             icon: _icon,
             message: _message,
             getMessageScope: function() {
@@ -601,58 +601,58 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
                 // Request lastest measurement for sensor
                 $measurementService.get_latest(token, related_sensor.sensor_id)
-                .success(function(response) {
-                    $scope.sensor.related_sensors[key].latest_measurement = response;
+                    .success(function(response) {
+                        $scope.sensor.related_sensors[key].latest_measurement = response;
 
-                    // Prepare Icon
-                    var _icon = $scope.defaultIcon;
+                        // Prepare Icon
+                        var _icon = $scope.defaultIcon;
 
-                    // Check if User is authenticated
-                    if($rootScope.authenticated_user !== undefined){
+                        // Check if User is authenticated
+                        if ($rootScope.authenticated_user !== undefined) {
 
-                        // Check if User has set a current Threshold
-                        if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
+                            // Check if User has set a current Threshold
+                            if ($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
 
-                            // Check if water_level exists
-                            if($scope.sensor.related_sensors[key].latest_measurement.water_level !== undefined){
-                                if(
-                                    ($scope.sensor.related_sensors[key].latest_measurement.water_level >= $scope.sensor.related_sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.warning_threshold) && ($scope.sensor.related_sensors[key].latest_measurement.water_level < $scope.sensor.related_sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold)){
-                                    _icon = $scope.warningIcon;
-                                } else if($scope.sensor.related_sensors[key].latest_measurement.water_level >= $scope.sensor.related_sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
-                                    _icon = $scope.dangerIcon;
-                                } else {
-                                    _icon = $scope.successIcon;
+                                // Check if water_level exists
+                                if ($scope.sensor.related_sensors[key].latest_measurement.water_level !== undefined) {
+                                    if (
+                                        ($scope.sensor.related_sensors[key].latest_measurement.water_level >= $scope.sensor.related_sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.warning_threshold) && ($scope.sensor.related_sensors[key].latest_measurement.water_level < $scope.sensor.related_sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold)) {
+                                        _icon = $scope.warningIcon;
+                                    } else if ($scope.sensor.related_sensors[key].latest_measurement.water_level >= $scope.sensor.related_sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
+                                        _icon = $scope.dangerIcon;
+                                    } else {
+                                        _icon = $scope.successIcon;
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    $scope.markers.push({
-                        sensor_id: related_sensor.sensor_id,
-                        layer: layer,
-                        lat: related_sensor.lat,
-                        lng: related_sensor.lng,
-                        focus: false,
-                        draggable: false,
-                        icon: _icon,
-                        message: related_sensor.description,
-                        getMessageScope: function() {
-                            return $scope;
-                        },
-                        compileMessage: true,
-                        popupOptions: {
-                            closeButton: true
-                        },
-                        enable: [
-                            'leafletDirectiveMarker.map.click',
-                            'leafletDirectiveMarker.map.dblclick'
-                        ]
+                        $scope.markers.push({
+                            sensor_id: related_sensor.sensor_id,
+                            layer: layer,
+                            lat: related_sensor.lat,
+                            lng: related_sensor.lng,
+                            focus: false,
+                            draggable: false,
+                            icon: _icon,
+                            message: related_sensor.description,
+                            getMessageScope: function() {
+                                return $scope;
+                            },
+                            compileMessage: true,
+                            popupOptions: {
+                                closeButton: true
+                            },
+                            enable: [
+                                'leafletDirectiveMarker.map.click',
+                                'leafletDirectiveMarker.map.dblclick'
+                            ]
+                        });
+
+                    })
+                    .error(function(err) {
+                        $scope.err = err;
                     });
-
-                })
-                .error(function(err) {
-                    $scope.err = err;
-                });
             });
 
         } else if (layer === 'emergency_stations') {
@@ -1007,7 +1007,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
      * Show Details
      * @param  {number} sensor_id [The Id of a Sensor]
      */
-    $scope.showDetails = function(sensor_id){
+    $scope.showDetails = function(sensor_id) {
         $location.url("/sensors/" + sensor_id);
     };
 
@@ -1052,207 +1052,210 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
      * REALTIME
      ***************************************/
 
-     /**
-      * Update when user logged in or out
-      */
-     $scope.changeTab = function(tab) {
-         $scope.tab = tab;
-         if (tab == 3) {
-             // Sockets: Activate realtime data
-             $socket.emit('/data/realtime', {
-                 device_id: $scope.sensor.device_id,
-                 status: true,
-             });
-             $scope.realtime = true;
+    /**
+     * Update when user logged in or out
+     */
+    $scope.changeTab = function(tab) {
+        $scope.tab = tab;
+        if (tab == 3) {
+            // Sockets: Activate realtime data
+            $socket.emit('/data/realtime', {
+                device_id: $scope.sensor.device_id,
+                status: true,
+            });
+            $scope.realtime = true;
 
-             // Load latest value and build chart
-             $scope.load_realtime();
-         } else if ($scope.realtime) {
-             // Sockets: Deactivate realtime data
-             $socket.emit('/data/realtime', {
-                 device_id: $scope.sensor.device_id,
-                 status: false,
-             });
-             $scope.realtime = false;
-         }
-     };
-
-     /*
-      * Sockets: Receiving realtime data
-      */
-     $socket.on('/data/realtime', function(data) {
-         console.log("Realtime data received", data);
-         $scope.load_realtime_value(data);
-     });
-
-
-     /**
-      * Update Realtime Chart with realtime value from Sockets
-      */
-    $scope.load_realtime_value = function(measurement) {
-      var dot = {
-          timestamp: new Date(measurement.properties.timestamp),
-          water_level: $scope.sensor.sensor_height - measurement.properties.distance.value,
-          sensor_height: $scope.sensor.sensor_height,
-          crossing_height: $scope.sensor.crossing_height,
-          gauge_zero: 0,
-          sensor_threshold_value: $scope.sensor.threshold_value
-      };
-
-      // Draw dot
-      if ($scope.data_2.dataset.length > 100) {
-          $scope.data_2.dataset.shift();
-      };
-      $scope.data_2.dataset.push(dot);
+            // Load latest value and build chart
+            $scope.load_realtime();
+        } else if ($scope.realtime) {
+            // Sockets: Deactivate realtime data
+            $socket.emit('/data/realtime', {
+                device_id: $scope.sensor.device_id,
+                status: false,
+            });
+            $scope.realtime = false;
+        }
     };
 
-     /**
-      * Update Realtime Chart with lastes value in DB
-      */
-     $scope.update_realtime = function() {
-
-         // Reset Dataset
-         $scope.data_2.dataset = [];
-
-         // Check if User is authenticated
-         var token;
-         if ($rootScope.authenticated_user) {
-             token = $rootScope.authenticated_user.token;
-         } else {
-             token = "";
-         }
-
-         // Request lastest measurement for sensor
-         $measurementService.get_latest(token, $scope.sensor.sensor_id)
-         .success(function(response) {
-             var dot = {
-                 timestamp: new Date(response.measurement_timestamp),
-                 water_level: response.water_level,
-                 sensor_height: $scope.sensor.sensor_height,
-                 crossing_height: $scope.sensor.crossing_height,
-                 gauge_zero: 0,
-                 sensor_threshold_value: $scope.sensor.threshold_value
-             };
-
-             // Draw dot
-             $scope.data_2.dataset.push(dot);
-         })
-         .error(function(err) {
-             $scope.err = err;
-         });
-
-     };
+    /*
+     * Sockets: Receiving realtime data
+     */
+    $socket.on('/data/realtime', function(data) {
+        console.log("Realtime data received", data);
+        $scope.load_realtime_value(data);
+    });
 
 
-     /**
-      * Load Realtime for Sensor
-      */
-     $scope.load_realtime = function() {
+    /**
+     * Update Realtime Chart with realtime value from Sockets
+     */
+    $scope.load_realtime_value = function(measurement) {
+        var dot = {
+            timestamp: new Date(measurement.properties.timestamp),
+            water_level: $scope.sensor.sensor_height - measurement.properties.distance.value,
+            sensor_height: $scope.sensor.sensor_height,
+            crossing_height: $scope.sensor.crossing_height,
+            gauge_zero: 0,
+            sensor_threshold_value: $scope.sensor.threshold_value
+        };
 
-         // Create Gauge-Zero-Serie
-         $scope.options_2.series.push({
-             visible: $scope.status.gauge_zero,
-             axis: "y",
-             dataset: "dataset",
-             key: "gauge_zero",
-             label: $filter('translate')("GAUGE_ZERO"),
-             color: "rgba(0, 0, 0, 1)",
-             type: [
-                 "line",
-             ],
-             id: "gaugeZero"
-         });
+        // Draw dot
+        if ($scope.data_2.dataset.length > 100) {
+            $scope.data_2.dataset.shift();
+        };
+        $scope.data_2.dataset.push(dot);
+    };
 
-         // Create Sensor-Height-Serie
-         $scope.options_2.series.push({
-             visible: $scope.status.sensor_height,
-             axis: "y",
-             dataset: "dataset",
-             key: "sensor_height",
-             label: $filter('translate')("SENSOR_HEIGHT"),
-             color: "rgba(128, 128, 128, 1)",
-             type: [
-                 "line",
-             ],
-             id: "sensorHeight"
-         });
+    /**
+     * Update Realtime Chart with lastes value in DB
+     */
+    $scope.update_realtime = function() {
 
-         /*
-         // Create Sensor-Threshold-Height-Serie
-         $scope.options_2.series.push({
-             visible: $scope.status.sensor_threshold,
-             axis: "y",
-             dataset: "dataset",
-             key: "sensor_threshold_value",
-             label: $filter('translate')("SENSOR_THRESHOLD_HEIGHT"),
-             color: "rgba(0, 204, 204, 1)",
-             type: [
-                 "line",
-                 "dot",
-             ],
-             id: "sensorThresholdHeight"
-         });
-         */
+        // Reset Dataset
+        $scope.data_2.dataset = [];
 
-         // Create Crossing-Height-Serie
-         $scope.options_2.series.push({
-             visible: $scope.status.crossing_height,
-             axis: "y",
-             dataset: "dataset",
-             key: "crossing_height",
-             label: $filter('translate')("CROSSING_HEIGHT"),
-             color: "rgba(102, 0, 102, 1)",
-             type: [
-                 "line",
-             ],
-             id: "crossingHeight"
-         });
+        // Check if User is authenticated
+        var token;
+        if ($rootScope.authenticated_user) {
+            token = $rootScope.authenticated_user.token;
+        } else {
+            token = "";
+        }
+
+        // Request lastest measurement for sensor
+        $measurementService.get_latest(token, $scope.sensor.sensor_id)
+            .success(function(response) {
+                var dot = {
+                    timestamp: new Date(response.measurement_timestamp),
+                    water_level: response.water_level,
+                    sensor_height: $scope.sensor.sensor_height,
+                    crossing_height: $scope.sensor.crossing_height,
+                    gauge_zero: 0,
+                    sensor_threshold_value: $scope.sensor.threshold_value
+                };
+
+                // Draw dot
+                $scope.data_2.dataset.push(dot);
+            })
+            .error(function(err) {
+                $scope.err = err;
+            });
+
+    };
 
 
-         // Create Measurement values
-         $scope.options_2.series.push({
-             visible: $scope.status.water_level,
-             axis: "y",
-             dataset: "dataset",
-             key: "water_level",
-             label: $filter('translate')("WATER_LEVEL"),
-             color: "rgba(2, 117, 216, 1)",
-             type: [
-                 "line",
-                 "dot",
-                 "area"
-             ],
-             id: "mainWaterLevels"
-         });
+    /**
+     * Load Realtime for Sensor
+     */
+    $scope.load_realtime = function() {
 
-         // Refresh Chart
-         $scope.update_realtime();
-     };
+        // Reset series
+        $scope.options_2.series = [];
+
+        // Create Gauge-Zero-Serie
+        $scope.options_2.series.push({
+            visible: $scope.status.gauge_zero,
+            axis: "y",
+            dataset: "dataset",
+            key: "gauge_zero",
+            label: $filter('translate')("GAUGE_ZERO"),
+            color: "rgba(0, 0, 0, 1)",
+            type: [
+                "line",
+            ],
+            id: "gaugeZero"
+        });
+
+        // Create Sensor-Height-Serie
+        $scope.options_2.series.push({
+            visible: $scope.status.sensor_height,
+            axis: "y",
+            dataset: "dataset",
+            key: "sensor_height",
+            label: $filter('translate')("SENSOR_HEIGHT"),
+            color: "rgba(128, 128, 128, 1)",
+            type: [
+                "line",
+            ],
+            id: "sensorHeight"
+        });
+
+        /*
+        // Create Sensor-Threshold-Height-Serie
+        $scope.options_2.series.push({
+            visible: $scope.status.sensor_threshold,
+            axis: "y",
+            dataset: "dataset",
+            key: "sensor_threshold_value",
+            label: $filter('translate')("SENSOR_THRESHOLD_HEIGHT"),
+            color: "rgba(0, 204, 204, 1)",
+            type: [
+                "line",
+                "dot",
+            ],
+            id: "sensorThresholdHeight"
+        });
+        */
+
+        // Create Crossing-Height-Serie
+        $scope.options_2.series.push({
+            visible: $scope.status.crossing_height,
+            axis: "y",
+            dataset: "dataset",
+            key: "crossing_height",
+            label: $filter('translate')("CROSSING_HEIGHT"),
+            color: "rgba(102, 0, 102, 1)",
+            type: [
+                "line",
+            ],
+            id: "crossingHeight"
+        });
 
 
-     /**
-      * Linechart
-      */
-     $scope.options_2 = {
-         margin: {
-             top: 10,
-             bottom: 20,
-             right: 50,
-             left: 50
-         },
-         series: [],
-         axes: {
-             x: {
-                 key: "timestamp",
-                 type: "date"
-             },
-             y: {
-                 label: "CENTIMETER",
-                 tickFormat: function(value) {
-                     return value + " cm";
-                 }
-             }
-         }
-     };
+        // Create Measurement values
+        $scope.options_2.series.push({
+            visible: $scope.status.water_level,
+            axis: "y",
+            dataset: "dataset",
+            key: "water_level",
+            label: $filter('translate')("WATER_LEVEL"),
+            color: "rgba(2, 117, 216, 1)",
+            type: [
+                "line",
+                "dot",
+                "area"
+            ],
+            id: "mainWaterLevels"
+        });
+
+        // Refresh Chart
+        $scope.update_realtime();
+    };
+
+
+    /**
+     * Linechart
+     */
+    $scope.options_2 = {
+        margin: {
+            top: 10,
+            bottom: 20,
+            right: 50,
+            left: 50
+        },
+        series: [],
+        axes: {
+            x: {
+                key: "timestamp",
+                type: "date"
+            },
+            y: {
+                label: "CENTIMETER",
+                tickFormat: function(value) {
+                    return value + " cm";
+                }
+            }
+        }
+    };
 
 });
