@@ -1100,11 +1100,10 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
       };
 
       // Draw dot
-      $scope.data_2.dataset.push(dot);
-
       if ($scope.data_2.dataset.length > 10) {
           $scope.data_2.dataset.shift();
-      }
+      };
+      $scope.data_2.dataset.push(dot);
     };
 
      /**
