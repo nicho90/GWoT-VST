@@ -30,7 +30,7 @@ exports.request = function(req, res) {
                 function(callback) {
 
 					// Database Query
-		            client.query('SELECT * FROM Sensors WHERE sensor_id=$1;', [
+		            client.query("SELECT * FROM Sensors WHERE sensor_id=$1;", [
 		                req.params.sensor_id
 		            ], function(err, result) {
 		                done();
@@ -61,8 +61,14 @@ exports.request = function(req, res) {
 						// 2.1 Get the average of the water-level
 						function(callback){
 
+							var query = "SELECT " +
+									"AVG(water_level) AS avg_water_level, " +
+									"'CENTIMETER' AS avg_water_level_unit " +
+								"FROM Timeseries " +
+								"WHERE sensor_id=$1;";
+
 							// Database Query
-							client.query("SELECT AVG(water_level) AS avg_water_level, 'CENTIMETER' AS avg_water_level_unit FROM Timeseries WHERE sensor_id=$1;", [
+							client.query(query, [
 								req.params.sensor_id
 							], function(err, result) {
 								done();
@@ -87,8 +93,14 @@ exports.request = function(req, res) {
 						// 2.2 Get the standard deviation of the water-level
 						function(callback){
 
+							var query = "SELECT " +
+									"STDDEV(water_level) AS std_water_level, " +
+									"'CENTIMETER' AS std_water_level_unit " +
+								"FROM Timeseries " +
+								"WHERE sensor_id=$1;";
+
 							// Database Query
-							client.query("SELECT STDDEV(water_level) AS std_water_level, 'CENTIMETER' AS std_water_level_unit FROM Timeseries WHERE sensor_id=$1;", [
+							client.query(query, [
 								req.params.sensor_id
 							], function(err, result) {
 								done();
@@ -150,8 +162,7 @@ exports.request = function(req, res) {
 													"SELECT * FROM Timeseries " +
 													"WHERE sensor_id=$1 AND valid_data=true AND water_level=$2" +
 												") AS timeseries ORDER BY measurement_date DESC LIMIT 1;", [
-											req.params.sensor_id,
-											ts_minimum
+											req.params.sensor_id
 										], function(err, result) {
 											done();
 
@@ -171,8 +182,13 @@ exports.request = function(req, res) {
 											// Get minimum in Measurement
 											function(callback){
 
+												var query = "SELECT " +
+														"MIN(water_level) AS minimum " +
+													"FROM Measurements " +
+													"WHERE sensor_id=$1;";
+
 												// Database Query
-												client.query("SELECT MIN(water_level) AS minimum FROM Measurements WHERE sensor_id=$1;", [
+												client.query(query, [
 													req.params.sensor_id
 												], function(err, result) {
 													done();
@@ -191,14 +207,18 @@ exports.request = function(req, res) {
 												// Check if a minimum in Measurements was found
 												if(ms_minimum !== null){
 
-													// Database Query
-													client.query("SELECT * FROM " +
+													var query = "SELECT * FROM " +
 														"( " +
 															"SELECT * FROM Measurements " +
-															"WHERE sensor_id=$1 AND water_level=$2" +
-														") AS measurements ORDER BY measurement_timestamp DESC LIMIT 1;", [
-														req.params.sensor_id,
-														ms_minimum
+															"WHERE sensor_id=$1 " +
+														") AS measurements ORDER BY (" +
+															"water_level ASC, " +
+															"measurement_timestamp DESC, " +
+														") LIMIT 1;";
+
+													// Database Query
+													client.query(query, [
+														req.params.sensor_id
 													], function(err, result) {
 														done();
 
@@ -250,8 +270,13 @@ exports.request = function(req, res) {
 								// Get maximum in Timeseries
 								function(callback){
 
+									var query = "SELECT " +
+											"MAX(water_level) AS maximum " +
+										"FROM Timeseries " +
+										"WHERE sensor_id=$1 AND valid_data=true;";
+
 									// Database Query
-									client.query("SELECT MAX(water_level) AS maximum FROM Timeseries WHERE sensor_id=$1 AND valid_data=true;", [
+									client.query(query, [
 										req.params.sensor_id
 									], function(err, result) {
 										done();
@@ -273,8 +298,7 @@ exports.request = function(req, res) {
 									// Check if a maximum in Timeseries was found
 									if(ts_maximum !== null){
 
-										// Database Query
-										client.query("SELECT " +
+										var query = "SELECT " +
 												"created, " +
 												"updated, " +
 												"water_level, " +
@@ -284,10 +308,15 @@ exports.request = function(req, res) {
 											"FROM " +
 												"( " +
 													"SELECT * FROM Timeseries " +
-													"WHERE sensor_id=$1 AND water_level=$2 AND valid_data=true " +
-												") AS timeseries ORDER BY measurement_date DESC LIMIT 1;", [
-											req.params.sensor_id,
-											ts_maximum
+													"WHERE sensor_id=$1 AND valid_data=true " +
+												") AS timeseries ORDER BY (" +
+													"water_level DESC, " +
+													"measurement_date DESC"  +
+												") LIMIT 1;";
+
+										// Database Query
+										client.query(query, [
+											req.params.sensor_id
 										], function(err, result) {
 											done();
 
@@ -308,8 +337,13 @@ console.log(result.rows);
 											// Get maximum in Measurement
 											function(callback){
 
+												var query = "SELECT " +
+														"MAX(water_level) AS maximum " +
+													"FROM Measurements " +
+													"WHERE sensor_id=$1;";
+
 												// Database Query
-												client.query("SELECT MAX(water_level) AS maximum FROM Measurements WHERE sensor_id=$1;", [
+												client.query(query, [
 													req.params.sensor_id
 												], function(err, result) {
 													done();
@@ -335,10 +369,12 @@ console.log(result.rows);
 													client.query("SELECT * FROM " +
 														"( " +
 															"SELECT * FROM Measurements " +
-															"WHERE sensor_id=$1 AND water_level=$2" +
-														") AS measurements ORDER BY measurement_timestamp DESC LIMIT 1;", [
-														req.params.sensor_id,
-														ms_maximum
+															"WHERE sensor_id=$1" +
+														") AS measurements ORDER BY (" +
+															"water_level DESC, " +
+															"measurement_timestamp DESC" +
+														") LIMIT 1;", [
+														req.params.sensor_id
 													], function(err, result) {
 														done();
 
