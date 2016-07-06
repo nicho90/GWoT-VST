@@ -45,7 +45,7 @@ exports.process = function(message) {
                                 callback(new Error(errors.database.error_2.message));
                             } else {
                                 if (result.rows.length > 0) {
-                                    console.log(result.rows[0]);
+                                    //console.log(result.rows[0]);
                                     callback(null, measurement, result.rows[0]);
                                 } else {
                                     console.error(errors.query.error_2.message);
