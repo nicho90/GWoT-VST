@@ -40,6 +40,10 @@ app.config(function($routeProvider) {
             templateUrl: "/js/templates/sensors/details.html",
             controller: "SensorDetailsController"
         })
+        .when("/new/sensor", {
+            templateUrl: "/js/templates/sensors/create.html",
+            controller: "SensorCreateController"
+        })
 
 
         // Users

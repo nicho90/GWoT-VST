@@ -16,7 +16,7 @@
         <meta name="format-detection" content="telephone=no">
         <meta http-equiv="x-rim-auto-match" content="none">
 
-        <title>GWoT-VST</title>
+        <title>GSys</title>
 
         <!-- Bootstrap core CSS -->
         <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
@@ -124,11 +124,11 @@
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" ng-click="showSettings()" style="cursor:pointer;">
-                                <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SETTINGS'}}
+                                <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SETTINGS' | translate }}
                             </a>
                             <div class="dropdown-divider" ng-if="authenticated_user.thresholds.length > 0"></div>
                             <a class="dropdown-item" ng-click="logout()" style="cursor:pointer;">
-                                <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'LOGOUT'}}
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'LOGOUT' | translate }}
                             </a>
                         </div>
                     </li>
@@ -179,7 +179,7 @@
                     </div>
                     <div class="col-xs-8 middle">
                         <small>
-                            &copy; 2016 <b>GWoT-VST</b>
+                            &copy; 2016 <b>{{config.appName}}</b>
                             &nbsp;&nbsp;
                             <a ng-href="#/about">{{ 'ABOUT' | translate }}</a>
                             &nbsp;&nbsp;|&nbsp;&nbsp;
