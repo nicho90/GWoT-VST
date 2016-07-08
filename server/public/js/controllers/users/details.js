@@ -2,7 +2,7 @@ var app = angular.module("gwot-vst");
 
 
 // DETAILS
-app.controller("UserDetailsController", function($scope, $rootScope, $routeParams, $location, $translate, $filter, $userService, $thresholdService, $sensorService, config) {
+app.controller("UserDetailsController", function($scope, $rootScope, $routeParams, $location, $translate, $filter, $ngBootbox, $userService, $thresholdService, $sensorService, config) {
 
 
     /**
@@ -74,7 +74,41 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
      * @return {sensor} [The Sensor object, which has to been deleted]
      */
     $scope.deleteSensor = function(sensor){
-        // TODO:
+
+        // Show confirmation dialog
+        $ngBootbox.customDialog({
+            message:
+                $filter('translate')('DIALOG_DELETE_SENSOR') +
+                '<br><b>' + sensor.description + '</b> <kbd>' +
+                sensor.device_id + '</kbd> ' +
+                $filter('translate')('DIALOG_DELETE_END'),
+            title:
+                '<i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;' +
+                $filter('translate')('DIALOG_ATTENTION'),
+            buttons: {
+                warning: {
+                    label: $filter('translate')('CANCEL'),
+                    className: "btn-secondary",
+                    callback: function() {}
+                },
+                success: {
+                    label: $filter('translate')('OK'),
+                    className: "btn-primary",
+                    callback: function() {
+                        $sensorService.delete(token, sensor.sensor_id)
+                        .success(function(response) {
+
+                            // Reset Sensors
+                            delete $scope.sensors;
+                            $scope.loadData();
+                        })
+                        .error(function(err) {
+                            $scope.err = err;
+                        });
+                    }
+                }
+            }
+        });
     };
 
 
@@ -82,7 +116,39 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
      * Delete all Sensors
      */
     $scope.deleteAllSensors = function(){
-        // TODO:
+
+        // Show confirmation dialog
+        $ngBootbox.customDialog({
+            message:
+                $filter('translate')('DIALOG_DELETE_ALL_SENSORS') + $filter('translate')('DIALOG_DELETE_END'),
+            title:
+                '<i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;' +
+                $filter('translate')('DIALOG_ATTENTION'),
+            buttons: {
+                warning: {
+                    label: $filter('translate')('CANCEL'),
+                    className: "btn-secondary",
+                    callback: function() {}
+                },
+                success: {
+                    label: $filter('translate')('OK'),
+                    className: "btn-primary",
+                    callback: function() {
+                        $sensorService.deleteAll(token)
+                        .success(function(response) {
+
+                            // Reset Sensors
+                            delete $scope.sensors;
+                            $scope.loadData();
+                        })
+                        .error(function(err) {
+                            $scope.err = err;
+                        });
+                    }
+                }
+            }
+        });
+
     };
 
 

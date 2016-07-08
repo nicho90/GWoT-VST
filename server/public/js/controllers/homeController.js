@@ -11,6 +11,10 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
      */
     $scope.load = function() {
 
+        // Reset markers
+        delete $scope.markers;
+        $scope.markers = [];
+
         // Check if User is authenticated
         var token;
         if ($rootScope.authenticated_user) {
@@ -22,7 +26,6 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
         // Request only public sensors (or also private sensors of an user, if the user is authenticated)
         $sensorService.list(token).success(function(response) {
             $scope.sensors = response;
-            $scope.markers = [];
             $scope.updateMarker();
         }).error(function(err) {
             $scope.err = err;
@@ -34,6 +37,7 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
     /**
      * Init
      */
+    $scope.markers = [];
     $scope.load();
 
 

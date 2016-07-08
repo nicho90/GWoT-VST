@@ -2,7 +2,7 @@ var app = angular.module("gwot-vst");
 
 
 // LIST
-app.controller("SensorListController", function($scope, $rootScope, $location, $sensorService) {
+app.controller("SensorListController", function($scope, $rootScope, $location, $filter, $ngBootbox, $sensorService) {
 
     /**
      * Load Sensors
@@ -29,7 +29,7 @@ app.controller("SensorListController", function($scope, $rootScope, $location, $
      * Show Details
      * @param  {number} sensor_id [Redirect to sensorDetailsView]
      */
-    $scope.showDetails = function(sensor_id){
+    $scope.showDetails = function(sensor_id) {
         $location.url("/sensors/" + sensor_id);
     };
 
@@ -38,7 +38,7 @@ app.controller("SensorListController", function($scope, $rootScope, $location, $
      * Show Sensor on map
      * @param  {number} sensor_id [Redirect to homeView, find Sensor and highlight it on map]
      */
-    $scope.showOnMap = function(sensor_id){
+    $scope.showOnMap = function(sensor_id) {
         $location.url("/map/" + sensor_id);
     };
 
@@ -46,7 +46,7 @@ app.controller("SensorListController", function($scope, $rootScope, $location, $
     /**
      * Edit a Sensor
      */
-    $scope.edit = function(sensor_id){
+    $scope.edit = function(sensor_id) {
         $location.url("/sensors/" + sensor_id + "/edit");
     };
 
@@ -54,8 +54,48 @@ app.controller("SensorListController", function($scope, $rootScope, $location, $
     /**
      * Delete a Sensor
      */
-    $scope.delete = function(){
-        // TODO
+    $scope.delete = function(sensor) {
+
+        // Check if User is authenticated
+        var token = "";
+        if ($rootScope.authenticated_user) {
+            token = $rootScope.authenticated_user.token;
+
+            // Show confirmation dialog
+            $ngBootbox.customDialog({
+                message:
+                    $filter('translate')('DIALOG_DELETE_SENSOR') +
+                    '<br><b>' + sensor.description + '</b> <kbd>' +
+                    sensor.device_id + '</kbd> ' +
+                    $filter('translate')('DIALOG_DELETE_END'),
+                title:
+                    '<i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;' +
+                    $filter('translate')('DIALOG_ATTENTION'),
+                buttons: {
+                    warning: {
+                        label: $filter('translate')('CANCEL'),
+                        className: "btn-secondary",
+                        callback: function() {}
+                    },
+                    success: {
+                        label: $filter('translate')('OK'),
+                        className: "btn-primary",
+                        callback: function() {
+                            $sensorService.delete(token, sensor.sensor_id)
+                            .success(function(response) {
+
+                                // Reset Sensors
+                                delete $scope.sensors;
+                                $scope.loadData();
+                            })
+                            .error(function(err) {
+                                $scope.err = err;
+                            });
+                        }
+                    }
+                }
+            });
+        }
     };
 
 
@@ -68,7 +108,7 @@ app.controller("SensorListController", function($scope, $rootScope, $location, $
     /**
      * Update when user logged in or out
      */
-    $rootScope.$on('update', function(){
+    $rootScope.$on('update', function() {
         $scope.load();
     });
 });
