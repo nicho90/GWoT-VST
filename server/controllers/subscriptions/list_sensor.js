@@ -72,6 +72,7 @@ exports.request = function(req, res) {
 												"subscriptions.creator, " +
 												"subscriptions.active, " +
 												"subscriptions.sensor_id, " +
+												"sensors.device_id, " +
 												"sensors.description AS sensor_description, " +
 												"subscriptions.threshold_id, " +
 												"thresholds.description AS threshold_description, " +
