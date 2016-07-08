@@ -39,7 +39,6 @@ if (broker !== undefined) {
                 });
             }
         });
-        // TODO: send Websocket-Message
     });
 
     // Client Disconnect
@@ -66,7 +65,6 @@ if (broker !== undefined) {
                 });
             }
         });
-        // TODO: send Websocket-Message
     });
 
 
@@ -74,7 +72,6 @@ if (broker !== undefined) {
      * Message-Handler
      */
     broker.on('published', function(packet, client) {
-        //console.log('Published', client);
 
         // MQTT-topics
         if (packet.topic == "heartbeat") {
@@ -93,8 +90,6 @@ if (broker !== undefined) {
         } else if (packet.topic == "/sensor/realtime/measurement") {
             //console.log('Message realtime measurement', packet.payload.toString());
             postprocessRealtime.process(packet.payload);
-            // Here are the realtime measurment messages incomming
-            // TODO: send Websocket-Message
         }
 
     });
