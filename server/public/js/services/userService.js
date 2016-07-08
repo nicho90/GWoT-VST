@@ -27,9 +27,11 @@ app.factory('$userService', function($http, config) {
             });
         },
         edit: function(token, username, data){
-            return $http.put(config.apiURL + "/users/" + username, {
-                headers: { 'authorization': token },
-                body: data
+            return $http.put(config.apiURL + "/users/" + username, data, {
+                headers: {
+                    'authorization': token,
+                    'content-type': 'application/json'
+                }
             });
         },
         delete: function(token, username){

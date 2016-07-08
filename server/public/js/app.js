@@ -9,6 +9,9 @@ var app = angular.module("gwot-vst", [
     "leaflet-directive",
     "n3-line-chart",
     "btford.socket-io",
+    "underscore",
+    "ngAnimate",
+    "toastr",
 
     // Own Modules
     "filters",
@@ -20,6 +23,7 @@ var app = angular.module("gwot-vst", [
     "userService",
     "thresholdService",
     "sensorService",
+    "subscriptionService",
     "measurementService",
     "statisticService",
     "timeseriesService",
@@ -30,8 +34,8 @@ var app = angular.module("gwot-vst", [
 /**
  * Sockets
  */
-app.factory('$socket', function (socketFactory) {
-  return socketFactory();
+app.factory('$socket', function(socketFactory) {
+    return socketFactory();
 });
 
 
@@ -52,4 +56,24 @@ app.run(function($translate, config) {
     // Use Translator and set Language
     $translate.use(config.appLanguage);
 
+});
+
+
+/**
+ * Configure toastr notifications
+ */
+app.config(function(toastrConfig) {
+    angular.extend(toastrConfig, {
+        timeOut: "60000",
+        extendedTimeOut: "60000",
+        newestOnTop: false,
+        positionClass: 'toast-top-center',
+        closeButton: true,
+        showDuration : "100",
+		    hideDuration : "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        progressBar: true,
+        allowHtml: true,
+    });
 });

@@ -5,6 +5,10 @@ var app = angular.module("languages", [ "config" ]);
  */
 app.config(function($translateProvider, config) {
 
+
+    /**
+     * German
+     */
     $translateProvider.translations('de_DE', {
 
         WELCOME: 'Willkommen',
@@ -26,6 +30,7 @@ app.config(function($translateProvider, config) {
         CANCEL: 'Abbrechen',
         SUBMIT: 'Senden',
         CREATE: 'Erstellen',
+        SETTINGS: 'Einstellungen',
 
         GENERAL: 'Allgemein',
         TIMESERIES: 'Zeitreihe',
@@ -40,10 +45,13 @@ app.config(function($translateProvider, config) {
         PRIVATE: 'Privat',
         PUBLIC: 'Öffentlich',
         COORDINATES: 'Koordinaten',
-        SENSOR_HEIGHT: 'Sensorhöhe',
         MEASURED_FROM: 'gemessen von der',
+        SENSOR_HEIGHT: 'Sensorhöhe',
+        SENSOR_THRESHOLD_HEIGHT: 'Sensorschwellenwert',
         GAUGE_ZERO: 'Fluss-Null-Linie',
         CROSSING_HEIGHT: 'Überquerungshöhe',
+        WARNING_THRESHOLD: 'Bedenklicher Schwellenwert',
+        CRITICAL_THRESHOLD: 'Kritischer Schwellenwert',
         FLOODWAY: 'Floodway',
         OR: 'oder',
         BRIDGE: 'Brücke',
@@ -56,6 +64,8 @@ app.config(function($translateProvider, config) {
         INCREASED_FREQUENCY: 'Gefahrinterval aktiv',
         CREATED: 'Erstellt am',
         UPDATED: 'Zuletzt geändert am',
+        SHOW_ON_MAP: 'Auf der Karte anzeigen',
+        DISTANCE: 'Distanz',
 
         CENTIMETER: 'Zentimeter',
         METER: 'Meter',
@@ -89,12 +99,61 @@ app.config(function($translateProvider, config) {
         NEARBY_SERVICE_STATIONS: 'Autowerkstätten in der Nähe',
         GERMANY: 'Deutschland',
 
+        PASSABLE: 'Passierbar',
+        RISK: 'Risiko',
+        HIGH_RISK: 'Hohes Risiko',
+        N_A: 'Nicht verfügbar',
+        EMERGENCY_STATION: 'Notrufstation',
+        SERIVE_STATION: 'Autowerkstatt',
+
         WATER_LEVEL: 'Pegelstand',
         WATER_LEVELS: 'Pegelstände',
-        LAST_WATER_LEVEL: 'Letzer Pegelstand'
+        LAST_WATER_LEVEL: 'Letzer Pegelstand',
+        STATISTICS: 'Statistik',
+        MEASURED: 'Gemessen um',
+        MAXIMUM: 'Maximum',
+        MINIMUM: 'Minimum',
+        AVERAGE: 'Durchschnitt',
+        STD: 'Standardabweichung',
 
+        WEATHER_FORECAST: 'Wettervorhersage',
+        SHOW_MEASUREMENTS: 'Show measurements',
+        HIDE_MEASUREMENTS: 'Hide measurements',
+        CURRENTLY: 'Aktuell',
+        TODAY: 'Heute',
+        TOMORROW: 'Morgen',
+        Monday: 'Montag',
+        Tuesday: 'Dienstag',
+        Wednesday: 'Mittwoch',
+        Thursday: 'Donnerstag',
+        Friday: 'Freitag',
+        Saturday: 'Samstag',
+        Sunday: 'Sonntag',
+        NEXT_HOURS: 'Die nächsten Stunden',
+        NEXT_DAYS: 'Die nächsten Tage',
+
+        SUBSCRIBED: 'Abonniert',
+        SUBSCRIBE: 'Abonnieren',
+        UNSUBSCRIBE: 'Abo beenden',
+
+        WARNING_NOTIFICATION: 'Warnung',
+        CRITICAL_NOTIFICATION: 'Gefahr',
+        SENSOR_NOTIFICATION: 'Sensor',
+        HEIGHT_NOTIFICATION: 'Höhe',
+        DESCRIPTION_NOTIFICATION: 'Beschreibung',
+        CATEGORY_NOTIFICATION: 'Kategorie',
+
+        HELP: 'Hilfe',
+        ABOUT: 'Über',
+        DEVELOPERS: 'Entwickler',
+        DOCUMENTATION: 'Dokumentation',
+        REST_API: 'REST-API'
     });
 
+
+    /**
+     * English
+     */
     $translateProvider.translations('en_US', {
 
         WELCOME: 'Welcome',
@@ -116,6 +175,7 @@ app.config(function($translateProvider, config) {
         CANCEL: 'Cancel',
         SUBMIT: 'Submit',
         CREATE: 'Create',
+        SETTINGS: 'Settings',
 
         GENERAL: 'General',
         TIMESERIES: 'Timeseries',
@@ -130,10 +190,13 @@ app.config(function($translateProvider, config) {
         PRIVATE: 'Private',
         PUBLIC: 'Public',
         COORDINATES: 'Coordinates',
-        SENSOR_HEIGHT: 'Sensor height',
         MEASURED_FROM: 'measured from the',
+        SENSOR_HEIGHT: 'Sensor height',
+        SENSOR_THRESHOLD_HEIGHT: 'Sensor threshold height',
         GAUGE_ZERO: 'Gauge Zero',
         CROSSING_HEIGHT: 'Crossing height',
+        WARNING_THRESHOLD: 'Warning threshold',
+        CRITICAL_THRESHOLD: 'Critical threshold',
         FLOODWAY: 'Floodway',
         OR: 'or',
         BRIDGE: 'Bridge',
@@ -146,6 +209,8 @@ app.config(function($translateProvider, config) {
         INCREASED_FREQUENCY: 'Frequency increased',
         CREATED: 'Created',
         UPDATED: 'Last updated',
+        SHOW_ON_MAP: 'Show on map',
+        DISTANCE: 'Distance',
 
         CENTIMETER: 'Centimeter',
         METER: 'Meter',
@@ -179,11 +244,57 @@ app.config(function($translateProvider, config) {
         NEARBY_SERVICE_STATIONS: 'Nearby Service-Stations',
         GERMANY: 'Germany',
 
+        PASSABLE: 'Passable',
+        RISK: 'Risk',
+        HIGH_RISK: 'High risk',
+        N_A: 'n/a',
+        EMERGENCY_STATION: 'Emergency station',
+        SERIVE_STATION: 'Service station',
+
         WATER_LEVEL: 'Water level',
         WATER_LEVELS: 'Water levels',
-        LAST_WATER_LEVEL: 'Last water level'
+        LAST_WATER_LEVEL: 'Last water level',
+        STATISTICS: 'Statistics',
+        MEASURED: 'Measured',
+        MAXIMUM: 'Maximum',
+        MINIMUM: 'Minimum',
+        AVERAGE: 'Average',
+        STD: 'Standard deviation',
 
+        WEATHER_FORECAST: 'Weather forecast',
+        SHOW_MEASUREMENTS: 'Show measurements',
+        HIDE_MEASUREMENTS: 'Hide measurements',
+        CURRENTLY: 'Currently',
+        TODAY: 'Today',
+        TOMORROW: 'Tomorrow',
+        Monday: 'Monday',
+        Tuesday: 'Tuesday',
+        Wednesday: 'Wednesday',
+        Thursday: 'Thursday',
+        Friday: 'Friday',
+        Saturday: 'Saturday',
+        Sunday: 'Sunday',
+        NEXT_HOURS: 'Next hours',
+        NEXT_DAYS: 'Next days',
+
+        SUBSCRIBED: 'Subscribed',
+        SUBSCRIBE: 'Subscribe',
+        UNSUBSCRIBE: 'Unsubscribe',
+
+        WARNING_NOTIFICATION: 'Warning',
+        CRITICAL_NOTIFICATION: 'Danger',
+        SENSOR_NOTIFICATION: 'Sensor',
+        HEIGHT_NOTIFICATION: 'Height',
+        DESCRIPTION_NOTIFICATION: 'Description',
+        CATEGORY_NOTIFICATION: 'Category',
+
+        HELP: 'Help',
+        ABOUT: 'About',
+        DEVELOPERS: 'Developers',
+        DOCUMENTATION: 'Documentation',
+        REST_API: 'REST-API'
     });
+
 
     // Set Default Language (English)
     $translateProvider.preferredLanguage(config.appLanguage);

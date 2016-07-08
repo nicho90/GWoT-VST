@@ -7,6 +7,31 @@ body {
     margin-bottom: 40px;
 }
 
+.deviceId {
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+}
+
+.legend {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    background: rgba(255,255,255, 0.9);
+    line-height: 18px;
+    border-radius: 5px;
+    color: #555;
+    width: 170px;
+}
+
+.legend i {
+    color: #777;
+    width: 16px;
+    height: 16px;
+    float: left;
+    margin-right: 8px;
+    opacity: 1.0;
+}
+
+
 .footer {
     position: absolute;
     bottom: 0px;
@@ -23,6 +48,10 @@ body {
     height: auto;
     width: 100%;
     z-index: 2147483647;
+}
+
+.bold {
+    font-weight: bold;
 }
 
 .main {
@@ -56,7 +85,7 @@ body {
     float:none;
     display:inline-block;
     *display:inline; /* ie7 fix */
-     zoom:1; /* hasLayout ie7 trigger */
+    zoom:1; /* hasLayout ie7 trigger */
 }
 
 .nav-tabs.centered, .nav-pills.centered {
@@ -79,6 +108,58 @@ body {
     padding-right: 5px;
     padding-top: 1.5px;
 }
+
+/* Statistics */
+.statistics th, .statistics td {
+    padding: 3px;
+}
+
+
+/* Weather Forecast */
+.forecast {
+    width: 100%;
+}
+
+.forecast th, .forecast td {
+    padding: 3px;
+}
+
+.forecast td {
+    font-size: 0.6rem;
+}
+.forecast th {
+    font-size: 0.75rem;
+}
+
+.headline th,
+.weatherIcon td,
+.weatherIcon_2 td,
+.normal td {
+    text-align: center;
+}
+
+.normal th {
+    text-align: right;
+}
+
+.weatherIcon > td {
+    font-size: 2.0rem;
+    color: #575757;
+}
+
+.weatherIcon_2 > td {
+    font-size: 1.5rem;
+    color: #575757;
+}
+
+.blue {
+    color: #0275d8;
+}
+
+.orange {
+    color: #e6550d;
+}
+
 
 
 /* Chart */

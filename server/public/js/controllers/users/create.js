@@ -1,9 +1,7 @@
 var app = angular.module("gwot-vst");
 
 
-/**
- * User Create Controller
- */
+// CREATE
 app.controller("UserCreateController", function($scope, $rootScope, $location, $translate, $userService) {
 
     /**

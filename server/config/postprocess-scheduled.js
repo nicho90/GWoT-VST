@@ -92,7 +92,7 @@ exports.process = function(message) {
 
                     // 5. Check Sensor-Settings for sensor-threshold
                     function(measurement, sensor, callback) {
-                        console.log("Distance: " + measurement.properties.distance.value, "Water Level: " + (sensor.sensor_height - measurement.properties.distance.value), "Threshold: " + sensor.threshold_value, new Date());
+                        /*console.log("Distance: " + measurement.properties.distance.value, "Water Level: " + (sensor.sensor_height - measurement.properties.distance.value), "Threshold: " + sensor.threshold_value, new Date());*/
 
                         var message;
                         if ((sensor.sensor_height - measurement.properties.distance.value) > sensor.threshold_value) {
@@ -108,7 +108,7 @@ exports.process = function(message) {
                                     retain: true // or true
                                 };
                                 broker.publish(message, function() {
-                                    console.log("Message send at time " + new Date());
+                                    //console.log("Message send at time " + new Date());
                                 });
 
                                 // Change increased_frequency value
@@ -141,7 +141,7 @@ exports.process = function(message) {
                                     retain: true // or true
                                 };
                                 broker.publish(message, function() {
-                                    console.log("Message send at time " + new Date());
+                                    //console.log("Message send at time " + new Date());
                                 });
 
                                 // Change increased_frequency value
@@ -190,7 +190,7 @@ exports.process = function(message) {
                                 console.error("Step 6: query subscribers", errors.database.error_2.message, err);
                                 callback(new Error(errors.database.error_2.message));
                             } else {
-                                console.log("Result of query: subscribed users", result.rows);
+                                //console.log("Result of query: subscribed users", result.rows);
                                 callback(null, measurement, sensor, result.rows);
                             }
                         });
@@ -237,45 +237,49 @@ exports.process = function(message) {
                                     console.error("Step 7: query warning and critical thresholds", errors.database.error_2.message, err);
                                     callback(new Error(errors.database.error_2.message));
                                 } else {
-                                    console.log("Result of query: warning and danger threshold values", result.rows);
+                                    //console.log("Result of query: warning and danger threshold values", result.rows);
 
                                     if (result.rows.length > 0) {
 
-                                        console.log("Thresholds length = ", result.rows.length);
+                                        //console.log("Thresholds length = ", result.rows.length);
                                         var triggered_thresholds = result.rows;
 
                                         // Change warning and danger notification status in DB
                                         // TODO test if working
-                                        for (row in triggered_thresholds) {
+                                        //for (var row in triggered_thresholds) {
+                                        async.each(triggered_thresholds, function(row, callback) {
+                                            //console.log("Row: ", row);
                                             /* e.g. message conteent
                                             { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
                                             */
-                                            if (triggered_thresholds[row].level == "warning") {
+                                            if (row.level == "warning") {
                                                 // Change warning_notified value
                                                 client.query('UPDATE Subscriptions SET warning_notified=true WHERE subscription_id=$1;', [
-                                                    triggered_thresholds[row].subscription_id
+                                                    row.subscription_id
                                                 ], function(err, result) {
                                                     done();
                                                     if (err) {
                                                         console.error("Step 7: change warning_notified value", errors.database.error_2.message, err);
                                                     } else {
-                                                        // Do nothing
+                                                        callback();
                                                     }
                                                 });
-                                            } else if (triggered_thresholds[row].level == "danger") {
+                                            } else if (row.level == "danger") {
                                                 // Change warning_notified value
                                                 client.query('UPDATE Subscriptions SET danger_notified=true WHERE subscription_id=$1;', [
-                                                    triggered_thresholds[row].subscription_id
+                                                    row.subscription_id
                                                 ], function(err, result) {
                                                     done();
                                                     if (err) {
                                                         console.error("Step 7: change warning_notified value", errors.database.error_2.message, err);
                                                     } else {
-                                                        // Do nothing
+                                                        callback();
                                                     }
                                                 });
                                             }
-                                        };
+                                        }, function(err) {
+                                          //TODO
+                                        });
 
                                         // Read Template
                                         fs.readFile(path.join(__dirname, '../templates/notification.html'), function(err, data) {
@@ -311,18 +315,28 @@ exports.process = function(message) {
                                         });
 
                                         // Emit Websocket-notification if triggered_thresholds.length > 0!
-                                        console.log("Publishing socket");
-                                        for (row in triggered_thresholds) {
-                                            console.log("Send socket notification for threshold:", row);
-                                            /* e.g. message conteent
-                                            { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" }
-                                            */
-                                            io.sockets.emit('/notification/threshold', triggered_thresholds[row]);
-                                        }
+                                        //console.log("Publishing socket");
+                                        async.each(triggered_thresholds, function(row, callback) {
+                                            //console.log("Send socket notification for threshold:", row);
+                                            var content = {
+                                                "subscription_id": row.subscription_id,
+                                                "threshold_id": row.threshold_id,
+                                                "creator": row.creator,
+                                                "description": row.description,
+                                                "category": row.category,
+                                                "level": row.level,
+                                                "device_id": measurement.properties.device_id,
+                                                "height": sensor.sensor_height - measurement.properties.distance.value,
+                                            };
+                                            io.sockets.emit('/notification/threshold', content);
+                                            callback();
+                                        }, function(err) {
+                                          //TODO
+                                          callback();
+                                        });
 
-                                        callback();
                                     } else {
-                                        console.log("Thresholds length = 0");
+                                        //console.log("Thresholds length = 0");
                                         callback();
                                     }
                                 }
@@ -341,51 +355,60 @@ exports.process = function(message) {
 
                     // 8. Check all Threshold notifications
                     function(measurement, sensor, users, callback) {
-                        //TODO update warning subscriptions that have been notified and lie (x cm) unter warning level
-                        var query = "" +
-                            "(UPDATE " +
-                            "subscriptions " +
-                            "SET warning_notified=false" +
-                            "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.warning_threshold));";
+                        // update warning subscriptions that have been notified and lie (x cm) under warning level
+                        async.each(users, function(user, callback) {
 
-                        // Database query
-                        client.query(query, function(err, result) {
-                            done();
+                            var query = "UPDATE Subscriptions AS sc " +
+                                "SET warning_notified=false " +
+                                "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
+                                "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.warning_threshold);";
 
+                            // Database query
+
+                            client.query(query, function(err, result) {
+                                done();
+
+                                if (err) {
+                                    console.error("Step 8: reset warning thresholds notification", errors.database.error_2.message, err);
+                                    callback(new Error(errors.database.error_2.message));
+                                } else {
+                                  // update danger subscriptions that have been notified and lie (x cm) under danger level
+                                  query = "UPDATE Subscriptions AS sc " +
+                                      "SET danger_notified=false " +
+                                      "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
+                                      "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.danger_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.critical_threshold);";
+
+
+                                  client.query(query, function(err, result) {
+                                      done();
+
+                                      if (err) {
+                                          console.error("Step 8: reset danger thresholds notification", errors.database.error_2.message, err);
+                                          callback(new Error(errors.database.error_2.message));
+                                      } else {
+                                          callback();
+                                      }
+                                  });
+                                }
+                            });
+
+                        }, function(err) {
                             if (err) {
-                                console.error("Step 8: reset warning thresholds notification", errors.database.error_2.message, err);
-                                callback(new Error(errors.database.error_2.message));
+                                console.log(err);
+                                callback(err);
                             } else {
-                                // Do nothing
+                                //console.log("Emails were sent to all users!");
+                                callback(null);
                             }
                         });
 
-                        //TODO select danger subscriptions that have been notified and lie (x cm) unter danger level
-                        var query = "" +
-                            "(UPDATE " +
-                            "subscriptions " +
-                            "SET danger_notified=false" +
-                            "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.danger_notified=true" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.danger_threshold));";
-
-                        client.query(query, function(err, result) {
-                            done();
-
-                            if (err) {
-                                console.error("Step 8: reset danger thresholds notification", errors.database.error_2.message, err);
-                                callback(new Error(errors.database.error_2.message));
-                            } else {
-                                // Do nothing
-                            }
-                        });
-
-                        callback(null)
                     }
                 ],
                 function(err, callback) {
                     if (err) {
                         console.log(err);
                     } else {
-                        console.log("Pipeline has been finished! " + new Date());
+                        console.log("SD-Pipeline has been finished! " + new Date());
                     }
                 });
         }

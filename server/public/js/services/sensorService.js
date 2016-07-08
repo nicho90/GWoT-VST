@@ -41,11 +41,38 @@ app.factory('$sensorService', function($http, config) {
                 headers: { 'authorization': token }
             });
         },
+        user_create: function(token, username, data) {
+            return $http.post(config.apiURL + "/users/" + username + "/sensors", data, {
+                headers: {
+                    'authorization': token,
+                    'content-type': 'application/json'
+                }
+            });
+        },
         user_get: function(token, username, sensor_id) {
             return $http.get(config.apiURL + "/users/" + username + "/sensors/" + sensor_id, {
                 headers: { 'authorization': token }
             });
         },
+        user_put: function(token, username, sensor_id, data) {
+            return $http.put(config.apiURL + "/users/" + username + "/sensors/" + sensor_id, data, {
+                headers: {
+                    'authorization': token,
+                    'content-type': 'application/json'
+                }
+            });
+        },
+        user_delete: function(token, username, sensor_id) {
+            return $http.delete(config.apiURL + "/users/" + username + "/sensors/" + sensor_id, {
+                headers: { 'authorization': token }
+            });
+        },
+        user_deleteAll: function(token, username) {
+            return $http.delete(config.apiURL + "/users/" + username + "/sensors", {
+                headers: { 'authorization': token }
+            });
+        },
+
 
         // Related (nearby) Sensors of a Sensor
         get_related_sensors: function(token, sensor_id) {

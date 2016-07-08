@@ -51,6 +51,7 @@ exports.request = function(req, res){
 									"sensors.device_id, " +
 									"sensors.description ," +
 									"sensors.private, " +
+									"sensors.creator, " +
 									"sensors.online_status, " +
 									"sensors.water_body_id, " +
 									"water_bodies.name AS water_body_name, " +
@@ -113,6 +114,7 @@ exports.request = function(req, res){
 												"sensors.device_id, " +
 												"sensors.description ," +
 												"sensors.private, " +
+												"sensors.creator, " +
 												"sensors.online_status, " +
 												"sensors.water_body_id, " +
 												"water_bodies.name AS water_body_name, " +
@@ -159,6 +161,7 @@ exports.request = function(req, res){
 													"sensors.device_id, " +
 													"sensors.description ," +
 													"sensors.private, " +
+													"sensors.creator, " +
 													"sensors.online_status, " +
 													"sensors.water_body_id, " +
 													"water_bodies.name AS water_body_name, " +

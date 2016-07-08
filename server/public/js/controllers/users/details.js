@@ -1,9 +1,7 @@
 var app = angular.module("gwot-vst");
 
 
-/**
- * User Details Controller
- *  */
+// DETAILS
 app.controller("UserDetailsController", function($scope, $rootScope, $routeParams, $location, $translate, $filter, $userService, $thresholdService, $sensorService, config) {
 
 

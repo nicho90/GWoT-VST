@@ -6,15 +6,33 @@ var app = angular.module("routes", []);
 app.config(function($routeProvider) {
     $routeProvider
 
-    // Home (Map)
+        // Home (Map)
         .when("/", {
-        templateUrl: "/js/templates/home.html",
-        controller: "HomeController"
-    })
+            templateUrl: "/js/templates/home.html",
+            controller: "HomeController"
+        })
+
+        // Go to sensor on map
+        .when("/map/:sensor_id", {
+            templateUrl: "/js/templates/home.html",
+            controller: "HomeController"
+        })
+
+        // Help
+        .when("/help", {
+            templateUrl: "/js/templates/help.html",
+            controller: "HelpController"
+        })
+
+        // About
+        .when("/about", {
+            templateUrl: "/js/templates/about.html",
+            controller: "AboutController"
+        })
 
 
-    // Sensors
-    .when("/sensors", {
+        // Sensors
+        .when("/sensors", {
             templateUrl: "/js/templates/sensors/list.html",
             controller: "SensorListController"
         })
@@ -24,8 +42,8 @@ app.config(function($routeProvider) {
         })
 
 
-    // Users
-    .when("/new/user", {
+        // Users
+        .when("/new/user", {
             templateUrl: "/js/templates/users/create.html",
             controller: "UserCreateController"
         })
@@ -34,14 +52,17 @@ app.config(function($routeProvider) {
             controller: "UserDetailsController"
         })
 
-    //thresholdService
-    .when("new/threshold", {
+
+        // Thresholds
+        .when("new/threshold", {
             templateUrl: "/js/templates/thresholds/create.html",
             controller: "ThresholdCreateController"
         })
+
+
+
         // Redirect
         .otherwise({
             redirectTo: "/"
         });
-
 });

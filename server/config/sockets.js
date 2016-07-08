@@ -32,12 +32,6 @@ io.on('connection', function(socket) {
         };
         broker.publish(message);
     });
-
-    // TESTING
-    // Code for emitting threshold notifications
-    setTimeout(function () {
-      socket.emit('/notification/threshold', { subscription_id: 2, threshold_id: 2, creator: "nicho90", description: "VW Golf (2015)", category: "CAR", level: "danger" });
-    }, 20000);
 });
 
 exports.sockets = io;

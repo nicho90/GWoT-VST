@@ -30,7 +30,7 @@ exports.request = function(req, res) {
                 function(callback) {
 
 					// Database Query
-		            client.query('SELECT * FROM Sensors WHERE sensor_id=$1;', [
+		            client.query("SELECT * FROM Sensors WHERE sensor_id=$1;", [
 		                req.params.sensor_id
 		            ], function(err, result) {
 		                done();
@@ -61,8 +61,14 @@ exports.request = function(req, res) {
 						// 2.1 Get the average of the water-level
 						function(callback){
 
+							var query = "SELECT " +
+									"AVG(water_level) AS avg_water_level, " +
+									"'CENTIMETER' AS avg_water_level_unit " +
+								"FROM Timeseries " +
+								"WHERE sensor_id=$1;";
+
 							// Database Query
-							client.query("SELECT AVG(water_level) AS avg_water_level, 'CENTIMETER' AS avg_water_level_unit FROM Timeseries WHERE sensor_id=$1;", [
+							client.query(query, [
 								req.params.sensor_id
 							], function(err, result) {
 								done();
@@ -71,7 +77,15 @@ exports.request = function(req, res) {
 									res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 									return console.error(errors.database.error_2.message, err);
 								} else {
-									statistics.average = result.rows[0];
+
+									if(result.rows[0].avg_water_level === null){
+										statistics.average = {
+											avg_water_level: "-",
+											avg_water_level_unit: "CENTIMETER"
+										};
+									} else {
+										statistics.average = result.rows[0];
+									}
 									callback(null, null);
 								}
 							});
@@ -79,8 +93,14 @@ exports.request = function(req, res) {
 						// 2.2 Get the standard deviation of the water-level
 						function(callback){
 
+							var query = "SELECT " +
+									"STDDEV(water_level) AS std_water_level, " +
+									"'CENTIMETER' AS std_water_level_unit " +
+								"FROM Timeseries " +
+								"WHERE sensor_id=$1;";
+
 							// Database Query
-							client.query("SELECT STDDEV(water_level) AS std_water_level, 'CENTIMETER' AS std_water_level_unit FROM Timeseries WHERE sensor_id=$1;", [
+							client.query(query, [
 								req.params.sensor_id
 							], function(err, result) {
 								done();
@@ -89,7 +109,14 @@ exports.request = function(req, res) {
 									res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 									return console.error(errors.database.error_2.message, err);
 								} else {
-									statistics.std = result.rows[0];
+									if(result.rows[0].std_water_level === null){
+										statistics.std = {
+											std_water_level: "-",
+											std_water_level_unit: "CENTIMETER"
+										};
+									} else {
+										statistics.std = result.rows[0];
+									}
 									callback(null, null);
 								}
 							});
@@ -102,8 +129,13 @@ exports.request = function(req, res) {
 								// Get minimum in Timeseries
 								function(callback){
 
+									var query = "SELECT " +
+											"MIN(water_level) AS minimum " +
+										"FROM Timeseries " +
+										"WHERE sensor_id=$1 AND valid_data=true;";
+
 									// Database Query
-									client.query("SELECT MIN(water_level) AS minimum FROM Timeseries WHERE sensor_id=$1 AND valid_data=true;", [
+									client.query(query, [
 										req.params.sensor_id
 									], function(err, result) {
 										done();
@@ -112,7 +144,6 @@ exports.request = function(req, res) {
 											res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 											return console.error(errors.database.error_2.message, err);
 										} else {
-											//console.log(result.rows);
 											callback(null, result.rows[0].minimum);
 										}
 									});
@@ -123,8 +154,7 @@ exports.request = function(req, res) {
 									// Check if a minimum in Timeseries was found
 									if(ts_minimum !== null){
 
-										// Database Query
-										client.query("SELECT " +
+										var query = "SELECT " +
 											    "created, " +
 											    "updated, " +
 											    "water_level, " +
@@ -134,10 +164,16 @@ exports.request = function(req, res) {
 										 	"FROM " +
 												"( " +
 													"SELECT * FROM Timeseries " +
-													"WHERE sensor_id=$1 AND valid_data=true AND water_level=$2" +
-												") AS timeseries ORDER BY measurement_date DESC LIMIT 1;", [
-											req.params.sensor_id,
-											ts_minimum
+													"WHERE sensor_id=$1 AND valid_data=true " +
+												") AS timeseries " +
+											"ORDER BY " +
+												"water_level ASC," +
+												"measurement_date DESC " +
+											"LIMIT 1;";
+
+										// Database Query
+										client.query(query, [
+											req.params.sensor_id
 										], function(err, result) {
 											done();
 
@@ -151,15 +187,19 @@ exports.request = function(req, res) {
 										});
 
 									} else {
-										console.log("null in Timeseries");
 
 										async.waterfall([
 
 											// Get minimum in Measurement
 											function(callback){
 
+												var query = "SELECT " +
+														"MIN(water_level) AS minimum " +
+													"FROM Measurements " +
+													"WHERE sensor_id=$1;";
+
 												// Database Query
-												client.query("SELECT MIN(water_level) AS minimum FROM Measurements WHERE sensor_id=$1;", [
+												client.query(query, [
 													req.params.sensor_id
 												], function(err, result) {
 													done();
@@ -168,7 +208,6 @@ exports.request = function(req, res) {
 														res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 														return console.error(errors.database.error_2.message, err);
 													} else {
-														//console.log(result.rows[0]);
 														callback(null, result.rows[0].minimum);
 													}
 												});
@@ -179,14 +218,18 @@ exports.request = function(req, res) {
 												// Check if a minimum in Measurements was found
 												if(ms_minimum !== null){
 
-													// Database Query
-													client.query("SELECT * FROM " +
+													var query = "SELECT * FROM " +
 														"( " +
 															"SELECT * FROM Measurements " +
-															"WHERE sensor_id=$1 AND water_level=$2" +
-														") AS measurements ORDER BY measurement_timestamp DESC LIMIT 1;", [
-														req.params.sensor_id,
-														ms_minimum
+															"WHERE sensor_id=$1 " +
+														") AS measurements ORDER BY " +
+															"water_level ASC, " +
+															"measurement_timestamp DESC " +
+														"LIMIT 1;";
+
+													// Database Query
+													client.query(query, [
+														req.params.sensor_id
 													], function(err, result) {
 														done();
 
@@ -200,8 +243,6 @@ exports.request = function(req, res) {
 													});
 
 												} else {
-
-													console.log("null in Measurements");
 
 													var min = {
   														water_level: "-",
@@ -240,8 +281,13 @@ exports.request = function(req, res) {
 								// Get maximum in Timeseries
 								function(callback){
 
+									var query = "SELECT " +
+											"MAX(water_level) AS maximum " +
+										"FROM Timeseries " +
+										"WHERE sensor_id=$1 AND valid_data=true;";
+
 									// Database Query
-									client.query("SELECT MAX(water_level) AS maximum FROM Timeseries WHERE sensor_id=$1 AND valid_data=true;", [
+									client.query(query, [
 										req.params.sensor_id
 									], function(err, result) {
 										done();
@@ -250,7 +296,6 @@ exports.request = function(req, res) {
 											res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 											return console.error(errors.database.error_2.message, err);
 										} else {
-											console.log(result.rows);
 											callback(null, result.rows[0].maximum);
 										}
 									});
@@ -258,11 +303,13 @@ exports.request = function(req, res) {
 								// Get maximum in Timeseries with date (full row)
 								function(ts_maximum, callback){
 
+									console.log("ts_maximum");
+									console.log(ts_maximum);
+
 									// Check if a maximum in Timeseries was found
 									if(ts_maximum !== null){
 
-										// Database Query
-										client.query("SELECT " +
+										var query = "SELECT " +
 												"created, " +
 												"updated, " +
 												"water_level, " +
@@ -272,13 +319,19 @@ exports.request = function(req, res) {
 											"FROM " +
 												"( " +
 													"SELECT * FROM Timeseries " +
-													"WHERE sensor_id=$1 AND water_level=$2 AND valid_data=true " +
-												") AS timeseries ORDER BY measurement_date DESC LIMIT 1;", [
-											req.params.sensor_id,
-											ts_maximum
+													"WHERE sensor_id=$1 AND valid_data=true " +
+												") AS timeseries ORDER BY " +
+													"water_level DESC, " +
+													"measurement_date DESC "  +
+												"LIMIT 1;";
+
+										// Database Query
+										client.query(query, [
+											req.params.sensor_id
 										], function(err, result) {
 											done();
 
+console.log(result.rows);
 											if(err) {
 												res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 												return console.error(errors.database.error_2.message, err);
@@ -289,15 +342,19 @@ exports.request = function(req, res) {
 										});
 
 									} else {
-										console.log("null in Timeseries");
 
 										async.waterfall([
 
 											// Get maximum in Measurement
 											function(callback){
 
+												var query = "SELECT " +
+														"MAX(water_level) AS maximum " +
+													"FROM Measurements " +
+													"WHERE sensor_id=$1;";
+
 												// Database Query
-												client.query("SELECT MAX(water_level) AS maximum FROM Measurements WHERE sensor_id=$1;", [
+												client.query(query, [
 													req.params.sensor_id
 												], function(err, result) {
 													done();
@@ -306,13 +363,15 @@ exports.request = function(req, res) {
 														res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 														return console.error(errors.database.error_2.message, err);
 													} else {
-														console.log(result.rows[0]);
 														callback(null, result.rows[0].maximum);
 													}
 												});
 											},
 											// Get maximum in Measurements with date (full row)
 											function(ms_maximum, callback){
+
+												console.log("ms_maximum");
+												console.log(ms_maximum);
 
 												// Check if a maximum in Measurements was found
 												if(ms_maximum !== null){
@@ -321,10 +380,12 @@ exports.request = function(req, res) {
 													client.query("SELECT * FROM " +
 														"( " +
 															"SELECT * FROM Measurements " +
-															"WHERE sensor_id=$1 AND water_level=$2" +
-														") AS measurements ORDER BY measurement_timestamp DESC LIMIT 1;", [
-														req.params.sensor_id,
-														ms_maximum
+															"WHERE sensor_id=$1" +
+														") AS measurements ORDER BY " +
+															"water_level DESC, " +
+															"measurement_timestamp DESC " +
+														"LIMIT 1;", [
+														req.params.sensor_id
 													], function(err, result) {
 														done();
 
@@ -339,11 +400,9 @@ exports.request = function(req, res) {
 
 												} else {
 
-													console.log("null in Measurements");
-
 													var max = {
   														water_level: "-",
-  														water_level_unit: "METER",
+  														water_level_unit: "CENTIMETER",
   														measurement_date: "-",
 														valid_entry: false
 													};
@@ -369,58 +428,23 @@ exports.request = function(req, res) {
 									callback(null, null);
 								}
 							});
-						},
-						// 2.4. Get the latest measurement
-						function(callback){
-
-							// Database Query
-							client.query("SELECT * FROM Measurements WHERE sensor_id=$1 ORDER BY measurement_timestamp DESC LIMIT 1;", [
-								req.params.sensor_id
-							], function(err, result) {
-								done();
-
-								if(err) {
-									res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
-									return console.error(errors.database.error_2.message, err);
-								} else {
-
-									// Check if latest measuement exists
-									if(result.rows.length !== 0) {
-										statistics.latest_measurement = result.rows[0];
-										callback(null, null);
-									} else {
-
-										console.log("No measurements found");
-
-										var latest_measurement = {
-										    water_level: "-",
-										    water_level_unit: "CENTIMETER",
-										    measurement_timestamp: "-",
-											valid_entry: false
-										};
-										statistics.latest_measurement = latest_measurement;
-										callback(null, null);
-									}
-								}
-							});
-					    }
+						}
 					],
 					function(err, results){
 						if(err){
-
+							console.log(err);
 						} else {
-							console.log(statistics);
-
-							// Send results
-							res.status(200).send(statistics);
+							callback(null, statistics);
 						}
 					});
 				}
-			], function(err, result) {
+			], function(err, results) {
 	            if (err) {
 	            	console.log(err);
 	            } else {
-	            	console.log("Finished");
+
+					// Send results
+					res.status(200).send(results);
 	            }
 	        });
 		}

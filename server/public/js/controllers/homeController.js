@@ -4,7 +4,7 @@ var app = angular.module("gwot-vst");
 /**
  * Home and Map Controller
  */
-app.controller("HomeController", function($scope, $rootScope, config, $filter, $location, $translate, $sensorService, $measurementService) {
+app.controller("HomeController", function($scope, $rootScope, $routeParams, config, $filter, $location, $translate, $sensorService, $measurementService) {
 
     /**
      * Load Sensors
@@ -58,8 +58,6 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
      */
     $scope.updateMarker = function() {
 
-        // TODO: Check Threshold
-
         // Check if User is authenticated
         var token;
         if ($rootScope.authenticated_user) {
@@ -70,10 +68,40 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
 
         angular.forEach($scope.sensors, function(sensor, key) {
 
+            // Prepare focus
+            var _focus = false;
+
+            // Check if routeParams were set
+            if($routeParams.sensor_id !== undefined && Number($routeParams.sensor_id) === sensor.sensor_id){
+                _focus = true;
+            }
+
             // Request lastest measurement for sensor
             $measurementService.get_latest(token, sensor.sensor_id)
                 .success(function(response) {
                     $scope.sensors[key].latest_measurement = response;
+
+                    // Prepare Icon
+                    var _icon = $scope.defaultIcon;
+
+                    // Check if User is authenticated
+                    if($rootScope.authenticated_user !== undefined){
+
+                        // Check if User has set a current Threshold
+                        if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
+
+                            // Check if water_level exists
+                            if($scope.sensors[key].latest_measurement.water_level !== undefined){
+                                if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].water_level + $rootScope.authenticated_user.currentThreshold.warning_threshold && $scope.sensors[key].latest_measurement.water_level < $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold){
+                                    _icon = $scope.warningIcon;
+                                } else if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
+                                    _icon = $scope.dangerIcon;
+                                } else {
+                                    _icon = $scope.successIcon;
+                                }
+                            }
+                        }
+                    }
 
                     // Check if latest measurement exists
                     var water_level = "-";
@@ -107,9 +135,9 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
                         layer: 'sensors',
                         lat: sensor.lat,
                         lng: sensor.lng,
-                        focus: false,
+                        focus: _focus,
                         draggable: false,
-                        icon: $scope.successIcon,
+                        icon: _icon,
                         message: _message,
                         getMessageScope: function() {
                             return $scope;
@@ -144,7 +172,7 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
         layers: {
             baselayers: {
                 mapbox_streets: {
-                    name: $translate.instant('MAP_TILES_STREETS'),
+                    name: $filter('translate')('MAP_TILES_STREETS'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
@@ -154,7 +182,7 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
                     }
                 },
                 mapbox_satellite: {
-                    name: $translate.instant('MAP_TILES_SATELLITE'),
+                    name: $filter('translate')('MAP_TILES_SATELLITE'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
@@ -164,7 +192,7 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
                     }
                 },
                 mapbox_satellite_streets: {
-                    name: $translate.instant('MAP_TILES_SATELLITE_2'),
+                    name: $filter('translate')('MAP_TILES_SATELLITE_2'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
@@ -174,7 +202,7 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
                     }
                 },
                 mapbox_night: {
-                    name: $translate.instant('MAP_TILES_DARK'),
+                    name: $filter('translate')('MAP_TILES_DARK'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
@@ -184,7 +212,7 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
                     }
                 },
                 mapbox_light: {
-                    name: $translate.instant('MAP_TILES_LIGHT'),
+                    name: $filter('translate')('MAP_TILES_LIGHT'),
                     url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}{format}?access_token={apikey}',
                     type: 'xyz',
                     layerOptions: {
@@ -203,6 +231,12 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
             }
         },
         markers: [],
+        defaultIcon: {
+            type: 'awesomeMarker',
+            markerColor: 'gray',
+            prefix: 'fa',
+            icon: 'cube'
+        },
         successIcon: {
             type: 'awesomeMarker',
             markerColor: 'green',
@@ -221,11 +255,20 @@ app.controller("HomeController", function($scope, $rootScope, config, $filter, $
             prefix: 'fa',
             icon: 'cube'
         },
-        offlineIcon: {
-            type: 'awesomeMarker',
-            markerColor: 'lightgrey',
-            prefix: 'fa',
-            icon: 'cube'
+        legend: {
+            position: 'bottomleft',
+            colors: [
+                '#70B211',
+                '#F8981B',
+                '#D83D20',
+                '#575757'
+            ],
+            labels: [
+                $filter('translate')('PASSABLE'),
+                $filter('translate')('RISK'),
+                $filter('translate')('HIGH_RISK'),
+                $filter('translate')('N_A')
+            ]
         },
         events: {
             map: {

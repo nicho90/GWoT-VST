@@ -8,6 +8,10 @@ var gpio_settings = require("./config/gpio");
 var ip = require("ip");
 
 /**
+ * Number of measurements that are used for selecting the median
+ */
+var numMeasure = 10;
+/**
  * Phyiscal connection of a LED
  */
 var led = gpio.export(gpio_settings.led, {
@@ -31,7 +35,7 @@ var scheduledTimer = {
     publish: function() {
         pubSD();
         //console.log("Scheduled publish " , measurements);
-        measurements = []; //empty the measurements arrar to collect the next 5 measurements
+        measurements = []; //empty the measurements array to collect the next [numMeasure] measurements
         this.start();
     },
     stop: function() {
@@ -96,7 +100,7 @@ var measurement = {
     lat: sensor.lat // (regarding geoMQTT)
 };
 
-var measurements = []; // collect 5 measurements for publishing
+var measurements = []; // collect [numMeasure] measurements for publishing
 
 
 /**
@@ -104,7 +108,7 @@ var measurements = []; // collect 5 measurements for publishing
  */
 var measurementTimer = {
     stopped: false,
-    interval: sensor.interval / 5, // default measurement interval 5x faster than scheduled interval
+    interval: sensor.interval / numMeasure, // default measurement interval [numMeasure]x faster than scheduled interval
     start: function(iv) {
         this.stopped = false;
         if (iv) this.interval = iv;
@@ -218,7 +222,7 @@ var pubSD = function() {
 var verifySD = function(message) {
     scheduledTimer.interval = message.interval;
     if (!realtimeTimer.status) {
-        setMeasurementTimer(scheduledTimer.interval / 5);
+        setMeasurementTimer(scheduledTimer.interval / numMeasure);
         resetScheduledTimer();
     }
 };
