@@ -5,6 +5,10 @@ var app = angular.module("languages", [ "config" ]);
  */
 app.config(function($translateProvider, config) {
 
+
+    /**
+     * German
+     */
     $translateProvider.translations('de_DE', {
 
         WELCOME: 'Willkommen',
@@ -139,9 +143,17 @@ app.config(function($translateProvider, config) {
         DESCRIPTION_NOTIFICATION: 'Beschreibung',
         CATEGORY_NOTIFICATION: 'Kategorie',
 
-
+        HELP: 'Hilfe',
+        ABOUT: 'Über',
+        DEVELOPERS: 'Entwickler',
+        DOCUMENTATION: 'Dokumentation',
+        REST_API: 'REST-API'
     });
 
+
+    /**
+     * English
+     */
     $translateProvider.translations('en_US', {
 
         WELCOME: 'Welcome',
@@ -276,7 +288,13 @@ app.config(function($translateProvider, config) {
         DESCRIPTION_NOTIFICATION: 'Description',
         CATEGORY_NOTIFICATION: 'Category',
 
+        HELP: 'Help',
+        ABOUT: 'About',
+        DEVELOPERS: 'Developers',
+        DOCUMENTATION: 'Documentation',
+        REST_API: 'REST-API'
     });
+
 
     // Set Default Language (English)
     $translateProvider.preferredLanguage(config.appLanguage);

@@ -18,6 +18,19 @@ app.config(function($routeProvider) {
             controller: "HomeController"
         })
 
+        // Help
+        .when("/help", {
+            templateUrl: "/js/templates/help.html",
+            controller: "HelpController"
+        })
+
+        // About
+        .when("/about", {
+            templateUrl: "/js/templates/about.html",
+            controller: "AboutController"
+        })
+
+
         // Sensors
         .when("/sensors", {
             templateUrl: "/js/templates/sensors/list.html",
@@ -45,6 +58,7 @@ app.config(function($routeProvider) {
             templateUrl: "/js/templates/thresholds/create.html",
             controller: "ThresholdCreateController"
         })
+
 
 
         // Redirect

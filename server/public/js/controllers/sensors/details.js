@@ -1054,6 +1054,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
     /**
      * Update when user logged in or out
+     * @param  {number} tab [The number of the tab]
      */
     $scope.changeTab = function(tab) {
         $scope.tab = tab;

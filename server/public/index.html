@@ -166,23 +166,33 @@
             <div class="container-fluid">
 
                 <div class="row">
-                    <div class="col-xs-3">
-                        <span class="flag-icon flag-icon-gb" ng-if="language == 'en_US' "></span>
-                        <span class="flag-icon flag-icon-de" ng-if="language == 'de_DE' "></span>
-                        &nbsp;&nbsp;
-                        <select ng-model="language" ng-change="changeLanguage()">
-                            <option value="en_US">{{ 'ENGLISH' | translate}}</option>
-                            <option value="de_DE">{{ 'GERMAN' | translate}}</option>
-                        </select>
+                    <div class="col-xs-2">
+                        <form class="form-inline">
+                            <span class="flag-icon flag-icon-gb" ng-if="language == 'en_US' "></span>
+                            <span class="flag-icon flag-icon-de" ng-if="language == 'de_DE' "></span>
+                            &nbsp;&nbsp;
+                            <select class="c-select c-select-sm form-control" ng-model="language" ng-change="changeLanguage()">
+                                <option value="en_US">{{ 'ENGLISH' | translate}}</option>
+                                <option value="de_DE">{{ 'GERMAN' | translate}}</option>
+                            </select>
+                        </form>
                     </div>
-                    <div class="col-xs-6 middle">
+                    <div class="col-xs-8 middle">
                         <small>
-                            &copy; 2016 - <b>GWoT-VST Group</b> - <span ng-repeat="developer in config.appDevelopers">
-                            {{developer.name}}<span ng-if="!$last">,</span>
-                            </span>
+                            &copy; 2016 <b>GWoT-VST</b>
+                            &nbsp;&nbsp;
+                            <a ng-href="#/about">{{ 'ABOUT' | translate }}</a>
+                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                            <a ng-href="#/help">{{ 'HELP' | translate }}</a>
+                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                            <a href="https://github.com/nicho90/GWoT-VST.git" target="_blank">Github-Repository</a>
+                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                            <a href="/docs" target="_blank">{{ 'DOCUMENTATION' | translate }}</a>
+                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                            <a href="/api" target="_blank">{{ 'REST_API' | translate }}</a>
                         </small>
                     </div>
-                    <div class="col-xs-3"></div>
+                    <div class="col-xs-2"></div>
                 </div>
             </div>
         </footer>
@@ -214,6 +224,8 @@
         <script src="js/controllers/navController.js"></script>
         <script src="js/controllers/footerController.js"></script>
         <script src="js/controllers/notificationController.js"></script>
+        <script src="js/controllers/helpController.js"></script>
+        <script src="js/controllers/aboutController.js"></script>
 
         <!-- User Controllers -->
         <script src="js/controllers/users/create.js"></script>

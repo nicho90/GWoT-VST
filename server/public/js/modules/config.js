@@ -7,13 +7,17 @@ app.constant("config", {
     appName: "GWoT-VST",
     appDevelopers: [
         {
-            name: "Nicholas Schiestel"
+            name: "Nicholas Schiestel",
+            github: "nicho90"
         }, {
-            name: "Heinrich Löwen"
+            name: "Heinrich Löwen",
+            github: "heinrichloewen"
         }, {
-            name: "Rehen Aziz Chaudhary"
+            name: "Rehen Aziz Chaudhary",
+            github: "rehans516"
         }, {
-            name: "Timm Kühnel"
+            name: "Timm Kühnel",
+            github: "timmimim"
         }
     ],
     appGithub: "https://github.com/nicho90/GWoT-VST",
