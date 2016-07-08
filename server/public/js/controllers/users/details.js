@@ -115,7 +115,7 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                     label: $filter('translate')('OK'),
                     className: "btn-primary",
                     callback: function() {
-                        $sensorService.delete(token, sensor.sensor_id)
+                        $sensorService.delete(token, rootScope.authenticated_user.username, sensor.sensor_id)
                         .success(function(response) {
 
                             // Reset Sensors
@@ -154,7 +154,7 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                     label: $filter('translate')('OK'),
                     className: "btn-primary",
                     callback: function() {
-                        $sensorService.deleteAll(token)
+                        $sensorService.deleteAll(token, rootScope.authenticated_user.username)
                         .success(function(response) {
 
                             // Reset Sensors
@@ -170,6 +170,47 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
         });
     };
 
+
+    /**
+     * Delete a Threshold
+     * @return {threshold} [The Threshold object, which has to been deleted]
+     */
+    $scope.deleteThreshold = function(threshold){
+
+        // Show confirmation dialog
+        $ngBootbox.customDialog({
+            message:
+                $filter('translate')('DIALOG_DELETE_THRESHOLD') +
+                '<br><b>' + threshold.description + '</b>' +
+                $filter('translate')('DIALOG_DELETE_END'),
+            title:
+                '<i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;' +
+                $filter('translate')('DIALOG_ATTENTION'),
+            buttons: {
+                warning: {
+                    label: $filter('translate')('CANCEL'),
+                    className: "btn-secondary",
+                    callback: function() {}
+                },
+                success: {
+                    label: $filter('translate')('OK'),
+                    className: "btn-primary",
+                    callback: function() {
+                        $thresholdService.delete(token, $rootScope.authenticated_user.username, threshold.threshold_id)
+                        .success(function(response) {
+
+                            // Reset Thresholds
+                            $scope.user.thresholds = [];
+                            $scope.loadData();
+                        })
+                        .error(function(err) {
+                            $scope.err = err;
+                        });
+                    }
+                }
+            }
+        });
+    };
 
     /**
      * Delete all Thresholds
@@ -193,11 +234,89 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                     label: $filter('translate')('OK'),
                     className: "btn-primary",
                     callback: function() {
-                        $thresholdService.deleteAll(token)
+                        $thresholdService.deleteAll(token, $rootScope.authenticated_user.username)
                         .success(function(response) {
 
-                            // Reset Sensors
+                            // Reset Thresholds
                             $scope.user.thresholds = [];
+                            $scope.loadData();
+                        })
+                        .error(function(err) {
+                            $scope.err = err;
+                        });
+                    }
+                }
+            }
+        });
+    };
+
+
+    /**
+     * Delete a Subscription
+     * @return {subscription} [The Threshold object, which has to been deleted]
+     */
+    $scope.deleteSubscription = function(subscription){
+
+        // Show confirmation dialog
+        $ngBootbox.customDialog({
+            message:
+                $filter('translate')('DIALOG_DELETE_SUBSCRIPTION'),
+            title:
+                '<i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;' +
+                $filter('translate')('DIALOG_ATTENTION'),
+            buttons: {
+                warning: {
+                    label: $filter('translate')('CANCEL'),
+                    className: "btn-secondary",
+                    callback: function() {}
+                },
+                success: {
+                    label: $filter('translate')('OK'),
+                    className: "btn-primary",
+                    callback: function() {
+                        $subscriptionService.delete(token, $rootScope.authenticated_user.username, subscription.subscription_id)
+                        .success(function(response) {
+
+                            // Reset Subscriptions
+                            $scope.user.subscriptions = [];
+                            $scope.loadData();
+                        })
+                        .error(function(err) {
+                            $scope.err = err;
+                        });
+                    }
+                }
+            }
+        });
+    };
+
+    /**
+     * Delete all Subscriptions
+     */
+    $scope.deleteAllSubscriptions = function(){
+
+        // Show confirmation dialog
+        $ngBootbox.customDialog({
+            message:
+                $filter('translate')('DIALOG_DELETE_ALL_SUBSCRIPTIONS'),
+            title:
+                '<i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;' +
+                $filter('translate')('DIALOG_ATTENTION'),
+            buttons: {
+                warning: {
+                    label: $filter('translate')('CANCEL'),
+                    className: "btn-secondary",
+                    callback: function() {}
+                },
+                success: {
+                    label: $filter('translate')('OK'),
+                    className: "btn-primary",
+                    callback: function() {
+                        $subscriptionService.deleteAll(token, $rootScope.authenticated_user.username)
+                        .success(function(response) {
+
+                            // Reset Subscriptions
+                            $scope.user.subscriptions = [];
                             $scope.loadData();
                         })
                         .error(function(err) {

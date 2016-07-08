@@ -157,7 +157,12 @@ app.config(function($translateProvider, config) {
         DIALOG_ATTENTION : 'Achtung',
         DIALOG_DELETE_SENSOR : 'Sind Sie sicher, dass Sie den Sensor ',
         DIALOG_DELETE_ALL_SENSORS : 'Sind Sie sicher, dass Sie alle Sensoren ',
+        DIALOG_DELETE_THRESHOLD : 'Sind Sie sicher, dass Sie den Schwellenwert ',
+        DIALOG_DELETE_ALL_THRESHOLDS : 'Sind Sie sicher, dass Sie alle Schwellenwerte ',
+        DIALOG_DELETE_ALL_SUBSCRIPTION : 'Sind Sie sicher, dass Sie dieses Abo beenden möchten?',
+        DIALOG_DELETE_ALL_SUBSCRIPTIONS : 'Sind Sie sicher, dass Sie alle Abos beenden möchten?',
         DIALOG_DELETE_END : ' löschen möchten?'
+
     });
 
 
@@ -312,6 +317,10 @@ app.config(function($translateProvider, config) {
         DIALOG_ATTENTION : 'Attention',
         DIALOG_DELETE_SENSOR : 'Are you sure, that you want to the delete the Sensor ',
         DIALOG_DELETE_ALL_SENSORS : 'Are you sure, that you want to the delete all Sensors ',
+        DIALOG_DELETE_THRESHOLD : 'Are you sure, that you want to the delete the Threshold',
+        DIALOG_DELETE_ALL_THRESHOLDS : 'Are you sure, that you want to the delete all Thresholds ',
+        DIALOG_DELETE_ALL_SUBSCRIPTION : 'Are you sure, that you want to the unsubscribe?',
+        DIALOG_DELETE_ALL_SUBSCRIPTIONS : 'Are you sure, that you want to unsubscribe to all Sensors?',
         DIALOG_DELETE_END : ' ?'
 
     });
