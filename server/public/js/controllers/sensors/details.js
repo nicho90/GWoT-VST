@@ -197,7 +197,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         } else if (option === "days") {
             $scope.timeoption = "days";
             $scope.query.time = "days";
-            $scope.query.value = 1;
+            $scope.query.value = 3;
         } else if (option === "weeks") {
             $scope.timeoption = "weeks";
             $scope.query.time = "weeks";
@@ -1048,17 +1048,16 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
     $scope.subscribed_status = false;
 
 
-    /***************************************
-     * REALTIME
-     ***************************************/
-
     /**
      * Update when user logged in or out
      * @param  {number} tab [The number of the tab]
      */
     $scope.changeTab = function(tab) {
         $scope.tab = tab;
+
+        // Check for realtime data
         if (tab == 3) {
+
             // Sockets: Activate realtime data
             $socket.emit('/data/realtime', {
                 device_id: $scope.sensor.device_id,
@@ -1068,7 +1067,9 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
             // Load latest value and build chart
             $scope.load_realtime();
+
         } else if ($scope.realtime) {
+
             // Sockets: Deactivate realtime data
             $socket.emit('/data/realtime', {
                 device_id: $scope.sensor.device_id,
@@ -1082,7 +1083,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
      * Sockets: Receiving realtime data
      */
     $socket.on('/data/realtime', function(data) {
-        console.log("Realtime data received", data);
         $scope.load_realtime_value(data);
     });
 
@@ -1103,7 +1103,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         // Draw dot
         if ($scope.data_2.dataset.length > 100) {
             $scope.data_2.dataset.shift();
-        };
+        }
         $scope.data_2.dataset.push(dot);
     };
 
@@ -1113,6 +1113,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
     $scope.update_realtime = function() {
 
         // Reset Dataset
+        delete $scope.data_2.dataset;
         $scope.data_2.dataset = [];
 
         // Check if User is authenticated
@@ -1126,17 +1127,21 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         // Request lastest measurement for sensor
         $measurementService.get_latest(token, $scope.sensor.sensor_id)
             .success(function(response) {
-                var dot = {
-                    timestamp: new Date(response.measurement_timestamp),
-                    water_level: response.water_level,
-                    sensor_height: $scope.sensor.sensor_height,
-                    crossing_height: $scope.sensor.crossing_height,
-                    gauge_zero: 0,
-                    sensor_threshold_value: $scope.sensor.threshold_value
-                };
 
-                // Draw dot
-                $scope.data_2.dataset.push(dot);
+                if(response.water_level !== undefined){
+                    var dot = {
+                        timestamp: new Date(response.measurement_timestamp),
+                        water_level: response.water_level,
+                        sensor_height: $scope.sensor.sensor_height,
+                        crossing_height: $scope.sensor.crossing_height,
+                        gauge_zero: 0,
+                        sensor_threshold_value: $scope.sensor.threshold_value
+                    };
+
+                    // Draw dot
+                    $scope.data_2.dataset.push(dot);
+                }
+
             })
             .error(function(err) {
                 $scope.err = err;
@@ -1176,7 +1181,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             label: $filter('translate')("SENSOR_HEIGHT"),
             color: "rgba(128, 128, 128, 1)",
             type: [
-                "line",
+                "line"
             ],
             id: "sensorHeight"
         });
@@ -1207,7 +1212,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             label: $filter('translate')("CROSSING_HEIGHT"),
             color: "rgba(102, 0, 102, 1)",
             type: [
-                "line",
+                "line"
             ],
             id: "crossingHeight"
         });
@@ -1223,7 +1228,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             color: "rgba(2, 117, 216, 1)",
             type: [
                 "line",
-                "dot",
+                //"dot",
                 "area"
             ],
             id: "mainWaterLevels"

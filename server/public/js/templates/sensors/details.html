@@ -1049,9 +1049,6 @@
 
                             <!-- Days -->
                             <div class="btn-group" role="group" ng-if="query.time=='days'">
-                                <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='days' && query.value == 1), 'btn-primary-outline': (query.time=='days' && query.value != 1) }" ng-click="changeQuery('days', 1)">
-                                    1 {{ 'DAY' | translate }}
-                                </button>
                                 <button type="button" class="btn" ng-class="{ 'btn-primary': (query.time=='days' && query.value == 3), 'btn-primary-outline': (query.time=='days' && query.value != 3) }" ng-click="changeQuery('days', 3)">
                                     3 {{ 'DAYS' | translate }}
                                 </button>
