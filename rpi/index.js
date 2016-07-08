@@ -3,6 +3,7 @@ var usonic = require("r-pi-usonic");
 var gpio = require("gpio");
 var mqtt = require("mqtt");
 var GeoJSON = require('geojson');
+var broker = require("./config/broker");
 var sensor = require("./config/sensor");
 var gpio_settings = require("./config/gpio");
 var ip = require("ip");
@@ -176,7 +177,7 @@ initSensor();
 /**
  * Create MQTT-Client and setup clientId, if MQTT-Broker is online (heartbeat)
  */
-var client = mqtt.connect('mqtt://giv-gwot-vst.uni-muenster.de:1883', {
+var client = mqtt.connect("mqtt://" + broker.url + ":" + broker.port, {
     encoding: 'utf8',
     clientId: sensor.device_id,
     will: { // Last Will (if Sensor goes offline)
@@ -277,15 +278,15 @@ var pubIP = function() {
  * Recieve Messages from MQTT-Broker
  */
 client.on('message', function(topic, message) {
-    var message = JSON.parse(message);
-    console.log(message);
-    if (message.device_id == sensor.device_id) {
+    var _message = JSON.parse(message);
+    console.log(_message);
+    if (_message.device_id == sensor.device_id) {
         switch (topic) {
             case '/data/realtime':
-                verifyRT(message);
+                verifyRT(_message);
                 break;
             case '/settings':
-                verifySD(message);
+                verifySD(_message);
                 break;
             case '/ipcheck':
                 pubIP();
