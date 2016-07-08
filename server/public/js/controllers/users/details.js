@@ -2,7 +2,7 @@ var app = angular.module("gwot-vst");
 
 
 // DETAILS
-app.controller("UserDetailsController", function($scope, $rootScope, $routeParams, $location, $translate, $filter, $ngBootbox, $userService, $thresholdService, $sensorService, config) {
+app.controller("UserDetailsController", function($scope, $rootScope, $routeParams, $location, $translate, $filter, $ngBootbox, $userService, $thresholdService, $subscriptionService, $sensorService, config) {
 
 
     /**
@@ -10,16 +10,19 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
      */
     $scope.load = function() {
 
+
         // Check if user is authenticated
         if ($rootScope.authenticated_user) {
 
+            var token = $rootScope.authenticated_user.token;
+
             // Request private or public sensor of authenticated user
-            $userService.get($rootScope.authenticated_user.token, $routeParams.username)
+            $userService.get(token, $routeParams.username)
             .success(function(response) {
                 $scope.user = response;
 
                 // Request all Sensors of the User
-                $sensorService.user_list($rootScope.authenticated_user.token, $routeParams.username)
+                $sensorService.user_list(token, $routeParams.username)
                 .success(function(response) {
                     $scope.user.sensors = response;
                 })
@@ -27,6 +30,23 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                     $scope.err = err;
                 });
 
+                // Request all Thresholds of the User
+                $thresholdService.list(token, $routeParams.username)
+                .success(function(response) {
+                    $scope.user.thresholds = response;
+                })
+                .error(function(err) {
+                    $scope.err = err;
+                });
+
+                // Request all Subscriptions of the User
+                $subscriptionService.list(token, $routeParams.username)
+                .success(function(response) {
+                    $scope.user.subscriptions = response;
+                })
+                .error(function(err) {
+                    $scope.err = err;
+                });
             })
             .error(function(err) {
                 $scope.err = err;
@@ -99,7 +119,7 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                         .success(function(response) {
 
                             // Reset Sensors
-                            delete $scope.sensors;
+                            $scope.user.sensors = [];
                             $scope.loadData();
                         })
                         .error(function(err) {
@@ -138,7 +158,7 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                         .success(function(response) {
 
                             // Reset Sensors
-                            delete $scope.sensors;
+                            $scope.user.sensors = [];
                             $scope.loadData();
                         })
                         .error(function(err) {
@@ -148,7 +168,45 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                 }
             }
         });
+    };
 
+
+    /**
+     * Delete all Thresholds
+     */
+    $scope.deleteAllThresholds = function(){
+
+        // Show confirmation dialog
+        $ngBootbox.customDialog({
+            message:
+                $filter('translate')('DIALOG_DELETE_ALL_THRESHOLDS') + $filter('translate')('DIALOG_DELETE_END'),
+            title:
+                '<i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;' +
+                $filter('translate')('DIALOG_ATTENTION'),
+            buttons: {
+                warning: {
+                    label: $filter('translate')('CANCEL'),
+                    className: "btn-secondary",
+                    callback: function() {}
+                },
+                success: {
+                    label: $filter('translate')('OK'),
+                    className: "btn-primary",
+                    callback: function() {
+                        $thresholdService.deleteAll(token)
+                        .success(function(response) {
+
+                            // Reset Sensors
+                            $scope.user.thresholds = [];
+                            $scope.loadData();
+                        })
+                        .error(function(err) {
+                            $scope.err = err;
+                        });
+                    }
+                }
+            }
+        });
     };
 
 
