@@ -2,7 +2,7 @@ var app = angular.module("gwot-vst");
 
 
 // CREATE
-app.controller("CreateThresholdController", function($scope, $rootScope, $location, $translate, $userService, $thresholdService) {
+app.controller("ThresholdCreateController", function($scope, $rootScope, $location, $translate, $userService, $thresholdService) {
 
     /**
      * Redirect
@@ -23,6 +23,9 @@ app.controller("CreateThresholdController", function($scope, $rootScope, $locati
      */
     $scope.create = function(){
         // TODO
+        $rootScope.thresholdService=$scope.thresholdService
+        
+
     };
 
 
