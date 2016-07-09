@@ -14,15 +14,13 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
         // Check if user is authenticated
         if ($rootScope.authenticated_user) {
 
-            var token = $rootScope.authenticated_user.token;
-
             // Request private or public sensor of authenticated user
-            $userService.get(token, $routeParams.username)
+            $userService.get($rootScope.authenticated_user.token, $routeParams.username)
             .success(function(response) {
                 $scope.user = response;
 
                 // Request all Sensors of the User
-                $sensorService.user_list(token, $routeParams.username)
+                $sensorService.user_list($rootScope.authenticated_user.token, $routeParams.username)
                 .success(function(response) {
                     $scope.user.sensors = response;
                 })
@@ -31,7 +29,7 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                 });
 
                 // Request all Thresholds of the User
-                $thresholdService.list(token, $routeParams.username)
+                $thresholdService.list($rootScope.authenticated_user.token, $routeParams.username)
                 .success(function(response) {
                     $scope.user.thresholds = response;
                 })
@@ -40,7 +38,7 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                 });
 
                 // Request all Subscriptions of the User
-                $subscriptionService.list(token, $routeParams.username)
+                $subscriptionService.list($rootScope.authenticated_user.token, $routeParams.username)
                 .success(function(response) {
                     $scope.user.subscriptions = response;
                 })
@@ -115,12 +113,12 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                     label: $filter('translate')('OK'),
                     className: "btn-primary",
                     callback: function() {
-                        $sensorService.delete(token, rootScope.authenticated_user.username, sensor.sensor_id)
+                        $sensorService.delete($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, sensor.sensor_id)
                         .success(function(response) {
 
                             // Reset Sensors
                             $scope.user.sensors = [];
-                            $scope.loadData();
+                            $scope.load();
                         })
                         .error(function(err) {
                             $scope.err = err;
@@ -154,12 +152,12 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                     label: $filter('translate')('OK'),
                     className: "btn-primary",
                     callback: function() {
-                        $sensorService.deleteAll(token, rootScope.authenticated_user.username)
+                        $sensorService.deleteAll($rootScope.authenticated_user.token, $rootScope.authenticated_user.username)
                         .success(function(response) {
 
                             // Reset Sensors
                             $scope.user.sensors = [];
-                            $scope.loadData();
+                            $scope.load();
                         })
                         .error(function(err) {
                             $scope.err = err;
@@ -196,12 +194,12 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                     label: $filter('translate')('OK'),
                     className: "btn-primary",
                     callback: function() {
-                        $thresholdService.delete(token, $rootScope.authenticated_user.username, threshold.threshold_id)
+                        $thresholdService.delete($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, threshold.threshold_id)
                         .success(function(response) {
 
                             // Reset Thresholds
                             $scope.user.thresholds = [];
-                            $scope.loadData();
+                            $scope.load();
                         })
                         .error(function(err) {
                             $scope.err = err;
@@ -234,12 +232,12 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                     label: $filter('translate')('OK'),
                     className: "btn-primary",
                     callback: function() {
-                        $thresholdService.deleteAll(token, $rootScope.authenticated_user.username)
+                        $thresholdService.deleteAll($rootScope.authenticated_user.token, $rootScope.authenticated_user.username)
                         .success(function(response) {
 
                             // Reset Thresholds
                             $scope.user.thresholds = [];
-                            $scope.loadData();
+                            $scope.load();
                         })
                         .error(function(err) {
                             $scope.err = err;
@@ -274,12 +272,12 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                     label: $filter('translate')('OK'),
                     className: "btn-primary",
                     callback: function() {
-                        $subscriptionService.delete(token, $rootScope.authenticated_user.username, subscription.subscription_id)
+                        $subscriptionService.delete($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, subscription.subscription_id)
                         .success(function(response) {
 
                             // Reset Subscriptions
                             $scope.user.subscriptions = [];
-                            $scope.loadData();
+                            $scope.load();
                         })
                         .error(function(err) {
                             $scope.err = err;
@@ -312,12 +310,12 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                     label: $filter('translate')('OK'),
                     className: "btn-primary",
                     callback: function() {
-                        $subscriptionService.deleteAll(token, $rootScope.authenticated_user.username)
+                        $subscriptionService.deleteAll($rootScope.authenticated_user.token, $rootScope.authenticated_user.username)
                         .success(function(response) {
 
                             // Reset Subscriptions
                             $scope.user.subscriptions = [];
-                            $scope.loadData();
+                            $scope.load();
                         })
                         .error(function(err) {
                             $scope.err = err;
@@ -333,6 +331,12 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
     /**
      * Init
      */
-    $scope.tab = 1;
     $scope.load();
+
+    // Check if tab was preselected
+    if($routeParams.tab && $routeParams.tab >= 1 && $routeParams.tab <= 4){
+        $scope.tab = $routeParams.tab;
+    } else {
+        $scope.tab = 1;
+    }
 });

@@ -55,10 +55,14 @@ app.config(function($routeProvider) {
             templateUrl: "/js/templates/users/details.html",
             controller: "UserDetailsController"
         })
+        .when("/users/:username/:tab", {
+            templateUrl: "/js/templates/users/details.html",
+            controller: "UserDetailsController"
+        })
 
 
         // Thresholds
-        .when("new/threshold", {
+        .when("/new/threshold", {
             templateUrl: "/js/templates/thresholds/create.html",
             controller: "ThresholdCreateController"
         })

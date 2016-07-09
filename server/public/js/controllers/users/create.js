@@ -5,7 +5,7 @@ var app = angular.module("gwot-vst");
 app.controller("UserCreateController", function($scope, $rootScope, $location, $translate, $userService) {
 
     /**
-     * Redirect
+     * Redirect, if User is logged in
      */
     if($rootScope.authenticated_user) {
         $location.url("/");

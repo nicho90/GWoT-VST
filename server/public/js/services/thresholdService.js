@@ -10,10 +10,10 @@ app.factory('$thresholdService', function($http, config) {
         // New Threshold
         getDefault: function() {
             return {
-                    description: "",
-                    warning_threshold: 0,
-                    critical_threshold: 0,
-                    category: "OTHER"
+                description: "",
+                warning_threshold: 0,
+                critical_threshold: 0,
+                category: "OTHER"
             };
         },
 

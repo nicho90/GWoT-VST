@@ -107,25 +107,25 @@
                         <tr>
                             <th>{{ 'MAXIMUM' | translate }}</th>
                             <td>
-                                {{sensor.statistics.maximum.water_level | water_level }}
+                                <small>{{sensor.statistics.maximum.water_level | water_level }}</small>
                             </td>
                             <td></td>
                             <td></td>
                             <th>{{ 'AVERAGE' | translate }}</th>
                             <td>
-                                {{sensor.statistics.average.avg_water_level | water_level }}
+                                <small>{{sensor.statistics.average.avg_water_level | water_level }}</small>
                             </td>
                         </tr>
                         <tr>
                             <th>{{ 'MINIMUM' | translate }}</th>
                             <td>
-                                {{sensor.statistics.minimum.water_level | water_level }}
+                                <small>{{sensor.statistics.minimum.water_level | water_level }}</small>
                             </td>
                             <td></td>
                             <td></td>
                             <th>{{ 'STD' | translate }}</th>
                             <td>
-                                {{sensor.statistics.std.std_water_level | water_level }}
+                                <small>{{sensor.statistics.std.std_water_level | water_level }}</small>
                             </td>
                         </tr>
                     </table>

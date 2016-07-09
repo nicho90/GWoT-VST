@@ -13,6 +13,7 @@ app.config(function($translateProvider, config) {
 
         WELCOME: 'Willkommen',
         HOME: 'Startseite',
+        SENSOR: 'Sensor',
         SENSORS: 'Sensoren',
         THRESHOLDS: 'Grenzwerte',
         LOGIN: 'Login',
@@ -142,8 +143,7 @@ app.config(function($translateProvider, config) {
         CRITICAL_NOTIFICATION: 'Gefahr',
         SENSOR_NOTIFICATION: 'Sensor',
         HEIGHT_NOTIFICATION: 'Höhe',
-        DESCRIPTION_NOTIFICATION: 'Beschreibung',
-        CATEGORY_NOTIFICATION: 'Kategorie',
+        CATEGORY: 'Kategorie',
 
         HELP: 'Hilfe',
         ABOUT: 'Über',
@@ -152,6 +152,8 @@ app.config(function($translateProvider, config) {
         REST_API: 'REST-API',
 
         ALL: 'Alle',
+        CREATE_NEW_SENSOR: 'Neuen Sensor erstellen',
+        CREATE_NEW_THRESHOLD: 'Neuen Schwellenwert erstellen',
 
         // DIALOGS
         DIALOG_ATTENTION : 'Achtung',
@@ -173,6 +175,7 @@ app.config(function($translateProvider, config) {
 
         WELCOME: 'Welcome',
         HOME: 'Home',
+        SENSOR: 'Sensor',
         SENSORS: 'Sensors',
         THRESHOLDS: 'Thresholds',
         LOGIN: 'Login',
@@ -302,8 +305,7 @@ app.config(function($translateProvider, config) {
         CRITICAL_NOTIFICATION: 'Danger',
         SENSOR_NOTIFICATION: 'Sensor',
         HEIGHT_NOTIFICATION: 'Height',
-        DESCRIPTION_NOTIFICATION: 'Description',
-        CATEGORY_NOTIFICATION: 'Category',
+        CATEGORY: 'Category',
 
         HELP: 'Help',
         ABOUT: 'About',
@@ -312,6 +314,8 @@ app.config(function($translateProvider, config) {
         REST_API: 'REST-API',
 
         ALL: 'All',
+        CREATE_NEW_SENSOR: 'Create new Sensor',
+        CREATE_NEW_THRESHOLD: 'Create new Threshold',
 
         // DIALOGS
         DIALOG_ATTENTION : 'Attention',
