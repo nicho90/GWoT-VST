@@ -80,10 +80,19 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
 
     /**
      * Edit a Sensor
-     * @param  {number} sensor_id [description]
+     * @param  {number} sensor_id [Redirect to sensorEditView]
      */
     $scope.editSensor = function(sensor_id){
         $location.url("/sensors/" + sensor_id + "/edit");
+    };
+
+
+    /**
+     * Show Details of a Sensor
+     * @param  {number} sensor_id [Redirect to sensorDetailsView]
+     */
+    $scope.showDetails = function(sensor_id) {
+        $location.url("/sensors/" + sensor_id);
     };
 
 

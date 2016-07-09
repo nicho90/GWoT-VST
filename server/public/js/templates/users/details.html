@@ -30,13 +30,22 @@
     <div class="row">
 
         <!-- Username -->
-        <div class="col-md-6">
+        <div class="col-md-12 middle" ng-if="tab==1 || tab==3">
             <h1 class="display-4 text-primary" style="font-size: 18pt;">
                 <i class="fa fa-user"></i> {{user.username}}
             </h1>
             <br>
         </div>
-        <div class="col-md-6 right">
+
+        <!-- Username and Create-Button -->
+        <div class="col-md-4" ng-if="tab==2 || tab==4"></div>
+        <div class="col-md-4 middle" ng-if="tab==2 || tab==4">
+            <h1 class="display-4 text-primary" style="font-size: 18pt;">
+                <i class="fa fa-user"></i> {{user.username}}
+            </h1>
+            <br>
+        </div>
+        <div class="col-md-4 right" ng-if="tab==2 || tab==4">
 
             <span ng-if="tab==2">
                 <a class="btn btn-primary" ng-href="#/new/threshold">
@@ -64,7 +73,7 @@
     <div class="row" ng-if="tab==2">
         <div class="col-md-12">
             <div class="card">
-                <table class="table table-striped table-hover" style="margin-bottom: 0px;">
+                <table class="table table-striped" style="margin-bottom: 0px;">
                     <thead>
                         <tr>
                             <th>{{ 'CATEGORY' | translate }}</th>
@@ -80,12 +89,12 @@
                     </thead>
                     <tbody>
                         <tr ng-if="!user.thresholds">
-                            <td colspan="4">
+                            <td colspan="5">
                                 <center><i class="fa fa-spinner fa-pulse"></i></center>
                             </td>
                         </tr>
                         <tr ng-if="user.thresholds.length == 0">
-                            <td colspan="4">
+                            <td colspan="5">
                                 <center>- {{ 'NONE' | translate}} -</center>
                             </td>
                         </tr>
@@ -131,7 +140,7 @@
     <div class="row" ng-if="tab==3">
         <div class="col-md-12">
             <div class="card">
-                <table class="table table-striped table-hover" style="margin-bottom: 0px;">
+                <table class="table table-striped" style="margin-bottom: 0px;">
                     <thead>
                         <tr>
                             <th>{{ 'DEVICE_ID' | translate }}</th>
@@ -212,12 +221,12 @@
                     </thead>
                     <tbody>
                         <tr ng-if="!user.sensors">
-                            <td colspan="5">
+                            <td colspan="6">
                                 <center><i class="fa fa-spinner fa-pulse"></i></center>
                             </td>
                         </tr>
                         <tr ng-if="user.sensors.length == 0">
-                            <td colspan="5">
+                            <td colspan="6">
                                 <center>- {{ 'NONE' | translate}} -</center>
                             </td>
                         </tr>

@@ -105,7 +105,7 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
                     $rootScope.alert = {
                         status: 1,
                         info: "",
-                        message: "Hi " + $scope.authenticated_user.first_name + " " + $scope.authenticated_user.last_name
+                        message: "Hi " + $scope.authenticated_user.first_name + " " + $scope.authenticated_user.last_name // TODO: translate
                     };
                     $rootScope.$broadcast('alert');
 
@@ -134,8 +134,8 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
 
             $rootScope.alert = {
                 status: 2,
-                info: "Error ",
-                message: "Please insert a username and a password!"
+                info: "Error ",  // TODO: translate
+                message: "Please insert a username and a password!"  // TODO: translate
             };
             $rootScope.$broadcast('alert');
 
