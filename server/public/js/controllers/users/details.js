@@ -88,6 +88,15 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
 
 
     /**
+     * Edit a Threshold
+     * @param  {number} threshold_id [Redirect to thresholdEditView]
+     */
+    $scope.editThreshold = function(threshold_id){
+        $location.url("/thresholds/" + threshold_id + "/edit");
+    };
+
+
+    /**
      * Show Details of a Sensor
      * @param  {number} sensor_id [Redirect to sensorDetailsView]
      */

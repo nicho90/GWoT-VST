@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<br>
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="jumbotron">
+
+            <form class="form-horizontal" ng-submit="save()">
+
+                <center>
+                    <h1 class="display-4">{{ 'EDIT_THRESHOLD' | translate }}</h1>
+                </center>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="selectCategory">{{ 'TYPE' | translate }}</label><br>
+                        <select class="c-select form-control" id="selectCategory" ng-model="threshold.category" ng-change="changeCategory(threshold.category)">
+                            <option value="PEDESTRIAN">{{ 'PEDESTRIAN' | translate}}</option>
+                            <option value="BIKE">{{ 'BIKE' | translate}}</option>
+                            <option value="WHEELCHAIR">{{ 'WHEELCHAIR' | translate}}</option>
+                            <option value="SCOOTER">{{ 'SCOOTER' | translate}}</option>
+                            <option value="MOTORBIKE">{{ 'MOTORBIKE' | translate}}</option>
+                            <option value="CAR">{{ 'CAR' | translate}}</option>
+                            <option value="BUS">{{ 'BUS' | translate}}</option>
+                            <option value="TRUCK">{{ 'TRUCK' | translate}}</option>
+                            <option value="OTHER">{{ 'OTHER' | translate}}</option>
+                        </select>
+                    </div>
+                    <br>
+                </div>
+
+                <div class="row" ng-if="threshold.category !== 'PEDESTRIAN' && threshold.category !== 'OTHER' ">
+                    <div class="col-md-12">
+                        <label>&nbsp;</label><br>
+                        <div class="card" style="margin-bottom: 0px;">
+                            <h3 class="card-header">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        {{ 'VEHICLES' | translate }}
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-search" aria-hidden="true"></i>
+                                            </span>
+                                            <input class="form-control form-control-sm" type="search" placeholder="{{ 'SEARCH' | translate }}" ng-model="search">
+                                        </div>
+                                    </div>
+                                </div>
+                            </h3>
+                            <div style="display: block; max-height:150px; overflow-y: scroll;">
+                                <table class="table table-sm table-striped" style="margin-bottom: 0px; margin-top: -10px;">
+                                    <thead>
+                                        <th>&nbsp;</th>
+                                        <th>{{ 'BRAND' | translate }}</th>
+                                        <th>{{ 'NAME' | translate }}</th>
+                                        <th>{{ 'YEAR' | translate }}</th>
+                                        <th></th>
+                                        <th>&nbsp;&nbsp;</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-if="vehicles.length == 0">
+                                            <td colspan="6" class="middle">
+                                                - {{ 'NONE' | translate }} -
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="vehicle in vehicles | orderBy: 'brand' | filter: search">
+                                            <td>&nbsp;</td>
+                                            <td>{{vehicle.brand}}</td>
+                                            <td>{{vehicle.name}}</td>
+                                            <td>{{vehicle.year}}</td>
+                                            <td class="right">
+                                                <button class="btn btn-sm btn-primary" ng-click="setThreshold(vehicle)" type="button">
+                                                    {{ 'USE' | translate }}
+                                                </button>
+                                            </td>
+                                            <td>&nbsp;&nbsp;</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="inputDescription">{{ 'DESCRIPTION' | translate }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-blind" aria-hidden="true" ng-if="threshold.category == 'PEDESTRIAN' "></i>
+                                <i class="fa fa-bicycle" aria-hidden="true" ng-if="threshold.category == 'BIKE' "></i>
+                                <i class="fa fa-wheelchair" aria-hidden="true" ng-if="threshold.category == 'WHEELCHAIR' "></i>
+                                <i class="fa fa-motorcycle" aria-hidden="true" ng-if="threshold.category == 'SCOOTER' "></i>
+                                <i class="fa fa-motorcycle" aria-hidden="true" ng-if="threshold.category == 'MOTORBIKE' "></i>
+                                <i class="fa fa-car" aria-hidden="true" ng-if="threshold.category == 'CAR' "></i>
+                                <i class="fa fa-bus" aria-hidden="true" ng-if="threshold.category == 'BUS' "></i>
+                                <i class="fa fa-truck" aria-hidden="true" ng-if="threshold.category == 'TRUCK' "></i>
+                                <i class="fa fa-circle-o" aria-hidden="true" ng-if="threshold.category == 'OTHER' "></i>
+                            </span>
+                            <input class="form-control form-control" type="text" placeholder="{{ 'DESCRIPTION' | translate }}" ng-model="threshold.description">
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="inputWarningThreshold">{{ 'WARNING_THRESHOLD' | translate }}</label>
+                        <input type="number" min="0" class="form-control" ng-model="threshold.warning_threshold" id="inputWarningThreshold" placeholder="{{ 'HEIGHT' | translate }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputCriticalThreshold">{{ 'CRITICAL_THRESHOLD' | translate }}</label>
+                        <input type="number" min="0" class="form-control" ng-model="threshold.critical_threshold" id="inputCriticalThreshold" placeholder="{{ 'HEIGHT' | translate }}">
+                    </div>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <button class="form-control btn btn-secondary" type="button" role="button" ng-click="cancel()">
+                            {{ 'CANCEL' | translate }}
+                        </button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button class="form-control btn btn-success" type="submit" role="button">
+                            {{ 'SUBMIT' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>
