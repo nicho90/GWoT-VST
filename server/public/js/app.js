@@ -12,6 +12,7 @@ var app = angular.module("gwot-vst", [
     "underscore",
     "ngAnimate",
     "toastr",
+    "ngBootbox",
 
     // Own Modules
     "filters",

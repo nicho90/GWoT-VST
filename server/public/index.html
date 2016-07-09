@@ -16,7 +16,7 @@
         <meta name="format-detection" content="telephone=no">
         <meta http-equiv="x-rim-auto-match" content="none">
 
-        <title>GWoT-VST</title>
+        <title>GSys</title>
 
         <!-- Bootstrap core CSS -->
         <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
@@ -41,7 +41,7 @@
         <link href="css/styles.css" rel="stylesheet"/>
 
         <!-- Toastr -->
-        <link rel="stylesheet" href="lib/angular-toastr/dist/angular-toastr.css" />
+        <link rel="stylesheet" href="lib/angular-toastr/dist/angular-toastr.min.css" />
 
         <!-- JavaScript Dependecies -->
         <script src="lib/jquery/dist/jquery.min.js"></script>
@@ -61,7 +61,9 @@
         <script src="node_modules/socket.io-client/socket.io.js"></script> <!-- Alternative -->
         <script src="lib/angular-socket-io/socket.min.js"></script>
         <script src="lib/angular-animate/angular-animate.js"></script>
-        <script src="lib/angular-toastr/dist/angular-toastr.tpls.js"></script>
+        <script src="lib/angular-toastr/dist/angular-toastr.min.js"></script>
+        <script src="lib/bootbox/bootbox.js"></script>
+        <script src="lib/ngBootbox/dist/ngBootbox.min.js"></script>
 
     </head>
 
@@ -124,11 +126,11 @@
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" ng-click="showSettings()" style="cursor:pointer;">
-                                <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SETTINGS'}}
+                                <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SETTINGS' | translate }}
                             </a>
                             <div class="dropdown-divider" ng-if="authenticated_user.thresholds.length > 0"></div>
                             <a class="dropdown-item" ng-click="logout()" style="cursor:pointer;">
-                                <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'LOGOUT'}}
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'LOGOUT' | translate }}
                             </a>
                         </div>
                     </li>
@@ -179,7 +181,7 @@
                     </div>
                     <div class="col-xs-8 middle">
                         <small>
-                            &copy; 2016 <b>GWoT-VST</b>
+                            &copy; 2016 <b>{{config.appName}}</b>
                             &nbsp;&nbsp;
                             <a ng-href="#/about">{{ 'ABOUT' | translate }}</a>
                             &nbsp;&nbsp;|&nbsp;&nbsp;

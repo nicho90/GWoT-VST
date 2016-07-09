@@ -2,13 +2,16 @@
 
 <ul class="nav nav-tabs centered" style="position: relative; z-index:2;">
     <li class="nav-item">
-        <a class="nav-link" ng-click="changeTab(1)" ng-class="{ active: tab==1 }" style="cursor:pointer"><i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SETTINGS' | translate }}</a>
+        <a class="nav-link" ng-click="changeTab(1)" ng-class="{ active: tab==1 }" style="cursor:pointer"><i class="fa fa-cog" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SETTINGS' | translate }}</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" ng-click="changeTab(2)" ng-class="{ active: tab==2 }" style="cursor:pointer"><i class="fa fa-area-chart" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'THRESHOLDS' | translate }}</a>
+        <a class="nav-link" ng-click="changeTab(2)" ng-class="{ active: tab==2 }" style="cursor:pointer"><i class="fa fa-arrows-v" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'THRESHOLDS' | translate }}</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" ng-click="changeTab(3)" ng-class="{ active: tab==3 }" style="cursor:pointer"><i class="fa fa-bolt" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SENSORS' | translate }}</a>
+        <a class="nav-link" ng-click="changeTab(3)" ng-class="{ active: tab==3 }" style="cursor:pointer"><i class="fa fa-rss" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SUBSCRIPTIONS' | translate }}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" ng-click="changeTab(4)" ng-class="{ active: tab==4 }" style="cursor:pointer"><i class="fa fa-cubes" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SENSORS' | translate }}</a>
     </li>
 </ul>
 
@@ -28,12 +31,23 @@
 
         <!-- Username -->
         <div class="col-md-6">
-            <div class="user-title" ng-if="user">
-                <br>
-                <h1 class="display-4 text-primary" style="font-size: 18pt;">
-                    <i class="fa fa-user"></i> {{user.username}}
-                </h1>
-            </div>
+            <h1 class="display-4 text-primary" style="font-size: 18pt;">
+                <i class="fa fa-user"></i> {{user.username}}
+            </h1>
+            <br>
+        </div>
+        <div class="col-md-6 right">
+
+            <span ng-if="tab==2">
+                <a class="btn btn-primary" ng-href="#/new/threshold">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'CREATE_NEW_THRESHOLD' | translate }}
+                </a>
+            </span>
+            <span ng-if="tab==4">
+                <a class="btn btn-primary" ng-href="#/new/sensor">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'CREATE_NEW_SENSOR' | translate }}
+                </a>
+            </span>
         </div>
     </div>
 
@@ -50,7 +64,65 @@
     <div class="row" ng-if="tab==2">
         <div class="col-md-12">
             <div class="card">
-                TAB 2
+                <table class="table table-striped table-hover" style="margin-bottom: 0px;">
+                    <thead>
+                        <tr>
+                            <th>{{ 'CATEGORY' | translate }}</th>
+                            <th>{{ 'DESCRIPTION' | translate }}</th>
+                            <th>{{ 'WARNING_HEIGHT' | translate }}</th>
+                            <th>{{ 'CRITICAL_HEIGHT' | translate }}</th>
+                            <th class="right">
+                                <button ng-click="deleteAllThresholds();" class="btn btn-sm btn-danger">
+                                    <i class="fa fa-trash"></i>&nbsp;{{ 'ALL' | translate }}
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-if="!user.thresholds">
+                            <td colspan="4">
+                                <center><i class="fa fa-spinner fa-pulse"></i></center>
+                            </td>
+                        </tr>
+                        <tr ng-if="user.thresholds.length == 0">
+                            <td colspan="4">
+                                <center>- {{ 'NONE' | translate}} -</center>
+                            </td>
+                        </tr>
+                        <tr ng-if="user.thresholds.length != 0" ng-repeat="threshold in user.thresholds | orderBy: 'category' ">
+                            <td>
+                                <i class="fa fa-blind" aria-hidden="true" ng-if="threshold.category == 'PEDESTRIAN' "></i>
+                                <i class="fa fa-bicycle" aria-hidden="true" ng-if="threshold.category == 'BIKE' "></i>
+                                <i class="fa fa-wheelchair" aria-hidden="true" ng-if="threshold.category == 'WHEELCHAIR' "></i>
+                                <i class="fa fa-motorcycle" aria-hidden="true" ng-if="threshold.category == 'SCOOTER' "></i>
+                                <i class="fa fa-motorcycle" aria-hidden="true" ng-if="threshold.category == 'MOTORBIKE' "></i>
+                                <i class="fa fa-car" aria-hidden="true" ng-if="threshold.category == 'CAR' "></i>
+                                <i class="fa fa-bus" aria-hidden="true" ng-if="threshold.category == 'BUS' "></i>
+                                <i class="fa fa-truck" aria-hidden="true" ng-if="threshold.category == 'TRUCK' "></i>
+                                <i class="fa fa-circle-o" aria-hidden="true" ng-if="threshold.category == 'OTHER' "></i>
+                            </td>
+                            <td>
+                                {{threshold.description}}
+                            </td>
+                            <td>
+                                {{threshold.warning_threshold}} cm
+                            </td>
+                            <td>
+                                {{threshold.critical_threshold}} cm
+                            </td>
+                            <td class="right">
+                                <div class="btn-group" role="group" aria-label="Edit">
+                                    <button ng-click="editThreshold(threshold.threshold_id); $event.stopPropagation();" class="btn btn-sm btn-info">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                    <button ng-click="deleteThreshold(threshold); $event.stopPropagation();" class="btn btn-sm btn-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -59,7 +131,135 @@
     <div class="row" ng-if="tab==3">
         <div class="col-md-12">
             <div class="card">
-                TAB 3
+                <table class="table table-striped table-hover" style="margin-bottom: 0px;">
+                    <thead>
+                        <tr>
+                            <th>{{ 'DEVICE_ID' | translate }}</th>
+                            <th>{{ 'SENSOR' | translate }}</th>
+                            <th></th>
+                            <th>{{ 'THRESHOLD' | translate }}</th>
+                            <th class="right">
+                                <button ng-click="deleteAllSubscriptions();" class="btn btn-sm btn-danger">
+                                    <i class="fa fa-trash"></i>&nbsp;{{ 'ALL' | translate }}
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-if="!user.subscriptions">
+                            <td colspan="5">
+                                <center><i class="fa fa-spinner fa-pulse"></i></center>
+                            </td>
+                        </tr>
+                        <tr ng-if="user.subscriptions.length == 0">
+                            <td colspan="5">
+                                <center>- {{ 'NONE' | translate}} -</center>
+                            </td>
+                        </tr>
+                        <tr ng-if="user.subscriptions.length != 0" ng-repeat="subscription in user.subscriptions | orderBy: 'device_id' ">
+                            <td>
+                                <kbd>{{subscription.device_id}}</kbd>
+                            </td>
+                            <td>
+                                {{subscription.sensor_description}}
+                            </td>
+                            <td class="right">
+                                <i class="fa fa-blind" aria-hidden="true" ng-if="subscription.threshold_category == 'PEDESTRIAN' "></i>
+                                <i class="fa fa-bicycle" aria-hidden="true" ng-if="subscription.threshold_category == 'BIKE' "></i>
+                                <i class="fa fa-wheelchair" aria-hidden="true" ng-if="subscription.threshold_category == 'WHEELCHAIR' "></i>
+                                <i class="fa fa-motorcycle" aria-hidden="true" ng-if="subscription.threshold_category == 'SCOOTER' "></i>
+                                <i class="fa fa-motorcycle" aria-hidden="true" ng-if="subscription.threshold_category == 'MOTORBIKE' "></i>
+                                <i class="fa fa-car" aria-hidden="true" ng-if="subscription.threshold_category == 'CAR' "></i>
+                                <i class="fa fa-bus" aria-hidden="true" ng-if="subscription.threshold_category == 'BUS' "></i>
+                                <i class="fa fa-truck" aria-hidden="true" ng-if="subscription.threshold_category == 'TRUCK' "></i>
+                                <i class="fa fa-circle-o" aria-hidden="true" ng-if="subscription.threshold_category == 'OTHER' "></i>
+                            </td>
+                            <td>
+                                {{subscription.threshold_description}}
+                            </td>
+                            <td class="right">
+                                <div class="btn-group" role="group" aria-label="Edit">
+                                    <button ng-click="deleteSubscription(subscription); $event.stopPropagation();" class="btn btn-sm btn-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4th Tab -->
+    <div class="row" ng-if="tab==4">
+        <div class="col-md-12">
+            <div class="card">
+                <table class="table table-striped table-hover" style="margin-bottom: 0px;">
+                    <thead>
+                        <tr>
+                            <th>{{ 'ONLINE' | translate }}</th>
+                            <th>{{ 'DEVICE_ID' | translate }}</th>
+                            <th>{{ 'PRIVATE' | translate }} / {{ 'PUBLIC' | translate }}</th>
+                            <th>{{ 'DESCRIPTION' | translate }}</th>
+                            <th></th>
+                            <th class="right">
+                                <button ng-click="deleteAllSensors();" class="btn btn-sm btn-danger">
+                                    <i class="fa fa-trash"></i>&nbsp;{{ 'ALL' | translate }}
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-if="!user.sensors">
+                            <td colspan="5">
+                                <center><i class="fa fa-spinner fa-pulse"></i></center>
+                            </td>
+                        </tr>
+                        <tr ng-if="user.sensors.length == 0">
+                            <td colspan="5">
+                                <center>- {{ 'NONE' | translate}} -</center>
+                            </td>
+                        </tr>
+                        <tr ng-if="user.sensors.length != 0" ng-repeat="sensor in user.sensors | orderBy: 'device_id' " ng-click="showDetails(sensor.sensor_id)" style="cursor:pointer">
+                            <td>
+                                <span ng-if="sensor.online_status" class="text-success">
+                                    <i class="fa fa-circle" aria-hidden="true"></i>
+                                </span>
+                                <span ng-if="!sensor.online_status" class="text-danger">
+                                    <i class="fa fa-circle" aria-hidden="true"></i>
+                                </span>
+                            </td>
+                            <td><kbd>{{sensor.device_id}}</kbd></td>
+                            <td>
+                                <span ng-if="sensor.private" class="text-primary">
+                                    <i class="fa fa-lock" aria-hidden="true"></i>
+                                </span>
+                                <span ng-if="!sensor.private">
+                                    <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                </span>
+                            </td>
+                            <td>{{sensor.description}}</td>
+                            <td class="right">
+                                <div class="btn-group" role="group" aria-label="Edit">
+                                    <button ng-click="showOnMap(sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-secondary">
+                                        <i class="fa fa-map"></i>&nbsp;&nbsp;{{ 'SHOW_ON_MAP' | translate }}
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="right">
+                                <div class="btn-group" role="group" aria-label="Edit">
+                                    <button ng-click="editSensor(sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-info">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                    <button ng-click="deleteSensor(sensor); $event.stopPropagation();" class="btn btn-sm btn-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

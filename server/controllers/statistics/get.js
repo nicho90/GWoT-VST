@@ -303,9 +303,6 @@ exports.request = function(req, res) {
 								// Get maximum in Timeseries with date (full row)
 								function(ts_maximum, callback){
 
-									console.log("ts_maximum");
-									console.log(ts_maximum);
-
 									// Check if a maximum in Timeseries was found
 									if(ts_maximum !== null){
 
@@ -331,7 +328,6 @@ exports.request = function(req, res) {
 										], function(err, result) {
 											done();
 
-console.log(result.rows);
 											if(err) {
 												res.status(errors.database.error_2.code).send(_.extend(errors.database.error_2, err));
 												return console.error(errors.database.error_2.message, err);
@@ -369,9 +365,6 @@ console.log(result.rows);
 											},
 											// Get maximum in Measurements with date (full row)
 											function(ms_maximum, callback){
-
-												console.log("ms_maximum");
-												console.log(ms_maximum);
 
 												// Check if a maximum in Measurements was found
 												if(ms_maximum !== null){
@@ -432,7 +425,7 @@ console.log(result.rows);
 					],
 					function(err, results){
 						if(err){
-							console.log(err);
+							console.error(err);
 						} else {
 							callback(null, statistics);
 						}
@@ -440,7 +433,7 @@ console.log(result.rows);
 				}
 			], function(err, results) {
 	            if (err) {
-	            	console.log(err);
+	            	console.error(err);
 	            } else {
 
 					// Send results

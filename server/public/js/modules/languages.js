@@ -31,7 +31,9 @@ app.config(function($translateProvider, config) {
         SUBMIT: 'Senden',
         CREATE: 'Erstellen',
         SETTINGS: 'Einstellungen',
+        LOGOUT: 'Logout',
 
+        DESCRIPTION: 'Beschreibung',
         GENERAL: 'Allgemein',
         TIMESERIES: 'Zeitreihe',
         REAL_TIME_DATA: 'Echtzeit-Daten',
@@ -147,7 +149,20 @@ app.config(function($translateProvider, config) {
         ABOUT: 'Über',
         DEVELOPERS: 'Entwickler',
         DOCUMENTATION: 'Dokumentation',
-        REST_API: 'REST-API'
+        REST_API: 'REST-API',
+
+        ALL: 'Alle',
+
+        // DIALOGS
+        DIALOG_ATTENTION : 'Achtung',
+        DIALOG_DELETE_SENSOR : 'Sind Sie sicher, dass Sie den Sensor ',
+        DIALOG_DELETE_ALL_SENSORS : 'Sind Sie sicher, dass Sie alle Sensoren ',
+        DIALOG_DELETE_THRESHOLD : 'Sind Sie sicher, dass Sie den Schwellenwert ',
+        DIALOG_DELETE_ALL_THRESHOLDS : 'Sind Sie sicher, dass Sie alle Schwellenwerte ',
+        DIALOG_DELETE_SUBSCRIPTION : 'Sind Sie sicher, dass Sie dieses Abo beenden möchten?',
+        DIALOG_DELETE_ALL_SUBSCRIPTIONS : 'Sind Sie sicher, dass Sie alle Abos beenden möchten?',
+        DIALOG_DELETE_END : ' löschen möchten?'
+
     });
 
 
@@ -176,7 +191,9 @@ app.config(function($translateProvider, config) {
         SUBMIT: 'Submit',
         CREATE: 'Create',
         SETTINGS: 'Settings',
+        LOGOUT: 'Logout',
 
+        DESCRIPTION: 'Description',
         GENERAL: 'General',
         TIMESERIES: 'Timeseries',
         REAL_TIME_DATA: 'Real-time-data',
@@ -292,7 +309,20 @@ app.config(function($translateProvider, config) {
         ABOUT: 'About',
         DEVELOPERS: 'Developers',
         DOCUMENTATION: 'Documentation',
-        REST_API: 'REST-API'
+        REST_API: 'REST-API',
+
+        ALL: 'All',
+
+        // DIALOGS
+        DIALOG_ATTENTION : 'Attention',
+        DIALOG_DELETE_SENSOR : 'Are you sure, that you want to the delete the Sensor ',
+        DIALOG_DELETE_ALL_SENSORS : 'Are you sure, that you want to the delete all Sensors ',
+        DIALOG_DELETE_THRESHOLD : 'Are you sure, that you want to the delete the Threshold',
+        DIALOG_DELETE_ALL_THRESHOLDS : 'Are you sure, that you want to the delete all Thresholds ',
+        DIALOG_DELETE_ALL_SUBSCRIPTION : 'Are you sure, that you want to the unsubscribe?',
+        DIALOG_DELETE_ALL_SUBSCRIPTIONS : 'Are you sure, that you want to unsubscribe to all Sensors?',
+        DIALOG_DELETE_END : ' ?'
+
     });
 
 
