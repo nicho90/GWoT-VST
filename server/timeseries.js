@@ -90,7 +90,7 @@ if (!db_settings.status) {
                             } else  {
 
                                 if (result.rows[0].water_level !== null) { // At least one measurement
-                                  
+
                                     if (result.rows[0].sd_water_level !== null) { // More than one measurement
 
                                         // Database Query
@@ -140,7 +140,7 @@ if (!db_settings.status) {
 
                                     // Database Query
                                     // TODO insert here zero values
-                                    client.query("INSERT INTO Timeseries (created, updated, sensor_id, water_level, measurement_date, valid_data) VALUES (now(), now(), $1, $2, $3, $4, $5, $6);", [
+                                    client.query("INSERT INTO Timeseries (created, updated, sensor_id, water_level, sd_water_level, num_measurements, measurement_date, valid_data) VALUES (now(), now(), $1, $2, $3, $4, $5, $6);", [
                                         sensor.sensor_id,
                                         0,
                                         0,
