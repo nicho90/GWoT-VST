@@ -78,7 +78,7 @@ if (!db_settings.status) {
                     async.each(sensors, function(sensor, callback) {
 
                         // Database Query
-                        client.query("SELECT AVG(water_level) AS avg_water_level, STDDEV_SAMP(water_level) AS sd_water_level, COUNT(*) AS num_measurements FROM Measurements WHERE sensor_id=$1 AND measurement_timestamp >=$2 AND measurement_timestamp <=$3;", [
+                        client.query("SELECT AVG(water_level) AS water_level, STDDEV_SAMP(water_level) AS sd_water_level, COUNT(*) AS num_measurements FROM Measurements WHERE sensor_id=$1 AND measurement_timestamp >=$2 AND measurement_timestamp <=$3;", [
                             sensor.sensor_id,
                             begin,
                             end
@@ -89,14 +89,14 @@ if (!db_settings.status) {
                                 return console.error('Error running query', err);
                             } else  {
 
-                                if (result.rows[0].avg_water_level !== null) { // At least one measurement
+                                if (result.rows[0].water_level !== null) { // At least one measurement
                                   
                                     if (result.rows[0].sd_water_level !== null) { // More than one measurement
 
                                         // Database Query
-                                        client.query("INSERT INTO Timeseries (created, updated, sensor_id, avg_water_level, sd_water_level, num_measurements, measurement_date, valid_data) VALUES (now(), now(), $1, $2, $3, $4, $5, $6);", [
+                                        client.query("INSERT INTO Timeseries (created, updated, sensor_id, water_level, sd_water_level, num_measurements, measurement_date, valid_data) VALUES (now(), now(), $1, $2, $3, $4, $5, $6);", [
                                             sensor.sensor_id,
-                                            result.rows[0].avg_water_level,
+                                            result.rows[0].water_level,
                                             result.rows[0].sd_water_level,
                                             result.rows[0].num_measurements,
                                             _begin,
@@ -117,9 +117,9 @@ if (!db_settings.status) {
 
                                         // Database Query
                                         // TODO insert here zero values
-                                        client.query("INSERT INTO Timeseries (created, updated, sensor_id, avg_water_level, sd_water_level, num_measurements, measurement_date, valid_data) VALUES (now(), now(), $1, $2, $3, $4, $5, $6);", [
+                                        client.query("INSERT INTO Timeseries (created, updated, sensor_id, water_level, sd_water_level, num_measurements, measurement_date, valid_data) VALUES (now(), now(), $1, $2, $3, $4, $5, $6);", [
                                             sensor.sensor_id,
-                                            result.rows[0].avg_water_level,
+                                            result.rows[0].water_level,
                                             0,
                                             1,
                                             _begin,
