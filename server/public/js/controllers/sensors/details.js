@@ -943,12 +943,17 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             map: {
                 enable: [
                     'leafletDirectiveMap.click',
-                    'leafletDirectiveMap.dblclick'
+                    'leafletDirectiveMap.dblclick',
+                    'load',
+                    'unload'
                 ],
                 logic: 'emit'
             }
         }
     });
+
+
+
 
 
     /**
@@ -974,6 +979,15 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             lng: args.leafletEvent.latlng.lng,
             zoom: 18
         };
+    });
+
+
+    /**
+     * Resize map
+     * (Map function)
+     */
+    $scope.$on('leafletDirectiveMap.map_2.load', function(event, args){
+        $scope.height = (angular.element('#details').height() + 18) + "px";
     });
 
 
@@ -1016,6 +1030,9 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
      * Init
      */
     $scope.load();
+
+    // Set default map size
+    $scope.height = '500px';
 
     // Select General-tab (Overview of the Sensor)
     $scope.tab = 1;

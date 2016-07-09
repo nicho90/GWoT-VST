@@ -141,7 +141,7 @@
             <div class="col-md-6">
                 <div class="card" style="margin-bottom: 0px;">
                     <h3 class="card-header">{{ 'DETAILS' | translate }}</h3>
-                    <div style="padding-left: 15px; padding-right: 15px; padding-bottom: 10px;" id="details">
+                    <div id="details" height="{{height_2}}" style="padding-left: 15px; padding-right: 15px; padding-bottom: 10px;">
                         <table class="table-sm" style="margin-bottom: 0px;">
                             <tbody>
                                 <tr>
@@ -239,7 +239,7 @@
             <div class="col-md-6">
                 <div class="card" style="margin-bottom: 0px;">
                     <h3 class="card-header">{{ 'MAP' | translate }}</h3>
-                    <leaflet id="map_2" markers="markers" center="center" layers="layers" paths="paths" legend="legend" event-broadcast="events"></leaflet>
+                    <leaflet id="map_2" height="{{height}}" markers="markers" center="center" layers="layers" paths="paths" legend="legend" event-broadcast="events"></leaflet>
                 </div>
             </div>
         </div>
@@ -1133,8 +1133,3 @@
     </div>
 
 </div>
-
-<!-- MAP-RESIZER -->
-<script>
-    $('#map_2').height($('#details').height() - 174);
-</script>

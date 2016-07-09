@@ -39,7 +39,7 @@ app.controller("ThresholdEditController", function($scope, $rootScope, $routePar
      * Set Threshold
      * @param  {object} vehicle [A pre-defined vehicle object]
      */
-    $scope.setThreshold = function(vehicle){
+    $scope.insertThreshold = function(vehicle){
         $scope.threshold.description = vehicle.brand + " " + vehicle.name + " (" + vehicle.year + ")";
         $scope.threshold.warning_threshold = vehicle.warning_height;
         $scope.threshold.critical_threshold = vehicle.critical_height;

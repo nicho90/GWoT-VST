@@ -197,7 +197,7 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
         $ngBootbox.customDialog({
             message:
                 $filter('translate')('DIALOG_DELETE_THRESHOLD') +
-                '<b>' + threshold.description + '</b>' +
+                ' <b>' + threshold.description + '</b> ' +
                 $filter('translate')('DIALOG_DELETE_END'),
             title:
                 '<i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;' +

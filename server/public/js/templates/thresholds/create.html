@@ -37,7 +37,7 @@
                             <h3 class="card-header">
                                 <div class="row">
                                     <div class="col-xs-6">
-                                        {{ 'VEHICLES' | translate }}
+                                        {{ 'VEHICLE_SUGGESTIONS' | translate }}
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="input-group">
@@ -71,8 +71,8 @@
                                             <td>{{vehicle.name}}</td>
                                             <td>{{vehicle.year}}</td>
                                             <td class="right">
-                                                <button class="btn btn-sm btn-primary" ng-click="setThreshold(vehicle)" type="button">
-                                                    {{ 'USE' | translate }}
+                                                <button class="btn btn-sm btn-primary" ng-click="insertThreshold(vehicle)" type="button">
+                                                    {{ 'INSERT' | translate }}
                                                 </button>
                                             </td>
                                             <td>&nbsp;&nbsp;</td>
