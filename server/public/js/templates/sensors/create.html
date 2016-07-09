@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<div class="card" style="margin-top: -1px; position: relative; z-index:1; padding:20px;">
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card" style="margin-bottom: 0px;">
+                <h3 class="card-header">{{ 'DETAILS' | translate }}</h3>
+                <div style="padding-left: 15px; padding-right: 15px; padding-bottom: 10px;" id="details">
+                    <table class="table-sm" style="margin-bottom: 0px;">
+                        <tbody>
+                            <tr>
+                                <th>{{ 'ONLINE' | translate }}</th>
+                                <td>
+                                    <span ng-if="sensor.online_status">
+                                        <span class="label label-pill label-success">
+                                            {{ 'ONLINE_' | translate }}
+                                        </span>
+                                    </span>
+                                    <span ng-if="!sensor.online_status">
+                                        <span class="label label-pill label-danger">
+                                            {{ 'OFFLINE_' | translate }}
+                                        </span>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'PRIVATE' | translate }} / {{ 'PUBLIC' | translate }}</th>
+                                <td>
+                                    <span ng-if="sensor.private" class="text-primary">
+                                        <i class="fa fa-lock" aria-hidden="true"></i>
+                                    </span>
+                                    <span ng-if="!sensor.private">
+                                        <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'COORDINATES' | translate }}</th>
+                                <td>{{sensor.lng}} <small>{{ 'LONGITUDE' | translate }}</small></td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>{{sensor.lat}} <small>{{ 'LATITUDE' | translate }}</small></td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'SENSOR_HEIGHT' | translate }}</th>
+                                <td>{{sensor.sensor_height}}
+                                    <small>{{ sensor.sensor_height_unit | translate }}</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'CROSSING_HEIGHT' | translate }}</th>
+                                <td>{{sensor.crossing_height}}
+                                    <small>{{ sensor.crossing_height_unit | translate }}</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'MEASURE_FREQUENCY' | translate }}
+                                    <small>({{ 'DEFAULT' | translate }})</small>
+                                </th>
+                                <td>{{sensor.default_frequency}}
+                                    <small>{{ sensor.default_frequency_unit | translate }}</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'MEASURE_FREQUENCY' | translate }}
+                                    <small>({{ 'DANGER' | translate }})</small>
+                                </th>
+                                <td>{{sensor.danger_frequency}}
+                                    <small>{{ sensor.danger_frequency_unit | translate }}</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'THRESHOLD' | translate }}</th>
+                                <td>{{sensor.threshold_value}}
+                                    <small>{{ sensor.threshold_value_unit | translate }}</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'INCREASED_FREQUENCY' | translate }}</th>
+                                <td>
+                                    <span ng-if="sensor.increased_frequency" class="text-warning">
+                                        <i class="fa fa-bell" aria-hidden="true"></i>
+                                    </span>
+                                    <span ng-if="!sensor.increased_frequency">
+                                        <i class="fa fa-bell-slash" aria-hidden="true"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'CREATED' | translate }}</th>
+                                <td>{{ sensor.created | time }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'UPDATED' | translate }}</th>
+                                <td>{{ sensor.updated | time }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card" style="margin-bottom: 0px;">
+                <h3 class="card-header">{{ 'MAP' | translate }}</h3>
+            </div>
+        </div>
+    </div>
+</div>

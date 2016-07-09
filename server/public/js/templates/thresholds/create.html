@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <br>
-<div class="row" ng-click="showSettings()">
+<div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <div class="jumbotron">
@@ -8,19 +8,72 @@
             <form class="form-horizontal" ng-submit="create()">
 
                 <center>
-                    <h1 class="display-4">{{ 'UPDATE THRESHOLDS' | translate }}</h1>
+                    <h1 class="display-4">{{ 'CREATE_NEW_THRESHOLD' | translate }}</h1>
                 </center>
                 <br>
 
-                <ul class="nav navbar-nav pull-right" ng-if="authenticated_user">
-                    <li class="nav-item nav-pills dropdown pull-xs-right">
-                        <a class="nav-link dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="cursor:pointer;">
-                            <i class="fa fa-user"></i>&nbsp;&nbsp;{{authenticated_user.username}}
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <h6 class="dropdown-header" ng-if="authenticated_user.thresholds.length > 0">{{ 'THRESHOLDS' | translate}}</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="selectCategory">{{ 'TYPE' | translate }}</label><br>
+                        <select class="c-select form-control" id="selectCategory" ng-model="threshold.category" ng-change="changeCategory(threshold.category)">
+                            <option value="PEDESTRIAN">{{ 'PEDESTRIAN' | translate}}</option>
+                            <option value="BIKE">{{ 'BIKE' | translate}}</option>
+                            <option value="WHEELCHAIR">{{ 'WHEELCHAIR' | translate}}</option>
+                            <option value="SCOOTER">{{ 'SCOOTER' | translate}}</option>
+                            <option value="MOTORBIKE">{{ 'MOTORBIKE' | translate}}</option>
+                            <option value="CAR">{{ 'CAR' | translate}}</option>
+                            <option value="BUS">{{ 'BUS' | translate}}</option>
+                            <option value="TRUCK">{{ 'TRUCK' | translate}}</option>
+                            <option value="OTHER">{{ 'OTHER' | translate}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>&nbsp;</label><br>
+                        <div class="card" style="margin-bottom: 0px;" ng-if="threshold.category !== 'PEDESTRIAN' && threshold.category !== 'OTHER' ">
+                            <center>
+                                <h3 class="card-header">{{ 'VEHICLES' | translate }}</h3>
+                            </center>
+                            <div style="display: block; max-height:150px; overflow-y: scroll;">
+                                <table class="table table-sm table-striped" style="margin-bottom: 0px; margin-top: -10px;">
+                                    <thead>
+                                        <th>&nbsp;</th>
+                                        <th>{{ 'BRAND' | translate }}</th>
+                                        <th>{{ 'NAME' | translate }}</th>
+                                        <th>{{ 'YEAR' | translate }}</th>
+                                        <th></th>
+                                        <th>&nbsp;&nbsp;</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-if="vehicles.length == 0">
+                                            <td colspan="6" class="middle">
+                                                - {{ 'NONE' | translate }} -
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="vehicle in vehicles">
+                                            <td>&nbsp;</td>
+                                            <td>{{vehicle.brand}}</td>
+                                            <td>{{vehicle.name}}</td>
+                                            <td>{{vehicle.year}}</td>
+                                            <td class="right">
+                                                <button class="btn btn-sm btn-primary" ng-click="setThreshold(vehicle)" type="button">
+                                                    {{ 'USE' | translate }}
+                                                </button>
+                                            </td>
+                                            <td>&nbsp;&nbsp;</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
 
-                            <a ng-repeat="threshold in authenticated_user.thresholds" class="dropdown-item" style="cursor:pointer;" ng-click="updateCurrentThreshold(threshold)">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="inputDescription">{{ 'DESCRIPTION' | translate }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
                                 <i class="fa fa-blind" aria-hidden="true" ng-if="threshold.category == 'PEDESTRIAN' "></i>
                                 <i class="fa fa-bicycle" aria-hidden="true" ng-if="threshold.category == 'BIKE' "></i>
                                 <i class="fa fa-wheelchair" aria-hidden="true" ng-if="threshold.category == 'WHEELCHAIR' "></i>
@@ -30,25 +83,26 @@
                                 <i class="fa fa-bus" aria-hidden="true" ng-if="threshold.category == 'BUS' "></i>
                                 <i class="fa fa-truck" aria-hidden="true" ng-if="threshold.category == 'TRUCK' "></i>
                                 <i class="fa fa-circle-o" aria-hidden="true" ng-if="threshold.category == 'OTHER' "></i>
-                                &nbsp;<span ng-class="{'bold': authenticated_user.currentThreshold.threshold_id === threshold.threshold_id}">{{threshold.description}}</span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" ng-click="showSettings()" style="cursor:pointer;">
-                                <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SETTINGS'}}
-                            </a>
+                            </span>
+                            <input class="form-control form-control" type="text" placeholder="{{ 'DESCRIPTION' | translate }}" ng-model="threshold.description">
+                        </div>
+                    </div>
+                </div>
+                <br>
 
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="inputthreshold">{{ 'New Value' | translate }}</label>
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <i class="fa fa-user"></i>
-                            </span>
-                            <input class="form-control form-control" type="text" placeholder="{{ 'New Value' | translate }}" ng-model="threshold.new value">
-                        </div>
+                        <label for="inputWarningThreshold">{{ 'WARNING_THRESHOLD' | translate }}</label>
+                        <input type="number" min="0" class="form-control" ng-model="threshold.warning_threshold" id="inputWarningThreshold" placeholder="{{ 'HEIGHT' | translate }}">
                     </div>
-
-
+                    <div class="col-md-6">
+                        <label for="inputCriticalThreshold">{{ 'CRITICAL_THRESHOLD' | translate }}</label>
+                        <input type="number" min="0" class="form-control" ng-model="threshold.critical_threshold" id="inputCriticalThreshold" placeholder="{{ 'HEIGHT' | translate }}">
+                    </div>
+                </div>
+                <br>
+                <hr>
+                <br>
                 <div class="row">
                     <div class="col-xs-6">
                         <button class="form-control btn btn-secondary" type="button" role="button" ng-click="cancel()">
