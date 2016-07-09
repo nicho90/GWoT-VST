@@ -103,7 +103,7 @@ app.controller("SensorListController", function($scope, $rootScope, $location, $
      * Init
      */
     $scope.load();
-
+    $scope.search = "";
 
     /**
      * Update when user logged in or out

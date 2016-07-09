@@ -7,8 +7,14 @@
                 <th>{{ 'DEVICE_ID' | translate }}</th>
                 <th>{{ 'PRIVATE' | translate }} / {{ 'PUBLIC' | translate }}</th>
                 <th>{{ 'DESCRIPTION' | translate }}</th>
-                <th></th>
-                <th></th>
+                <th colspan="2">
+                    <div class="input-group" style="width:100%;">
+                        <span class="input-group-addon">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </span>
+                        <input class="form-control form-control-sm" type="search" placeholder="{{ 'SEARCH' | translate }}" ng-model="search">
+                    </div>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -22,7 +28,7 @@
                     <center>- {{ 'NONE' | translate}} -</center>
                 </td>
             </tr>
-            <tr ng-if="sensors.length != 0" ng-repeat="sensor in sensors | orderBy: 'device_id' " ng-click="showDetails(sensor.sensor_id)" style="cursor:pointer">
+            <tr ng-if="sensors.length != 0" ng-repeat="sensor in sensors | orderBy: 'device_id' | filter: search" ng-click="showDetails(sensor.sensor_id)" style="cursor:pointer">
                 <td>
                     <span ng-if="sensor.online_status" class="text-success">
                         <i class="fa fa-circle" aria-hidden="true"></i>

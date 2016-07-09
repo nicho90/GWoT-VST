@@ -86,7 +86,7 @@ app.controller("ThresholdCreateController", function($scope, $rootScope, $locati
             delete $scope.threshold;
 
             // Update all Controllers
-            $rootScope.$broadcast('update');
+            $rootScope.$broadcast('updateThresholds');
 
             // Show Alert
             $rootScope.alert = {
@@ -127,5 +127,5 @@ app.controller("ThresholdCreateController", function($scope, $rootScope, $locati
      * Init
      */
     $scope.load();
-
+    $scope.search = "";
 });

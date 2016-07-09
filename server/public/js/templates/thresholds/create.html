@@ -13,7 +13,7 @@
                 <br>
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="selectCategory">{{ 'TYPE' | translate }}</label><br>
                         <select class="c-select form-control" id="selectCategory" ng-model="threshold.category" ng-change="changeCategory(threshold.category)">
                             <option value="PEDESTRIAN">{{ 'PEDESTRIAN' | translate}}</option>
@@ -27,12 +27,28 @@
                             <option value="OTHER">{{ 'OTHER' | translate}}</option>
                         </select>
                     </div>
-                    <div class="col-md-6">
+                    <br>
+                </div>
+
+                <div class="row" ng-if="threshold.category !== 'PEDESTRIAN' && threshold.category !== 'OTHER' ">
+                    <div class="col-md-12">
                         <label>&nbsp;</label><br>
-                        <div class="card" style="margin-bottom: 0px;" ng-if="threshold.category !== 'PEDESTRIAN' && threshold.category !== 'OTHER' ">
-                            <center>
-                                <h3 class="card-header">{{ 'VEHICLES' | translate }}</h3>
-                            </center>
+                        <div class="card" style="margin-bottom: 0px;">
+                            <h3 class="card-header">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        {{ 'VEHICLES' | translate }}
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-search" aria-hidden="true"></i>
+                                            </span>
+                                            <input class="form-control form-control-sm" type="search" placeholder="{{ 'SEARCH' | translate }}" ng-model="search">
+                                        </div>
+                                    </div>
+                                </div>
+                            </h3>
                             <div style="display: block; max-height:150px; overflow-y: scroll;">
                                 <table class="table table-sm table-striped" style="margin-bottom: 0px; margin-top: -10px;">
                                     <thead>
@@ -49,7 +65,7 @@
                                                 - {{ 'NONE' | translate }} -
                                             </td>
                                         </tr>
-                                        <tr ng-repeat="vehicle in vehicles">
+                                        <tr ng-repeat="vehicle in vehicles | orderBy: 'brand' | filter: search">
                                             <td>&nbsp;</td>
                                             <td>{{vehicle.brand}}</td>
                                             <td>{{vehicle.name}}</td>
@@ -66,6 +82,7 @@
                             </div>
                         </div>
                     </div>
+                    <br>
                 </div>
                 <br>
 
