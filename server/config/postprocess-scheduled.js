@@ -404,6 +404,8 @@ exports.process = function(message) {
 
                     }
                 ],
+
+                // End waterfall
                 function(err, callback) {
                     if (err) {
                         console.log(err);
