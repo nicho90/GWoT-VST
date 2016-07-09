@@ -59,14 +59,14 @@ exports.request = function(req, res){
 										res.status(errors.query.error_1.code).send(errors.query.error_1);
 										return console.error(errors.query.error_1.message);
 			                        } else {
-										
+
 										// Prepare Query
 										var query = "UPDATE Thresholds SET " +
-											"updated=now(), " +
-											"description=($3), " +
-											"warning_threshold=($4), " +
-											"critical_threshold=($5), " +
-											"category=($6), " +
+												"updated=now(), " +
+												"description=($3), " +
+												"warning_threshold=($4), " +
+												"critical_threshold=($5), " +
+												"category=($6) " +
 											"WHERE creator=$1 AND threshold_id=$2;";
 
 										// Database Query
