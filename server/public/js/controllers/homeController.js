@@ -94,14 +94,16 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                         // Check if User has set a current Threshold
                         if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
 
-                            // Check if water_level exists
-                            if($scope.sensors[key].latest_measurement.water_level !== undefined){
-                                if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].water_level + $rootScope.authenticated_user.currentThreshold.warning_threshold && $scope.sensors[key].latest_measurement.water_level < $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold){
-                                    _icon = $scope.warningIcon;
-                                } else if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
-                                    _icon = $scope.dangerIcon;
-                                } else {
-                                    _icon = $scope.successIcon;
+                            // Check if latest_measurement and water_level exists
+                            if($scope.sensors[key].latest_measurement !== undefined){
+                                if($scope.sensors[key].latest_measurement.water_level !== undefined){
+                                    if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].water_level + $rootScope.authenticated_user.currentThreshold.warning_threshold && $scope.sensors[key].latest_measurement.water_level < $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold){
+                                        _icon = $scope.warningIcon;
+                                    } else if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
+                                        _icon = $scope.dangerIcon;
+                                    } else {
+                                        _icon = $scope.successIcon;
+                                    }
                                 }
                             }
                         }
@@ -155,6 +157,8 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                 })
                 .error(function(err) {
                     $scope.err = err;
+
+                    console.log(err);
                 });
 
         });
