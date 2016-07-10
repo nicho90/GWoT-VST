@@ -67,13 +67,11 @@ exports.request = function(req, res){
 			                        } else {
 
 										// Database Query
-										client.query("INSERT INTO Subscriptions (created, updated, creator, sensor_id, threshold_id, active) VALUES (now(), now(), $1, $2, $3, $4);",
-											[
-												req.params.username,
-												req.body.sensor_id,
-												req.body.threshold_id,
-												req.body.active
-											], function(err, result) {
+										client.query("INSERT INTO Subscriptions (created, updated, creator, sensor_id, threshold_id) VALUES (now(), now(), $1, $2, $3);", [
+											req.params.username,
+											req.body.sensor_id,
+											req.body.threshold_id
+										], function(err, result) {
 											done();
 
 											if(err) {
@@ -86,7 +84,6 @@ exports.request = function(req, res){
 														"subscriptions.created, " +
 														"subscriptions.updated, " +
 														"subscriptions.creator, " +
-														"subscriptions.active, " +
 														"subscriptions.sensor_id, " +
 														"sensors.description AS sensor_description, " +
 														"subscriptions.threshold_id, " +
