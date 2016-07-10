@@ -37,10 +37,24 @@ exports.request = function(req, res) {
                     "addition, " +
                     "zip_code, " +
                     "city, " +
+                    "state, " +
                     "country " +
                     "FROM Service_Stations ORDER BY distance ASC LIMIT 5;";
             } else {
-                query = "SELECT * FROM Service_Stations;";
+                query = "SELECT " +
+                        "service_station_id, " +
+                        "name, " +
+                        "phone_number, " +
+                        "ST_X(coordinates::geometry) AS lng, " +
+                        "ST_Y(coordinates::geometry) AS lat, " +
+                        "street, " +
+                        "house_number, " +
+                        "addition, " +
+                        "zip_code, " +
+                        "city, " +
+                        "state, " +
+                        "country " +
+                    "FROM Service_Stations;";
             }
 
             // Database query

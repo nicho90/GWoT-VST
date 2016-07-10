@@ -56,6 +56,7 @@ exports.request = function(req, res) {
                             "service_stations.addition, " +
                             "service_stations.zip_code, " +
                             "service_stations.city, " +
+                            "service_stations.state, " +
                             "service_stations.country " +
                             "FROM Service_stations service_stations, Sensors sensors " +
                             "WHERE sensors.sensor_id=$1 ORDER BY distance ASC LIMIT 5;";
