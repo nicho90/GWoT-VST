@@ -25,22 +25,36 @@ exports.request = function(req, res) {
             // Check for longitude & latitude
             if(req.query.lng && req.query.lat){
                 query = "SELECT " +
-                    "emergency_station_id, " +
-                    "ST_Distance(coordinates, ST_GeographyFromText('POINT(" + req.query.lng + " " + req.query.lat + ")')) AS distance, " +
-                    "'METER' AS distance_unit, " +
-                    "name, " +
-                    "phone_number, " +
-                    "ST_X(coordinates::geometry) AS lng, " +
-                    "ST_Y(coordinates::geometry) AS lat, " +
-                    "street, " +
-                    "house_number, " +
-                    "addition, " +
-                    "zip_code, " +
-                    "city, " +
-                    "country " +
+                        "emergency_station_id, " +
+                        "ST_Distance(coordinates, ST_GeographyFromText('POINT(" + req.query.lng + " " + req.query.lat + ")')) AS distance, " +
+                        "'METER' AS distance_unit, " +
+                        "name, " +
+                        "phone_number, " +
+                        "ST_X(coordinates::geometry) AS lng, " +
+                        "ST_Y(coordinates::geometry) AS lat, " +
+                        "street, " +
+                        "house_number, " +
+                        "addition, " +
+                        "zip_code, " +
+                        "state, " +
+                        "city, " +
+                        "country " +
                     "FROM Emergency_Stations ORDER BY distance ASC LIMIT 5;";
             } else {
-                query = "SELECT * FROM Emergency_Stations;";
+                query = "SELECT " +
+                        "emergency_station_id, " +
+                        "name, " +
+                        "phone_number, " +
+                        "ST_X(coordinates::geometry) AS lng, " +
+                        "ST_Y(coordinates::geometry) AS lat, " +
+                        "street, " +
+                        "house_number, " +
+                        "addition, " +
+                        "zip_code, " +
+                        "city, " +
+                        "state, " +
+                        "country " +
+                    "FROM Emergency_Stations;";
             }
 
             // Database query
