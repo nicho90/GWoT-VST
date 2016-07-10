@@ -2,7 +2,7 @@ var app = angular.module("gwot-vst");
 
 
 // DETAILS
-app.controller("SensorDetailsController", function($scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $subscriptionService, $statisticService, $forecastService, $measurementService, $timeseriesService, config, $socket, _) {
+app.controller("SensorDetailsController", function($scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $subscriptionService, $statisticService, $forecastService, $measurementService, $timeseriesService, $emergencyStationService, $serviceStationService, config, $socket, _) {
 
 
     /**
@@ -488,7 +488,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
 
         // Request nearby Emergency-Stations
-        $sensorService.get_emergency_stations(token, $routeParams.sensor_id)
+        $emergencyStationService.get_emergency_stations(token, $routeParams.sensor_id)
             .success(function(response) {
                 $scope.sensor.emergency_stations = response;
                 $scope.updateMarkers('emergency_stations');
@@ -499,7 +499,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             });
 
         // Request nearby Service-Stations
-        $sensorService.get_service_stations(token, $routeParams.sensor_id)
+        $serviceStationService.get_service_stations(token, $routeParams.sensor_id)
             .success(function(response) {
                 $scope.sensor.service_stations = response;
                 $scope.updateMarkers('service_stations');
@@ -853,7 +853,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                     visible: true
                 },
                 service_stations: {
-                    name: $filter('translate')('SERIVE_STATIONS'),
+                    name: $filter('translate')('SERVICE_STATIONS'),
                     type: "group",
                     visible: true
                 }
@@ -936,7 +936,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                 $filter('translate')('HIGH_RISK'),
                 $filter('translate')('N_A'),
                 $filter('translate')('EMERGENCY_STATION'),
-                $filter('translate')('SERIVE_STATION')
+                $filter('translate')('SERVICE_STATION')
             ]
         },
         events: {

@@ -29,7 +29,9 @@ var app = angular.module("gwot-vst", [
     "statisticService",
     "timeseriesService",
     "forecastService",
-    "vehicleService"
+    "vehicleService",
+    "emergencyStationService",
+    "serviceStationService",
 ]);
 
 

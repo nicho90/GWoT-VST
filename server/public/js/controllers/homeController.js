@@ -4,7 +4,7 @@ var app = angular.module("gwot-vst");
 /**
  * Home and Map Controller
  */
-app.controller("HomeController", function($scope, $rootScope, $routeParams, config, $filter, $location, $translate, $sensorService, $measurementService) {
+app.controller("HomeController", function($scope, $rootScope, $routeParams, config, $filter, $location, $translate, $sensorService, $measurementService, $emergencyStationService, $serviceStationService) {
 
     /**
      * Load Sensors
@@ -27,6 +27,62 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
         $sensorService.list(token).success(function(response) {
             $scope.sensors = response;
             $scope.updateMarker();
+        }).error(function(err) {
+            $scope.err = err;
+        });
+
+        // Load Emergency Stations
+        $emergencyStationService.list().success(function(response) {
+            $scope.emergency_stations = response;
+
+            angular.forEach($scope.emergency_stations, function(emergency_station, key) {
+                $scope.markers.push({
+                    layer: 'emergency_stations',
+                    lat: emergency_station.lat,
+                    lng: emergency_station.lng,
+                    focus: false,
+                    draggable: false,
+                    icon: $scope.emergencyStationIcon,
+                    message: emergency_station.name,
+                    getMessageScope: function() {
+                        return $scope;
+                    },
+                    compileMessage: true,
+                    popupOptions: {
+                        closeButton: true
+                    },
+                    enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
+                });
+            });
+
+        }).error(function(err) {
+            $scope.err = err;
+        });
+
+        // Load Service Stations
+        $serviceStationService.list().success(function(response) {
+            $scope.service_stations = response;
+
+            angular.forEach($scope.service_stations, function(service_station, key) {
+                $scope.markers.push({
+                    layer: 'service_stations',
+                    lat: service_station.lat,
+                    lng: service_station.lng,
+                    focus: false,
+                    draggable: false,
+                    icon: $scope.serviceStationIcon,
+                    message: service_station.name,
+                    getMessageScope: function() {
+                        return $scope;
+                    },
+                    compileMessage: true,
+                    popupOptions: {
+                        closeButton: true
+                    },
+                    enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
+                });
+            });
+
         }).error(function(err) {
             $scope.err = err;
         });
@@ -157,7 +213,6 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                 })
                 .error(function(err) {
                     $scope.err = err;
-
                     console.log(err);
                 });
 
@@ -235,6 +290,16 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                     name: $filter('translate')('SENSORS'),
                     type: "group",
                     visible: true
+                },
+                emergency_stations: {
+                    name: $filter('translate')('EMERGENCY_STATIONS'),
+                    type: "group",
+                    visible: false
+                },
+                service_stations: {
+                    name: $filter('translate')('SERVICE_STATIONS'),
+                    type: "group",
+                    visible: false
                 }
             }
         },
@@ -263,19 +328,35 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
             prefix: 'fa',
             icon: 'cube'
         },
+        serviceStationIcon: {
+            type: 'awesomeMarker',
+            markerColor: 'blue',
+            prefix: 'fa',
+            icon: 'wrench'
+        },
+        emergencyStationIcon: {
+            type: 'awesomeMarker',
+            markerColor: 'darkblue',
+            prefix: 'fa',
+            icon: 'ambulance'
+        },
         legend: {
             position: 'bottomleft',
             colors: [
                 '#70B211',
                 '#F8981B',
                 '#D83D20',
-                '#575757'
+                '#575757',
+                '#0066A5',
+                '#30A8DE'
             ],
             labels: [
                 $filter('translate')('PASSABLE'),
                 $filter('translate')('RISK'),
                 $filter('translate')('HIGH_RISK'),
-                $filter('translate')('N_A')
+                $filter('translate')('N_A'),
+                $filter('translate')('EMERGENCY_STATION'),
+                $filter('translate')('SERVICE_STATION')
             ]
         },
         events: {

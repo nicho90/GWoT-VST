@@ -102,13 +102,16 @@ app.config(function($translateProvider, config) {
         NEARBY_EMERGENCY_STATIONS: 'Notrufstationen in der Nähe',
         NEARBY_SERVICE_STATIONS: 'Autowerkstätten in der Nähe',
         GERMANY: 'Deutschland',
+        AUSTRALIA: 'Australien',
 
         PASSABLE: 'Passierbar',
         RISK: 'Risiko',
         HIGH_RISK: 'Hohes Risiko',
         N_A: 'Nicht verfügbar',
         EMERGENCY_STATION: 'Notrufstation',
-        SERIVE_STATION: 'Autowerkstatt',
+        EMERGENCY_STATIONS: 'Notrufstationen',
+        SERVICE_STATION: 'Autowerkstatt',
+        SERVICE_STATIONS: 'Autowerkstätte',
 
         WATER_LEVEL: 'Pegelstand',
         WATER_LEVELS: 'Pegelstände',
@@ -169,6 +172,13 @@ app.config(function($translateProvider, config) {
         BUS: 'Bus',
         TRUCK: 'LKW',
         OTHER: 'Sonstiger Schwellenwert',
+
+        // MAP-BASELAYERS
+        MAP_TILES_STREETS: 'Straßenansicht',
+        MAP_TILES_SATELLITE: 'Satelittenansicht',
+        MAP_TILES_SATELLITE_2: 'Hybridansicht',
+        MAP_TILES_DARK: 'Tagansicht',
+        MAP_TILES_LIGHT: 'Nachtansicht',
 
         // DIALOGS
         DIALOG_ATTENTION : 'Achtung',
@@ -279,13 +289,16 @@ app.config(function($translateProvider, config) {
         NEARBY_EMERGENCY_STATIONS: 'Nearby Emergency-Stations',
         NEARBY_SERVICE_STATIONS: 'Nearby Service-Stations',
         GERMANY: 'Germany',
+        AUSTRALIA: 'Australia',
 
         PASSABLE: 'Passable',
         RISK: 'Risk',
         HIGH_RISK: 'High risk',
         N_A: 'n/a',
         EMERGENCY_STATION: 'Emergency station',
-        SERIVE_STATION: 'Service station',
+        EMERGENCY_STATIONS: 'Emergency stations',
+        SERVICE_STATION: 'Service station',
+        SERVICE_STATIONS: 'Service stations',
 
         WATER_LEVEL: 'Water level',
         WATER_LEVELS: 'Water levels',
@@ -346,6 +359,13 @@ app.config(function($translateProvider, config) {
         BUS: 'Bus',
         TRUCK: 'Truck',
         OTHER: 'Other Threshold',
+
+        // MAP-BASELAYERS
+        MAP_TILES_STREETS: 'Streets',
+        MAP_TILES_SATELLITE: 'Satelitte',
+        MAP_TILES_SATELLITE_2: 'Hybridview',
+        MAP_TILES_DARK: 'Dayview',
+        MAP_TILES_LIGHT: 'Nightview',
 
         // DIALOGS
         DIALOG_ATTENTION : 'Attention',
