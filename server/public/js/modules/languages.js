@@ -177,8 +177,8 @@ app.config(function($translateProvider, config) {
         MAP_TILES_STREETS: 'Straßenansicht',
         MAP_TILES_SATELLITE: 'Satelittenansicht',
         MAP_TILES_SATELLITE_2: 'Hybridansicht',
-        MAP_TILES_DARK: 'Tagansicht',
-        MAP_TILES_LIGHT: 'Nachtansicht',
+        MAP_TILES_DARK: 'Nachtansicht',
+        MAP_TILES_LIGHT: 'Tagansicht',
 
         // DIALOGS
         DIALOG_ATTENTION : 'Achtung',
@@ -364,8 +364,8 @@ app.config(function($translateProvider, config) {
         MAP_TILES_STREETS: 'Streets',
         MAP_TILES_SATELLITE: 'Satelitte',
         MAP_TILES_SATELLITE_2: 'Hybridview',
-        MAP_TILES_DARK: 'Dayview',
-        MAP_TILES_LIGHT: 'Nightview',
+        MAP_TILES_DARK: 'Nightview',
+        MAP_TILES_LIGHT: 'Dayview',
 
         // DIALOGS
         DIALOG_ATTENTION : 'Attention',
