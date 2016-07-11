@@ -32,6 +32,7 @@ var app = angular.module("gwot-vst", [
     "vehicleService",
     "emergencyStationService",
     "serviceStationService",
+    "waterBodyService"
 ]);
 
 

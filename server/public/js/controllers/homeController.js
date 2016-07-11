@@ -133,6 +133,11 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
 
             // Check if routeParams were set
             if($routeParams.sensor_id !== undefined && Number($routeParams.sensor_id) === sensor.sensor_id){
+                $scope.center = {
+                    lat: sensor.lat,
+                    lng: sensor.lng,
+                    zoom: $scope.center.zoom
+                };
                 _focus = true;
             }
 
