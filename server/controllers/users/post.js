@@ -48,7 +48,7 @@ exports.request = function(req, res) {
 	                req.body.first_name,
 	                req.body.last_name,
 	                req.body.language,
-	                'user' // User-Role (Default)
+	                'USER' // User-Role (Default)
 	            ], function(err, result) {
 	                done();
 
