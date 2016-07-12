@@ -1,110 +1,298 @@
 <!DOCTYPE html>
+<br>
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="jumbotron">
 
-<div class="card" style="margin-top: -1px; position: relative; z-index:1; padding:20px;">
+            <form class="form-horizontal" ng-submit="create()">
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card" style="margin-bottom: 0px;">
-                <h3 class="card-header">{{ 'DETAILS' | translate }}</h3>
-                <div style="padding-left: 15px; padding-right: 15px; padding-bottom: 10px;" id="details">
-                    <table class="table-sm" style="margin-bottom: 0px;">
-                        <tbody>
-                            <tr>
-                                <th>{{ 'ONLINE' | translate }}</th>
-                                <td>
-                                    <span ng-if="sensor.online_status">
-                                        <span class="label label-pill label-success">
-                                            {{ 'ONLINE_' | translate }}
-                                        </span>
-                                    </span>
-                                    <span ng-if="!sensor.online_status">
-                                        <span class="label label-pill label-danger">
-                                            {{ 'OFFLINE_' | translate }}
-                                        </span>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ 'PRIVATE' | translate }} / {{ 'PUBLIC' | translate }}</th>
-                                <td>
-                                    <span ng-if="sensor.private" class="text-primary">
-                                        <i class="fa fa-lock" aria-hidden="true"></i>
-                                    </span>
-                                    <span ng-if="!sensor.private">
-                                        <i class="fa fa-unlock-alt" aria-hidden="true"></i>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ 'COORDINATES' | translate }}</th>
-                                <td>{{sensor.lng}} <small>{{ 'LONGITUDE' | translate }}</small></td>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <td>{{sensor.lat}} <small>{{ 'LATITUDE' | translate }}</small></td>
-                            </tr>
-                            <tr>
-                                <th>{{ 'SENSOR_HEIGHT' | translate }}</th>
-                                <td>{{sensor.sensor_height}}
-                                    <small>{{ sensor.sensor_height_unit | translate }}</small>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ 'CROSSING_HEIGHT' | translate }}</th>
-                                <td>{{sensor.crossing_height}}
-                                    <small>{{ sensor.crossing_height_unit | translate }}</small>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ 'MEASURE_FREQUENCY' | translate }}
-                                    <small>({{ 'DEFAULT' | translate }})</small>
-                                </th>
-                                <td>{{sensor.default_frequency}}
-                                    <small>{{ sensor.default_frequency_unit | translate }}</small>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ 'MEASURE_FREQUENCY' | translate }}
-                                    <small>({{ 'DANGER' | translate }})</small>
-                                </th>
-                                <td>{{sensor.danger_frequency}}
-                                    <small>{{ sensor.danger_frequency_unit | translate }}</small>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ 'THRESHOLD' | translate }}</th>
-                                <td>{{sensor.threshold_value}}
-                                    <small>{{ sensor.threshold_value_unit | translate }}</small>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ 'INCREASED_FREQUENCY' | translate }}</th>
-                                <td>
-                                    <span ng-if="sensor.increased_frequency" class="text-warning">
-                                        <i class="fa fa-bell" aria-hidden="true"></i>
-                                    </span>
-                                    <span ng-if="!sensor.increased_frequency">
-                                        <i class="fa fa-bell-slash" aria-hidden="true"></i>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ 'CREATED' | translate }}</th>
-                                <td>{{ sensor.created | time }}</td>
-                            </tr>
-                            <tr>
-                                <th>{{ 'UPDATED' | translate }}</th>
-                                <td>{{ sensor.updated | time }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <center>
+                    <h1 class="display-4">{{ 'CREATE_NEW_SENSOR' | translate }}</h1>
+                </center>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="inputDescription">{{ 'DESCRIPTION' | translate }}</label>
+                        <input class="form-control" type="text" placeholder="{{ 'DESCRIPTION' | translate }}" ng-model="sensor.description" id="inputDescription" required="required">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{'has-success': device_id_available, 'has-danger': !device_id_available, 'has-warning': device_id_available=='undefined' }">
+                            <label for="inputDeviceId">{{ 'DEVICE_ID' | translate }}</label>
+                            <input class="form-control" type="text" placeholder="{{ 'DEVICE_ID' | translate }}" ng-model="sensor.device_id" id="inputDeviceId" required="required" ng-change="checkDeviceId(sensor.device_id)" ng-class="{'form-control-success': device_id_available, 'form-control-danger': !device_id_available, 'form-control-warning': device_id_available=='undefined' }">
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card" style="margin-bottom: 0px;">
-                <h3 class="card-header">{{ 'MAP' | translate }}</h3>
-            </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="c-input c-radio">
+                            <input id="radio1" name="radio1" type="radio" ng-model="sensor.private" ng-value="false" required="required">
+                            <span class="c-indicator"></span>
+                            {{ 'PUBLIC' | translate }} <small>({{ 'DEFAULT_' | translate }})</small>
+                        </label>
+                        <label class="c-input c-radio">
+                            <input id="radio2" name="radio1" type="radio" ng-model="sensor.private" ng-value="true" required="required">
+                            <span class="c-indicator"></span>
+                            {{ 'PRIVATE' | translate }}
+                        </label>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" style="margin-bottom: 0px;">
+                            <h3 class="card-header">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        {{ 'LOCATION' | translate }}
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                {{ 'LATITUDE' | translate }}
+                                            </span>
+                                            <input class="form-control form-control-sm" type="number" step="any" placeholder="{{ 'LATITUDE' | translate }}" ng-model="sensor.lat" required="required" ng-change="updateMarker()">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                {{ 'LONGITUDE' | translate }}
+                                            </span>
+                                            <input class="form-control form-control-sm" type="number" step="any" placeholder="{{ 'LONGITUDE' | translate }}" ng-model="sensor.lng" required="required" ng-change="updateMarker()">
+                                        </div>
+                                    </div>
+                                </div>
+                            </h3>
+                            <leaflet id="map_2" height="500px" markers="markers" center="center" layers="layers" paths="paths" legend="legend" event-broadcast="events"></leaflet>
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-xs-6">
+                        <label for="selectWaterBody">{{ 'WATER_BODIES' | translate }}</label><br>
+                        <select class="c-select form-control" id="selectWaterBody" ng-model="sensor.water_body_id" ng-options="water_body.water_body_id as water_body.name for water_body in water_bodies | orderBy: 'name' | filter: search " required="required">
+                            <option value="">&raquo; {{ 'SELECT_A_WATER_BODY' | translate }} &laquo;</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-6">
+                        <label>&nbsp;</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </span>
+                            <input class="form-control" type="search" placeholder="{{ 'SEARCH' | translate }}" ng-model="search">
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="c-input c-radio">
+                            <input id="radio3" name="radio2" type="radio" ng-model="sensor.crossing_type" value="BRIDGE" required="required">
+                            <span class="c-indicator"></span>
+                            {{ 'BRIDGE' | translate }} <small>({{ 'DEFAULT_' | translate }})</small>
+                        </label>
+                        <label class="c-input c-radio">
+                            <input id="radio4" name="radio2" type="radio" ng-model="sensor.crossing_type" value="FLOODWAY" required="required">
+                            <span class="c-indicator"></span>
+                            {{ 'FLOODWAY' | translate }}
+                        </label>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="c-input c-radio">
+                            <input id="radio5" name="radio3" type="radio" ng-model="sensor.seasonal" ng-value="true" required="required">
+                            <span class="c-indicator"></span>
+                            {{ 'ON' | translate }}
+                        </label>
+                        <label class="c-input c-radio">
+                            <input id="radio6" name="radio3" type="radio" ng-model="sensor.seasonal" ng-value="false" required="required">
+                            <span class="c-indicator"></span> <small>({{ 'DEFAULT_' | translate }})</small>
+                            {{ 'OFF' | translate }}
+                        </label>
+                    </div>
+                </div>
+
+                <div ng-if="sensor.seasonal">
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-5">
+
+                            <label for="selectWetSeasonBegin">{{ 'WET_SEASON_BEGIN' | translate }}</label><br>
+                            <select class="c-select form-control" id="selectWetSeasonBegin" ng-model="sensor.wet_season_begin" ng-required="sensor.seasonal">
+                                <option value="">&raquo; {{ 'SELECT_A_MONTH' | translate }} &laquo;</option>
+                                <option value="1">{{ 'JANUARY' | translate }}</option>
+                                <option value="2">{{ 'FEBRUARY' | translate }}</option>
+                                <option value="3">{{ 'MARCH' | translate }}</option>
+                                <option value="4">{{ 'APRIL' | translate }}</option>
+                                <option value="5">{{ 'MAY' | translate }}</option>
+                                <option value="6">{{ 'JUNE' | translate }}</option>
+                                <option value="7">{{ 'JULY' | translate }}</option>
+                                <option value="8">{{ 'AUGUST' | translate }}</option>
+                                <option value="9">{{ 'SEPTEMBER' | translate }}</option>
+                                <option value="10">{{ 'OCTOBER' | translate }}</option>
+                                <option value="11">{{ 'NOVEMBER' | translate }}</option>
+                                <option value="12">{{ 'DECEMBER' | translate }}</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-2 middle">
+                            <label>&nbsp;</label><br>
+                            <i class="fa fa-angle-right fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="col-xs-5">
+
+                            <label for="selectWetSeasonEnd">{{ 'WET_SEASON_END' | translate }}</label><br>
+                            <select class="c-select form-control" id="selectWetSeasonEnd" ng-model="sensor.wet_season_end" ng-required="sensor.seasonal">
+                                <option value="">&raquo; {{ 'SELECT_A_MONTH' | translate }} &laquo;</option>
+                                <option value="1">{{ 'JANUARY' | translate }}</option>
+                                <option value="2">{{ 'FEBRUARY' | translate }}</option>
+                                <option value="3">{{ 'MARCH' | translate }}</option>
+                                <option value="4">{{ 'APRIL' | translate }}</option>
+                                <option value="5">{{ 'MAY' | translate }}</option>
+                                <option value="6">{{ 'JUNE' | translate }}</option>
+                                <option value="7">{{ 'JULY' | translate }}</option>
+                                <option value="8">{{ 'AUGUST' | translate }}</option>
+                                <option value="9">{{ 'SEPTEMBER' | translate }}</option>
+                                <option value="10">{{ 'OCTOBER' | translate }}</option>
+                                <option value="11">{{ 'NOVEMBER' | translate }}</option>
+                                <option value="12">{{ 'DECEMBER' | translate }}</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-5">
+
+                            <label for="selectDrySeasonBegin">{{ 'DRY_SEASON_BEGIN' | translate }}</label><br>
+                            <select class="c-select form-control" id="selectDrySeasonBegin" ng-model="sensor.dry_season_begin" ng-required="sensor.seasonal">
+                                <option value="">&raquo; {{ 'SELECT_A_MONTH' | translate }} &laquo;</option>
+                                <option value="1">{{ 'JANUARY' | translate }}</option>
+                                <option value="2">{{ 'FEBRUARY' | translate }}</option>
+                                <option value="3">{{ 'MARCH' | translate }}</option>
+                                <option value="4">{{ 'APRIL' | translate }}</option>
+                                <option value="5">{{ 'MAY' | translate }}</option>
+                                <option value="6">{{ 'JUNE' | translate }}</option>
+                                <option value="7">{{ 'JULY' | translate }}</option>
+                                <option value="8">{{ 'AUGUST' | translate }}</option>
+                                <option value="9">{{ 'SEPTEMBER' | translate }}</option>
+                                <option value="10">{{ 'OCTOBER' | translate }}</option>
+                                <option value="11">{{ 'NOVEMBER' | translate }}</option>
+                                <option value="12">{{ 'DECEMBER' | translate }}</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-2 middle">
+                            <label>&nbsp;</label><br>
+                            <i class="fa fa-angle-right fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="col-xs-5">
+
+                            <label for="selectDrySeasonEnd">{{ 'DRY_SEASON_END' | translate }}</label><br>
+                            <select class="c-select form-control" id="selectDrySeasonEnd" ng-model="sensor.dry_season_end" ng-required="sensor.seasonal">
+                                <option value="">&raquo; {{ 'SELECT_A_MONTH' | translate }} &laquo;</option>
+                                <option value="1">{{ 'JANUARY' | translate }}</option>
+                                <option value="2">{{ 'FEBRUARY' | translate }}</option>
+                                <option value="3">{{ 'MARCH' | translate }}</option>
+                                <option value="4">{{ 'APRIL' | translate }}</option>
+                                <option value="5">{{ 'MAY' | translate }}</option>
+                                <option value="6">{{ 'JUNE' | translate }}</option>
+                                <option value="7">{{ 'JULY' | translate }}</option>
+                                <option value="8">{{ 'AUGUST' | translate }}</option>
+                                <option value="9">{{ 'SEPTEMBER' | translate }}</option>
+                                <option value="10">{{ 'OCTOBER' | translate }}</option>
+                                <option value="11">{{ 'NOVEMBER' | translate }}</option>
+                                <option value="12">{{ 'DECEMBER' | translate }}</option>
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="inputSensorHeight">{{ 'SENSOR_HEIGHT' | translate }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-arrows-v" aria-hidden="true"></i>
+                            </span>
+                            <input type="number" min="1" class="form-control" ng-model="sensor.sensor_height" id="inputSensorHeight" placeholder="{{ 'HEIGHT' | translate }} ({{ 'CENTIMETER' | translate }})" required="required">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputCrossingHeight">{{ 'CROSSING_HEIGHT' | translate }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-arrows-v" aria-hidden="true"></i>
+                            </span>
+                            <input type="number" min="0" class="form-control" ng-model="sensor.crossing_height" id="inputCrossingHeight" placeholder="{{ 'HEIGHT' | translate }} ({{ 'CENTIMETER' | translate }})" required="required">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputSensorThresholdHeight">{{ 'SENSOR_THRESHOLD_HEIGHT' | translate }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-bell" aria-hidden="true"></i>
+                            </span>
+                            <input type="number" min="0" class="form-control" ng-model="sensor.threshold_value" id="inputSensorThresholdHeight" placeholder="{{ 'HEIGHT' | translate }} ({{ 'CENTIMETER' | translate }})" required="required">
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <label for="inputDefaultFrequency">
+                            {{ 'MEASURE_FREQUENCY' | translate }} <small>({{ 'DEFAULT' | translate }})</small>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-hourglass" aria-hidden="true"></i>
+                            </span>
+                            <input type="number" min="1000" class="form-control" ng-model="sensor.default_frequency" id="inputDefaultFrequency" placeholder="{{ 'INTERVAL' | translate }} ({{ 'MILLISECONDS' | translate }})" required="required">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputDangerFrequency">
+                            {{ 'MEASURE_FREQUENCY' | translate }} <small>({{ 'DANGER' | translate }})</small>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-hourglass" aria-hidden="true"></i>
+                            </span>
+                            <input type="number" min="0" class="form-control" ng-model="sensor.danger_frequency" id="inputDangerFrequency" placeholder="{{ 'INTERVAL' | translate }} ({{ 'MILLISECONDS' | translate }})" required="required">
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <button class="form-control btn btn-secondary" type="button" role="button" ng-click="cancel()">
+                            {{ 'CANCEL' | translate }}
+                        </button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button class="form-control btn btn-success btn-background" type="submit" role="button" ng-disabled="!device_id_available">
+                            {{ 'SUBMIT' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
+    <div class="col-md-2"></div>
 </div>
