@@ -46,6 +46,36 @@ module.exports = {
         "lat": {
             "type": "number",
             "minimum": 0
+        },
+        "crossing_type": {
+            "type": "string",
+            "enum": [
+                "BRIDGE",
+                "FLOODWAY"
+            ]
+        },
+        "seasonal": {
+            "type": "boolean"
+        },
+        "wet_season_begin": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+        },
+        "wet_season_end": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+        },
+        "dry_season_begin": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+        },
+        "dry_season_end": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
         }
     },
     "required": [
@@ -59,6 +89,8 @@ module.exports = {
         "default_frequency",
         "danger_frequency",
         "lng",
-        "lat"
+        "lat",
+        "crossing_type",
+        "seasonal"
     ]
 };

@@ -30,6 +30,10 @@ module.exports = {
             "type": "string",
             "minLength": 1
         },
+        "state": {
+            "type": "string",
+            "minLength": 1
+        },
         "country": {
             "type": "string",
             "minLength": 1
@@ -49,6 +53,7 @@ module.exports = {
         "street",
         "zip_code",
         "city",
+        "state",
         "country",
         "lng",
         "lat"
