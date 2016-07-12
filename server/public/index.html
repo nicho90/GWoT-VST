@@ -94,8 +94,8 @@
 
                 <!-- Right Navbar-Menu (Login & Profile) -->
                 <form class="form-inline pull-xs-right" ng-if="!authenticated_user">
-                    <input class="form-control form-control" type="text" placeholder="{{ 'USERNAME' | translate }}" ng-model="user.username">
-                    <input class="form-control form-control" type="password" placeholder="{{ 'PASSWORD' | translate }}" ng-model="user.password">
+                    <input class="form-control" type="text" placeholder="{{ 'USERNAME' | translate }}" ng-model="user.username">
+                    <input class="form-control" type="password" placeholder="{{ 'PASSWORD' | translate }}" ng-model="user.password">
                     <button class="btn btn-primary" type="submit" ng-click="login()">
                         <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'LOGIN' | translate }}
                     </button>
@@ -220,6 +220,7 @@
         <script src="js/services/emergencyStationService.js"></script>
         <script src="js/services/serviceStationService.js"></script>
         <script src="js/services/waterBodyService.js"></script>
+        <script src="js/services/verificationService.js"></script>
 
         <!-- Main App -->
         <script src="js/app.js"></script>

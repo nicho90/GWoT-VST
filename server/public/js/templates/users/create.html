@@ -14,12 +14,14 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="inputUsername">{{ 'USERNAME' | translate }}</label>
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <i class="fa fa-user"></i>
-                            </span>
-                            <input class="form-control form-control" type="text" placeholder="{{ 'USERNAME' | translate }}" ng-model="user.username">
+                        <div class="form-group" ng-class="{'has-success': username_available, 'has-danger': !username_available, 'has-warning': username_available=='undefined' }">
+                            <label for="inputUsername">{{ 'USERNAME' | translate }}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </span>
+                                <input class="form-control" type="text" placeholder="{{ 'USERNAME' | translate }}" ng-model="user.username" id="inputUsername" required="required" ng-change="checkUsername(user.username)" ng-class="{'form-control-success': username_available, 'form-control-danger': !username_available, 'form-control-warning': username_available=='undefined' }">
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -28,7 +30,7 @@
                             <span class="input-group-addon">
                                 <i class="fa fa-lock"></i>
                             </span>
-                            <input class="form-control form-control" type="password" placeholder="{{ 'PASSWORD' | translate }}" ng-model="user.password">
+                            <input class="form-control" type="password" minlength="6" placeholder="{{ 'PASSWORD' | translate }}" ng-model="user.password">
                         </div>
                     </div>
                 </div>

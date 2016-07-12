@@ -11,6 +11,14 @@ body {
     font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
 }
 
+.c-indicator {
+    background-color: #FFFFFF;
+}
+
+.btn-success:disabled {
+    background-color: #5cb85c;
+}
+
 .legend {
     padding: 6px 8px;
     font: 14px/16px Arial, Helvetica, sans-serif;
