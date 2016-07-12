@@ -73,12 +73,18 @@ exports.request = function(req, res){
                                     "ST_X(related_sensors.coordinates::geometry) AS lng, " +
                                     "ST_Y(related_sensors.coordinates::geometry) AS lat " +
                                 "FROM " +
-                                    "(SELECT sensor_id, coordinates " +
+                                    "(" +
+										"SELECT " +
+											"sensor_id, " +
+											"water_body_id, " +
+											"coordinates " +
                                         "FROM Sensors " +
-                                        "WHERE sensor_id=$1) " +
-                                    "AS main_sensor, " +
+                                        "WHERE sensor_id=$1" +
+									") AS main_sensor, " +
                                     "Sensors related_sensors JOIN Water_Bodies water_bodies ON related_sensors.water_body_id=water_bodies.water_body_id " +
-                                "WHERE related_sensors.sensor_id != main_sensor.sensor_id AND related_sensors.private=false " +
+                                "WHERE related_sensors.sensor_id != main_sensor.sensor_id " +
+									"AND related_sensors.private=false " +
+									"AND related_sensors.water_body_id = main_sensor.water_body_id " +
                                 "ORDER BY distance ASC;";
 
                                 // Database query
@@ -146,12 +152,17 @@ exports.request = function(req, res){
                                                 "ST_X(related_sensors.coordinates::geometry) AS lng, " +
                                                 "ST_Y(related_sensors.coordinates::geometry) AS lat " +
                                             "FROM " +
-                                                "(SELECT sensor_id, coordinates " +
+                                                "(" +
+													"SELECT " +
+														"sensor_id, " +
+														"water_body_id, " +
+														"coordinates " +
                                                     "FROM Sensors " +
-                                                    "WHERE sensor_id=$1) " +
-                                                "AS main_sensor, " +
+                                                    "WHERE sensor_id=$1" +
+												") AS main_sensor, " +
                                                 "Sensors related_sensors JOIN Water_Bodies water_bodies ON related_sensors.water_body_id=water_bodies.water_body_id " +
                                             "WHERE related_sensors.sensor_id != main_sensor.sensor_id " +
+												"AND related_sensors.water_body_id = main_sensor.water_body_id " +
                                             "ORDER BY distance ASC;";
 
                                         } else {
@@ -181,12 +192,24 @@ exports.request = function(req, res){
                                                 "ST_X(related_sensors.coordinates::geometry) AS lng, " +
                                                 "ST_Y(related_sensors.coordinates::geometry) AS lat " +
                                             "FROM " +
-                                                "(SELECT sensor_id, coordinates " +
+                                                "(" +
+													"SELECT " +
+														"sensor_id, " +
+														"water_body_id, " +
+														"coordinates " +
                                                     "FROM Sensors " +
-                                                    "WHERE sensor_id=$1) " +
-                                                "AS main_sensor, " +
+                                                    "WHERE sensor_id=$1" +
+												") AS main_sensor, " +
                                                 "Sensors related_sensors JOIN Water_Bodies water_bodies ON related_sensors.water_body_id=water_bodies.water_body_id " +
-                                            "WHERE related_sensors.sensor_id != main_sensor.sensor_id AND (related_sensors.private=false OR (related_sensors.private=true AND related_sensors.creator=$2)) " +
+                                            "WHERE related_sensors.sensor_id != main_sensor.sensor_id " +
+												"AND (" +
+													"related_sensors.private=false " +
+													"OR (" +
+														"related_sensors.private=true " +
+														"AND related_sensors.creator=$2" +
+													")" +
+												") " +
+												"AND related_sensors.water_body_id = main_sensor.water_body_id " +
                                             "ORDER BY distance ASC;";
 
                                         }
@@ -238,12 +261,17 @@ exports.request = function(req, res){
                                                 "ST_X(related_sensors.coordinates::geometry) AS lng, " +
                                                 "ST_Y(related_sensors.coordinates::geometry) AS lat " +
                                             "FROM " +
-                                                "(SELECT sensor_id, coordinates " +
-                                                    "FROM Sensors " +
-                                                    "WHERE sensor_id=$1) " +
-                                                "AS main_sensor, " +
+												"(" +
+													"SELECT " +
+														"sensor_id, " +
+														"water_body_id, " +
+														"coordinates " +
+													"FROM Sensors " +
+													"WHERE sensor_id=$1" +
+												") AS main_sensor, " +
                                                 "Sensors related_sensors JOIN Water_Bodies water_bodies ON related_sensors.water_body_id=water_bodies.water_body_id " +
                                             "WHERE related_sensors.sensor_id != main_sensor.sensor_id " +
+											"AND related_sensors.water_body_id = main_sensor.water_body_id " +
                                             "ORDER BY distance ASC;";
 
                                             // Database query
@@ -292,12 +320,22 @@ exports.request = function(req, res){
                                                     "ST_X(related_sensors.coordinates::geometry) AS lng, " +
                                                     "ST_Y(related_sensors.coordinates::geometry) AS lat " +
                                                 "FROM " +
-                                                    "(SELECT sensor_id, coordinates " +
-                                                        "FROM Sensors " +
-                                                        "WHERE sensor_id=$1) " +
-                                                    "AS main_sensor, " +
+													"(" +
+														"SELECT " +
+															"sensor_id, " +
+															"water_body_id, " +
+															"coordinates " +
+														"FROM Sensors " +
+														"WHERE sensor_id=$1" +
+													") AS main_sensor, " +
                                                     "Sensors related_sensors JOIN Water_Bodies water_bodies ON related_sensors.water_body_id=water_bodies.water_body_id " +
-                                                "WHERE related_sensors.sensor_id != main_sensor.sensor_id AND (related_sensors.private=false OR (related_sensors.private=true AND related_sensors.creator=$2)) " +
+                                                "WHERE related_sensors.sensor_id != main_sensor.sensor_id " +
+												"AND (" +
+													"related_sensors.private=false OR (" +
+														"related_sensors.private=true AND related_sensors.creator=$2" +
+													")" +
+												") " +
+												"AND related_sensors.water_body_id = main_sensor.water_body_id " +
                                                 "ORDER BY distance ASC;";
 
                                                 // Database query
