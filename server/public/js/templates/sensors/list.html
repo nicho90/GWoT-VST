@@ -5,8 +5,11 @@
             <tr>
                 <th>{{ 'ONLINE' | translate }}</th>
                 <th>{{ 'DEVICE_ID' | translate }}</th>
-                <th>{{ 'PRIVATE' | translate }} / {{ 'PUBLIC' | translate }}</th>
+                <th><!--{{ 'PRIVATE' | translate }} / {{ 'PUBLIC' | translate }}--></th>
                 <th>{{ 'DESCRIPTION' | translate }}</th>
+                <th>{{ 'CROSSING_TYPE' | translate }}</th>
+                <th>{{ 'WATER_BODY' | translate }}</th>
+                <th>{{ 'WATER_BODY_TYPE' | translate }}</th>
                 <th colspan="2">
                     <div class="input-group" style="width:100%;">
                         <span class="input-group-addon">
@@ -37,7 +40,9 @@
                         <i class="fa fa-circle" aria-hidden="true"></i>
                     </span>
                 </td>
-                <td><kbd>{{sensor.device_id}}</kbd></td>
+                <td class="nowrap">
+                    <kbd>{{sensor.device_id}}</kbd>
+                </td>
                 <td>
                     <span ng-if="sensor.private" class="text-primary">
                         <i class="fa fa-lock" aria-hidden="true"></i>
@@ -47,6 +52,9 @@
                     </span>
                 </td>
                 <td>{{sensor.description}}</td>
+                <td>{{sensor.crossing_type | translate }}</td>
+                <td>{{sensor.water_body_name}}</td>
+                <td>{{sensor.water_body_type | translate }}</td>
                 <td class="right">
                     <div class="btn-group" role="group" aria-label="Edit">
                         <button ng-click="showOnMap(sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-secondary">

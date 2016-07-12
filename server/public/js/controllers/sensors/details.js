@@ -1027,6 +1027,34 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
 
     /**
+     * Show Sensor on map
+     * @param  {number} sensor_id [Redirect to homeView, find Sensor and highlight it on map]
+     */
+    $scope.showOnMap = function(sensor_id) {
+        $location.url("/map/" + sensor_id);
+    };
+
+
+    /**
+     * Move inside little map to related Sensor
+     * @param  {number} sensor_id
+     */
+    $scope.moveTo = function(sensor_id) {
+        var index = _.findIndex($scope.markers, {
+            sensor_id: sensor_id
+        });
+        if(index !== -1){
+            $scope.markers[index].focus = true;
+            $scope.center = {
+                lng: $scope.markers[index].lng,
+                lat: $scope.markers[index].lat,
+                zoom: 18
+            };
+        }
+    };
+
+
+    /**
      * Init
      */
     $scope.load();
@@ -1245,7 +1273,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             color: "rgba(2, 117, 216, 1)",
             type: [
                 "line",
-                //"dot",
+                "dot",
                 "area"
             ],
             id: "mainWaterLevels"

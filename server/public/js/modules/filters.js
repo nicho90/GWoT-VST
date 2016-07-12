@@ -23,7 +23,7 @@ app.filter('distance', function() {
  */
 app.filter('water_level', function() {
     return function(water_level) {
-        if(water_level !== undefined) {
+        if(water_level !== undefined && typeof(water_level) === 'number') {
             return (water_level/100).toFixed(3) + "m";
         } else {
             return "-";
@@ -41,9 +41,9 @@ app.filter('water_level', function() {
  */
 app.filter('time', function() {
     return function(time) {
-        if(time === undefined){
-            return "";
-        } else {
+        if(time === undefined || time === ""){
+            return "-";
+        } else {
             return moment(time).format("DD.MM.YYYY HH:mm:ss");
         }
     };
@@ -77,7 +77,6 @@ app.filter('unixtime_2', function() {
             return "";
         } else {
             return moment.unix(unixtime).format("HH:mm");
-            //return moment.unix(unixtime).format("HH") + '°°';
         }
     };
 });

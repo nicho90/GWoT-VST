@@ -54,8 +54,20 @@
                     <i class="fa fa-cube"></i> {{sensor.description}}
                 </h1>
 
-                <span style="font-size: 11pt; font-weight:bold;">{{ 'DEVICE_ID' | translate }}</span>
-                <kbd style="font-size: 8pt;">{{sensor.device_id}}</kbd>
+                <span style="font-size: 11pt; font-weight:bold;">
+                    <span ng-if="sensor.online_status">
+                        <span class="label label-pill label-success">
+                            {{ 'ONLINE_' | translate }}
+                        </span>
+                    </span>
+                    <span ng-if="!sensor.online_status">
+                        <span class="label label-pill label-danger">
+                            {{ 'OFFLINE_' | translate }}
+                        </span>
+                    </span>
+                    {{ 'DEVICE_ID' | translate }}</span>
+                <kbd style="font-size: 8pt;">{{sensor.device_id}}</kbd><br>
+
 
             </div>
         </div>
@@ -78,8 +90,11 @@
                                 {{ 'WATER_LEVEL' | translate }}
                             </th>
                             <td>
-                                <span class="label label-primary" style="font-size: 11pt;">
+                                <span class="label label-primary" style="font-size: 11pt;" ng-if="sensor.latest_measurement">
                                     {{sensor.latest_measurement.water_level | water_level }}
+                                </span>
+                                <span ng-if="!sensor.latest_measurement">
+                                    <small>-</small>
                                 </span>
                             </td>
                         </tr>
@@ -145,21 +160,6 @@
                         <table class="table-sm" style="margin-bottom: 0px;">
                             <tbody>
                                 <tr>
-                                    <th>{{ 'ONLINE' | translate }}</th>
-                                    <td>
-                                        <span ng-if="sensor.online_status">
-                                            <span class="label label-pill label-success">
-                                                {{ 'ONLINE_' | translate }}
-                                            </span>
-                                        </span>
-                                        <span ng-if="!sensor.online_status">
-                                            <span class="label label-pill label-danger">
-                                                {{ 'OFFLINE_' | translate }}
-                                            </span>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
                                     <th>{{ 'PRIVATE' | translate }} / {{ 'PUBLIC' | translate }}</th>
                                     <td>
                                         <span ng-if="sensor.private" class="text-primary">
@@ -171,11 +171,22 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>{{ 'COORDINATES' | translate }}</th>
+                                    <th>{{ 'CROSSING_TYPE' | translate }}</th>
+                                    <td>{{sensor.crossing_type | translate }}</td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ 'WATER_BODY' | translate }} <small>({{ 'WATER_BODY_TYPE' | translate }})</small>
+                                    </th>
+                                    <td>
+                                        {{sensor.water_body_name}} <small>({{sensor.water_body_type | translate }})</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th rowspan="2" style="vertical-align:middle;">{{ 'COORDINATES' | translate }}</th>
                                     <td>{{sensor.lng}} <small>{{ 'LONGITUDE' | translate }}</small></td>
                                 </tr>
                                 <tr>
-                                    <th></th>
                                     <td>{{sensor.lat}} <small>{{ 'LATITUDE' | translate }}</small></td>
                                 </tr>
                                 <tr>
@@ -188,6 +199,12 @@
                                     <th>{{ 'CROSSING_HEIGHT' | translate }}</th>
                                     <td>{{sensor.crossing_height}}
                                         <small>{{ sensor.crossing_height_unit | translate }}</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>{{ 'THRESHOLD' | translate }}</th>
+                                    <td>{{sensor.threshold_value}}
+                                        <small>{{ sensor.threshold_value_unit | translate }}</small>
                                     </td>
                                 </tr>
                                 <tr>
@@ -204,12 +221,6 @@
                                     </th>
                                     <td>{{sensor.danger_frequency}}
                                         <small>{{ sensor.danger_frequency_unit | translate }}</small>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>{{ 'THRESHOLD' | translate }}</th>
-                                    <td>{{sensor.threshold_value}}
-                                        <small>{{ sensor.threshold_value_unit | translate }}</small>
                                     </td>
                                 </tr>
                                 <tr>
@@ -855,7 +866,9 @@
                                 <th>{{ 'DISTANCE' | translate }}</th>
                                 <th>{{ 'ONLINE' | translate }}</th>
                                 <th>{{ 'DEVICE_ID' | translate }}</th>
+                                <th><!--{{ 'PRIVATE' | translate }} / {{ 'PUBLIC' | translate }}--></th>
                                 <th>{{ 'DESCRIPTION' | translate }}</th>
+                                <th>{{ 'CROSSING_TYPE' | translate }}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -886,12 +899,26 @@
                                         <i class="fa fa-circle" aria-hidden="true"></i>
                                     </span>
                                 </td>
-                                <td><kbd>{{related_sensor.device_id}}</kbd></td>
+                                <td class="nowrap">
+                                    <kbd>{{related_sensor.device_id}}</kbd>
+                                </td>
+                                <td>
+                                    <span ng-if="related_sensor.private" class="text-primary">
+                                        <i class="fa fa-lock" aria-hidden="true"></i>
+                                    </span>
+                                    <span ng-if="!related_sensor.private">
+                                        <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                    </span>
+                                </td>
                                 <td>{{related_sensor.description}}</td>
+                                <td>{{related_sensor.crossing_type | translate }}</td>
                                 <td class="right">
                                     <div class="btn-group" role="group" aria-label="Edit">
+                                        <button ng-click="moveTo(related_sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-secondary">
+                                            <i class="fa fa-crosshairs"></i>&nbsp;&nbsp;{{ 'MOVE_TO' | translate }}
+                                        </button>
                                         <button ng-click="showOnMap(related_sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-secondary">
-                                            <i class="fa fa-map"></i>
+                                            <i class="fa fa-map"></i>&nbsp;&nbsp;{{ 'SHOW_ON_MAP' | translate }}
                                         </button>
                                     </div>
                                 </td>

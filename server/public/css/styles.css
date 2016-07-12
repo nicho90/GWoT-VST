@@ -11,6 +11,10 @@ body {
     font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
 }
 
+.nowrap {
+    white-space: nowrap;
+}
+
 .c-indicator {
     background-color: #FFFFFF;
 }

@@ -45,7 +45,7 @@ app.config(function($translateProvider, config) {
         ONLINE_: 'online',
         OFFLINE: 'Offline',
         OFFLINE_: 'offline',
-        DEVICE_ID: 'Geräte ID',
+        DEVICE_ID: 'Geräte-ID',
         PRIVATE: 'Privat',
         PUBLIC: 'Öffentlich',
         COORDINATES: 'Koordinaten',
@@ -59,6 +59,7 @@ app.config(function($translateProvider, config) {
         FLOODWAY: 'Floodway',
         OR: 'oder',
         BRIDGE: 'Brücke',
+        CROSSING_TYPE: 'Überquerungsart',
         MEASURE_FREQUENCY: 'Messinterval',
         DEFAULT: 'Standardeinstellung',
         DANGER: 'bei erhöhtem Pegelstand',
@@ -93,6 +94,7 @@ app.config(function($translateProvider, config) {
 
         WATER_BODY: 'Gewässersystem',
         WATER_BODIES: 'Gewässersysteme',
+        WATER_BODY_TYPE: 'Gewässertyp',
         RIVER: 'Fluss',
         CHANNEL: 'Kanal',
         LAKE: 'See',
@@ -175,7 +177,7 @@ app.config(function($translateProvider, config) {
 
         // MAP-BASELAYERS
         MAP_TILES_STREETS: 'Straßenansicht',
-        MAP_TILES_SATELLITE: 'Satelittenansicht',
+        MAP_TILES_SATELLITE: 'Satellitenansicht',
         MAP_TILES_SATELLITE_2: 'Hybridansicht',
         MAP_TILES_DARK: 'Nachtansicht',
         MAP_TILES_LIGHT: 'Tagansicht',
@@ -246,6 +248,7 @@ app.config(function($translateProvider, config) {
         FLOODWAY: 'Floodway',
         OR: 'or',
         BRIDGE: 'Bridge',
+        CROSSING_TYPE: 'Crossing type',
         MEASURE_FREQUENCY: 'Measuring interval',
         DEFAULT: 'default interval',
         DANGER: 'at increased water level',
@@ -280,6 +283,7 @@ app.config(function($translateProvider, config) {
 
         WATER_BODY: 'Water body',
         WATER_BODIES: 'Water bodies',
+        WATER_BODY_TYPE: 'Water body type',
         RIVER: 'River',
         CHANNEL: 'Channel',
         LAKE: 'Lake',
@@ -362,7 +366,7 @@ app.config(function($translateProvider, config) {
 
         // MAP-BASELAYERS
         MAP_TILES_STREETS: 'Streets',
-        MAP_TILES_SATELLITE: 'Satelitte',
+        MAP_TILES_SATELLITE: 'Satellite',
         MAP_TILES_SATELLITE_2: 'Hybridview',
         MAP_TILES_DARK: 'Nightview',
         MAP_TILES_LIGHT: 'Dayview',
