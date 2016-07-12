@@ -12,8 +12,16 @@ app.config(function($routeProvider) {
             controller: "HomeController"
         })
 
-        // Go to sensor on map
-        .when("/map/:sensor_id", {
+        // Move to
+        .when("/map/sensors/:sensor_id", {
+            templateUrl: "/js/templates/home.html",
+            controller: "HomeController"
+        })
+        .when("/map/emergency_stations/:emergency_station_id", {
+            templateUrl: "/js/templates/home.html",
+            controller: "HomeController"
+        })
+        .when("/map/service_stations/:service_station_id", {
             templateUrl: "/js/templates/home.html",
             controller: "HomeController"
         })

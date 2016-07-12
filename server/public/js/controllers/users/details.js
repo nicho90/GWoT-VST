@@ -74,7 +74,7 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
      * @param  {number} sensor_id [Redirect to homeView, find Sensor and highlight it on map]
      */
     $scope.showOnMap = function(sensor_id){
-        $location.url("/map/" + sensor_id);
+        $location.url("/map/sensors/" + sensor_id);
     };
 
 

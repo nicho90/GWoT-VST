@@ -6,6 +6,39 @@ var app = angular.module("gwot-vst");
  */
 app.controller("HomeController", function($scope, $rootScope, $routeParams, config, $filter, $location, $translate, $sensorService, $measurementService, $emergencyStationService, $serviceStationService) {
 
+
+    /**
+     * Check for route parameters
+     */
+    $scope.check_route_params = function(layer, id){
+        
+        if($location.path().includes(layer) && layer === 'sensors'){
+            if(Number($routeParams.sensor_id) === id){
+                $scope.layers.overlays.sensors.visible = true;
+                return true;
+            } else {
+                return false;
+            }
+        } else if($location.path().includes(layer) && layer === 'emergency_stations'){
+            if(Number($routeParams.emergency_station_id) === id){
+                $scope.layers.overlays.emergency_stations.visible = true;
+                return true;
+            } else {
+                return false;
+            }
+        } else if($location.path().includes(layer) && layer === 'service_stations'){
+            if(Number($routeParams.service_station_id) === id){
+                $scope.layers.overlays.service_stations.visible = true;
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    };
+
+
     /**
      * Load Sensors
      */
@@ -36,11 +69,17 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
             $scope.emergency_stations = response;
 
             angular.forEach($scope.emergency_stations, function(emergency_station, key) {
+
+                // Prepare focus
+                var _focus = $scope.check_route_params('emergency_stations', emergency_station.emergency_station_id);
+
+                // Add marker
                 $scope.markers.push({
+                    //emergency_station_id: emergency_station.emergency_station_id,
                     layer: 'emergency_stations',
                     lat: emergency_station.lat,
                     lng: emergency_station.lng,
-                    focus: false,
+                    focus: _focus,
                     draggable: false,
                     icon: $scope.emergencyStationIcon,
                     message: emergency_station.name,
@@ -53,6 +92,15 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                     },
                     enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
                 });
+
+                // Zoom to
+                if(_focus){
+                    $scope.center = {
+                        lat: emergency_station.lat,
+                        lng: emergency_station.lng,
+                        zoom: $scope.center.zoom
+                    };
+                }
             });
 
         }).error(function(err) {
@@ -64,11 +112,17 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
             $scope.service_stations = response;
 
             angular.forEach($scope.service_stations, function(service_station, key) {
+
+                // Prepare focus
+                var _focus = $scope.check_route_params('service_stations', service_station.service_station_id);
+
+                // Add marker
                 $scope.markers.push({
+                    //service_station_id: service_station.service_station_id,
                     layer: 'service_stations',
                     lat: service_station.lat,
                     lng: service_station.lng,
-                    focus: false,
+                    focus: _focus,
                     draggable: false,
                     icon: $scope.serviceStationIcon,
                     message: service_station.name,
@@ -81,6 +135,15 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                     },
                     enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
                 });
+
+                // Zoom to
+                if(_focus){
+                    $scope.center = {
+                        lat: service_station.lat,
+                        lng: service_station.lng,
+                        zoom: $scope.center.zoom
+                    };
+                }
             });
 
         }).error(function(err) {
@@ -128,19 +191,6 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
 
         angular.forEach($scope.sensors, function(sensor, key) {
 
-            // Prepare focus
-            var _focus = false;
-
-            // Check if routeParams were set
-            if($routeParams.sensor_id !== undefined && Number($routeParams.sensor_id) === sensor.sensor_id){
-                $scope.center = {
-                    lat: sensor.lat,
-                    lng: sensor.lng,
-                    zoom: $scope.center.zoom
-                };
-                _focus = true;
-            }
-
             // Request lastest measurement for sensor
             $measurementService.get_latest(token, sensor.sensor_id)
                 .success(function(response) {
@@ -169,6 +219,9 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                             }
                         }
                     }
+
+                    // Prepare focus
+                    var _focus = $scope.check_route_params('sensors', sensor.sensor_id);
 
                     // Check if latest measurement exists
                     var water_level = "-";
@@ -199,6 +252,7 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                         '</center>';
 
                     $scope.markers.push({
+                        //sensor_id: sensor.sensor_id,
                         layer: 'sensors',
                         lat: sensor.lat,
                         lng: sensor.lng,
@@ -215,14 +269,23 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                         },
                         enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
                     });
+
+                    // Zoom to
+                    if(_focus){
+                        $scope.center = {
+                            lat: sensor.lat,
+                            lng: sensor.lng,
+                            zoom: $scope.center.zoom
+                        };
+                    }
                 })
                 .error(function(err) {
                     $scope.err = err;
                     console.log(err);
                 });
-
         });
     };
+
 
 
     /**
@@ -366,7 +429,12 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
         },
         events: {
             map: {
-                enable: ['leafletDirectiveMap.click', 'leafletDirectiveMap.dblclick'],
+                enable: [
+                    'leafletDirectiveMap.click',
+                    'leafletDirectiveMap.dblclick',
+                    'load',
+                    'unload'
+                ],
                 logic: 'emit'
             }
         }

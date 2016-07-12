@@ -115,11 +115,10 @@
                             <input id="radio5" name="radio3" type="radio" ng-model="sensor.seasonal" ng-value="true" required="required">
                             <span class="c-indicator"></span>
                             {{ 'ON' | translate }}
-                        </label>
-                        <label class="c-input c-radio">
+                        </label><label class="c-input c-radio">
                             <input id="radio6" name="radio3" type="radio" ng-model="sensor.seasonal" ng-value="false" required="required">
-                            <span class="c-indicator"></span> <small>({{ 'DEFAULT_' | translate }})</small>
-                            {{ 'OFF' | translate }}
+                            <span class="c-indicator"></span>
+                            {{ 'OFF' | translate }} <small>({{ 'DEFAULT_' | translate }})</small>
                         </label>
                     </div>
                 </div>
@@ -243,7 +242,7 @@
                         <label for="inputSensorThresholdHeight">{{ 'SENSOR_THRESHOLD_HEIGHT' | translate }}</label>
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <i class="fa fa-bell" aria-hidden="true"></i>
+                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                             </span>
                             <input type="number" min="0" class="form-control" ng-model="sensor.threshold_value" id="inputSensorThresholdHeight" placeholder="{{ 'HEIGHT' | translate }} ({{ 'CENTIMETER' | translate }})" required="required">
                         </div>
