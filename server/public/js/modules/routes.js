@@ -59,7 +59,11 @@ app.config(function($routeProvider) {
             templateUrl: "/js/templates/users/details.html",
             controller: "UserDetailsController"
         })
-        .when("/users/:username/:tab", {
+        .when("/users/:username/edit", {
+            templateUrl: "/js/templates/users/edit.html",
+            controller: "UserEditController"
+        })
+        .when("/users/:username/tab/:tab", {
             templateUrl: "/js/templates/users/details.html",
             controller: "UserDetailsController"
         })

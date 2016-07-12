@@ -97,7 +97,7 @@ app.controller("ThresholdCreateController", function($scope, $rootScope, $locati
             $rootScope.$broadcast('alert');
 
             // Redirect to
-            $location.url("/users/" + $rootScope.authenticated_user.username + "/" + 2);
+            $location.url("/users/" + $rootScope.authenticated_user.username + "/tab/" + 2);
 
         }).error(function(err){
             $scope.err = err;
@@ -119,7 +119,9 @@ app.controller("ThresholdCreateController", function($scope, $rootScope, $locati
      */
     $scope.cancel = function(){
         delete $scope.threshold;
-        $location.url("/");
+        
+        // Redirect to
+        $location.url("/users/" + $rootScope.authenticated_user.username + "/tab/" + 2);
     };
 
 

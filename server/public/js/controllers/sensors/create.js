@@ -11,7 +11,7 @@ app.controller("SensorCreateController", function($scope, $rootScope, $location,
 
         // Check if User is authenticated
         if (!$rootScope.authenticated_user) {
-            //$location.url("/");
+            $location.url("/");
         }
 
         // New Sensor
@@ -58,7 +58,7 @@ app.controller("SensorCreateController", function($scope, $rootScope, $location,
             delete $scope.sensor;
 
             // Redirect
-            $location.url("/users/" + $rootScope.authenticated_user.username + "/" + 4);
+            $location.url("/users/" + $rootScope.authenticated_user.username + "/tab/" + 4);
         }).error(function(err) {
             $scope.err = err;
         });
@@ -227,7 +227,9 @@ app.controller("SensorCreateController", function($scope, $rootScope, $location,
      */
     $scope.cancel = function(){
         delete $scope.threshold;
-        $location.url("/");
+
+        // Redirect to
+        $location.url("/users/" + $rootScope.authenticated_user.username + "/tab/" + 4);
     };
 
 
