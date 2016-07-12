@@ -64,7 +64,45 @@
     <div class="row" ng-if="tab==1">
         <div class="col-md-12">
             <div class="card">
-                TAB 1
+                <table class="table" style="margin-bottom: 0px;">
+                    <tbody>
+                        <tr>
+                            <th>
+                                {{ 'USERNAME' | translate }}
+                            </th>
+                            <td>
+                                {{user.username}}
+                            </td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <th>
+                                {{ 'FIRST_NAME' | translate }}
+                            </th>
+                            <td>
+                                {{user.first_name}}
+                            </td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <th>
+                                {{ 'LAST_NAME' | translate }}
+                            </th>
+                            <td>
+                                {{user.last_name}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+
+                <label for="selectLanguage">{{ 'LANGUAGE' | translate }}</label><br>
+                <select class="c-select form-control" id="selectLanguage" ng-model="user.language">
+                    <option value="en_US">{{ 'ENGLISH' | translate}}</option>
+                    <option value="de_DE">{{ 'GERMAN' | translate}}</option>
+                </select>
             </div>
         </div>
     </div>
@@ -209,9 +247,11 @@
                         <tr>
                             <th>{{ 'ONLINE' | translate }}</th>
                             <th>{{ 'DEVICE_ID' | translate }}</th>
-                            <th>{{ 'PRIVATE' | translate }} / {{ 'PUBLIC' | translate }}</th>
+                            <th><!--{{ 'PRIVATE' | translate }} / {{ 'PUBLIC' | translate }}--></th>
                             <th>{{ 'DESCRIPTION' | translate }}</th>
-                            <th></th>
+                            <th>{{ 'CROSSING_TYPE' | translate }}</th>
+                            <th>{{ 'WATER_BODY' | translate }}</th>
+                            <th>{{ 'WATER_BODY_TYPE' | translate }}</th>
                             <th class="right">
                                 <button ng-click="deleteAllSensors();" class="btn btn-sm btn-danger">
                                     <i class="fa fa-trash"></i>&nbsp;{{ 'ALL' | translate }}
@@ -221,12 +261,12 @@
                     </thead>
                     <tbody>
                         <tr ng-if="!user.sensors">
-                            <td colspan="6">
+                            <td colspan="8">
                                 <center><i class="fa fa-spinner fa-pulse"></i></center>
                             </td>
                         </tr>
                         <tr ng-if="user.sensors.length == 0">
-                            <td colspan="6">
+                            <td colspan="8">
                                 <center>- {{ 'NONE' | translate}} -</center>
                             </td>
                         </tr>
@@ -239,7 +279,9 @@
                                     <i class="fa fa-circle" aria-hidden="true"></i>
                                 </span>
                             </td>
-                            <td><kbd>{{sensor.device_id}}</kbd></td>
+                            <td class="nowrap">
+                                <kbd>{{sensor.device_id}}</kbd>
+                            </td>
                             <td>
                                 <span ng-if="sensor.private" class="text-primary">
                                     <i class="fa fa-lock" aria-hidden="true"></i>
@@ -249,21 +291,28 @@
                                 </span>
                             </td>
                             <td>{{sensor.description}}</td>
-                            <td class="right">
-                                <div class="btn-group" role="group" aria-label="Edit">
-                                    <button ng-click="showOnMap(sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-secondary">
-                                        <i class="fa fa-map"></i>&nbsp;&nbsp;{{ 'SHOW_ON_MAP' | translate }}
-                                    </button>
-                                </div>
-                            </td>
-                            <td class="right">
-                                <div class="btn-group" role="group" aria-label="Edit">
-                                    <button ng-click="editSensor(sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-info">
-                                        <i class="fa fa-pencil"></i>
-                                    </button>
-                                    <button ng-click="deleteSensor(sensor); $event.stopPropagation();" class="btn btn-sm btn-danger">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
+                            <td>{{sensor.crossing_type | translate }}</td>
+                            <td>{{sensor.water_body_name}}</td>
+                            <td>{{sensor.water_body_type | translate }}</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-xs-6 right">
+                                        <div class="btn-group" role="group" aria-label="Edit">
+                                            <button ng-click="showOnMap(sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-secondary">
+                                                <i class="fa fa-map"></i>&nbsp;&nbsp;{{ 'SHOW_ON_MAP' | translate }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 right">
+                                        <div class="btn-group" role="group" aria-label="Edit">
+                                            <button ng-click="editSensor(sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-info">
+                                                <i class="fa fa-pencil"></i>
+                                            </button>
+                                            <button ng-click="deleteSensor(sensor); $event.stopPropagation();" class="btn btn-sm btn-danger">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

@@ -22,12 +22,12 @@
         </thead>
         <tbody>
             <tr ng-if="!sensors">
-                <td colspan="5">
+                <td colspan="9">
                     <center><i class="fa fa-spinner fa-pulse"></i></center>
                 </td>
             </tr>
             <tr ng-if="sensors.length == 0">
-                <td colspan="5">
+                <td colspan="9">
                     <center>- {{ 'NONE' | translate}} -</center>
                 </td>
             </tr>
@@ -55,21 +55,25 @@
                 <td>{{sensor.crossing_type | translate }}</td>
                 <td>{{sensor.water_body_name}}</td>
                 <td>{{sensor.water_body_type | translate }}</td>
-                <td class="right">
-                    <div class="btn-group" role="group" aria-label="Edit">
-                        <button ng-click="showOnMap(sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-secondary">
-                            <i class="fa fa-map"></i>&nbsp;&nbsp;{{ 'SHOW_ON_MAP' | translate }}
-                        </button>
-                    </div>
-                </td>
-                <td class="right">
-                    <div class="btn-group" role="group" aria-label="Edit">
-                        <button ng-click="edit(sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-info" ng-if="authenticated_user && (sensor.creator == authenticated_user.username || authenticated_user.role == 'ADMIN')">
-                            <i class="fa fa-pencil"></i>
-                        </button>
-                        <button ng-click="delete(sensor); $event.stopPropagation();" class="btn btn-sm btn-danger" ng-if="authenticated_user && (sensor.creator == authenticated_user.username || authenticated_user.role == 'ADMIN')">
-                            <i class="fa fa-trash"></i>
-                        </button>
+                <td colspan="2">
+                    <div class="row">
+                        <div class="col-xs-6 right">
+                            <div class="btn-group" role="group" aria-label="Edit">
+                                <button ng-click="showOnMap(sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-secondary">
+                                    <i class="fa fa-map"></i>&nbsp;&nbsp;{{ 'SHOW_ON_MAP' | translate }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 right">
+                            <div class="btn-group" role="group" aria-label="Edit">
+                                <button ng-click="edit(sensor.sensor_id); $event.stopPropagation();" class="btn btn-sm btn-info" ng-if="authenticated_user && (sensor.creator == authenticated_user.username || authenticated_user.role == 'ADMIN')">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                                <button ng-click="delete(sensor); $event.stopPropagation();" class="btn btn-sm btn-danger" ng-if="authenticated_user && (sensor.creator == authenticated_user.username || authenticated_user.role == 'ADMIN')">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </td>
             </tr>
