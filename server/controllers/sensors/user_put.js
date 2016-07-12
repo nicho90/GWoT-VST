@@ -83,18 +83,24 @@ exports.request = function(req, res) {
 
                                                     // Prepare Query
                 									var query = "UPDATE Sensors SET " +
-                										"updated=now(), " +
-                										"device_id=($1), " +
-                										"description=($2), " +
-                										"private=($3), " +
-                										"water_body_id=($4), " +
-                										"sensor_height=($5), " +
-                										"crossing_height=($6), " +
-                										"default_frequency=($7), " +
-                										"danger_frequency=($8), " +
-                										"threshold_value=($9), " +
-                										"coordinates='POINT(" + req.body.lng + " " + req.body.lat + ")' " +
-                										"WHERE creator=$10 AND sensor_id=$11;";
+                    										"updated=now(), " +
+                    										"device_id=($1), " +
+                    										"description=($2), " +
+                    										"private=($3), " +
+                    										"water_body_id=($4), " +
+                    										"sensor_height=($5), " +
+                    										"crossing_height=($6), " +
+                    										"default_frequency=($7), " +
+                    										"danger_frequency=($8), " +
+                    										"threshold_value=($9), " +
+                    										"crossing_type=($10), " +
+                    										"seasonal=($11), " +
+                    										"wet_season_begin=($12), " +
+                    										"wet_season_end=($13), " +
+                    										"dry_season_begin=($14), " +
+                    										"dry_season_end=($15), " +
+                    										"coordinates='POINT(" + req.body.lng + " " + req.body.lat + ")' " +
+                										"WHERE creator=$16 AND sensor_id=$17;";
 
                 									// Database Query
                 									client.query(query, [
@@ -107,6 +113,12 @@ exports.request = function(req, res) {
                 										req.body.default_frequency,
                 										req.body.danger_frequency,
                 										req.body.threshold_value,
+                										req.body.crossing_type,
+                										req.body.seasonal,
+                										req.body.wet_season_begin,
+                										req.body.wet_season_end,
+                										req.body.dry_season_begin,
+                										req.body.dry_season_end,
                                                         req.params.username,
                 										req.params.sensor_id
                                                     ], function(err, result) {
@@ -138,6 +150,12 @@ exports.request = function(req, res) {
                                                                     "'CENTIMETER' AS threshold_value_unit, " +
                                                                     "ST_X(sensors.coordinates::geometry) AS lng, " +
                                                                     "ST_Y(sensors.coordinates::geometry) AS lat, " +
+                                                                    "sensors.crossing_type, " +
+                    												"sensors.seasonal, " +
+                    												"sensors.wet_season_begin, " +
+                    												"sensors.wet_season_end, " +
+                    												"sensors.dry_season_begin, " +
+                    												"sensors.dry_season_end, " +
                                                                     "sensors.created, " +
                                                                     "sensors.updated " +
                                                                 "FROM Sensors sensors JOIN Water_Bodies water_bodies ON sensors.water_body_id=water_bodies.water_body_id " +

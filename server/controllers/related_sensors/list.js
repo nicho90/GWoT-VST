@@ -71,7 +71,13 @@ exports.request = function(req, res){
                                     "related_sensors.threshold_value, " +
                                     "'CENTIMETER' AS threshold_value_unit, " +
                                     "ST_X(related_sensors.coordinates::geometry) AS lng, " +
-                                    "ST_Y(related_sensors.coordinates::geometry) AS lat " +
+                                    "ST_Y(related_sensors.coordinates::geometry) AS lat, " +
+									"related_sensors.crossing_type, " +
+									"related_sensors.seasonal, " +
+									"related_sensors.wet_season_begin, " +
+									"related_sensors.wet_season_end, " +
+									"related_sensors.dry_season_begin, " +
+									"related_sensors.dry_season_end " +
                                 "FROM " +
                                     "(" +
 										"SELECT " +
@@ -150,7 +156,13 @@ exports.request = function(req, res){
                                                 "related_sensors.threshold_value, " +
                                                 "'CENTIMETER' AS threshold_value_unit, " +
                                                 "ST_X(related_sensors.coordinates::geometry) AS lng, " +
-                                                "ST_Y(related_sensors.coordinates::geometry) AS lat " +
+                                                "ST_Y(related_sensors.coordinates::geometry) AS lat, " +
+												"related_sensors.crossing_type, " +
+												"related_sensors.seasonal, " +
+												"related_sensors.wet_season_begin, " +
+												"related_sensors.wet_season_end, " +
+												"related_sensors.dry_season_begin, " +
+												"related_sensors.dry_season_end " +
                                             "FROM " +
                                                 "(" +
 													"SELECT " +
@@ -190,7 +202,13 @@ exports.request = function(req, res){
                                                 "related_sensors.threshold_value, " +
                                                 "'CENTIMETER' AS threshold_value_unit, " +
                                                 "ST_X(related_sensors.coordinates::geometry) AS lng, " +
-                                                "ST_Y(related_sensors.coordinates::geometry) AS lat " +
+                                                "ST_Y(related_sensors.coordinates::geometry) AS lat, " +
+												"related_sensors.crossing_type, " +
+												"related_sensors.seasonal, " +
+												"related_sensors.wet_season_begin, " +
+												"related_sensors.wet_season_end, " +
+												"related_sensors.dry_season_begin, " +
+												"related_sensors.dry_season_end " +
                                             "FROM " +
                                                 "(" +
 													"SELECT " +
@@ -259,7 +277,13 @@ exports.request = function(req, res){
                                                 "related_sensors.threshold_value, " +
                                                 "'CENTIMETER' AS threshold_value_unit, " +
                                                 "ST_X(related_sensors.coordinates::geometry) AS lng, " +
-                                                "ST_Y(related_sensors.coordinates::geometry) AS lat " +
+                                                "ST_Y(related_sensors.coordinates::geometry) AS lat, " +
+												"related_sensors.crossing_type, " +
+												"related_sensors.seasonal, " +
+												"related_sensors.wet_season_begin, " +
+												"related_sensors.wet_season_end, " +
+												"related_sensors.dry_season_begin, " +
+												"related_sensors.dry_season_end " +
                                             "FROM " +
 												"(" +
 													"SELECT " +
@@ -318,7 +342,13 @@ exports.request = function(req, res){
                                                     "related_sensors.threshold_value, " +
                                                     "'CENTIMETER' AS threshold_value_unit, " +
                                                     "ST_X(related_sensors.coordinates::geometry) AS lng, " +
-                                                    "ST_Y(related_sensors.coordinates::geometry) AS lat " +
+                                                    "ST_Y(related_sensors.coordinates::geometry) AS lat, " +
+													"related_sensors.crossing_type, " +
+													"related_sensors.seasonal, " +
+													"related_sensors.wet_season_begin, " +
+													"related_sensors.wet_season_end, " +
+													"related_sensors.dry_season_begin, " +
+													"related_sensors.dry_season_end " +
                                                 "FROM " +
 													"(" +
 														"SELECT " +
