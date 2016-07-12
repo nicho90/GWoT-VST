@@ -35,6 +35,7 @@ exports.request = function(req, res){
 						"sensors.creator, " +
 						"sensors.online_status, " +
 						"sensors.water_body_id, " +
+						"water_bodies.water_body_type, " +
 						"water_bodies.name AS water_body_name, " +
 						"sensors.sensor_height, " +
 						"'CENTIMETER' AS sensor_height_unit, " +
@@ -99,6 +100,7 @@ exports.request = function(req, res){
 							"sensors.creator, " +
 							"sensors.online_status, " +
 							"sensors.water_body_id, " +
+							"water_bodies.water_body_type, " +
 							"water_bodies.name AS water_body_name, " +
 							"sensors.sensor_height, " +
 							"'CENTIMETER' AS sensor_height_unit, " +
@@ -150,6 +152,7 @@ exports.request = function(req, res){
 								"creator, " +
 								"online_status, " +
 								"water_body_id, " +
+								"water_body_type, " +
 								"water_body_name, " +
 								"sensor_height, " +
 								"sensor_height_unit, " +
@@ -182,6 +185,7 @@ exports.request = function(req, res){
 									"sensors.creator, " +
 									"sensors.online_status, " +
 									"sensors.water_body_id, " +
+									"water_bodies.water_body_type, " +
 									"water_bodies.name AS water_body_name, " +
 									"sensors.sensor_height, " +
 									"'CENTIMETER' AS sensor_height_unit, " +
@@ -215,6 +219,7 @@ exports.request = function(req, res){
 									"sensors.creator, " +
 									"sensors.online_status, " +
 									"sensors.water_body_id, " +
+									"water_bodies.water_body_type, " +
 									"water_bodies.name AS water_body_name, " +
 									"sensors.sensor_height, " +
 									"'CENTIMETER' AS sensor_height_unit, " +

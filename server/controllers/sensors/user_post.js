@@ -117,6 +117,7 @@ exports.request = function(req, res){
 														"sensors.private, " +
 														"sensors.online_status, " +
 														"sensors.water_body_id, " +
+														"water_bodies.water_body_type, " +
 														"water_bodies.name AS water_body_name, " +
 														"sensors.sensor_height, " +
 														"'CENTIMETER' AS sensor_height_unit, " +

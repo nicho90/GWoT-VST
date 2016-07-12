@@ -58,6 +58,7 @@ exports.request = function(req, res){
                                     "related_sensors.private, " +
                                     "related_sensors.online_status, " +
                                     "related_sensors.water_body_id, " +
+									"water_bodies.water_body_type, " +
                                     "water_bodies.name AS water_body_name, " +
                                     "related_sensors.sensor_height, " +
                                     "'CENTIMETER' AS sensor_height_unit, " +
@@ -143,6 +144,7 @@ exports.request = function(req, res){
                                                 "related_sensors.private, " +
                                                 "related_sensors.online_status, " +
                                                 "related_sensors.water_body_id, " +
+												"water_bodies.water_body_type, " +
                                                 "water_bodies.name AS water_body_name, " +
                                                 "related_sensors.sensor_height, " +
                                                 "'CENTIMETER' AS sensor_height_unit, " +
@@ -189,6 +191,7 @@ exports.request = function(req, res){
                                                 "related_sensors.private, " +
                                                 "related_sensors.online_status, " +
                                                 "related_sensors.water_body_id, " +
+												"water_bodies.water_body_type, " +
                                                 "water_bodies.name AS water_body_name, " +
                                                 "related_sensors.sensor_height, " +
                                                 "'CENTIMETER' AS sensor_height_unit, " +
@@ -264,6 +267,7 @@ exports.request = function(req, res){
                                                 "related_sensors.private, " +
                                                 "related_sensors.online_status, " +
                                                 "related_sensors.water_body_id, " +
+												"water_bodies.water_body_type, " +
                                                 "water_bodies.name AS water_body_name, " +
                                                 "related_sensors.sensor_height, " +
                                                 "'CENTIMETER' AS sensor_height_unit, " +
@@ -329,6 +333,7 @@ exports.request = function(req, res){
                                                     "related_sensors.private, " +
                                                     "related_sensors.online_status, " +
                                                     "related_sensors.water_body_id, " +
+													"water_bodies.water_body_type, " +
                                                     "water_bodies.name AS water_body_name, " +
                                                     "related_sensors.sensor_height, " +
                                                     "'CENTIMETER' AS sensor_height_unit, " +
