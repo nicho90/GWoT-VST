@@ -6,7 +6,7 @@ app.controller("UserCreateController", function($scope, $rootScope, $location, $
 
 
     /**
-     * Load
+     * Load function
      */
     $scope.load = function(){
 
@@ -34,7 +34,7 @@ app.controller("UserCreateController", function($scope, $rootScope, $location, $
             $rootScope.alert = {
                 status: 1,
                 info: "Success ",
-                message: "Your profile has been created!"
+                message: "Your profile has been created!" // TODO: translate
             };
             $rootScope.$broadcast('alert');
             $location.url("/");

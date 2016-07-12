@@ -131,7 +131,7 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                     label: $filter('translate')('OK'),
                     className: "btn-primary",
                     callback: function() {
-                        $sensorService.delete($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, sensor.sensor_id)
+                        $sensorService.user_delete($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, sensor.sensor_id)
                         .success(function(response) {
 
                             // Reset Sensors
@@ -170,7 +170,7 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
                     label: $filter('translate')('OK'),
                     className: "btn-primary",
                     callback: function() {
-                        $sensorService.deleteAll($rootScope.authenticated_user.token, $rootScope.authenticated_user.username)
+                        $sensorService.user_deleteAll($rootScope.authenticated_user.token, $rootScope.authenticated_user.username)
                         .success(function(response) {
 
                             // Reset Sensors

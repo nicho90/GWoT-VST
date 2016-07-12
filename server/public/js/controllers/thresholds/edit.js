@@ -6,7 +6,7 @@ app.controller("ThresholdEditController", function($scope, $rootScope, $routePar
 
 
     /**
-     * Load funtion
+     * Load function
      */
     $scope.load = function(){
 

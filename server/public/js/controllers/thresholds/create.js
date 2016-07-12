@@ -6,7 +6,7 @@ app.controller("ThresholdCreateController", function($scope, $rootScope, $locati
 
 
     /**
-     * Load funtion
+     * Load function
      */
     $scope.load = function(){
 

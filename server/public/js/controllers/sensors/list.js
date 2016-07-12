@@ -81,12 +81,12 @@ app.controller("SensorListController", function($scope, $rootScope, $location, $
                         label: $filter('translate')('OK'),
                         className: "btn-primary",
                         callback: function() {
-                            $sensorService.delete(token, sensor.sensor_id)
+                            $sensorService.user_delete(token, $rootScope.authenticated_user.username, sensor.sensor_id)
                             .success(function(response) {
 
                                 // Reset Sensors
                                 delete $scope.sensors;
-                                $scope.loadData();
+                                $scope.load();
                             })
                             .error(function(err) {
                                 $scope.err = err;
