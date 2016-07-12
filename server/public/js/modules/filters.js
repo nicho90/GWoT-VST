@@ -67,6 +67,50 @@ app.filter('unixtime', function() {
 
 
 /**
+ * Month Filter
+ * @param  {number} 'month' [1,2,3,4,5,6,7,8,9,10,11,12]
+ * @return {string} 'month' [JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMBER, DECEMBER]
+ */
+app.filter('month', function() {
+    return function(month) {
+        if(month === undefined){
+            return "";
+        } else {
+            switch (month) {
+                case 1:
+                    return "JANUARY";
+                case 2:
+                    return "FEBRUARY";
+                case 3:
+                    return "MARCH";
+                case 4:
+                    return "APRIL";
+                case 5:
+                    return "MAY";
+                case 6:
+                    return "JUNE";
+                case 7:
+                    return "JULY";
+                case 8:
+                    return "AUGUST";
+                case 9:
+                    return "SEPTEMBER";
+                case 10:
+                    return "OCTOBER";
+                case 11:
+                    return "NOVEMBER";
+                case 12:
+                    return "DECEMBER";
+                default: {
+                    return "";
+                }
+            }
+        }
+    };
+});
+
+
+/**
  * Hours Filter
  * @param  {number} 'unixtime' [The unixtime in Milliseconds]
  * @return {string} 'time' [12:00, 13:00, etc.]

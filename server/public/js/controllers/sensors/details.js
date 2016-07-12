@@ -2,7 +2,7 @@ var app = angular.module("gwot-vst");
 
 
 // DETAILS
-app.controller("SensorDetailsController", function($scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $subscriptionService, $statisticService, $forecastService, $measurementService, $timeseriesService, $emergencyStationService, $serviceStationService, config, $socket, _) {
+app.controller("SensorDetailsController", function($scope, $rootScope, $routeParams, $location, $translate, $filter, $sensorService, $subscriptionService, $statisticService, $forecastService, $measurementService, $timeseriesService, $emergencyStationService, $serviceStationService, config, $socket, _, $window) {
 
 
     /**
@@ -628,7 +628,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                         }
 
                         $scope.markers.push({
-                            sensor_id: related_sensor.sensor_id,
+                            related_sensor_id: related_sensor.sensor_id,
                             layer: layer,
                             lat: related_sensor.lat,
                             lng: related_sensor.lng,
@@ -659,6 +659,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
             angular.forEach($scope.sensor.emergency_stations, function(emergency_station, key) {
                 $scope.markers.push({
+                    emergency_station_id: emergency_station.emergency_station_id,
                     layer: layer,
                     lat: emergency_station.lat,
                     lng: emergency_station.lng,
@@ -681,6 +682,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
             angular.forEach($scope.sensor.service_stations, function(service_station, key) {
                 $scope.markers.push({
+                    service_station_id: service_station.service_station_id,
                     layer: layer,
                     lat: service_station.lat,
                     lng: service_station.lng,
@@ -729,9 +731,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         if ($rootScope.authenticated_user) {
             token = $rootScope.authenticated_user.token;
         }
-
-        // TODO: Find bug /sensors/sensor_id -> undefined??
-        // console.log($routeParams.sensor_id);
 
         // Request public sensor (or private sensor only when User is authenticated)
         $sensorService.get(token, $routeParams.sensor_id)
@@ -954,8 +953,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
 
 
-
-
     /**
      * Center marker when clicked
      * (Map function)
@@ -1028,29 +1025,51 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
     /**
      * Show Sensor on map
-     * @param  {number} sensor_id [Redirect to homeView, find Sensor and highlight it on map]
+     * @param  {number} id [Redirect to homeView and find Sensor / Emergency-Station / Service-Station and highlight it on map]
      */
-    $scope.showOnMap = function(sensor_id) {
-        $location.url("/map/" + sensor_id);
+    $scope.showOnMap = function(layer, id) {
+        $location.url("/map/" + layer + "/" + id);
     };
 
 
     /**
-     * Move inside little map to related Sensor
-     * @param  {number} sensor_id
+     * Move inside little map to marker
+     * @param  {number} id [Related Sensor / Emergency-Station / Service-Station]
      */
-    $scope.moveTo = function(sensor_id) {
-        var index = _.findIndex($scope.markers, {
-            sensor_id: sensor_id
-        });
+    $scope.moveTo = function(layer, id) {
+        var index;
+
+        if(layer === 'sensor'){
+            index = _.findIndex($scope.markers, {
+                sensor_id: id
+            });
+        }
+        else if(layer === 'related_sensors'){
+            index = _.findIndex($scope.markers, {
+                related_sensor_id: id
+            });
+        } else if(layer === 'emergency_stations'){
+            index = _.findIndex($scope.markers, {
+                emergency_station_id: id
+            });
+        } else if(layer === 'service_stations'){
+            index = _.findIndex($scope.markers, {
+                service_station_id: id
+            });
+        } else {
+            index = -1;
+        }
+
         if(index !== -1){
             $scope.markers[index].focus = true;
             $scope.center = {
                 lng: $scope.markers[index].lng,
                 lat: $scope.markers[index].lat,
-                zoom: 18
+                zoom: $scope.center.zoom
             };
+            $window.scrollTo(0, 0);
         }
+
     };
 
 
