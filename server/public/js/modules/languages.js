@@ -46,6 +46,7 @@ app.config(function($translateProvider, config) {
         OFFLINE: 'Offline',
         OFFLINE_: 'offline',
         DEVICE_ID: 'Geräte-ID',
+        PRIVACY: 'Datenschutzeinstellungen',
         PRIVATE: 'Privat',
         PUBLIC: 'Öffentlich',
         COORDINATES: 'Koordinaten',
@@ -72,7 +73,7 @@ app.config(function($translateProvider, config) {
         UPDATED: 'Zuletzt geändert am',
         SHOW_ON_MAP: 'Auf der Karte anzeigen',
         DISTANCE: 'Distanz',
-        SEASONAL: 'Saisonbedingt',
+        SEASONAL_DEPENDENCY: 'Saisonbedingt',
         WET_SEASON: 'Regenzeit',
         DRY_SEASON: 'Trockenzeit',
         WET_SEASON_BEGIN: 'Beginn der Regenzeit',
@@ -82,6 +83,8 @@ app.config(function($translateProvider, config) {
         SELECT_A_MONTH: 'Monat auswählen',
         SELECT_A_WATER_BODY: 'Gewässersystem auswählen',
         LOCATION: 'Position',
+        YES: 'Yes',
+        NO: 'No',
 
         JANUARY: 'Januar',
         FEBRUARY: 'Februar',
@@ -197,7 +200,7 @@ app.config(function($translateProvider, config) {
         CAR: 'Auto',
         BUS: 'Bus',
         TRUCK: 'LKW',
-        OTHER: 'Sonstiger Schwellenwert',
+        OTHER: 'Sonstiger',
 
         // MAP-BASELAYERS
         MAP_TILES_STREETS: 'Straßenansicht',
@@ -259,6 +262,7 @@ app.config(function($translateProvider, config) {
         OFFLINE: 'Offline',
         OFFLINE_: 'offline',
         DEVICE_ID: 'Device-ID',
+        PRIVACY: 'Privacy',
         PRIVATE: 'Private',
         PUBLIC: 'Public',
         COORDINATES: 'Coordinates',
@@ -285,7 +289,7 @@ app.config(function($translateProvider, config) {
         UPDATED: 'Last updated',
         SHOW_ON_MAP: 'Show on map',
         DISTANCE: 'Distance',
-        SEASONAL: 'Seasonal',
+        SEASONAL_DEPENDENCY: 'Seasonal dependency',
         WET_SEASON: 'Wet season',
         DRY_SEASON: 'Dry season',
         WET_SEASON_BEGIN: 'Begin of the wet season',
@@ -295,6 +299,8 @@ app.config(function($translateProvider, config) {
         SELECT_A_MONTH: 'Select a month',
         SELECT_A_WATER_BODY: 'Select a water body',
         LOCATION: 'Location',
+        YES: 'Yes',
+        NO: 'No',
 
         JANUARY: 'January',
         FEBRUARY: 'February',
@@ -410,7 +416,7 @@ app.config(function($translateProvider, config) {
         CAR: 'Car',
         BUS: 'Bus',
         TRUCK: 'Truck',
-        OTHER: 'Other Threshold',
+        OTHER: 'Other',
 
         // MAP-BASELAYERS
         MAP_TILES_STREETS: 'Streets',

@@ -167,7 +167,10 @@
                         <table class="table-sm" style="margin-bottom: 0px;">
                             <tbody>
                                 <tr>
-                                    <th>{{ 'PRIVATE' | translate }} / {{ 'PUBLIC' | translate }}</th>
+                                    <th>
+                                        {{ 'PRIVACY' | translate }}
+                                        <small>{{ 'PUBLIC' | translate }} / {{ 'PUBLIC' | translate }}</small>
+                                    </th>
                                     <td>
                                         <span ng-if="sensor.private" class="text-primary">
                                             <i class="fa fa-lock" aria-hidden="true"></i>
@@ -215,7 +218,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>{{ 'SEASONAL' | translate }}</th>
+                                    <th>{{ 'SEASONAL_DEPENDENCY' | translate }}</th>
                                     <td>
                                         <span ng-if="sensor.seasonal" class="text-primary">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>

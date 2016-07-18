@@ -28,6 +28,7 @@
 
                 <div class="row">
                     <div class="col-md-12">
+                        <label>{{ 'PRIVACY' | translate }}</label><br>
                         <label class="c-input c-radio">
                             <input id="radio1" name="radio1" type="radio" ng-model="sensor.private" ng-value="false" required="required">
                             <span class="c-indicator"></span>
@@ -95,6 +96,7 @@
 
                 <div class="row">
                     <div class="col-md-12">
+                        <label>{{ 'CROSSING_TYPE' | translate }}</label><br>
                         <label class="c-input c-radio">
                             <input id="radio3" name="radio2" type="radio" ng-model="sensor.crossing_type" value="BRIDGE" required="required">
                             <span class="c-indicator"></span>
@@ -105,20 +107,26 @@
                             <span class="c-indicator"></span>
                             {{ 'FLOODWAY' | translate }}
                         </label>
+                        <label class="c-input c-radio">
+                            <input id="radio5" name="radio2" type="radio" ng-model="sensor.crossing_type" value="OTHER" required="required">
+                            <span class="c-indicator"></span>
+                            {{ 'OTHER' | translate }} {{ 'SENSOR' | translate }}
+                        </label>
                     </div>
                 </div>
                 <br>
 
                 <div class="row">
                     <div class="col-md-12">
+                        <label>{{ 'SEASONAL_DEPENDENCY' | translate }}</label><br>
                         <label class="c-input c-radio">
-                            <input id="radio5" name="radio3" type="radio" ng-model="sensor.seasonal" ng-value="true" required="required">
+                            <input id="radio6" name="radio3" type="radio" ng-model="sensor.seasonal" ng-value="true" required="required">
                             <span class="c-indicator"></span>
-                            {{ 'ON' | translate }}
+                            {{ 'YES' | translate }}
                         </label><label class="c-input c-radio">
-                            <input id="radio6" name="radio3" type="radio" ng-model="sensor.seasonal" ng-value="false" required="required">
+                            <input id="radio7" name="radio3" type="radio" ng-model="sensor.seasonal" ng-value="false" required="required">
                             <span class="c-indicator"></span>
-                            {{ 'OFF' | translate }} <small>({{ 'DEFAULT_' | translate }})</small>
+                            {{ 'NO' | translate }} <small>({{ 'DEFAULT_' | translate }})</small>
                         </label>
                     </div>
                 </div>
