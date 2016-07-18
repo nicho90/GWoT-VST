@@ -64,7 +64,6 @@ exports.request = function(req, res){
 												"subscriptions.created, " +
 												"subscriptions.updated, " +
 												"subscriptions.creator, " +
-												"subscriptions.active, " +
 												"subscriptions.sensor_id, " +
 												"sensors.device_id, " +
 												"sensors.description AS sensor_description, " +

@@ -11,8 +11,7 @@ app.factory('$subscriptionService', function($http, config) {
         getDefault: function() {
             return {
                 sensor_id: null,
-                threshold_id: null,
-                active: true
+                threshold_id: null
             };
         },
 

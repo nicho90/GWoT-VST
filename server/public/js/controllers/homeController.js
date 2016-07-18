@@ -4,7 +4,40 @@ var app = angular.module("gwot-vst");
 /**
  * Home and Map Controller
  */
-app.controller("HomeController", function($scope, $rootScope, $routeParams, config, $filter, $location, $translate, $sensorService, $measurementService) {
+app.controller("HomeController", function($scope, $rootScope, $routeParams, config, $filter, $location, $translate, $sensorService, $measurementService, $emergencyStationService, $serviceStationService) {
+
+
+    /**
+     * Check for route parameters
+     */
+    $scope.check_route_params = function(layer, id){
+        
+        if($location.path().includes(layer) && layer === 'sensors'){
+            if(Number($routeParams.sensor_id) === id){
+                $scope.layers.overlays.sensors.visible = true;
+                return true;
+            } else {
+                return false;
+            }
+        } else if($location.path().includes(layer) && layer === 'emergency_stations'){
+            if(Number($routeParams.emergency_station_id) === id){
+                $scope.layers.overlays.emergency_stations.visible = true;
+                return true;
+            } else {
+                return false;
+            }
+        } else if($location.path().includes(layer) && layer === 'service_stations'){
+            if(Number($routeParams.service_station_id) === id){
+                $scope.layers.overlays.service_stations.visible = true;
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    };
+
 
     /**
      * Load Sensors
@@ -27,6 +60,92 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
         $sensorService.list(token).success(function(response) {
             $scope.sensors = response;
             $scope.updateMarker();
+        }).error(function(err) {
+            $scope.err = err;
+        });
+
+        // Load Emergency Stations
+        $emergencyStationService.list().success(function(response) {
+            $scope.emergency_stations = response;
+
+            angular.forEach($scope.emergency_stations, function(emergency_station, key) {
+
+                // Prepare focus
+                var _focus = $scope.check_route_params('emergency_stations', emergency_station.emergency_station_id);
+
+                // Add marker
+                $scope.markers.push({
+                    //emergency_station_id: emergency_station.emergency_station_id,
+                    layer: 'emergency_stations',
+                    lat: emergency_station.lat,
+                    lng: emergency_station.lng,
+                    focus: _focus,
+                    draggable: false,
+                    icon: $scope.emergencyStationIcon,
+                    message: emergency_station.name,
+                    getMessageScope: function() {
+                        return $scope;
+                    },
+                    compileMessage: true,
+                    popupOptions: {
+                        closeButton: true
+                    },
+                    enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
+                });
+
+                // Zoom to
+                if(_focus){
+                    $scope.center = {
+                        lat: emergency_station.lat,
+                        lng: emergency_station.lng,
+                        zoom: $scope.center.zoom
+                    };
+                }
+            });
+
+        }).error(function(err) {
+            $scope.err = err;
+        });
+
+        // Load Service Stations
+        $serviceStationService.list().success(function(response) {
+            $scope.service_stations = response;
+
+            angular.forEach($scope.service_stations, function(service_station, key) {
+
+                // Prepare focus
+                var _focus = $scope.check_route_params('service_stations', service_station.service_station_id);
+
+                // Add marker
+                $scope.markers.push({
+                    //service_station_id: service_station.service_station_id,
+                    layer: 'service_stations',
+                    lat: service_station.lat,
+                    lng: service_station.lng,
+                    focus: _focus,
+                    draggable: false,
+                    icon: $scope.serviceStationIcon,
+                    message: service_station.name,
+                    getMessageScope: function() {
+                        return $scope;
+                    },
+                    compileMessage: true,
+                    popupOptions: {
+                        closeButton: true
+                    },
+                    enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
+                });
+
+                // Zoom to
+                if(_focus){
+                    $scope.center = {
+                        lat: service_station.lat,
+                        lng: service_station.lng,
+                        zoom: $scope.center.zoom
+                    };
+                }
+            });
+
         }).error(function(err) {
             $scope.err = err;
         });
@@ -72,14 +191,6 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
 
         angular.forEach($scope.sensors, function(sensor, key) {
 
-            // Prepare focus
-            var _focus = false;
-
-            // Check if routeParams were set
-            if($routeParams.sensor_id !== undefined && Number($routeParams.sensor_id) === sensor.sensor_id){
-                _focus = true;
-            }
-
             // Request lastest measurement for sensor
             $measurementService.get_latest(token, sensor.sensor_id)
                 .success(function(response) {
@@ -94,18 +205,23 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                         // Check if User has set a current Threshold
                         if($rootScope.authenticated_user.currentThreshold.threshold_id !== 0) {
 
-                            // Check if water_level exists
-                            if($scope.sensors[key].latest_measurement.water_level !== undefined){
-                                if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].water_level + $rootScope.authenticated_user.currentThreshold.warning_threshold && $scope.sensors[key].latest_measurement.water_level < $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold){
-                                    _icon = $scope.warningIcon;
-                                } else if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
-                                    _icon = $scope.dangerIcon;
-                                } else {
-                                    _icon = $scope.successIcon;
+                            // Check if latest_measurement and water_level exists
+                            if($scope.sensors[key].latest_measurement !== undefined){
+                                if($scope.sensors[key].latest_measurement.water_level !== undefined){
+                                    if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].water_level + $rootScope.authenticated_user.currentThreshold.warning_threshold && $scope.sensors[key].latest_measurement.water_level < $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold){
+                                        _icon = $scope.warningIcon;
+                                    } else if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
+                                        _icon = $scope.dangerIcon;
+                                    } else {
+                                        _icon = $scope.successIcon;
+                                    }
                                 }
                             }
                         }
                     }
+
+                    // Prepare focus
+                    var _focus = $scope.check_route_params('sensors', sensor.sensor_id);
 
                     // Check if latest measurement exists
                     var water_level = "-";
@@ -136,6 +252,7 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                         '</center>';
 
                     $scope.markers.push({
+                        //sensor_id: sensor.sensor_id,
                         layer: 'sensors',
                         lat: sensor.lat,
                         lng: sensor.lng,
@@ -152,13 +269,23 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                         },
                         enable: ['leafletDirectiveMarker.map.click', 'leafletDirectiveMarker.map.dblclick']
                     });
+
+                    // Zoom to
+                    if(_focus){
+                        $scope.center = {
+                            lat: sensor.lat,
+                            lng: sensor.lng,
+                            zoom: $scope.center.zoom
+                        };
+                    }
                 })
                 .error(function(err) {
                     $scope.err = err;
+                    console.log(err);
                 });
-
         });
     };
+
 
 
     /**
@@ -231,6 +358,16 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                     name: $filter('translate')('SENSORS'),
                     type: "group",
                     visible: true
+                },
+                emergency_stations: {
+                    name: $filter('translate')('EMERGENCY_STATIONS'),
+                    type: "group",
+                    visible: false
+                },
+                service_stations: {
+                    name: $filter('translate')('SERVICE_STATIONS'),
+                    type: "group",
+                    visible: false
                 }
             }
         },
@@ -259,24 +396,45 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
             prefix: 'fa',
             icon: 'cube'
         },
+        serviceStationIcon: {
+            type: 'awesomeMarker',
+            markerColor: 'blue',
+            prefix: 'fa',
+            icon: 'wrench'
+        },
+        emergencyStationIcon: {
+            type: 'awesomeMarker',
+            markerColor: 'darkblue',
+            prefix: 'fa',
+            icon: 'ambulance'
+        },
         legend: {
             position: 'bottomleft',
             colors: [
                 '#70B211',
                 '#F8981B',
                 '#D83D20',
-                '#575757'
+                '#575757',
+                '#0066A5',
+                '#30A8DE'
             ],
             labels: [
                 $filter('translate')('PASSABLE'),
                 $filter('translate')('RISK'),
                 $filter('translate')('HIGH_RISK'),
-                $filter('translate')('N_A')
+                $filter('translate')('N_A'),
+                $filter('translate')('EMERGENCY_STATION'),
+                $filter('translate')('SERVICE_STATION')
             ]
         },
         events: {
             map: {
-                enable: ['leafletDirectiveMap.click', 'leafletDirectiveMap.dblclick'],
+                enable: [
+                    'leafletDirectiveMap.click',
+                    'leafletDirectiveMap.dblclick',
+                    'load',
+                    'unload'
+                ],
                 logic: 'emit'
             }
         }

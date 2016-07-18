@@ -4,7 +4,7 @@
  */
 module.exports = {
     "properties": {
-        "username": {
+        "creator": {
             "type": "string",
             "minLength": 2
         },
@@ -13,15 +13,11 @@ module.exports = {
         },
         "threshold_id": {
             "type": "integer"
-        },
-        "active": {
-            "type": "boolean"
         }
     },
     "required": [
-        "username",
+        "creator",
         "sensor_id",
-        "threshold_id",
-        "active"
+        "threshold_id"
     ]
 };

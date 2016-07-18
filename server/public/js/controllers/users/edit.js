@@ -1,43 +1,54 @@
 var app = angular.module("gwot-vst");
 
 
-// CREATE
-app.controller("UserCreateController", function($scope, $rootScope, $location, $translate, $userService,  $verificationService, config) {
-
+// EDIT
+app.controller("UserEditController", function($scope, $rootScope, $location, $translate, $filter, $userService, $verificationService, config) {
 
     /**
      * Load function
      */
     $scope.load = function(){
 
-        // Redirect, if User is logged in
-        if($rootScope.authenticated_user) {
+        // Check if User is authenticated
+        if (!$rootScope.authenticated_user) {
             $location.url("/");
         } else {
 
-            // New user
-            $scope.user = $userService.getDefault();
+            // Load User
+            $userService.get($rootScope.authenticated_user.token, $rootScope.authenticated_user.username).success(function(response){
+                $scope.user = response;
+                $scope._username = $scope.user.username;
+            }).error(function(err) {
+                $scope.err = err;
+            });
         }
+
     };
 
 
     /**
      * Create
      */
-    $scope.create = function(){
+    $scope.save = function(){
 
-        $userService.create($scope.user).success(function(response){
-            $scope.authenticated_user = response;
+        $userService.edit($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, $scope.user).success(function(response){
+
+            // Reset
+            delete $scope.user;
+
+            // Update all Controllers
             $rootScope.authenticated_user = response;
             $rootScope.$broadcast('update');
 
             $rootScope.alert = {
                 status: 1,
                 info: "Success ",
-                message: "Your profile has been created!" // TODO: translate
+                message: "Your profile has been updated!" // TODO: translate
             };
             $rootScope.$broadcast('alert');
-            $location.url("/");
+
+            // Redirect
+            $location.url("/users/" + $rootScope.authenticated_user.username);
 
         }).error(function(err){
             $scope.err = err;
@@ -57,6 +68,8 @@ app.controller("UserCreateController", function($scope, $rootScope, $location, $
     $scope.checkUsername = function(username){
         if(username === $scope.username){
             $scope.username_available = "undefined";
+        } else if(username === $scope._username){
+            $scope.username_available = true;
         } else {
             $verificationService.verify_username(username).success(function(response){
                 $scope.username_available = response;
@@ -76,7 +89,7 @@ app.controller("UserCreateController", function($scope, $rootScope, $location, $
         delete $scope.user;
 
         // Redirect
-        $location.url("/");
+        $location.url("/users/" + $rootScope.authenticated_user.username);
     };
 
 
@@ -84,6 +97,6 @@ app.controller("UserCreateController", function($scope, $rootScope, $location, $
      * Init
      */
     $scope.load();
-    $scope.username_available = "undefined";
+    $scope.username_available = true;
 
 });

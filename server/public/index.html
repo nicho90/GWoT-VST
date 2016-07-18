@@ -61,7 +61,7 @@
         <script src="node_modules/socket.io-client/socket.io.js"></script> <!-- Alternative -->
         <script src="lib/angular-socket-io/socket.min.js"></script>
         <script src="lib/angular-animate/angular-animate.js"></script>
-        <script src="lib/angular-toastr/dist/angular-toastr.min.js"></script>
+        <script src="lib/angular-toastr/dist/angular-toastr.tpls.min.js"></script>
         <script src="lib/bootbox/bootbox.js"></script>
         <script src="lib/ngBootbox/dist/ngBootbox.min.js"></script>
 
@@ -94,8 +94,8 @@
 
                 <!-- Right Navbar-Menu (Login & Profile) -->
                 <form class="form-inline pull-xs-right" ng-if="!authenticated_user">
-                    <input class="form-control form-control" type="text" placeholder="{{ 'USERNAME' | translate }}" ng-model="user.username">
-                    <input class="form-control form-control" type="password" placeholder="{{ 'PASSWORD' | translate }}" ng-model="user.password">
+                    <input class="form-control" type="text" placeholder="{{ 'USERNAME' | translate }}" ng-model="user.username">
+                    <input class="form-control" type="password" placeholder="{{ 'PASSWORD' | translate }}" ng-model="user.password">
                     <button class="btn btn-primary" type="submit" ng-click="login()">
                         <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'LOGIN' | translate }}
                     </button>
@@ -112,7 +112,7 @@
                         <div class="dropdown-menu dropdown-menu-right">
                             <h6 class="dropdown-header" ng-if="authenticated_user.thresholds.length > 0">{{ 'THRESHOLDS' | translate}}</h6>
 
-                            <a ng-repeat="threshold in authenticated_user.thresholds" class="dropdown-item" style="cursor:pointer;" ng-click="updateCurrentThreshold(threshold)">
+                            <a ng-repeat="threshold in authenticated_user.thresholds | orderBy: 'category' " class="dropdown-item" style="cursor:pointer;" ng-click="updateCurrentThreshold(threshold)">
                                 <i class="fa fa-blind" aria-hidden="true" ng-if="threshold.category == 'PEDESTRIAN' "></i>
                                 <i class="fa fa-bicycle" aria-hidden="true" ng-if="threshold.category == 'BIKE' "></i>
                                 <i class="fa fa-wheelchair" aria-hidden="true" ng-if="threshold.category == 'WHEELCHAIR' "></i>
@@ -124,7 +124,7 @@
                                 <i class="fa fa-circle-o" aria-hidden="true" ng-if="threshold.category == 'OTHER' "></i>
                                 &nbsp;<span ng-class="{'bold': authenticated_user.currentThreshold.threshold_id === threshold.threshold_id}">{{threshold.description}}</span>
                             </a>
-                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-divider" ng-if="authenticated_user.thresholds.length > 0"></div>
                             <a class="dropdown-item" ng-click="showSettings()" style="cursor:pointer;">
                                 <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'SETTINGS' | translate }}
                             </a>
@@ -211,11 +211,16 @@
         <script src="js/services/forecastService.js"></script>
         <script src="js/services/userService.js"></script>
         <script src="js/services/thresholdService.js"></script>
+        <script src="js/services/vehicleService.js"></script>
         <script src="js/services/sensorService.js"></script>
         <script src="js/services/subscriptionService.js"></script>
         <script src="js/services/measurementService.js"></script>
         <script src="js/services/statisticService.js"></script>
         <script src="js/services/timeseriesService.js"></script>
+        <script src="js/services/emergencyStationService.js"></script>
+        <script src="js/services/serviceStationService.js"></script>
+        <script src="js/services/waterBodyService.js"></script>
+        <script src="js/services/verificationService.js"></script>
 
         <!-- Main App -->
         <script src="js/app.js"></script>
@@ -232,6 +237,7 @@
         <!-- User Controllers -->
         <script src="js/controllers/users/create.js"></script>
         <script src="js/controllers/users/details.js"></script>
+        <script src="js/controllers/users/edit.js"></script>
 
         <!-- Sensor Controllers -->
         <script src="js/controllers/sensors/list.js"></script>
@@ -240,6 +246,7 @@
 
         <!-- Threshold controllers-->
         <script src="js/controllers/thresholds/create.js"></script>
+        <script src="js/controllers/thresholds/edit.js"></script>
 
     </body>
 

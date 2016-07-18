@@ -65,6 +65,7 @@ exports.request = function(req, res){
 												"sensors.private, " +
 												"sensors.online_status, " +
 												"sensors.water_body_id, " +
+												"water_bodies.water_body_type, " +
 												"water_bodies.name AS water_body_name, " +
 												"sensors.sensor_height, " +
 												"'CENTIMETER' AS sensor_height_unit, " +
@@ -79,10 +80,17 @@ exports.request = function(req, res){
 												"'CENTIMETER' AS threshold_value_unit, " +
 												"ST_X(sensors.coordinates::geometry) AS lng, " +
 												"ST_Y(sensors.coordinates::geometry) AS lat, " +
+												"sensors.crossing_type, " +
+												"sensors.seasonal, " +
+												"sensors.wet_season_begin, " +
+												"sensors.wet_season_end, " +
+												"sensors.dry_season_begin, " +
+												"sensors.dry_season_end, " +
 												"sensors.created, " +
 												"sensors.updated " +
 											"FROM Sensors sensors JOIN Water_Bodies water_bodies ON sensors.water_body_id=water_bodies.water_body_id " +
-											"WHERE sensors.creator=$1 ORDER BY sensors.sensor_id ASC;";
+											"WHERE sensors.creator=$1 " +
+											"ORDER BY sensors.sensor_id ASC;";
 
 										// Database Query
 										client.query(query, [

@@ -38,11 +38,11 @@ app.controller("NotificationController", function($scope, $rootScope, $timeout, 
                 '<td>' + data.height + '</td>' +
                 '</tr>' +
                 '<tr>' +
-                '<td>' + $filter('translate')("DESCRIPTION_NOTIFICATION") + ': </td>' +
+                '<td>' + $filter('translate')("DESCRIPTION") + ': </td>' +
                 '<td>' + data.description + '</td>' +
                 '</tr>' +
                 '<tr>' +
-                '<td>' + $filter('translate')("CATEGORY_NOTIFICATION") + ': </td>' +
+                '<td>' + $filter('translate')("CATEGORY") + ': </td>' +
                 '<td>' + data.category + '</td>' +
                 '</tr>' +
                 '</table>';

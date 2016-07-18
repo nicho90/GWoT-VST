@@ -8,7 +8,7 @@ module.exports = {
             "type": "string",
             "minLength": 1
         },
-        "category": {
+        "water_body_type": {
             "type": "string",
             "enum": [
                 "STREAM",
@@ -22,6 +22,6 @@ module.exports = {
     },
     "required": [
         "name",
-        "category"
+        "water_body_type"
     ]
 };

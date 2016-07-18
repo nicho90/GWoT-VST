@@ -28,29 +28,36 @@ exports.request = function(req, res){
 
 				// SELECT ALL PUBLIC SENSORS
 				query = "SELECT " +
-					"sensors.sensor_id, " +
-					"sensors.device_id, " +
-					"sensors.description ," +
-					"sensors.private, " +
-					"sensors.creator, " +
-					"sensors.online_status, " +
-					"sensors.water_body_id, " +
-					"water_bodies.name AS water_body_name, " +
-					"sensors.sensor_height, " +
-					"'CENTIMETER' AS sensor_height_unit, " +
-					"sensors.crossing_height, " +
-					"'CENTIMETER' AS crossing_height_unit, " +
-					"sensors.default_frequency, " +
-					"'MILLISECONDS' AS default_frequency_unit, " +
-					"sensors.danger_frequency, " +
-					"'MILLISECONDS' AS danger_frequency_unit, " +
-					"sensors.increased_frequency, " +
-					"sensors.threshold_value, " +
-					"'CENTIMETER' AS threshold_value_unit, " +
-					"ST_X(sensors.coordinates::geometry) AS lng, " +
-					"ST_Y(sensors.coordinates::geometry) AS lat, " +
-					"sensors.created, " +
-					"sensors.updated " +
+						"sensors.sensor_id, " +
+						"sensors.device_id, " +
+						"sensors.description ," +
+						"sensors.private, " +
+						"sensors.creator, " +
+						"sensors.online_status, " +
+						"sensors.water_body_id, " +
+						"water_bodies.water_body_type, " +
+						"water_bodies.name AS water_body_name, " +
+						"sensors.sensor_height, " +
+						"'CENTIMETER' AS sensor_height_unit, " +
+						"sensors.crossing_height, " +
+						"'CENTIMETER' AS crossing_height_unit, " +
+						"sensors.default_frequency, " +
+						"'MILLISECONDS' AS default_frequency_unit, " +
+						"sensors.danger_frequency, " +
+						"'MILLISECONDS' AS danger_frequency_unit, " +
+						"sensors.increased_frequency, " +
+						"sensors.threshold_value, " +
+						"'CENTIMETER' AS threshold_value_unit, " +
+						"ST_X(sensors.coordinates::geometry) AS lng, " +
+						"ST_Y(sensors.coordinates::geometry) AS lat, " +
+						"sensors.crossing_type, " +
+						"sensors.seasonal, " +
+						"sensors.wet_season_begin, " +
+						"sensors.wet_season_end, " +
+						"sensors.dry_season_begin, " +
+						"sensors.dry_season_end, " +
+						"sensors.created, " +
+						"sensors.updated " +
 					"FROM Sensors sensors JOIN Water_Bodies water_bodies ON sensors.water_body_id=water_bodies.water_body_id " +
 					"WHERE sensors.private=false " +
 					"ORDER BY sensors.sensor_id ASC;";
@@ -93,6 +100,7 @@ exports.request = function(req, res){
 							"sensors.creator, " +
 							"sensors.online_status, " +
 							"sensors.water_body_id, " +
+							"water_bodies.water_body_type, " +
 							"water_bodies.name AS water_body_name, " +
 							"sensors.sensor_height, " +
 							"'CENTIMETER' AS sensor_height_unit, " +
@@ -107,6 +115,12 @@ exports.request = function(req, res){
 							"'CENTIMETER' AS threshold_value_unit, " +
 							"ST_X(sensors.coordinates::geometry) AS lng, " +
 							"ST_Y(sensors.coordinates::geometry) AS lat, " +
+							"sensors.crossing_type, " +
+							"sensors.seasonal, " +
+							"sensors.wet_season_begin, " +
+							"sensors.wet_season_end, " +
+							"sensors.dry_season_begin, " +
+							"sensors.dry_season_end, " +
 							"sensors.created, " +
 							"sensors.updated " +
 						"FROM Sensors sensors JOIN Water_Bodies water_bodies ON sensors.water_body_id=water_bodies.water_body_id " +
@@ -138,6 +152,7 @@ exports.request = function(req, res){
 								"creator, " +
 								"online_status, " +
 								"water_body_id, " +
+								"water_body_type, " +
 								"water_body_name, " +
 								"sensor_height, " +
 								"sensor_height_unit, " +
@@ -150,6 +165,12 @@ exports.request = function(req, res){
 								"increased_frequency, " +
 								"threshold_value, " +
 								"threshold_value_unit, " +
+								"crossing_type, " +
+								"seasonal, " +
+								"wet_season_begin, " +
+								"wet_season_end, " +
+								"dry_season_begin, " +
+								"dry_season_end, " +
 								"lng, " +
 								"lat, " +
 								"created, " +
@@ -164,6 +185,7 @@ exports.request = function(req, res){
 									"sensors.creator, " +
 									"sensors.online_status, " +
 									"sensors.water_body_id, " +
+									"water_bodies.water_body_type, " +
 									"water_bodies.name AS water_body_name, " +
 									"sensors.sensor_height, " +
 									"'CENTIMETER' AS sensor_height_unit, " +
@@ -178,6 +200,12 @@ exports.request = function(req, res){
 									"'CENTIMETER' AS threshold_value_unit, " +
 									"ST_X(sensors.coordinates::geometry) AS lng, " +
 									"ST_Y(sensors.coordinates::geometry) AS lat, " +
+									"sensors.crossing_type, " +
+									"sensors.seasonal, " +
+									"sensors.wet_season_begin, " +
+									"sensors.wet_season_end, " +
+									"sensors.dry_season_begin, " +
+									"sensors.dry_season_end, " +
 									"sensors.created, " +
 									"sensors.updated " +
 								"FROM Sensors sensors JOIN Water_Bodies water_bodies ON sensors.water_body_id=water_bodies.water_body_id " +
@@ -191,6 +219,7 @@ exports.request = function(req, res){
 									"sensors.creator, " +
 									"sensors.online_status, " +
 									"sensors.water_body_id, " +
+									"water_bodies.water_body_type, " +
 									"water_bodies.name AS water_body_name, " +
 									"sensors.sensor_height, " +
 									"'CENTIMETER' AS sensor_height_unit, " +
@@ -205,6 +234,12 @@ exports.request = function(req, res){
 									"'CENTIMETER' AS threshold_value_unit, " +
 									"ST_X(sensors.coordinates::geometry) AS lng, " +
 									"ST_Y(sensors.coordinates::geometry) AS lat, " +
+									"sensors.crossing_type, " +
+									"sensors.seasonal, " +
+									"sensors.wet_season_begin, " +
+									"sensors.wet_season_end, " +
+									"sensors.dry_season_begin, " +
+									"sensors.dry_season_end, " +
 									"sensors.created, " +
 									"sensors.updated " +
 								"FROM Sensors sensors JOIN Water_Bodies water_bodies ON sensors.water_body_id=water_bodies.water_body_id " +

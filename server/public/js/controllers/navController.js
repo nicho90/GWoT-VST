@@ -83,42 +83,15 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
                 $rootScope.authenticated_user = response;
 
                 // Load thresholds
-                $thresholdService.list($scope.authenticated_user.token, $scope.authenticated_user.username).success(function(response){
+                $scope.load_thresholds();
 
-                    $scope.authenticated_user.thresholds = response;
-                    $rootScope.authenticated_user.thresholds = response;
-
-                    // Select first threshold as currentThreshold
-                    if($rootScope.authenticated_user.thresholds.length !== 0){
-                        $scope.authenticated_user.currentThreshold = $rootScope.authenticated_user.thresholds[0];
-                        $rootScope.authenticated_user.currentThreshold = $rootScope.authenticated_user.thresholds[0];
-                    } else {
-                        $rootScope.authenticated_user.currentThreshold = {
-                            threshold_id: 0
-                        };
-                    }
-
-                    // Update all Controllers again
-                    $rootScope.$broadcast('update');
-
-                    // Throw Alert
-                    $rootScope.alert = {
-                        status: 1,
-                        info: "",
-                        message: "Hi " + $scope.authenticated_user.first_name + " " + $scope.authenticated_user.last_name
-                    };
-                    $rootScope.$broadcast('alert');
-
-                }).error(function(err){
-                    $scope.err = err;
-
-                    $rootScope.alert = {
-                        status: 2,
-                        info: "Error ",
-                        message: err.message
-                    };
-                    $rootScope.$broadcast('alert');
-                });
+                // Throw Alert
+                $rootScope.alert = {
+                    status: 1,
+                    info: "",
+                    message: "Hi " + $scope.authenticated_user.first_name + " " + $scope.authenticated_user.last_name // TODO: translate
+                };
+                $rootScope.$broadcast('alert');
 
             }).error(function(err){
 
@@ -134,13 +107,58 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
 
             $rootScope.alert = {
                 status: 2,
-                info: "Error ",
-                message: "Please insert a username and a password!"
+                info: "Error ",  // TODO: translate
+                message: "Please insert a username and a password!"  // TODO: translate
             };
             $rootScope.$broadcast('alert');
 
         }
     };
+
+
+    /**
+     * Load thresholds
+     */
+    $scope.load_thresholds = function(){
+
+        $thresholdService.list($scope.authenticated_user.token, $scope.authenticated_user.username).success(function(response){
+
+            $scope.authenticated_user.thresholds = response;
+            $rootScope.authenticated_user.thresholds = response;
+
+            // Select first threshold as currentThreshold
+            if($rootScope.authenticated_user.thresholds.length !== 0){
+                $scope.authenticated_user.currentThreshold = $rootScope.authenticated_user.thresholds[0];
+                $rootScope.authenticated_user.currentThreshold = $rootScope.authenticated_user.thresholds[0];
+            } else {
+                $rootScope.authenticated_user.currentThreshold = {
+                    threshold_id: 0
+                };
+            }
+
+            // Update all Controllers again
+            $rootScope.$broadcast('update');
+
+        }).error(function(err){
+            $scope.err = err;
+
+            $rootScope.alert = {
+                status: 2,
+                info: "Error ",
+                message: err.message
+            };
+            $rootScope.$broadcast('alert');
+        });
+    };
+
+
+    /**
+     * Update thresholds
+     */
+    $rootScope.$on('updateThresholds', function(){
+        $scope.load_thresholds();
+    });
+
 
     /**
      * Logout

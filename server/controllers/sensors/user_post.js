@@ -73,10 +73,16 @@ exports.request = function(req, res){
 											"threshold_value, " +
 											"default_frequency, " +
 											"danger_frequency, " +
+											"crossing_type, " +
+											"seasonal, " +
+											"wet_season_begin, " +
+											"wet_season_end, " +
+											"dry_season_begin, " +
+											"dry_season_end, " +
 											"increased_frequency, " +
 											"online_status, " +
 											"coordinates " +
-										") VALUES (now(), now(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'false', 'false', 'POINT(" + req.body.lat + " " + req.body.lng + ")');";
+										") VALUES (now(), now(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 'false', 'false', 'POINT(" + req.body.lat + " " + req.body.lng + ")');";
 
 										// Database Query
 										client.query(query, [
@@ -89,7 +95,13 @@ exports.request = function(req, res){
 											req.body.crossing_height,
 											req.body.threshold_value,
 											req.body.default_frequency,
-											req.body.danger_frequency
+											req.body.danger_frequency,
+											req.body.crossing_type,
+											req.body.seasonal,
+											req.body.wet_season_begin,
+											req.body.wet_season_end,
+											req.body.dry_season_begin,
+											req.body.dry_season_end
 										], function(err, result) {
 											done();
 
@@ -99,30 +111,38 @@ exports.request = function(req, res){
 											} else {
 
 												var query = "SELECT " +
-													"sensors.sensor_id, " +
-													"sensors.device_id, " +
-													"sensors.description ," +
-													"sensors.private, " +
-													"sensors.online_status, " +
-													"sensors.water_body_id, " +
-													"water_bodies.name AS water_body_name, " +
-													"sensors.sensor_height, " +
-													"'CENTIMETER' AS sensor_height_unit, " +
-													"sensors.crossing_height, " +
-													"'CENTIMETER' AS crossing_height_unit, " +
-													"sensors.default_frequency, " +
-													"'MILLISECONDS' AS default_frequency_unit, " +
-													"sensors.danger_frequency, " +
-													"'MILLISECONDS' AS danger_frequency_unit, " +
-													"sensors.increased_frequency, " +
-													"sensors.threshold_value, " +
-													"'CENTIMETER' AS threshold_value_unit, " +
-													"ST_X(sensors.coordinates::geometry) AS lng, " +
-													"ST_Y(sensors.coordinates::geometry) AS lat, " +
-													"sensors.created, " +
-													"sensors.updated " +
+														"sensors.sensor_id, " +
+														"sensors.device_id, " +
+														"sensors.description ," +
+														"sensors.private, " +
+														"sensors.online_status, " +
+														"sensors.water_body_id, " +
+														"water_bodies.water_body_type, " +
+														"water_bodies.name AS water_body_name, " +
+														"sensors.sensor_height, " +
+														"'CENTIMETER' AS sensor_height_unit, " +
+														"sensors.crossing_height, " +
+														"'CENTIMETER' AS crossing_height_unit, " +
+														"sensors.default_frequency, " +
+														"'MILLISECONDS' AS default_frequency_unit, " +
+														"sensors.danger_frequency, " +
+														"'MILLISECONDS' AS danger_frequency_unit, " +
+														"sensors.increased_frequency, " +
+														"sensors.threshold_value, " +
+														"'CENTIMETER' AS threshold_value_unit, " +
+														"ST_X(sensors.coordinates::geometry) AS lng, " +
+														"ST_Y(sensors.coordinates::geometry) AS lat, " +
+														"sensors.crossing_type, " +
+														"sensors.seasonal, " +
+														"sensors.wet_season_begin, " +
+														"sensors.wet_season_end, " +
+														"sensors.dry_season_begin, " +
+														"sensors.dry_season_end, " +
+														"sensors.created, " +
+														"sensors.updated " +
 													"FROM Sensors sensors JOIN Water_Bodies water_bodies ON sensors.water_body_id=water_bodies.water_body_id " +
-													"WHERE sensors.creator=$1 ORDER BY sensors.created DESC;";
+													"WHERE sensors.creator=$1 " +
+													"ORDER BY sensors.created DESC;";
 
 												// Database Query
 												client.query(query, [

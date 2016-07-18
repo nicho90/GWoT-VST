@@ -13,14 +13,20 @@ app.factory('$sensorService', function($http, config) {
                 device_id: "",
                 description: "",
                 private: false,
-                water_body_id: "",
+                crossing_type: "BRIDGE",
+                water_body_id: null,
                 sensor_height: 100,
                 crossing_height: 0,
                 default_frequency: 60000,
                 danger_frequency: 6000,
                 threshold_value: 50,
                 lng: 0.0,
-                lat: 0.0
+                lat: 0.0,
+                seasonal: false,
+                wet_season_begin: null,
+                wet_season_end: null,
+                dry_season_begin: null,
+                dry_season_end: null
             };
         },
 
@@ -79,20 +85,7 @@ app.factory('$sensorService', function($http, config) {
             return $http.get(config.apiURL + "/sensors/" + sensor_id + "/related_sensors", {
                 headers: { 'authorization': token }
             });
-        },
-
-        // Nearby Emergency-Stations of a Sensor
-        get_emergency_stations: function(token, sensor_id) {
-            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/emergency_stations", {
-                headers: { 'authorization': token }
-            });
-        },
-
-        // Nearby Service-Stations of a Sensor
-        get_service_stations: function(token, sensor_id) {
-            return $http.get(config.apiURL + "/sensors/" + sensor_id + "/service_stations", {
-                headers: { 'authorization': token }
-            });
         }
+
     };
 });

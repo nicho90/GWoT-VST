@@ -1,8 +1,8 @@
 var app = angular.module("gwot-vst");
 
 
-// CREATE
-app.controller("ThresholdCreateController", function($scope, $rootScope, $location, $translate, $userService, $thresholdService, $vehicleService) {
+// EDIT
+app.controller("ThresholdEditController", function($scope, $rootScope, $routeParams, $location, $translate, $userService, $thresholdService, $vehicleService) {
 
 
     /**
@@ -15,8 +15,22 @@ app.controller("ThresholdCreateController", function($scope, $rootScope, $locati
             $location.url("/");
         }
 
-        $scope.threshold = $thresholdService.getDefault();
         $scope.vehicles = [];
+
+        // Load threshold
+        $thresholdService.get($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, $routeParams.threshold_id).success(function(response){
+            $scope.threshold = response;
+        }).error(function(err){
+            $scope.err = err;
+
+            // Show Alert
+            $rootScope.alert = {
+                status: 2,
+                info: "Error ",
+                message: err.message
+            };
+            $rootScope.$broadcast('alert');
+        });
 
     };
 
@@ -76,11 +90,11 @@ app.controller("ThresholdCreateController", function($scope, $rootScope, $locati
 
 
     /**
-     * Create
+     * Save
      */
-    $scope.create = function(){
+    $scope.save = function(){
 
-        $thresholdService.create($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, $scope.threshold).success(function(response){
+        $thresholdService.edit($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, $routeParams.threshold_id, $scope.threshold).success(function(response){
 
             // Reset
             delete $scope.threshold;
@@ -92,7 +106,7 @@ app.controller("ThresholdCreateController", function($scope, $rootScope, $locati
             $rootScope.alert = {
                 status: 1,
                 info: "Success ", // TODO: translate
-                message: "Your new Threshold has been created!" // TODO: translate
+                message: "Your new Threshold has been updated!" // TODO: translate
             };
             $rootScope.$broadcast('alert');
 
@@ -129,5 +143,4 @@ app.controller("ThresholdCreateController", function($scope, $rootScope, $locati
      * Init
      */
     $scope.load();
-    $scope.search = "";
 });

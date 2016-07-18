@@ -21,7 +21,7 @@ app.controller("AlertController", function($scope, $rootScope, $translate, $time
         if($rootScope.alert.status === 1) {
             $timeout(function () {
                 $scope.isAlert = false;
-            }, 1000);
+            }, 1500);
         }
 
     });

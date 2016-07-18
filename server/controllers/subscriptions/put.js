@@ -62,18 +62,16 @@ exports.request = function(req, res){
 
 										// Prepare Query
 										var query = "UPDATE Subscriptions SET " +
-											"updated=now(), " +
-											"sensor_id=$2, " +
-											"threshold_id=$3, " +
-											"active=$4 " +
+												"updated=now(), " +
+												"sensor_id=$2, " +
+												"threshold_id=$3 " +
 											"WHERE subscription_id=$1;";
 
 										// Database Query
 										client.query(query, [
 											req.params.subscription_id,
 											req.body.sensor_id,
-											req.body.threshold_id,
-											req.body.active
+											req.body.threshold_id
 										], function(err, result) {
 											done();
 
@@ -87,7 +85,6 @@ exports.request = function(req, res){
 														"subscriptions.created, " +
 														"subscriptions.updated, " +
 														"subscriptions.creator, " +
-														"subscriptions.active, " +
 														"subscriptions.sensor_id, " +
 														"sensors.description AS sensor_description, " +
 														"subscriptions.threshold_id, " +

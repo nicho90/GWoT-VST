@@ -5,10 +5,10 @@
     <div class="col-md-8">
         <div class="jumbotron">
 
-            <form class="form-horizontal" ng-submit="create()">
+            <form class="form-horizontal" ng-submit="save()">
 
                 <center>
-                    <h1 class="display-4">{{ 'REGISTRATION' | translate }}</h1>
+                    <h1 class="display-4">{{ 'EDIT_PROFILE' | translate }}</h1>
                 </center>
                 <br>
 
@@ -55,13 +55,6 @@
                         <input type="text" class="form-control" ng-model="user.last_name" id="inputLastName" placeholder="{{ 'LAST_NAME' | translate }}">
                     </div>
                 </div>
-                <br>
-
-                <label for="selectLanguage">{{ 'LANGUAGE' | translate }}</label><br>
-                <select class="c-select form-control" id="selectLanguage" ng-model="user.language">
-                    <option value="en_US">{{ 'ENGLISH' | translate}}</option>
-                    <option value="de_DE">{{ 'GERMAN' | translate}}</option>
-                </select>
                 <br>
                 <hr>
                 <br>

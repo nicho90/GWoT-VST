@@ -13,12 +13,6 @@ program
     .option('-r, --redis', 'Use Redis database')
     .option('-dbu, --postgres_user [username]', 'Enter the PostgreSQL-User, which is needed to start REST-API', 'admin')
     .option('-dbpw, --postgres_password [password]', 'Enter the PostgreSQL-Password, which is needed to start REST-API', 'password')
-
-    // TODO:
-    // Add the following parameters
-    //.option('-ex, --examples', 'Add example-data to the PostgreSQL-Database')
-    //.option('-c, --clean', 'Delete all entries in the PostgreSQL-Database')
-
     .option('-emu, --email_user [email-address]', 'Enter the SMTP-address, which is needed to start the Email-Notification-Service (example: user@gmail.com)', 'user@gmail.com')
     .option('-empw, --email_password [password]', 'Enter the Email-Password, which is needed to start Email-Notification-Service', 'password')
     .option('-sio, --socket_io', 'Use socket.io communication engine')
@@ -153,6 +147,7 @@ if (db_settings.status && email_settings.status) {
     var service_stations = require ('./routes/service_stations');
     var emergency_stations = require ('./routes/emergency_stations');
     var forecast = require ('./routes/forecast');
+    var verifications = require ('./routes/verifications');
 
     // Load Routes
     app.use('/api', login);
@@ -169,12 +164,11 @@ if (db_settings.status && email_settings.status) {
     app.use('/api', service_stations);
     app.use('/api', emergency_stations);
     app.use('/api', forecast);
+    app.use('/api', verifications);
 
 } else {
     console.log("Simple Webserver, no REST-API (no Database, no Websockets, no Email-Notification-Service)");
 }
-
-
 
 /**
  * Start MQTT-Broker

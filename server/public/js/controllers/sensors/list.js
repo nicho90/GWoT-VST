@@ -39,7 +39,7 @@ app.controller("SensorListController", function($scope, $rootScope, $location, $
      * @param  {number} sensor_id [Redirect to homeView, find Sensor and highlight it on map]
      */
     $scope.showOnMap = function(sensor_id) {
-        $location.url("/map/" + sensor_id);
+        $location.url("/map/sensors/" + sensor_id);
     };
 
 
@@ -81,12 +81,12 @@ app.controller("SensorListController", function($scope, $rootScope, $location, $
                         label: $filter('translate')('OK'),
                         className: "btn-primary",
                         callback: function() {
-                            $sensorService.delete(token, sensor.sensor_id)
+                            $sensorService.user_delete(token, $rootScope.authenticated_user.username, sensor.sensor_id)
                             .success(function(response) {
 
                                 // Reset Sensors
                                 delete $scope.sensors;
-                                $scope.loadData();
+                                $scope.load();
                             })
                             .error(function(err) {
                                 $scope.err = err;
@@ -103,7 +103,7 @@ app.controller("SensorListController", function($scope, $rootScope, $location, $
      * Init
      */
     $scope.load();
-
+    $scope.search = "";
 
     /**
      * Update when user logged in or out

@@ -22,8 +22,23 @@ exports.request = function(req, res) {
             return console.error(errors.database.error_1.message, err);
         } else {
 
+            var query = "SELECT " +
+                    "emergency_station_id, " +
+                    "name, " +
+                    "phone_number, " +
+                    "ST_X(coordinates::geometry) AS lng, " +
+                    "ST_Y(coordinates::geometry) AS lat, " +
+                    "street, " +
+                    "house_number, " +
+                    "addition, " +
+                    "zip_code, " +
+                    "city, " +
+                    "state, " +
+                    "country " +
+                "FROM Emergency_Stations WHERE emergency_station_id=$1;";
+
             // Database query
-            client.query('SELECT * FROM Emergency_Stations WHERE emergency_station_id=$1;', [
+            client.query(query, [
                 req.params.emergency_station_id
             ], function(err, result) {
                 done();
