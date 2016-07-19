@@ -1,4 +1,116 @@
 <!DOCTYPE html>
 <br>
 <h1>{{ 'HELP' | translate }}</h1>
+<p>GSys is a floodway monitoring application implemented with smart and mobile water gauges as first class citizens in the Web of Things to cater for and alert the users regarding the various water-level scenarios present within a floodway. This application
+    can be used by anyone who is interested in viewing the water-level for a floodway hoewver for integrating a sensor within the application or to get notified about the varying water-levels, users need to get registered.</p>
+<h3>1.Registration</h3>
+<p> The Sign-up button can be clicked to start the registration process in order to reach the form as shown in figure below.</p>
+<ul>
+    <li>All fields are mandatory </li>
+    <li> E-mail should be entered with "@"</li>
+    <li>Passsword should be atleast 6 characters long</li>
+</ul>
+<img src="/img/1.jpg" width=800 height=500>
 <br>
+<h3>2.Home</h3>
+<p> Once registered, users can visualize the sensors geographically under the <b>HOME</b> tab. The sensors have been displayed through markers with different colors suggesting different level of risks associated with water level.</p>
+<br>
+<ul>
+    <li><b>Passable (Green):</b> Water level in the regions with this type of sensors is low and safe to pass-by</li>
+    <li><b>Risk(Orange):</b> Water level in the regions with this type of sensors is moderately high and could be a risk to pass-by</li>
+    <li><b>High Risk(Red):</b> Water level in the regions with this type of sensors is very high and should not be crossed</li>
+    <li><b>Emergency Station(Blue):</b> Indicating near-by emergency stations</li>
+    <li><b>Service Station(Cyan):</b> Indicating near-by service station</li>
+</ul>
+<img src="/img/2.jpg" width=800 height=500>
+<br>
+<h3>3.Sensors</h3>
+<p> A list of sensors deployed and registered within the application by different users can be visualized under the <b>SENSOR</b> tab as shown in the figure below. The sensor can also be visualized by clicking on the <b>SHOW ON MAP</b> button.</p>
+<p> Sensors with green icon are the ones that are currently transferring data while the red ones are offline. In addition to this it also gives information about the sensor installation site i.e. river name and the crossing on which it is installed (bridgeor
+    floodway). </p>
+<img src="/img/3.jpg" width=800 height=500>
+<br>
+<h3>4.Settings</h3>
+<p> Once the user has registered with the application, they can access the SETTINGS view through the drop-down menu to manipulate their account as shown in the figure below. The settings view provides options to:</p>
+<ul>
+    <li>Create new or adjust existing Sensors</li>
+    <li>Create new or adjust existing Thresholds</li>
+    <li>View the Subscribed Thresholds & Sensors</li>
+</ul>
+<img src="/img/4.jpg" width=800 height=500>
+<br>
+<h4>Sensors</h4>
+<p> The registered user can create new sensor by using the <b> CREATE NEW SENSOR</b> button under the sensor tab in settings as shown in the figure below</p>
+<img src="/img/5.jpg" width=800 height=500>
+<br>
+<p> The <b>Create New Sensor</b> button opens up a form where user has to enter mandatory information related to sensor which are:</p>
+<ul>
+    <li>Description & Unique ID of Sensor</li>
+    <li>Privacy Settings for Sensor</li>
+    <li> Latitude, Longitude of Sensor</li>
+    <li>Selection of Waterbody on which sensor is to be installed</li>
+    <li> Crossing Type e.g. bridge and seasonal dependencies if the sensors reading are to be season specific</li>
+    <li>Sensor's height, Crossing height and sensor threshold</li>
+    <li>Measuring interval for normal & during a flood activity</li>
+</ul>
+<p> <b>Create New Sensor Form</b> </p>
+<img src="/img/6.jpg" width=800 height=500>
+<p> After entering all necessary information and submitting it, user can then view the sensor under the sensors tab and can also view it on map by clicking on SHOW ON MAP button</p>
+<h5> Sensor Details</h5>
+<p> The user can also view additional details related to a particular sensor by clicking on that sensor under the sensor tab which include:</p>
+<ul>
+    <li> Real & Time-Series Data of Sensor</li>
+    <li> Nearby Sensors</li>
+    <li>Nearby Emergency Stations</li>
+    <li>Sensor Configurations</li>
+</ul>
+<br>
+<p>The Sensor Details provide three tabs <b>General, Real-Time, Time-Series</b></p>
+<h5>General</h5>
+<p>Under the General Tab, User can view all the configurational information related to a sensor which has been entered while creating it. It also displays the location of sensor on map.</p>
+<p>It also displays the last measured water-level,time associated with it and descriptive statistis related to the overall data.Users can subscribe to a sensor by clicking on the <b>SUBSCRIBE</b> button on top right corner.</p>
+<img src="/img/7.jpg" width=800 height==500>
+<p></p>
+<p>The General Tab also provides weather updates around the sensor for hourly and daily basis. It also provides information regarding the other sensors which are in proximity to the sensor.The user can visualize all the sensor details related to these sensors
+    too from configuration to incoming data by simply clinking on the name.</p>
+<br>
+<img src="/img/8.jpg" width=800 height=500>
+<p></p>
+<p>In addition to information about nearby sensors, information about nearby emrgency stations and service stations can also be viewed under the general tab and can be visualized on map by clicking on the map buttons provided next to their names.</p>
+<img src="/img/9.jpg" width=800 height=500>
+<h5>Time-Series</h5>
+<p>The time-series tab displays the time-series data for a particular sensor. The user can adjust the duration for which they wish to visualize the time-series on the graph through the tabular options provided below the graph. The values for nay particular
+    time on grpah can be read by simply hovering the cursor over to that point.</p>
+<img src="/img/10.jpg" width="800" height="500">
+<p></p>
+<p>The graph also shows the measurement values and defined thresholds through which water-level is being measured and users are alerted about the varying water level scenarios</p>
+<ul>
+    <li><b>Gauge Zero:</b> A fixed value that has been defined for the zero-level of sensor with reference to the water bed of waterbody</li>
+    <li><b>Sensor Height:</b> Height of Sensor that has been defined while creating a new sensor within the application</li>
+    <li><b>Sensor Threshold Height:</b> The threshold height defined while creating the sensor which is the maximum safe value for passing a crossing</li>
+    <li><b>Crossing Height:</b> The height of the crossing or installation site where sensor has been placed</li>
+    <li><b>Warning threshold:</b> The threshold value at which a warning is sent to the user to stay alert</li>
+    <li><b>Critical threshold:</b> The threshold at which a danger alert is sent to the user and suggest not to pass the crossing site</li>
+    <li><b>Water Level:</b> The level of Water at a particular time</li>
+</ul>
+<br>
+<h5>Real-Time</h5>
+<br>
+<p> The Real time tab provides continuous data that is coming from sensor in real time without any post processing.</p>
+<p>As the data is being visualized simulatneously as being fetched so it can be compared with the sensor height and crossing height to generate warnings. The statistics at the top are generated on basis of all the data collected by the sensor. The thresholds are not being compared in real time data because no cumulative calculations have been performed.</p>
+<img src="/img/11.jpg" width="800" height="500">
+<p></p>
+<h4>Thresholds</h4>
+<p>User can also define new threshold for recieving alerts with respect to their vehicles by clicking on the <b>CREATE NEW THRESHOLD</b> button under the threshold tab within settings.</p>
+<img src="/img/12.jpg" width="800" height="500">
+<p></p>
+<ul>
+    <li><b>Type:</b> Selection from a list of Vehicles stored in database</li>
+    <li><b>Description:</b> Brief Description about thresholds</li>
+    <li><b>Warning & Critical Threhold:</b> Alert & Danger level heights depending on the type of vehicle</li>
+</ul>
+<br>
+<p> All thresholds defined by a single user can be viewed under the Thresholds tab after being logged in. The thresholds can also be edited through the EDIT button provided adjacent to each threshold.</p>
+<br>
+<h4>Subscription</h4>
+<p> The subscription tab allows the user to view all the subscribed or installed sensors by that particular user and the thresholds that have been defined by the user and to delete if any.</p>

@@ -39,5 +39,9 @@
     "angular-underscore-module": "^1.0.3",
     "angular-toastr": "~1.7.0",
     "angular-animate": "~1.5.7"
+  },
+  "resolutions": {
+    "angular": "1.5.7",
+    "bootstrap": ">=3.3.0"
   }
 }
