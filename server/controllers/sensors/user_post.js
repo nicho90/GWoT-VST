@@ -80,9 +80,11 @@ exports.request = function(req, res){
 											"dry_season_begin, " +
 											"dry_season_end, " +
 											"increased_frequency, " +
+											"triggered_threshold, " +
+											"triggered_weather, " +
 											"online_status, " +
 											"coordinates " +
-										") VALUES (now(), now(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 'false', 'false', 'POINT(" + req.body.lat + " " + req.body.lng + ")');";
+										") VALUES (now(), now(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 'false', 'false', 'false', 'false', 'POINT(" + req.body.lat + " " + req.body.lng + ")');";
 
 										// Database Query
 										client.query(query, [
@@ -128,6 +130,8 @@ exports.request = function(req, res){
 														"sensors.danger_frequency, " +
 														"'MILLISECONDS' AS danger_frequency_unit, " +
 														"sensors.increased_frequency, " +
+														"sensors.triggered_threshold, " +
+														"sensors.triggered_weather, " +
 														"sensors.threshold_value, " +
 														"'CENTIMETER' AS threshold_value_unit, " +
 														"ST_X(sensors.coordinates::geometry) AS lng, " +

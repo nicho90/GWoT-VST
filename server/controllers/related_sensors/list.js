@@ -69,6 +69,8 @@ exports.request = function(req, res){
                                     "related_sensors.danger_frequency, " +
                                     "'MILLISECONDS' AS danger_frequency_unit, " +
                                     "related_sensors.increased_frequency, " +
+                                    "related_sensors.triggered_threshold, " +
+                                    "related_sensors.triggered_weather, " +
                                     "related_sensors.threshold_value, " +
                                     "'CENTIMETER' AS threshold_value_unit, " +
                                     "ST_X(related_sensors.coordinates::geometry) AS lng, " +
@@ -155,6 +157,8 @@ exports.request = function(req, res){
                                                 "related_sensors.danger_frequency, " +
                                                 "'MILLISECONDS' AS danger_frequency_unit, " +
                                                 "related_sensors.increased_frequency, " +
+                                                "related_sensors.triggered_threshold, " +
+                                                "related_sensors.triggered_weather, " +
                                                 "related_sensors.threshold_value, " +
                                                 "'CENTIMETER' AS threshold_value_unit, " +
                                                 "ST_X(related_sensors.coordinates::geometry) AS lng, " +
@@ -202,6 +206,8 @@ exports.request = function(req, res){
                                                 "related_sensors.danger_frequency, " +
                                                 "'MILLISECONDS' AS danger_frequency_unit, " +
                                                 "related_sensors.increased_frequency, " +
+                                                "related_sensors.triggered_threshold, " +
+                                                "related_sensors.triggered_weather, " +
                                                 "related_sensors.threshold_value, " +
                                                 "'CENTIMETER' AS threshold_value_unit, " +
                                                 "ST_X(related_sensors.coordinates::geometry) AS lng, " +
@@ -278,6 +284,8 @@ exports.request = function(req, res){
                                                 "related_sensors.danger_frequency, " +
                                                 "'MILLISECONDS' AS danger_frequency_unit, " +
                                                 "related_sensors.increased_frequency, " +
+                                                "related_sensors.triggered_threshold, " +
+                                                "related_sensors.triggered_weather, " +
                                                 "related_sensors.threshold_value, " +
                                                 "'CENTIMETER' AS threshold_value_unit, " +
                                                 "ST_X(related_sensors.coordinates::geometry) AS lng, " +
@@ -344,6 +352,8 @@ exports.request = function(req, res){
                                                     "related_sensors.danger_frequency, " +
                                                     "'MILLISECONDS' AS danger_frequency_unit, " +
                                                     "related_sensors.increased_frequency, " +
+                                                    "related_sensors.triggered_threshold, " +
+                                                    "related_sensors.triggered_weather, " +
                                                     "related_sensors.threshold_value, " +
                                                     "'CENTIMETER' AS threshold_value_unit, " +
                                                     "ST_X(related_sensors.coordinates::geometry) AS lng, " +

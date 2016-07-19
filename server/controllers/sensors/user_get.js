@@ -76,6 +76,8 @@ exports.request = function(req, res) {
                                                 "sensors.danger_frequency, " +
                                                 "'MILLISECONDS' AS danger_frequency_unit, " +
                                                 "sensors.increased_frequency, " +
+                                                "sensors.triggered_threshold, " +
+                                                "sensors.triggered_weather, " +
                                                 "sensors.threshold_value, " +
                                                 "'CENTIMETER' AS threshold_value_unit, " +
                                                 "ST_X(sensors.coordinates::geometry) AS lng, " +
