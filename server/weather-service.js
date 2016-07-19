@@ -71,10 +71,10 @@ if (!db_settings.status) {
                 // 2. Check weather forecast
                 function(sensors, callback){
 
-                    async.each(sensors, function(sensor, callback) {
+                    // Create today
+                    var now = moment();
 
-                        // Create today
-                        var now = moment();
+                    async.each(sensors, function(sensor, callback) {
 
                         // Create wet-season-begin
                         var _begin = now.format("YYYY")+ "-" + sensor.wet_season_begin + "-01 00:00:00";
@@ -173,7 +173,7 @@ if (!db_settings.status) {
                 if(err){
                     console.error(err);
                 } else {
-                    console.log("Weather-Service finished for date: " + result);
+                    console.log(result + " - Weather-Service finished");
                 }
             });
         }
