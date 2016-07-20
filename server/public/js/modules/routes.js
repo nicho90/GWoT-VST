@@ -48,10 +48,10 @@ app.config(function($routeProvider) {
             templateUrl: "/js/templates/sensors/details.html",
             controller: "SensorDetailsController"
         })
-        /*.when("/sensors/:sensor_id/edit", {
+        .when("/sensors/:sensor_id/edit", {
             templateUrl: "/js/templates/sensors/edit.html",
             controller: "SensorEditController"
-        })*/
+        })
         .when("/new/sensor", {
             templateUrl: "/js/templates/sensors/create.html",
             controller: "SensorCreateController"
