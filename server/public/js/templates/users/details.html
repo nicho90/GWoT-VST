@@ -30,7 +30,7 @@
     <div class="row">
 
         <!-- Username -->
-        <div class="col-md-12 middle" ng-if="tab==1 || tab==3">
+        <div class="col-md-12 middle" ng-if="tab==3">
             <h1 class="display-4 text-primary" style="font-size: 18pt;">
                 <i class="fa fa-user"></i> {{user.username}}
             </h1>
@@ -38,15 +38,20 @@
         </div>
 
         <!-- Username and Create-Button -->
-        <div class="col-md-4" ng-if="tab==2 || tab==4"></div>
-        <div class="col-md-4 middle" ng-if="tab==2 || tab==4">
+        <div class="col-md-4" ng-if="tab==1 || tab==2 || tab==4"></div>
+        <div class="col-md-4 middle" ng-if="tab==1 || tab==2 || tab==4">
             <h1 class="display-4 text-primary" style="font-size: 18pt;">
                 <i class="fa fa-user"></i> {{user.username}}
             </h1>
             <br>
         </div>
-        <div class="col-md-4 right" ng-if="tab==2 || tab==4">
+        <div class="col-md-4 right" ng-if="tab==1 || tab==2 || tab==4">
 
+            <span ng-if="tab==1">
+                <a class="btn btn-primary" ng-href="#/users/{{user.username}}/edit">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'EDIT_PROFILE' | translate }}
+                </a>
+            </span>
             <span ng-if="tab==2">
                 <a class="btn btn-primary" ng-href="#/new/threshold">
                     <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'CREATE_NEW_THRESHOLD' | translate }}
@@ -62,19 +67,64 @@
 
     <!-- 1st Tab -->
     <div class="row" ng-if="tab==1">
-        <div class="col-md-12">
+
+        <div class="col-md-6">
             <div class="card">
                 <table class="table" style="margin-bottom: 0px;">
+                    <tbody>
+                        <tr>
+                            <th style="width:40%;">
+                                {{ 'LANGUAGE' | translate }}
+                                &nbsp;&nbsp;
+                                <span class="flag-icon flag-icon-gb" ng-if="user.language == 'en_US' "></span>
+                                <span class="flag-icon flag-icon-de" ng-if="user.language == 'de_DE' "></span>
+                            </th>
+                            <td style="width:40%;">
+                                <select class="c-select form-control" ng-model="user.language" ng-change="changeLanguage()">
+                                    <option value="en_US">{{ 'ENGLISH' | translate}}</option>
+                                    <option value="de_DE">{{ 'GERMAN' | translate}}</option>
+                                </select>
+                            </td>
+                            <td class="right" style="width:20%;">
+                                <button class="btn btn-success" ng-click="save()">
+                                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <th>{{ 'ACCOUNT' | translate }}</th>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <button class="form-control btn btn-danger-outline" ng-click="deleteUser(user)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>&nbsp;&nbsp;{{ 'DELETE_ACCOUNT' | translate }}
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <table class="table table-striped" style="margin-bottom: 0px;">
                     <tbody>
                         <tr>
                             <th>
                                 {{ 'USERNAME' | translate }}
                             </th>
                             <td>
-                                {{user.username}}
+                                <kbd>{{user.username}}</kbd>
                             </td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
                         </tr>
                         <tr>
                             <th>
@@ -83,8 +133,6 @@
                             <td>
                                 {{user.first_name}}
                             </td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
                         </tr>
                         <tr>
                             <th>
@@ -94,18 +142,24 @@
                                 {{user.last_name}}
                             </td>
                         </tr>
+                        <tr>
+                            <th>
+                                {{ 'EMAIL_ADDRESS' | translate }}
+                            </th>
+                            <td>
+                                {{user.email_address}}
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-                <br>
-
-                <label for="selectLanguage">{{ 'LANGUAGE' | translate }}</label><br>
-                <select class="c-select form-control" id="selectLanguage" ng-model="user.language">
-                    <option value="en_US">{{ 'ENGLISH' | translate}}</option>
-                    <option value="de_DE">{{ 'GERMAN' | translate}}</option>
-                </select>
             </div>
         </div>
     </div>
+
+    <!--<select class="c-select form-control" id="selectLanguage" ng-model="user.language">
+        <option value="en_US">{{ 'ENGLISH' | translate}}</option>
+        <option value="de_DE">{{ 'GERMAN' | translate}}</option>
+    </select>-->
 
     <!-- 2nd Tab -->
     <div class="row" ng-if="tab==2">

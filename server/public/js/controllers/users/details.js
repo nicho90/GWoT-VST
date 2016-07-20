@@ -10,7 +10,6 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
      */
     $scope.load = function() {
 
-
         // Check if user is authenticated
         if ($rootScope.authenticated_user) {
 
@@ -75,6 +74,102 @@ app.controller("UserDetailsController", function($scope, $rootScope, $routeParam
      */
     $scope.showOnMap = function(sensor_id){
         $location.url("/map/sensors/" + sensor_id);
+    };
+
+
+    /**
+     * Save settings
+     */
+     $scope.save = function(){
+
+        // Prepare User-Object
+        var user = $scope.user;
+        delete user.sensors;
+        delete user.thresholds;
+        delete user.subscriptions;
+
+        $userService.edit($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, user).success(function(response){
+
+            // Update all Controllers
+            $rootScope.authenticated_user = response;
+            $rootScope.$broadcast('updateUser');
+
+            // Refresh
+            $scope.load();
+
+            $rootScope.alert = {
+                status: 1,
+                info: "Success ",
+                message: "Your settings has been saved!" // TODO: translate
+            };
+            $rootScope.$broadcast('alert');
+
+         }).error(function(err){
+            $scope.err = err;
+            $rootScope.alert = {
+                status: 2,
+                info: "Error ",
+                message: err.message
+            };
+            $rootScope.$broadcast('alert');
+        });
+    };
+
+
+    /**
+     * Delete User
+     */
+    $scope.deleteUser = function(user) {
+
+        // Check if User is authenticated
+        var token = "";
+        if ($rootScope.authenticated_user) {
+            token = $rootScope.authenticated_user.token;
+
+            // Show confirmation dialog
+            $ngBootbox.customDialog({
+                message:
+                    $filter('translate')('DIALOG_DELETE_USER') +
+                    '<br><kbd>' + user.username + '</kbd> ' +
+                    $filter('translate')('DIALOG_DELETE_END'),
+                title:
+                    '<i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;' +
+                    $filter('translate')('DIALOG_ATTENTION'),
+                buttons: {
+                    warning: {
+                        label: $filter('translate')('CANCEL'),
+                        className: "btn-secondary",
+                        callback: function() {}
+                    },
+                    success: {
+                        label: $filter('translate')('OK'),
+                        className: "btn-primary",
+                        callback: function() {
+                            $userService.delete(token, $rootScope.authenticated_user.username)
+                            .success(function(response) {
+
+                                // Reset User
+                                delete $scope.user;
+                                delete $rootScope.authenticated_user;
+                                $rootScope.$broadcast('update');
+                                $rootScope.$broadcast('resetUser');
+
+                                // Redirect
+                                $location.url("/");
+
+                            })
+                            .error(function(err) {
+                                $scope.err = err;
+                            });
+                        }
+                    }
+                }
+            });
+        } else {
+
+            // Redirect
+            $location.url("/");
+        }
     };
 
 

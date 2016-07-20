@@ -121,7 +121,7 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
      */
     $scope.load_thresholds = function(){
 
-        $thresholdService.list($scope.authenticated_user.token, $scope.authenticated_user.username).success(function(response){
+        $thresholdService.list($rootScope.authenticated_user.token, $rootScope.authenticated_user.username).success(function(response){
 
             $scope.authenticated_user.thresholds = response;
             $rootScope.authenticated_user.thresholds = response;
@@ -157,6 +157,25 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
      */
     $rootScope.$on('updateThresholds', function(){
         $scope.load_thresholds();
+    });
+
+
+    /**
+     * Update User
+     */
+    $rootScope.$on('updateUser', function(){
+        $scope.authenticated_user = $rootScope.authenticated_user;
+
+        // Load thresholds
+        $scope.load_thresholds();
+    });
+
+
+    /**
+     * Reset User
+     */
+    $rootScope.$on('resetUser', function(){
+        delete $scope.authenticated_user;
     });
 
 
