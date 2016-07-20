@@ -77,7 +77,7 @@ exports.process = function(message) {
         ],
         function(err, callback) {
             if (err) {
-                console.log(err);
+                console.log(err, new Date(), "Realtime");
             } else {
                 console.log("RT-Pipeline has been finished! " + new Date());
             }
