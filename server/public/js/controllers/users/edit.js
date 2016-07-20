@@ -27,18 +27,16 @@ app.controller("UserEditController", function($scope, $rootScope, $location, $tr
 
 
     /**
-     * Create
+     * Save
      */
     $scope.save = function(){
 
-        $userService.edit($rootScope.authenticated_user.token, $rootScope.authenticated_user.username, $scope.user).success(function(response){
-
-            // Reset
-            delete $scope.user;
+        $userService.edit($rootScope.authenticated_user.token, $scope._username, $scope.user).success(function(response){
 
             // Update all Controllers
+            $scope.user = response;
             $rootScope.authenticated_user = response;
-            $rootScope.$broadcast('update');
+            $rootScope.$broadcast('updateUser');
 
             $rootScope.alert = {
                 status: 1,

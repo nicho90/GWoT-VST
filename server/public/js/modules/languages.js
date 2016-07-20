@@ -193,6 +193,9 @@ app.config(function($translateProvider, config) {
         EDIT_SENSOR: 'Sensor bearbeiten',
         CREATE_NEW_THRESHOLD: 'Neuen Schwellenwert erstellen',
         EDIT_THRESHOLD: 'Schwellenwert bearbeiten',
+        EDIT_PROFILE: 'Profil bearbeiten',
+        ACCOUNT: 'Account',
+        DELETE_ACCOUNT: 'Account löschen',
         BRAND: 'Marke',
         NAME: 'Name',
         VEHICLE_SUGGESTIONS: 'Fahrzeugvorschläge',
@@ -223,6 +226,7 @@ app.config(function($translateProvider, config) {
         DIALOG_DELETE_ALL_THRESHOLDS : 'Sind Sie sicher, dass Sie alle Schwellenwerte ',
         DIALOG_DELETE_SUBSCRIPTION : 'Sind Sie sicher, dass Sie dieses Abo beenden möchten?',
         DIALOG_DELETE_ALL_SUBSCRIPTIONS : 'Sind Sie sicher, dass Sie alle Abos beenden möchten?',
+        DIALOG_DELETE_USER : 'Sind Sie sicher, dass Sie Ihren Account mit dem Nutzernamen ',
         DIALOG_DELETE_END : ' löschen möchten?'
 
     });
@@ -415,6 +419,9 @@ app.config(function($translateProvider, config) {
         EDIT_SENSOR: 'Edit Sensor',
         CREATE_NEW_THRESHOLD: 'Create new Threshold',
         EDIT_THRESHOLD: 'Edit Threshold',
+        EDIT_PROFILE: 'Edit your Profile',
+        ACCOUNT: 'Account',
+        DELETE_ACCOUNT: 'Delete account',
         BRAND: 'Brand',
         NAME: 'Name',
         VEHICLE_SUGGESTIONS: 'Vehicle suggestions',
@@ -445,6 +452,7 @@ app.config(function($translateProvider, config) {
         DIALOG_DELETE_ALL_THRESHOLDS : 'Are you sure, that you want to the delete all Thresholds ',
         DIALOG_DELETE_ALL_SUBSCRIPTION : 'Are you sure, that you want to the unsubscribe?',
         DIALOG_DELETE_ALL_SUBSCRIPTIONS : 'Are you sure, that you want to unsubscribe to all Sensors?',
+        DIALOG_DELETE_USER : 'Are you sure, that you want to delete your account with the username ',
         DIALOG_DELETE_END : ' ?'
 
     });
