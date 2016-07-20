@@ -11,7 +11,7 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
      * Check for route parameters
      */
     $scope.check_route_params = function(layer, id){
-        
+
         if($location.path().includes(layer) && layer === 'sensors'){
             if(Number($routeParams.sensor_id) === id){
                 $scope.layers.overlays.sensors.visible = true;
@@ -208,7 +208,7 @@ app.controller("HomeController", function($scope, $rootScope, $routeParams, conf
                             // Check if latest_measurement and water_level exists
                             if($scope.sensors[key].latest_measurement !== undefined){
                                 if($scope.sensors[key].latest_measurement.water_level !== undefined){
-                                    if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].water_level + $rootScope.authenticated_user.currentThreshold.warning_threshold && $scope.sensors[key].latest_measurement.water_level < $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold){
+                                    if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.warning_threshold && $scope.sensors[key].latest_measurement.water_level < $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold){
                                         _icon = $scope.warningIcon;
                                     } else if($scope.sensors[key].latest_measurement.water_level >= $scope.sensors[key].crossing_height + $rootScope.authenticated_user.currentThreshold.critical_threshold) {
                                         _icon = $scope.dangerIcon;
