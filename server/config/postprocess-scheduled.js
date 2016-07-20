@@ -24,8 +24,8 @@ exports.process = function(message) {
     // Connect to Database
     pg.connect(url, function(err, client, done) {
 
+        console.log("Scheduled Message", new Date(), message);
         if (err) {
-            console.log("Message", message);
             return console.error(errors.database.error_1.message, err);
         } else {
 
