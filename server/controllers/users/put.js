@@ -42,7 +42,7 @@ exports.request = function(req, res){
 						if(username === req.params.username || username === db.admin) {
 
 		                    // Database Query
-							client.query('SELECT (created, updated, username, password, email_address, first_name, last_name) FROM Users WHERE username=$1;', [
+							client.query('SELECT * FROM Users WHERE username=$1;', [
 								req.params.username
 							], function(err, result) {
 								done();
@@ -60,13 +60,13 @@ exports.request = function(req, res){
 
 		                                // Prepare Query
 		                                var query = "UPDATE Users SET " +
-		                                    "updated=now(), " +
-		                                    "username=($1), " +
-		                                    "password=($2), " +
-		                                    "email_address=($3), " +
-		                                    "first_name=($4), " +
-		                                    "last_name=($5) " +
-		                                    "language=($6) " +
+			                                    "updated=now(), " +
+			                                    "username=($1), " +
+			                                    "password=($2), " +
+			                                    "email_address=($3), " +
+			                                    "first_name=($4), " +
+			                                    "last_name=($5), " +
+			                                    "language=($6) " +
 		                                    "WHERE username=($7);";
 
 		                                // Database Query
@@ -87,7 +87,7 @@ exports.request = function(req, res){
 		                                    } else {
 
 		                                        // Database Query
-		                                        client.query('SELECT (created, updated, username, password, email_address, first_name, last_name) FROM Users WHERE username=$1;', [
+		                                        client.query('SELECT created, updated, username, password, email_address, first_name, last_name, language FROM Users WHERE username=$1;', [
 		                                            req.body.username
 		                                        ], function(err, result) {
 		                                            done();
@@ -97,9 +97,13 @@ exports.request = function(req, res){
 		                                                return console.error(errors.database.error_2.message, err);
 		                                            } else {
 
-		                                                // Attach Access-Token
-		                                                var user = result.rows[0];
-		                                                user.authorization = req.headers.authorization;
+														// Prepare result
+							                            var user = result.rows[0];
+
+														// Refresh and attach Access-Token
+														user.token = jwt.sign({username: user.username, password: user.password}, secret.key, {
+															expiresIn: '1d' // Default: 1 day
+														});
 
 		                                                // Send Result
 		                                                res.status(200).send(user);

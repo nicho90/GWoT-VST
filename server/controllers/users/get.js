@@ -40,7 +40,7 @@ exports.request = function(req, res){
 						if(username === req.params.username || username === db.admin) {
 
 							// Database Query
-							client.query('SELECT created, updated, username, password, email_address, first_name, last_name FROM Users WHERE username=$1;', [
+							client.query('SELECT created, updated, username, password, email_address, first_name, last_name, language FROM Users WHERE username=$1;', [
 								req.params.username
 							], function(err, result) {
 								done();
