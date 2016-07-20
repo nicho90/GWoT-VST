@@ -226,7 +226,7 @@ app.controller("SensorCreateController", function($scope, $rootScope, $location,
      * Cancel
      */
     $scope.cancel = function(){
-        delete $scope.threshold;
+        delete $scope.sensor;
 
         // Redirect to
         $location.url("/users/" + $rootScope.authenticated_user.username + "/tab/" + 4);
