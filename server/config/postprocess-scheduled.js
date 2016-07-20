@@ -25,6 +25,7 @@ exports.process = function(message) {
     pg.connect(url, function(err, client, done) {
 
         if (err) {
+            console.log("Message", message);
             return console.error(errors.database.error_1.message, err);
         } else {
 
@@ -410,7 +411,7 @@ exports.process = function(message) {
                 // End waterfall
                 function(err, callback) {
                     if (err) {
-                        console.log("Waterfall error", moment().format("YYYY-MM-DD hh:mm:ss"), err);
+                        console.log("Waterfall error", new Date(), err);
                     } else {
                         console.log("SD-Pipeline has been finished! " + new Date());
                     }
