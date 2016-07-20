@@ -8,10 +8,11 @@ var moment = require('moment');
 var _ = require('underscore');
 var db_settings = require('./config/db').db_settings;
 var errors = require('./config/errors');
+var mqtt = require('mqtt');
 var forecastio = require('./config/forecastio');
 
 var http = require("http");
-var https = require('https');
+var https = require("https");
 
 /**
  * Check Command-Line parameters
@@ -107,23 +108,23 @@ if (!db_settings.status) {
             				    response.on('end', function(){
             				        var result = JSON.parse(body);
 
-                                    var weather;
+                                    var triggered_weather;
                                     if(result.currently.icon == 'rain'){
-                                        weather = true;
+                                        triggered_weather = true;
                                     } else if(result.currently.icon == 'snow') {
-                                        weather = true;
+                                        triggered_weather = true;
                                     } else if(result.currently.icon == 'hail') {
-                                        weather = true;
+                                        triggered_weather = true;
                                     } else if(result.currently.icon == 'thunderstorm') {
-                                        weather = true;
+                                        triggered_weather = true;
                                     } else {
-                                        weather = false;
+                                        triggered_weather = false;
                                     }
 
                                     var query;
 
                                     // Check if frequency is already increased or increased by the sensor-threshold
-                                    if(weather){
+                                    if(triggered_weather){
                                         query = "UPDATE Sensors SET " +
                                                 "increased_frequency=true, " +
                                                 "triggered_weather=true " +
@@ -142,6 +143,8 @@ if (!db_settings.status) {
                                         }
                                     }
 
+                                    console.log(query);
+
                                     // Database Query
                                     client.query(query, [
                                         sensor.sensor_id
@@ -152,7 +155,26 @@ if (!db_settings.status) {
                                             console.error('Error running query', err);
                                             callback(new Error('Error running query', err));
                                         } else  {
-                                            callback(null, now.format("YYYY-MM-DD HH:mm:ss"));
+
+                                            // Send MQTT-Message to increase the frequency
+                                            message = {
+                                                topic: '/settings',
+                                                payload: '{"device_id": "' + sensor.device_id + '","interval": ' + sensor.danger_frequency + '}', // String or a Buffer
+                                                qos: 1, // quality of service: 0, 1, or 2
+                                                retain: true
+                                            };
+
+                                            console.log(message);
+
+                                            // Send MQTT-Message to Broker for forwarding
+                                            var client = mqtt.connect('mqtt://localhost:1883');
+                                            client.on('connect', function () {
+                                                client.publish(message, function() {
+                                                    console.log(new Date() + " Frequency increased for '" + sensor.device_id + "'");
+                                                });
+                                            });
+
+                                            callback(null);
                                         }
                                     });
 
@@ -166,14 +188,14 @@ if (!db_settings.status) {
                         }
 
                     }, function(err){
-                        callback(null, now.format("YYYY-MM-DD HH:mm:ss"));
+                        callback(null);
                     });
                 }
-            ], function(err, result) {
+            ], function(err) {
                 if(err){
                     console.error(err);
                 } else {
-                    console.log(result + " - Weather-Service finished");
+                    console.log(new Date() + " Weather-Service finished");
                 }
             });
         }

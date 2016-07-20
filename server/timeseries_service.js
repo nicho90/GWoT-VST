@@ -66,14 +66,10 @@ if (!db_settings.status) {
                 // 2. Calculate average waterlevel for last day for every sensor
                 function(sensors, callback) {
 
-                    // PostgreSQL-timestamp: "2016-05-17 00:20:53.248363+02"
                     var yesterday = moment().add(-1, 'days');
                     var begin = yesterday.format("YYYY-MM-DD") + " 00:00:00";
                     var _begin = yesterday.format("YYYY-MM-DD");
                     var end = yesterday.format("YYYY-MM-DD") + " 23:59:59";
-
-                    //console.log(begin);
-                    //console.log(end);
 
                     async.each(sensors, function(sensor, callback) {
 
@@ -116,7 +112,6 @@ if (!db_settings.status) {
                                         console.log("Only one measurement found for SensorId '" + sensor.sensor_id + "'!");
 
                                         // Database Query
-                                        // TODO insert here zero values
                                         client.query("INSERT INTO Timeseries (created, updated, sensor_id, water_level, sd_water_level, num_measurements, measurement_date, valid_data) VALUES (now(), now(), $1, $2, $3, $4, $5, $6);", [
                                             sensor.sensor_id,
                                             result.rows[0].water_level,
@@ -139,7 +134,6 @@ if (!db_settings.status) {
                                     console.log("No measurements found for SensorId '" + sensor.sensor_id + "'!");
 
                                     // Database Query
-                                    // TODO insert here zero values
                                     client.query("INSERT INTO Timeseries (created, updated, sensor_id, water_level, sd_water_level, num_measurements, measurement_date, valid_data) VALUES (now(), now(), $1, $2, $3, $4, $5, $6);", [
                                         sensor.sensor_id,
                                         0,
