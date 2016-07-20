@@ -3,6 +3,7 @@
  */
 exports.process = function(message) {
 
+    var moment = require('moment');
     var broker = require('./mqtt-message-handler.js');
     var pg = require('pg');
     var db_settings = require('../server.js').db_settings;
@@ -395,7 +396,6 @@ exports.process = function(message) {
 
                         }, function(err) {
                             if (err) {
-                                console.log("8. Error", query);
                                 console.log(err);
                                 callback(err);
                             } else {
@@ -410,7 +410,7 @@ exports.process = function(message) {
                 // End waterfall
                 function(err, callback) {
                     if (err) {
-                        console.log(err);
+                        console.log("Waterfall error", moment().format("YYYY-MM-DD hh:mm:ss"), err);
                     } else {
                         console.log("SD-Pipeline has been finished! " + new Date());
                     }
