@@ -3,7 +3,6 @@
  */
 exports.process = function(message) {
 
-    var moment = require('moment');
     var broker = require('./mqtt-message-handler.js');
     var pg = require('pg');
     var db_settings = require('../server.js').db_settings;
@@ -42,7 +41,7 @@ exports.process = function(message) {
                     // 2. Find sensor_id in Sensors with device_id
                     function(measurement, callback) {
 
-                        // Database query: select sensors
+                        // Database query
                         client.query('SELECT * FROM Sensors WHERE device_id=$1;', [
                             measurement.properties.device_id
                         ], function(err, result) {
@@ -74,7 +73,7 @@ exports.process = function(message) {
                     // 4. Save new measuremt in Database
                     function(measurement, sensor, callback) {
 
-                        // Database query: save measurment to DB
+                        // Database query
                         client.query('INSERT INTO Measurements (created, updated, sensor_id, distance, water_level, measurement_timestamp) VALUES (now(), now(), $1, $2, $3, $4);', [
                             sensor.sensor_id,
                             measurement.properties.distance.value,
@@ -107,14 +106,14 @@ exports.process = function(message) {
                                     topic: '/settings',
                                     payload: '{"device_id": "' + sensor.device_id + '","interval": ' + sensor.danger_frequency + '}', // String or a Buffer
                                     qos: 1, // quality of service: 0, 1, or 2
-                                    retain: true // or true
+                                    retain: true
                                 };
                                 broker.publish(message, function() {
                                     //console.log("Message send at time " + new Date());
                                 });
 
                                 // Change increased_frequency value
-                                client.query('UPDATE Sensors SET increased_frequency=true WHERE device_id=$1;', [
+                                client.query('UPDATE Sensors SET increased_frequency=true, triggered_threshold=true WHERE device_id=$1;', [
                                     sensor.device_id
                                 ], function(err, result) {
                                     done();
@@ -132,22 +131,22 @@ exports.process = function(message) {
 
                         } else {
 
-                            // Only decrease if not decrease
-                            if (sensor.increased_frequency) {
+                            // Only decrease if not increased and sensor was not increased of weather-service
+                            if (sensor.increased_frequency && !sensor.triggered_weather) {
 
                                 // Send MQTT-Message decrease frequency
                                 message = {
                                     topic: '/settings',
                                     payload: '{"device_id": "' + sensor.device_id + '","interval": ' + sensor.default_frequency + '}', // String or a Buffer
                                     qos: 1, // quality of service: 0, 1, or 2
-                                    retain: true // or true
+                                    retain: true
                                 };
                                 broker.publish(message, function() {
                                     //console.log("Message send at time " + new Date());
                                 });
 
                                 // Change increased_frequency value
-                                client.query('UPDATE Sensors SET increased_frequency=false WHERE device_id=$1;', [
+                                client.query('UPDATE Sensors SET increased_frequency=false, triggered_threshold=false WHERE device_id=$1;', [
                                     sensor.device_id
                                 ], function(err, result) {
                                     done();
@@ -175,16 +174,16 @@ exports.process = function(message) {
                         m_must1  | max@muster.de | Max        | M.
                         */
                         var query = "SELECT DISTINCT " +
-                            "users.username, " +
-                            "users.email_address, " +
-                            "users.first_name, " +
-                            "users.last_name " +
+                                "users.username, " +
+                                "users.email_address, " +
+                                "users.first_name, " +
+                                "users.last_name " +
                             "FROM Subscriptions subscriptions JOIN Users users ON subscriptions.creator=users.username " +
                             "WHERE subscriptions.sensor_id=$1;";
 
                         // Database query
                         client.query(query, [
-                            sensor.sensor_id //inject sensor_id into query
+                            sensor.sensor_id
                         ], function(err, result) {
                             done();
 
@@ -210,26 +209,29 @@ exports.process = function(message) {
                                           1 |            1 | nicho90 | Myself              | PEDESTRIAN | warning
                                           2 |            2 | nicho90 | VW Golf (2015)      | CAR        | danger
                             */
-                            var query = "" +
-                                "(SELECT " +
-                                "subscriptions.subscription_id, " +
-                                "subscriptions.threshold_id, " +
-                                "subscriptions.creator, " +
-                                "thresholds.description, " +
-                                "thresholds.category, " +
-                                "'warning' AS level " + // warning-level
-                                "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                                "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=false" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") >= (" + sensor.crossing_height + " + thresholds.warning_threshold) AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.critical_threshold)) " +
+                            var query = "(" +
+                                    "SELECT " +
+                                        "subscriptions.subscription_id, " +
+                                        "subscriptions.threshold_id, " +
+                                        "subscriptions.creator, " +
+                                        "thresholds.description, " +
+                                        "thresholds.category, " +
+                                        "'warning' AS level " + // warning-level
+                                    "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
+                                    "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.warning_notified=false" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") >= (" + sensor.crossing_height + " + thresholds.warning_threshold) AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") < (" + sensor.crossing_height + " + thresholds.critical_threshold)" +
+                                ") " +
                                 "UNION ALL " + // Merge with critical-level
-                                "(SELECT " +
-                                "subscriptions.subscription_id, " +
-                                "subscriptions.threshold_id, " +
-                                "subscriptions.creator, " +
-                                "thresholds.description, " +
-                                "thresholds.category, " +
-                                "'danger' AS level " + // danger-level
-                                "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
-                                "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.danger_notified=false" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") >= (" + sensor.crossing_height + " + thresholds.critical_threshold));";
+                                "(" +
+                                    "SELECT " +
+                                        "subscriptions.subscription_id, " +
+                                        "subscriptions.threshold_id, " +
+                                        "subscriptions.creator, " +
+                                        "thresholds.description, " +
+                                        "thresholds.category, " +
+                                        "'danger' AS level " + // danger-level
+                                    "FROM Subscriptions subscriptions JOIN Thresholds thresholds ON subscriptions.threshold_id=thresholds.threshold_id " +
+                                    "WHERE subscriptions.sensor_id=" + sensor.sensor_id + " AND subscriptions.danger_notified=false" + " AND subscriptions.creator='" + user.username + "' AND (" + sensor.sensor_height + " - " + measurement.properties.distance.value + ") >= (" + sensor.crossing_height + " + thresholds.critical_threshold)" +
+                                ");";
 
                             // Database query
                             client.query(query, function(err, result) {
@@ -247,8 +249,6 @@ exports.process = function(message) {
                                         var triggered_thresholds = result.rows;
 
                                         // Change warning and danger notification status in DB
-                                        // TODO test if working
-                                        //for (var row in triggered_thresholds) {
                                         async.each(triggered_thresholds, function(row, callback) {
                                             //console.log("Row: ", row);
                                             /* e.g. message conteent
@@ -280,7 +280,7 @@ exports.process = function(message) {
                                                 });
                                             }
                                         }, function(err) {
-                                          //TODO
+                                            console.error(err);
                                         });
 
                                         // Read Template
@@ -295,7 +295,7 @@ exports.process = function(message) {
                                                 'Attention ' + user.first_name + ' ' + user.last_name + '!\n' +
                                                 'At least one of your thresholds has been triggered for a  sensor, which you are subscribed to!\n\n\n' +
                                                 // TODO: Input Sensor and list all thresholds
-                                                'GWoT-VST - Institute for Geoinformatics (Heisenbergstraße 2, 48149 Münster, Germany)';
+                                                'GSys by Institute for Geoinformatics (Heisenbergstraße 2, 48149 Münster, Germany)';
 
                                             // Set Mail options
                                             var mailOptions = {
@@ -307,13 +307,13 @@ exports.process = function(message) {
                                             };
 
                                             // Send Email
-                                            /*transporter.sendMail(mailOptions, function(error, info) {
-                                                if (error) {
-                                                    return console.log(error);
+                                            transporter.sendMail(mailOptions, function(err, info) {
+                                                if (err) {
+                                                    console.error(err);
                                                 } else {
                                                     console.log('Message sent: ' + info.response);
                                                 }
-                                            });*/
+                                            });
                                         });
 
                                         // Emit Websocket-notification if triggered_thresholds.length > 0!

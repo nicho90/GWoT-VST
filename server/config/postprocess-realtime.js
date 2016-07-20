@@ -16,7 +16,7 @@ exports.process = function(message) {
     var mustache = require('mustache');
     var io = require('../server.js').io;
 
-    console.log("RT-Message", new Date(), message)
+    console.log("RT-Message", new Date(), message);
 
     // Start pipeline
     async.waterfall([
