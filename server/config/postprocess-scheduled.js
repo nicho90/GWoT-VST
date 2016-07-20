@@ -343,6 +343,7 @@ exports.process = function(message) {
                             });
                         }, function(err) {
                             if (err) {
+                                console.log("7. Error", measurement, sensor, users);
                                 console.log(err);
                                 callback(err);
                             } else {
@@ -394,6 +395,7 @@ exports.process = function(message) {
 
                         }, function(err) {
                             if (err) {
+                                console.log("8. Error", query);
                                 console.log(err);
                                 callback(err);
                             } else {
