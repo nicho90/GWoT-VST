@@ -19,7 +19,7 @@ Within this study project we implemented smart and mobile water gauges as first 
 ### Related repositories
 
 * Vertical Integration: [https://github.com/mrunde/WoT-Vertical-Approach](https://github.com/mrunde/WoT-Vertical-Approach)
-* Physical Smart Things:
+* Physical Smart Things: [https://github.com/JanVan01/gwot-physical](https://github.com/JanVan01/gwot-physical)
 
 ***
 
