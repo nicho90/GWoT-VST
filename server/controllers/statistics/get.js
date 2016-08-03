@@ -65,7 +65,7 @@ exports.request = function(req, res) {
 									"AVG(water_level) AS avg_water_level, " +
 									"'CENTIMETER' AS avg_water_level_unit " +
 								"FROM Timeseries " +
-								"WHERE sensor_id=$1;";
+								"WHERE sensor_id=$1 AND valid_data=true;";
 
 							// Database Query
 							client.query(query, [
@@ -97,7 +97,7 @@ exports.request = function(req, res) {
 									"STDDEV(water_level) AS std_water_level, " +
 									"'CENTIMETER' AS std_water_level_unit " +
 								"FROM Timeseries " +
-								"WHERE sensor_id=$1;";
+								"WHERE sensor_id=$1 AND valid_data=true;";
 
 							// Database Query
 							client.query(query, [
