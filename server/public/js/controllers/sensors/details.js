@@ -276,12 +276,41 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             .success(function(response) {
                 $scope.sensor.timeseries = response;
 
+                var avg_water_level;
+                var water_level;
+                var std_water_level;
+
+                // Check average
+                if($scope.sensor.statistics.average.avg_water_level === undefined){
+                    avg_water_level = 0;
+                } else {
+                    avg_water_level = $scope.sensor.statistics.average.avg_water_level;
+                }
+
+                // Check
+                if($scope.sensor.statistics.std.std_water_level === undefined){
+                    std_water_level = 0;
+                } else {
+                    std_water_level = $scope.sensor.statistics.std.std_water_level;
+                }
+
                 // Add values to chart
                 angular.forEach($scope.sensor.timeseries, function(timeserie, key) {
 
+                    // Check for valid measurements
+                    if(!timeserie.valid_data){
+                        water_level = undefined;
+                    } else {
+                        water_level = timeserie.water_level;
+                    }
+
+                    // Prepare new dot
                     var dot = {
                         timestamp: new Date(timeserie.measurement_date),
-                        water_level: timeserie.water_level,
+                        water_level: water_level,
+                        avg_water_level: avg_water_level,
+                        std_water_level_min: avg_water_level-std_water_level,
+                        std_water_level_max: avg_water_level+std_water_level,
                         sensor_height: $scope.sensor.sensor_height,
                         crossing_height: $scope.sensor.crossing_height,
                         gauge_zero: 0,
@@ -410,6 +439,36 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
             }
         }
 
+        // Create Average-Serie
+        $scope.options.series.push(
+            {
+                visible: $scope.status.avg_water_level,
+                axis: "y",
+                dataset: "dataset",
+                key: "avg_water_level",
+                label: $filter('translate')("AVERAGE"),
+                color: "rgba(244, 208, 63, 1)",
+                type: [
+                    "line"
+                ],
+                id: "avgWaterLevel"
+            }, {
+                visible: false,
+                axis: "y",
+                dataset: "dataset",
+                key: {
+                    y0: "std_water_level_min",
+                    y1: "std_water_level_max"
+                },
+                label: $filter('translate')("STD"),
+                color: "rgba(244, 208, 63, 0.7)",
+                type: [
+                    "area"
+                ],
+                id: "stdWaterLevel"
+            }
+        );
+
         // Create Timeseries-Serie
         $scope.options.series.push({
             visible: $scope.status.water_level,
@@ -422,7 +481,10 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
                 "line",
                 "area"
             ],
-            id: "mainWaterLevels"
+            id: "mainWaterLevels",
+            defined: function (value) {
+                return value.y1 !== undefined;
+            }
         });
 
         // Refresh Chart
@@ -470,6 +532,9 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         $statisticService.get(token, $routeParams.sensor_id)
             .success(function(response) {
                 $scope.sensor.statistics = response;
+
+                // Load Timeseries
+                $scope.load_timeseries();
             }).error(function(err) {
                 $scope.err = err;
             });
@@ -756,7 +821,6 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
 
                 // Load related data
                 $scope.load_forecast();
-                $scope.load_timeseries();
                 $scope.load_related_data();
                 $scope.load_subscriptions();
             })
@@ -1099,6 +1163,7 @@ app.controller("SensorDetailsController", function($scope, $rootScope, $routePar
         sensor_threshold: false,
         warning_threshold: false,
         critical_threshold: false,
+        avg_water_level: true,
         water_level: true
     };
 
