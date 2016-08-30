@@ -12,6 +12,8 @@ Within this study project we implemented smart and mobile water gauges as first 
 ![Application](server/public/img/application.png)
 ![Crossing types](server/public/img/crossing_types.png)
 
+***
+
 ### Architecture
 
 ![Architecture](server/public/img/architecture.png)
@@ -25,14 +27,10 @@ Within this study project we implemented smart and mobile water gauges as first 
 ##### ![alt GitHub](http://i.imgur.com/0o48UoR.png") [Heinrich Löwen](https://github.com/heinrichloewen)
 ##### ![alt GitHub](http://i.imgur.com/0o48UoR.png") [Nicholas Schiestel](https://github.com/nicho90)
 
+***
+
 ### Related repository
 
 * **Virtual Smart Things Documentation**: [https://github.com/nicho90/GWoT-VST-Docs](https://github.com/nicho90/GWoT-VST-Docs)
 * Vertical Integration: [https://github.com/mrunde/WoT-Vertical-Approach](https://github.com/mrunde/WoT-Vertical-Approach)
 * Physical Smart Things: [https://github.com/JanVan01/gwot-physical](https://github.com/JanVan01/gwot-physical)
-
-***
-
-### License
-
-**The MIT License** (Please see the `LICENSE`-file for more information)
