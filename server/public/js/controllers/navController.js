@@ -53,8 +53,8 @@ app.controller("NavController", function($scope, $rootScope, $translate, $locati
         $scope.user = $scope.authenticated_user;
     } else {
         $scope.user = {
-            username : "",
-            password : ""
+            username : "demo",
+            password : "demo2016"
         };
     }
 
