@@ -9,6 +9,12 @@ This project is part of the course *The Geospatial Web of Things*, which took pl
 
 Within this study project we implemented smart and mobile water gauges as first class citizens in the Web of Things. We distinguished between IoT and WoT concepts, technologies and application patterns, and we learned to develop and integrated smart things into the socio technical environment of disaster management.
 
+### Demo
+
+* Link: [http://giv-gwot-vst.uni-muenster.de](http://giv-gwot-vst.uni-muenster.de)
+* Username: `demo`
+* Password: `demo2016`
+
 ![Application](server/public/img/application.png)
 ![Crossing types](server/public/img/crossing_types.png)
 
