@@ -28,10 +28,10 @@ Within this study project we implemented smart and mobile water gauges as first 
 
 ### Contributors
 
-##### ![alt GitHub](http://i.imgur.com/0o48UoR.png") [Rehan Aziz Chaudhary](https://github.com/rehans516)
-##### ![alt GitHub](http://i.imgur.com/0o48UoR.png") [Timm Kühnel](https://github.com/timmimim)
-##### ![alt GitHub](http://i.imgur.com/0o48UoR.png") [Heinrich Löwen](https://github.com/heinrichloewen)
-##### ![alt GitHub](http://i.imgur.com/0o48UoR.png") [Nicholas Schiestel](https://github.com/nicho90)
+:octocat: [Rehan Aziz Chaudhary](https://github.com/rehans516)<br>
+:octocat: [Timm Kühnel](https://github.com/timmimim)<br>
+:octocat: [Heinrich Löwen](https://github.com/heinrichloewen)<br>
+:octocat: [Nicholas Schiestel](https://github.com/nicho90)<br>
 
 ***
 
